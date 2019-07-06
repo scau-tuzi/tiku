@@ -10,8 +10,8 @@ use `tiku`	;
 CREATE TABLE `problem` (
     id integer(64) NOT NULL  COMMENT '标识', 
     problem_text varchar(255)  DEFAULT NULL comment '问题主体文本',
-    parent_id int(11) comment '父问题',
-    anwser_id int(11) comment '对应的答案',
+    parent_id integer(64) comment '父问题',
+    answer_id integer(64) comment '对应的答案',
     is_del bit(1) DEFAULT NULL comment '是否删除',
     create_at datetime DEFAULT NULL  comment '创建时间',
     create_by bigint(20) DEFAULT NULL comment  '创建人',
