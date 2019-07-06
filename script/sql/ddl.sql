@@ -21,7 +21,7 @@ CREATE TABLE `problem` (
     primary key (`id`)
 ) comment '问题' ;
 
-create table `anwser` (
+create table `answer` (
     id integer(64) NOT NULL COMMENT '标识',
     answer_text varchar(255) comment '答案文本',
     answer_images varchar(255) comment '答案图片',
