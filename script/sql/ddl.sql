@@ -6,21 +6,6 @@ use `tiku`	;
 --  不用手动清空，因为上面已经把整个架构删掉一次了 
 -- DROP TABLE  if exists `problem`;-
 
-
-CREATE TABLE `problem` (
-    id integer(64) NOT NULL  COMMENT '标识', 
-    problem_text varchar(255)  DEFAULT NULL comment '问题主体文本',
-    parent_id integer(64) comment '父问题',
-    answer_id integer(64) comment '对应的答案',
-    is_del bit(1) DEFAULT NULL comment '是否删除',
-    create_at datetime DEFAULT NULL  comment '创建时间',
-    create_by bigint(20) DEFAULT NULL comment  '创建人',
-    update_at datetime DEFAULT NULL  comment '更新时间',
-    update_by bigint(20) DEFAULT NULL comment '更新人',
-    delete_time datetime comment '删除时间',
-    primary key (`id`)
-) comment '问题' ;
-
 create table `answer` (
     id integer(64) NOT NULL COMMENT '标识',
     answer_text varchar(255) comment '答案文本',
@@ -34,6 +19,24 @@ create table `answer` (
     primary key (`id`)
 ) comment '答案';
 
+
+CREATE TABLE `problem` (
+    id integer(64) NOT NULL  COMMENT '标识', 
+    problem_text varchar(255)  DEFAULT NULL comment '问题主体文本',
+    parent_id integer(64) comment '父问题',
+    answer_id integer(64) comment '对应的答案',
+    is_del bit(1) DEFAULT NULL comment '是否删除',
+    create_at datetime DEFAULT NULL  comment '创建时间',
+    create_by bigint(20) DEFAULT NULL comment  '创建人',
+    update_at datetime DEFAULT NULL  comment '更新时间',
+    update_by bigint(20) DEFAULT NULL comment '更新人',
+    delete_time datetime comment '删除时间',
+    primary key (`id`),
+    foreign key (answer_id) references answer(id)
+) comment '问题' ;
+
+
+
 -- 包括选项，图片，语音等
 create table `ext_data`(
 	problem_id integer(64), -- 所属问题
@@ -46,7 +49,8 @@ create table `ext_data`(
     update_at datetime DEFAULT NULL  comment '更新时间',
     update_by bigint(20) DEFAULT NULL comment '更新人',
     delete_time datetime comment '删除时间',
-    primary key (`problem_id`)
+    primary key (`problem_id`),
+    foreign key (problem_id) references problem(id)
 ) comment '问题的额外信息';
 
 
@@ -73,7 +77,9 @@ CREATE TABLE `problem_tag` (
     update_at datetime DEFAULT NULL  comment '更新时间',
     update_by bigint(20) DEFAULT NULL comment '更新人',
     delete_time datetime comment '删除时间',
-	primary key (`problem_id`,`tag_id`)
+	primary key (`problem_id`,`tag_id`),
+    foreign key (tag_id) references tag(id),
+    foreign key (problem_id) references problem(id)
 ) comment '问题和标签的关系（多对多)' ;
 
 
@@ -86,7 +92,8 @@ create table `status`(
     update_at datetime DEFAULT NULL  comment '更新时间',
     update_by bigint(20) DEFAULT NULL comment '更新人',
     delete_time datetime comment '删除时间',
-	primary key (`problem_id`)
+	primary key (`problem_id`),
+    foreign key (problem_id) references problem(id)
 ) comment '问题状态表';
 
 CREATE TABLE `paper` (
@@ -114,7 +121,9 @@ CREATE TABLE `paper_item` (
     update_at datetime DEFAULT NULL  comment '更新时间',
     update_by bigint(20) DEFAULT NULL comment '更新人',
     delete_time datetime comment '删除时间',
-	primary key (`problem_id`,`paper_id`)
+	primary key (`problem_id`,`paper_id`),
+    foreign key (problem_id) references problem(id),
+    foreign key (paper_id) references paper(id)
 
 ) comment '试卷项，每一项对应一个问题';
 
@@ -129,7 +138,9 @@ CREATE TABLE `paper_tag` (
     update_at datetime DEFAULT NULL  comment '更新时间',
     update_by bigint(20) DEFAULT NULL comment '更新人',
     delete_time datetime comment '删除时间',
-	primary key (`paper_id`,`tag_id`)
+	primary key (`paper_id`,`tag_id`),
+	foreign key (paper_id) references paper(id),
+	 foreign key (tag_id) references tag(id)
 ) comment '试卷所属的标签' ;
 
 create table `user` (
@@ -145,7 +156,8 @@ create table `user` (
     update_at datetime DEFAULT NULL  comment '更新时间',
     update_by bigint(20) DEFAULT NULL comment '更新人',
     delete_time datetime comment '删除时间',
-    primary key (`id`)
+    primary key (`id`),
+    foreign key (role_id) references role(id)
 ) comment '用户表';
 
 
@@ -154,14 +166,15 @@ CREATE TABLE `permission` (
     name varchar(255), 
     url VARCHAR(255) comment '请求接口',
     method VARCHAR(255) comment '请求方法',
-    parent_permission INT(11) comment '父权限',
+    parent_permission  integer(64)  comment '父权限',
     is_del bit(1) DEFAULT NULL comment '是否删除',
     create_at datetime DEFAULT NULL  comment '创建时间',
     create_by bigint(20) DEFAULT NULL comment  '创建人',
     update_at datetime DEFAULT NULL  comment '更新时间',
     update_by bigint(20) DEFAULT NULL comment '更新人',
     delete_time datetime comment '删除时间',
-    primary key (`id`)
+    primary key (`id`),
+    foreign key (parent_permission) references permission(id)
 ) comment '权限列表';
 
 create table `role`(
@@ -185,6 +198,8 @@ create table `role_permission` (
     update_at datetime DEFAULT NULL  comment '更新时间',
     update_by bigint(20) DEFAULT NULL comment '更新人',
     delete_time datetime comment '删除时间',
-    primary key (`role_id`,`permission_id`)
+    primary key (`role_id`,`permission_id`),
+     foreign key (permission_id) references permission(id),
+    foreign key (role_id) references role(id)
 ) comment '角色权限表' ;
 
