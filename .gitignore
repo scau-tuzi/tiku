@@ -75,3 +75,7 @@ buildNumber.properties
 
 ## others
 *.doc
+
+source/back-end/\.idea/
+
+*.iml
