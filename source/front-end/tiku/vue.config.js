@@ -4,5 +4,6 @@ module.exports = {
     // 将baseUrl: '/api',改为baseUrl: '/',
     devServer: {
         proxy:'https://api.github.com/'
-        }
-    };
+    },
+    outputDir:"../../back-end/tiku/src/main/resources/static"
+};
