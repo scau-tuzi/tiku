@@ -1,12 +1,16 @@
 package io.swagger.api;
 
+import cn.czfshine.tiku.pojo.ProblemFullData;
+import io.swagger.model.AnyValue;
 import io.swagger.model.QuerryInfo;
 import io.swagger.model.QuerryResult;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.*;
 import io.swagger.model.StatusCode;
+import io.swagger.service.ProblemService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -16,6 +20,8 @@ import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
 
 @javax.annotation.Generated(value = "io.io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-07-07T02:38:17.975Z[GMT]")
 @Controller
@@ -27,6 +33,9 @@ public class QueryProblemsApiController implements QueryProblemsApi {
 
     private final HttpServletRequest request;
 
+    @Autowired
+    private ProblemService problemService;
+
     @org.springframework.beans.factory.annotation.Autowired
     public QueryProblemsApiController(ObjectMapper objectMapper, HttpServletRequest request) {
         this.objectMapper = objectMapper;
@@ -35,13 +44,20 @@ public class QueryProblemsApiController implements QueryProblemsApi {
 
     public ResponseEntity<QuerryResult> queryProblems(@ApiParam(value = ""  )  @Valid @RequestBody QuerryInfo body) {
         String accept = request.getHeader("Accept");
+
+        //拼装数据和做下格式转换
         QuerryResult querryResult = new QuerryResult();
         querryResult.setStatus(StatusCode.OK);
-        ArrayList<HashMap<String,Object>> res=new ArrayList<>();
-        log.error(body.getQuerry().getArgument1().toString());
 
-//        querryResult.setResults(res);
-        return new ResponseEntity<QuerryResult>(HttpStatus.NOT_IMPLEMENTED);
+        ArrayList<HashMap<String, Object>> res=new ArrayList<>();
+
+        List<ProblemFullData> problemFullData = problemService.queryProblem(body.getQuerry());
+        problemFullData.stream().forEach((e)->{
+            res.add(e.toMap());
+        });
+
+        querryResult.setResults(res);
+        return new ResponseEntity<QuerryResult>(HttpStatus.OK);
     }
 
 }

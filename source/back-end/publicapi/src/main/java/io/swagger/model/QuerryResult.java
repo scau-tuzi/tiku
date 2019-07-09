@@ -1,5 +1,6 @@
 package io.swagger.model;
 
+import java.util.HashMap;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
@@ -23,7 +24,7 @@ public class QuerryResult   {
 
   @JsonProperty("results")
   @Valid
-  private List<AnyValue> results = new ArrayList<AnyValue>();
+  private List<HashMap<String,Object>> results = new ArrayList<HashMap<String,Object>>();
 
   public QuerryResult status(StatusCode status) {
     this.status = status;
@@ -46,12 +47,12 @@ public class QuerryResult   {
     this.status = status;
   }
 
-  public QuerryResult results(List<AnyValue> results) {
+  public QuerryResult results(List<HashMap<String,Object>> results) {
     this.results = results;
     return this;
   }
 
-  public QuerryResult addResultsItem(AnyValue resultsItem) {
+  public QuerryResult addResultsItem(HashMap<String,Object> resultsItem) {
     this.results.add(resultsItem);
     return this;
   }
@@ -63,11 +64,11 @@ public class QuerryResult   {
   @ApiModelProperty(required = true, value = "")
   @NotNull
   @Valid
-  public List<AnyValue> getResults() {
+  public List<HashMap<String,Object>> getResults() {
     return results;
   }
 
-  public void setResults(List<AnyValue> results) {
+  public void setResults(List<HashMap<String,Object>> results) {
     this.results = results;
   }
 
