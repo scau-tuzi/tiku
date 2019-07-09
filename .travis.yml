@@ -1,7 +1,16 @@
-language: node_js
+language: 
+  - node_js
+  - java
 node_js:
   - "10"
+jdk:
+  - oraclejdk8
 
 script:
   - cd ./source/front-end/tiku
+  - npm install -g yarn
+  - yarn global add @vue/cli
+  - yarn 
   - yarn build
+  - cd ../../back-end/
+  - mvn package
