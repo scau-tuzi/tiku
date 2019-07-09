@@ -3,10 +3,7 @@ package cn.czfshine.tiku.pojo.dao;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * 功能描述：试卷项-实体类
@@ -18,6 +15,7 @@ import javax.persistence.Table;
 @Entity
 @Accessors(chain = true)
 @Table(name = "paper_item")
+@IdClass(PaperItemPK.class)
 public class PaperItem extends BasicEntity{
 
     /**

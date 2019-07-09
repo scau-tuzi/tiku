@@ -3,10 +3,7 @@ package cn.czfshine.tiku.pojo.dao;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * 功能描述：角色权限实体类
@@ -18,6 +15,7 @@ import javax.persistence.Table;
 @Table(name = "role_permission")
 @Entity
 @Accessors(chain = true)
+@IdClass(RolePermissionPK.class)
 public class RolePermission extends BasicEntity {
 
     /**
