@@ -1,5 +1,6 @@
 package cn.czfshine.tiku.pojo.dao;
 
+import cn.czfshine.tiku.pojo.dao.BasicEntity;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -9,39 +10,59 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
- * 功能描述：问题实体类
+ * 问题描述：标签实体
  *
  * @作者：黄宽波
- * @时间:2019-07-09
+ * @时间：2019-07-09
  */
-@Data
-@Entity
 @Accessors(chain = true)
-@Table(name = "problem")
-public class Problem extends BasicEntity {
+@Data
+@Table(name = "tag")
+@Entity
+public class Tag extends BasicEntity{
 
     /**
-     * 问题id
+     * 标签id
      */
     @Id
     @Column(name = "id")
     private Long id;
 
     /**
-     * 问题主体文本
+     * 标签名称
      */
-    @Column(name = "problem_text")
-    private String problemText;
+    @Column(name = "value")
+    private String value;
 
     /**
-     * 父问题
+     * 父标签
      */
     @Column(name = "parent_id")
     private Long parentId;
 
-    /**
-     * 对应答案id
-     */
-    @Column(name = "answer_id")
-    private Long answerId;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

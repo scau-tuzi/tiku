@@ -9,39 +9,40 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
- * 功能描述：问题实体类
+ * 功能描述：问题扩展信息实体
  *
  * @作者：黄宽波
- * @时间:2019-07-09
+ * @时间：2019-07-09
  */
-@Data
 @Entity
+@Data
+@Table(name = "ext_data")
 @Accessors(chain = true)
-@Table(name = "problem")
-public class Problem extends BasicEntity {
+public class ExtData extends BasicEntity {
 
     /**
-     * 问题id
+     * 主键
      */
     @Id
     @Column(name = "id")
     private Long id;
 
     /**
-     * 问题主体文本
+     * 所属问题
      */
-    @Column(name = "problem_text")
-    private String problemText;
+    @Column(name = "problem_id")
+    private Long problemId;
 
     /**
-     * 父问题
+     * 数据项的key
      */
-    @Column(name = "parent_id")
-    private Long parentId;
+    @Column(name = "key")
+    private String key;
 
     /**
-     * 对应答案id
+     * 数据项的值
      */
-    @Column(name = "answer_id")
-    private Long answerId;
+    @Column(name = "value")
+    private String value;
+
 }

@@ -15,7 +15,6 @@ create table `answer` (
     create_by bigint(20) DEFAULT NULL comment  '创建人',
     update_at datetime DEFAULT NULL  comment '更新时间',
     update_by bigint(20) DEFAULT NULL comment '更新人',
-    delete_time datetime comment '删除时间',
     primary key (`id`)
 ) comment '答案';
 
@@ -30,7 +29,6 @@ CREATE TABLE `problem` (
     create_by bigint(20) DEFAULT NULL comment  '创建人',
     update_at datetime DEFAULT NULL  comment '更新时间',
     update_by bigint(20) DEFAULT NULL comment '更新人',
-    delete_time datetime comment '删除时间',
     primary key (`id`)
 ) comment '问题' ;
 
@@ -38,6 +36,7 @@ CREATE TABLE `problem` (
 
 -- 包括选项，图片，语音等
 create table `ext_data`(
+	id integer(64) NOT NULL,
 	problem_id integer(64), -- 所属问题
     -- 比如选项信息的key可以是 choice_A,choice_B,choice_C 等
     `key` varchar(255) comment '数据项的key',  
@@ -47,20 +46,19 @@ create table `ext_data`(
     create_by bigint(20) DEFAULT NULL comment  '创建人',
     update_at datetime DEFAULT NULL  comment '更新时间',
     update_by bigint(20) DEFAULT NULL comment '更新人',
-    delete_time datetime comment '删除时间',
-    primary key (`problem_id`)
+    primary key (`id`)
 ) comment '问题的额外信息';
 
 
 CREATE TABLE `tag` (
     id integer(64) NOT NULL COMMENT '标识',
     value varchar(255) NOT NULL comment '标签名称',
+	parent_id integer(64) comment '父标签',
     is_del bit(1) DEFAULT NULL comment '是否删除',
     create_at datetime DEFAULT NULL  comment '创建时间',
     create_by bigint(20) DEFAULT NULL comment  '创建人',
     update_at datetime DEFAULT NULL  comment '更新时间',
     update_by bigint(20) DEFAULT NULL comment '更新人',
-    delete_time datetime comment '删除时间',
     primary key (`id`)
 ) comment '标签';
 
@@ -68,13 +66,11 @@ CREATE TABLE `tag` (
 CREATE TABLE `problem_tag` (
     problem_id integer(64) NOT NULL,
     tag_id integer(64) NOT NULL,
-	
     is_del bit(1) DEFAULT NULL comment '是否删除',
     create_at datetime DEFAULT NULL  comment '创建时间',
     create_by bigint(20) DEFAULT NULL comment  '创建人',
     update_at datetime DEFAULT NULL  comment '更新时间',
     update_by bigint(20) DEFAULT NULL comment '更新人',
-    delete_time datetime comment '删除时间',
 	primary key (`problem_id`,`tag_id`)
 ) comment '问题和标签的关系（多对多)' ;
 
@@ -87,7 +83,6 @@ create table `status`(
     create_by bigint(20) DEFAULT NULL comment  '创建人',
     update_at datetime DEFAULT NULL  comment '更新时间',
     update_by bigint(20) DEFAULT NULL comment '更新人',
-    delete_time datetime comment '删除时间',
 	primary key (`problem_id`)
 ) comment '问题状态表';
 
@@ -100,7 +95,6 @@ CREATE TABLE `paper` (
     create_by bigint(20) DEFAULT NULL comment  '创建人',
     update_at datetime DEFAULT NULL  comment '更新时间',
     update_by bigint(20) DEFAULT NULL comment '更新人',
-    delete_time datetime comment '删除时间',
     primary key (`id`)
 ) comment '试卷';
 
@@ -115,7 +109,6 @@ CREATE TABLE `paper_item` (
     create_by bigint(20) DEFAULT NULL comment  '创建人',
     update_at datetime DEFAULT NULL  comment '更新时间',
     update_by bigint(20) DEFAULT NULL comment '更新人',
-    delete_time datetime comment '删除时间',
 	primary key (`problem_id`,`paper_id`)
 
 ) comment '试卷项，每一项对应一个问题';
@@ -130,7 +123,6 @@ CREATE TABLE `paper_tag` (
     create_by bigint(20) DEFAULT NULL comment  '创建人',
     update_at datetime DEFAULT NULL  comment '更新时间',
     update_by bigint(20) DEFAULT NULL comment '更新人',
-    delete_time datetime comment '删除时间',
 	primary key (`paper_id`,`tag_id`)
 ) comment '试卷所属的标签' ;
 create table `role`(
@@ -141,7 +133,6 @@ create table `role`(
     create_by bigint(20) DEFAULT NULL comment  '创建人',
     update_at datetime DEFAULT NULL  comment '更新时间',
     update_by bigint(20) DEFAULT NULL comment '更新人',
-    delete_time datetime comment '删除时间',
     primary key (`id`)
 ) comment '角色信息';
 create table `user` (
@@ -156,7 +147,6 @@ create table `user` (
     create_by bigint(20) DEFAULT NULL comment  '创建人',
     update_at datetime DEFAULT NULL  comment '更新时间',
     update_by bigint(20) DEFAULT NULL comment '更新人',
-    delete_time datetime comment '删除时间',
     primary key (`id`)
 ) comment '用户表';
 
@@ -172,7 +162,6 @@ CREATE TABLE `permission` (
     create_by bigint(20) DEFAULT NULL comment  '创建人',
     update_at datetime DEFAULT NULL  comment '更新时间',
     update_by bigint(20) DEFAULT NULL comment '更新人',
-    delete_time datetime comment '删除时间',
     primary key (`id`)
 ) comment '权限列表';
 
@@ -186,6 +175,5 @@ create table `role_permission` (
     create_by bigint(20) DEFAULT NULL comment  '创建人',
     update_at datetime DEFAULT NULL  comment '更新时间',
     update_by bigint(20) DEFAULT NULL comment '更新人',
-    delete_time datetime comment '删除时间',
     primary key (`role_id`,`permission_id`)
 ) comment '角色权限表' ;
