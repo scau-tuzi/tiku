@@ -31,8 +31,7 @@ CREATE TABLE `problem` (
     update_at datetime DEFAULT NULL  comment '更新时间',
     update_by bigint(20) DEFAULT NULL comment '更新人',
     delete_time datetime comment '删除时间',
-    primary key (`id`),
-    foreign key (answer_id) references answer(id)
+    primary key (`id`)
 ) comment '问题' ;
 
 
@@ -49,8 +48,7 @@ create table `ext_data`(
     update_at datetime DEFAULT NULL  comment '更新时间',
     update_by bigint(20) DEFAULT NULL comment '更新人',
     delete_time datetime comment '删除时间',
-    primary key (`problem_id`),
-    foreign key (problem_id) references problem(id)
+    primary key (`problem_id`)
 ) comment '问题的额外信息';
 
 
@@ -77,9 +75,7 @@ CREATE TABLE `problem_tag` (
     update_at datetime DEFAULT NULL  comment '更新时间',
     update_by bigint(20) DEFAULT NULL comment '更新人',
     delete_time datetime comment '删除时间',
-	primary key (`problem_id`,`tag_id`),
-    foreign key (tag_id) references tag(id),
-    foreign key (problem_id) references problem(id)
+	primary key (`problem_id`,`tag_id`)
 ) comment '问题和标签的关系（多对多)' ;
 
 
@@ -92,8 +88,7 @@ create table `status`(
     update_at datetime DEFAULT NULL  comment '更新时间',
     update_by bigint(20) DEFAULT NULL comment '更新人',
     delete_time datetime comment '删除时间',
-	primary key (`problem_id`),
-    foreign key (problem_id) references problem(id)
+	primary key (`problem_id`)
 ) comment '问题状态表';
 
 CREATE TABLE `paper` (
@@ -121,9 +116,7 @@ CREATE TABLE `paper_item` (
     update_at datetime DEFAULT NULL  comment '更新时间',
     update_by bigint(20) DEFAULT NULL comment '更新人',
     delete_time datetime comment '删除时间',
-	primary key (`problem_id`,`paper_id`),
-    foreign key (problem_id) references problem(id),
-    foreign key (paper_id) references paper(id)
+	primary key (`problem_id`,`paper_id`)
 
 ) comment '试卷项，每一项对应一个问题';
 
@@ -138,9 +131,7 @@ CREATE TABLE `paper_tag` (
     update_at datetime DEFAULT NULL  comment '更新时间',
     update_by bigint(20) DEFAULT NULL comment '更新人',
     delete_time datetime comment '删除时间',
-	primary key (`paper_id`,`tag_id`),
-	foreign key (paper_id) references paper(id),
-	 foreign key (tag_id) references tag(id)
+	primary key (`paper_id`,`tag_id`)
 ) comment '试卷所属的标签' ;
 create table `role`(
 	id integer(64) NOT NULL COMMENT '标识',
@@ -166,8 +157,7 @@ create table `user` (
     update_at datetime DEFAULT NULL  comment '更新时间',
     update_by bigint(20) DEFAULT NULL comment '更新人',
     delete_time datetime comment '删除时间',
-    primary key (`id`),
-    foreign key (role_id) references role(id)
+    primary key (`id`)
 ) comment '用户表';
 
 
@@ -183,8 +173,7 @@ CREATE TABLE `permission` (
     update_at datetime DEFAULT NULL  comment '更新时间',
     update_by bigint(20) DEFAULT NULL comment '更新人',
     delete_time datetime comment '删除时间',
-    primary key (`id`),
-    foreign key (parent_permission) references permission(id)
+    primary key (`id`)
 ) comment '权限列表';
 
 
@@ -198,11 +187,5 @@ create table `role_permission` (
     update_at datetime DEFAULT NULL  comment '更新时间',
     update_by bigint(20) DEFAULT NULL comment '更新人',
     delete_time datetime comment '删除时间',
-    primary key (`role_id`,`permission_id`),
-     foreign key (permission_id) references permission(id),
-    foreign key (role_id) references role(id)
+    primary key (`role_id`,`permission_id`)
 ) comment '角色权限表' ;
-
-create table `mirrorSet`{
-	id int(64) not null;
-}
