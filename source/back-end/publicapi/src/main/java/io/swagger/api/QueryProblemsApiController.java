@@ -38,6 +38,7 @@ public class QueryProblemsApiController implements QueryProblemsApi {
         QuerryResult querryResult = new QuerryResult();
         querryResult.setStatus(StatusCode.OK);
         ArrayList<HashMap<String,Object>> res=new ArrayList<>();
+        log.error(body.getQuerry().getArgument1().toString());
 
 //        querryResult.setResults(res);
         return new ResponseEntity<QuerryResult>(HttpStatus.NOT_IMPLEMENTED);
