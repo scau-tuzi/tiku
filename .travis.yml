@@ -3,4 +3,5 @@ node_js:
   - "10"
 
 script:
+  - cd ./source/front-end/tiku
   - yarn build

@@ -21,3 +21,4 @@ yarn-error.log*
 *.sw?
 *.map
 /src/style/.sass-cache
+package-lock.json
