@@ -9,6 +9,7 @@ import io.swagger.model.ProblemInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -25,8 +26,22 @@ public class Parser {
     * @param expression
     * @return
     */
-   public static List<ProblemFullData> getAllProblemsByExpression(Expression expression){
-      //todo
+   public static List<ProblemFullData> getAllProblemsByExpression(Expression expression) throws ParserErrorException {
+
+      @NotNull String op = expression.getOperator();
+      switch (op){
+         case "==":{
+            @NotNull Object argument1 = expression.getArgument1();
+            if(!(argument1 instanceof String) ){
+               throw new ParserErrorException("操作【==】的第一个参数类型必须是字符串，但是收到的不是");
+            }
+            @NotNull Object argument2 = expression.getArgument2();
+            if(!(argument2 instanceof String) ){
+               throw new ParserErrorException("操作【==】的第二个参数类型必须是字符串，但是收到的不是");
+            }
+            problemEquals((String)argument1,(String)argument2);
+         }
+      }
       return new ArrayList<>();
    }
 
