@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.*;
 import io.swagger.model.StatusCode;
 import io.swagger.service.ProblemService;
+import io.swagger.utils.ParserErrorException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +52,13 @@ public class QueryProblemsApiController implements QueryProblemsApi {
 
         ArrayList<HashMap<String, Object>> res=new ArrayList<>();
 
-        List<ProblemFullData> problemFullData = problemService.queryProblem(body.getQuerry());
+        List<ProblemFullData> problemFullData = null;
+        try {
+            problemFullData = problemService.queryProblem(body.getQuerry());
+        } catch (ParserErrorException e) {
+            // todo 表达异常
+            e.printStackTrace();
+        }
         problemFullData.stream().forEach((e)->{
             res.add(e.toMap());
         });
