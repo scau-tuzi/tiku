@@ -5,6 +5,9 @@ import cn.czfshine.tiku.pojo.dao.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Optional;
+
 /**
  * 功能描述：标签实体Jpa操作类
  *
@@ -13,5 +16,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface TagRepository extends JpaRepository<Tag, Long>{
+    Tag findDistinctByValue(String value);
 
 }
