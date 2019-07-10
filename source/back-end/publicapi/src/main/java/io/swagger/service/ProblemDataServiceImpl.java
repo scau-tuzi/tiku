@@ -88,7 +88,7 @@ public class ProblemDataServiceImpl implements ProblemDataService {
      */
     public Map<Long, Problem> getProblemIdProblemMap(List<Long> problemIds) {
         Map<Long, Problem> problemIdProblemMap = new HashMap<>();
-        List<Problem> problemList = problemRepository.findAllById(problemIds);
+        List<Problem> problemList = problemRepository.findAllByIdIn(problemIds);
 
         for (Problem problem : problemList) {
             problemIdProblemMap.put(problem.getId(), problem);
@@ -106,7 +106,7 @@ public class ProblemDataServiceImpl implements ProblemDataService {
      */
     public Map<Long, Status> getProblemIdStatusMap(List<Long> problemIds) {
 
-        List<Status> statusList = statusRepository.findAllByProblemId(problemIds);
+        List<Status> statusList = statusRepository.findAllByProblemIdIn(problemIds);
         Map<Long, Status> problemIdStatusMap = new HashMap<>();
 
         for (Status status : statusList) {
@@ -123,7 +123,7 @@ public class ProblemDataServiceImpl implements ProblemDataService {
      * @return 问题id和扩展信息的map
      */
     public Map<Long, Map<String, String>> getProblemIdExtDataMap(List<Long> problemIds) {
-        List<ExtData> extDataList = extDataRepository.findAllByProblemId(problemIds);
+        List<ExtData> extDataList = extDataRepository.findAllByProblemIdIn(problemIds);
         Map<Long, Map<String, String>> problemIdExtDataMap = new HashMap<>();
 
         for (ExtData extData : extDataList) {
@@ -150,7 +150,7 @@ public class ProblemDataServiceImpl implements ProblemDataService {
      */
     public Map<Long, List<Tag>> getProblemIdTagMap(List<Long> problemIds) {
         // 所有问题标签
-        List<ProblemTag> problemTagList = problemTagRepository.findAllByProblemId(problemIds);
+        List<ProblemTag> problemTagList = problemTagRepository.findAllByProblemIdIn(problemIds);
         // 所有标签id(用来查询所有标签)
         List<Long> tagIdList = new ArrayList<>();
         // 问题和标签id的map
@@ -192,7 +192,10 @@ public class ProblemDataServiceImpl implements ProblemDataService {
             //将指定问题的标签id->指定问题的标签
             for (Long tagId : tagsIdList) {
                 Tag tag = IdTagMap.get(tagId);
-                tagsList.add(tag);
+
+                if (tag != null) {
+                    tagsList.add(tag);
+                }
             }
 
             // 设置问题和标签的map
@@ -213,16 +216,25 @@ public class ProblemDataServiceImpl implements ProblemDataService {
         List<Long> answerIdList = new ArrayList<>();
 
         //获取问题答案id
-        for (Long problemId : problemIdProblemMap.keySet()) {
-            Problem problem = problemIdProblemMap.get(problemId);
+        for (Problem problem : problemIdProblemMap.values()) {
             answerIdList.add(problem.getAnswerId());
         }
 
-        List<Answer> answerList = answerRepository.findAllById(answerIdList);
+        List<Answer> answerList = answerRepository.findAllByIdIn(answerIdList);
+        Map<Long, Answer> answerIdAnswerMap = new HashMap<>();
+
+        //设置答案id和答案的map
+        for (Answer answer : answerList) {
+            answerIdAnswerMap.put(answer.getId(), answer);
+        }
 
         //设置问题id和答案的map
-        for (Answer answer : answerList) {
-            problemIdAnswerMap.put(answer.getId(), answer);
+        for (Problem problem : problemIdProblemMap.values()) {
+            Answer answer = answerIdAnswerMap.get(problem.getAnswerId());
+
+            if (answer != null) {
+                problemIdAnswerMap.put(problem.getId(), answer);
+            }
         }
 
         return problemIdAnswerMap;

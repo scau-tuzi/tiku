@@ -15,5 +15,5 @@ import java.util.List;
 @Repository
 public interface ExtDataRepository extends JpaRepository<ExtData, Long> {
 
-    List<ExtData> findAllByProblemId(List<Long> problemIdList);
+    List<ExtData> findAllByProblemIdIn(List<Long> problemIdList);
 }
