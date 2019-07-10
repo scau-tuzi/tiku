@@ -8,6 +8,7 @@ import lombok.Data;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *一个问题的内部表达形式,聚合一个问题的所有相关数据
@@ -22,7 +23,7 @@ public class ProblemFullData {
     // 标签表
     private List<Tag> tags;
     //额外数据 ext_data表，处理成map
-    private HashMap<String,String> extData;
+    private Map<String,String> extData;
     //状态表
     private Status status;
     /**转换成map，主要是用来返回给前台，返回的map只会（也只能）被框架解析成json对象

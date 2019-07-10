@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * 功能描述：问题实体Jpa操作类
  *
@@ -14,4 +16,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface ProblemRepository extends JpaRepository<Problem, Long> {
+
+    List<Problem> findAllById(List<Long> idList);
 }
