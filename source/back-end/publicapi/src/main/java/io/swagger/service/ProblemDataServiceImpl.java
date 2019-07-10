@@ -45,7 +45,7 @@ public class ProblemDataServiceImpl implements ProblemDataService {
     public List<ProblemFullData> getFullDataByIds(List<Long> problemIds) {
 
         if (problemIds.size() <= 0) {
-            return null;
+            return new ArrayList<>();
         }
 
         List<ProblemFullData> problemFullDataList = new ArrayList<>();
