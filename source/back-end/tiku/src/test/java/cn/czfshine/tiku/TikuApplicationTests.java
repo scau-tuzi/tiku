@@ -19,19 +19,12 @@ public class TikuApplicationTests {
 
     @Test
     public void contextLoads() {
-<<<<<<< HEAD
-        ProblemTag problemTag = new ProblemTag();
-        problemTag.setProblemId(1L);
-        problemTag.setTagId(1L);
-
-        System.out.println(problemTag);
-=======
         // todo 自动生成测试数据，再测试，默认数据库啥都没
 //        ProblemTag problemTag = new ProblemTag();
 //        problemTag.setProblemId(1L);
 //        problemTag.setTagId(1L);
 //
 //        Assert.assertNotNull(problemTagRepository.save(problemTag));
->>>>>>> e73f302573b5dfdab1e751e61ff083fb6451ebe3
+
     }
 }
