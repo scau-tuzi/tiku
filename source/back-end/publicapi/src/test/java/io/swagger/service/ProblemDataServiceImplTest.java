@@ -11,9 +11,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.ArrayList;
 import java.util.List;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = Swagger2SpringBoot.class)
-public class ProblemDataServiceImplTest {
+
+public class ProblemDataServiceImplTest  extends BaseTest{
 
 
     @Autowired

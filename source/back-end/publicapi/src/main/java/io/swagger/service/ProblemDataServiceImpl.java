@@ -74,6 +74,7 @@ public class ProblemDataServiceImpl implements ProblemDataService {
             problemFullData.setStatus(problemIdStatusMap.get(problemId));
             problemFullData.setExtData(problemIdExtDataMap.get(problemId));
             problemFullData.setTags(problemIdTagMap.get(problemId));
+            problemFullDataList.add(problemFullData);
         }
 
         return problemFullDataList;
