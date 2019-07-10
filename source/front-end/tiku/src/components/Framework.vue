@@ -20,7 +20,7 @@
                 <el-row class="tac">
                     <el-col :span="24">
 
-                        <el-menu
+                        <el-menu router
                                 default-active="2"
                                 class="el-menu-vertical-demo"
                         >
@@ -31,7 +31,7 @@
                                     <span>{{menu.title}} </span>
                                </template>
 <!--                                todo index-->
-                                <el-menu-item v-for="(item,indexs) in menu.subItems"  v-bind:index="toString(index+1)+'-'+toString(indexs+1)" v-bind:key="item.title">
+                                <el-menu-item v-for="item in menu.subItems"   v-bind:index=item.path v-bind:key="item.title">
                                     {{item.title}}
                                 </el-menu-item>
                             </el-submenu>
