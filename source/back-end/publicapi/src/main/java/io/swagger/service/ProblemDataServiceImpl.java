@@ -175,7 +175,7 @@ public class ProblemDataServiceImpl implements ProblemDataService {
         }
 
         // 根据所有标签id查询所有标签
-        List<Tag> tagList = tagRepository.findAllById(tagIdList);
+        List<Tag> tagList = tagRepository.findAllByIdIn(tagIdList);
         // 设置标签id和标签的map
         Map<Long, Tag> IdTagMap = new HashMap<>();
         for (Tag tag : tagList) {

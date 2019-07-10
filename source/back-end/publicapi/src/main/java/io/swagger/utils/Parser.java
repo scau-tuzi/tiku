@@ -31,7 +31,7 @@ public class Parser {
     * @param expression
     * @return
     */
-   public static List<ProblemFullData> getAllProblemsByExpression(Expression expression) throws ParserErrorException {
+   public  List<ProblemFullData> getAllProblemsByExpression(Expression expression) throws ParserErrorException {
       List<Long> longs = executeExpression(expression);
       return problemDataService.getFullDataByIds(longs);
    }
@@ -42,7 +42,7 @@ public class Parser {
     * @param expression
     * @return
     */
-   public static List<PaperFullData> getAllPapersByExpression(Expression expression){
+   public  List<PaperFullData> getAllPapersByExpression(Expression expression){
       return new ArrayList<>();
    }
 
@@ -53,13 +53,14 @@ public class Parser {
     * @param value
     * @return
     */
-   private static List<Long> problemEquals(String fieldName,String value) throws ParserErrorException {
+   private  List<Long> problemEquals(String fieldName,String value) throws ParserErrorException {
       ArrayList<Long> res = new ArrayList<>();
       try{
 
          switch (fieldName){
             case "problemId":{
                //todo 捕获数字解析错误
+               System.out.println(problemRepository);
                Optional<Problem> byId = problemRepository.findById(Long.valueOf(value));
                byId.ifPresent(problem -> res.add(problem.getId()));
                break;
@@ -68,7 +69,8 @@ public class Parser {
                throw new ParserErrorException("域["+fieldName+"]不支持[==]操作");
          }
       }catch (Exception e){
-         throw new ParserErrorException("未知错误:"+e.getMessage());
+         e.printStackTrace();
+         throw new ParserErrorException("未知错误:"+e.getClass());
       }
       return res;
    }
@@ -78,7 +80,7 @@ public class Parser {
     * @param strings
     * @return
     */
-   private static List<Long> problemContains(String fieldName,List<String> strings) throws ParserErrorException {
+   private  List<Long> problemContains(String fieldName,List<String> strings) throws ParserErrorException {
       switch (fieldName){
          case "tags":
          {
@@ -92,7 +94,7 @@ public class Parser {
     * @param tags
     * @return
     */
-   private static List<Long> problemContainsTags(List<String> tags){
+   private  List<Long> problemContainsTags(List<String> tags){
       ArrayList<Long> res = new ArrayList<>();
 
       //每个问题出现对应标签的数量，结果应该是数量和输入的数量一样
@@ -128,7 +130,7 @@ public class Parser {
     * @return
     * @throws ParserErrorException
     */
-   private static List<Long> executeExpression(Expression expression) throws ParserErrorException {
+   private  List<Long> executeExpression(Expression expression) throws ParserErrorException {
       @NotNull String op = expression.getOperator();
 
 
@@ -203,7 +205,7 @@ public class Parser {
    }
 
 
-   private static Expression mapToExpression(LinkedHashMap json) throws ParserErrorException {
+   private  Expression mapToExpression(LinkedHashMap json) throws ParserErrorException {
       Expression expression = new Expression();
       Object operator;
       Object argument1;
@@ -241,7 +243,7 @@ public class Parser {
       return expression;
    }
 
-   private static List<Long> orOperator(Expression left,Expression right) throws ParserErrorException {
+   private  List<Long> orOperator(Expression left,Expression right) throws ParserErrorException {
       // todo 短路
       List<Long> l = executeExpression(left);
       List<Long> r = executeExpression(right);
@@ -249,7 +251,7 @@ public class Parser {
       ls.addAll(r);
       return new ArrayList<>(ls);
    }
-   private static List<Long> andOperator(Expression left,Expression right) throws ParserErrorException {
+   private  List<Long> andOperator(Expression left,Expression right) throws ParserErrorException {
       // todo 短路
       List<Long> l = executeExpression(left);
       List<Long> r = executeExpression(right);
@@ -257,13 +259,13 @@ public class Parser {
       return r.stream().filter(ls::contains).collect(Collectors.toList());
    }
    @Autowired
-   private static ProblemRepository problemRepository;
+   private  ProblemRepository problemRepository;
    @Autowired
-   private static ProblemTagRepository problemTagRepository;
+   private  ProblemTagRepository problemTagRepository;
    @Autowired
-   private static TagRepository tagRepository;
+   private  TagRepository tagRepository;
 
    @Autowired
-   private static ProblemDataService problemDataService;
+   private  ProblemDataService problemDataService;
 }
 
