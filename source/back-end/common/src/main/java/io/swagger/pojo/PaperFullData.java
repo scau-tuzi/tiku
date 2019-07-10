@@ -27,6 +27,8 @@ public class PaperFullData {
      * @return
      */
     public HashMap<String,Object> toMap(){
+        HashMap<String, Object> map = new HashMap<>();
+
         return new HashMap<>();
     }
 }

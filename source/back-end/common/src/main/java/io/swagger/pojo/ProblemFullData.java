@@ -5,10 +5,12 @@ import io.swagger.pojo.dao.Problem;
 import io.swagger.pojo.dao.Status;
 import io.swagger.pojo.dao.Tag;
 import lombok.Data;
+import org.hibernate.mapping.Collection;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collector;
 
 /**
  *一个问题的内部表达形式,聚合一个问题的所有相关数据
@@ -31,6 +33,10 @@ public class ProblemFullData {
      * @return
      */
     public HashMap<String,Object> toMap(){
-        return new HashMap<>();
+        HashMap<String,Object> map = new HashMap<>();
+        map.put("problemId",problem.getId());
+        map.put("text",problem.getProblemText());
+        map.put("anwser",answer.getAnswerText());
+        return map;
     }
 }
