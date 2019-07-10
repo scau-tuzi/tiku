@@ -1,10 +1,8 @@
 package io.swagger.service;
 
-import cn.czfshine.tiku.pojo.ProblemFullData;
-import cn.czfshine.tiku.pojo.dao.*;
-import cn.czfshine.tiku.pojo.dao.repos.*;
-import com.sun.tracing.Probe;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.swagger.pojo.ProblemFullData;
+import io.swagger.pojo.dao.*;
+import io.swagger.pojo.dao.repos.*;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,23 +13,26 @@ import java.util.Map;
 @Service
 public class ProblemDataServiceImpl implements ProblemDataService {
 
-    @Autowired
-    private ProblemRepository problemRepository;
+    private final ProblemRepository problemRepository;
 
-    @Autowired
-    private StatusRepository statusRepository;
+    private final StatusRepository statusRepository;
 
-    @Autowired
-    private ExtDataRepository extDataRepository;
+    private final ExtDataRepository extDataRepository;
 
-    @Autowired
-    private ProblemTagRepository problemTagRepository;
+    private final ProblemTagRepository problemTagRepository;
 
-    @Autowired
-    private TagRepository tagRepository;
+    private final TagRepository tagRepository;
 
-    @Autowired
-    private AnswerRepository answerRepository;
+    private final AnswerRepository answerRepository;
+
+    public ProblemDataServiceImpl(ProblemRepository problemRepository, StatusRepository statusRepository, ExtDataRepository extDataRepository, ProblemTagRepository problemTagRepository, TagRepository tagRepository, AnswerRepository answerRepository) {
+        this.problemRepository = problemRepository;
+        this.statusRepository = statusRepository;
+        this.extDataRepository = extDataRepository;
+        this.problemTagRepository = problemTagRepository;
+        this.tagRepository = tagRepository;
+        this.answerRepository = answerRepository;
+    }
 
 
     /**

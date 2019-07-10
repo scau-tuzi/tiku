@@ -1,6 +1,5 @@
 package io.swagger.service;
 
-import cn.czfshine.tiku.pojo.dao.repos.ProblemTagRepository;
 import io.swagger.Swagger2SpringBoot;
 import org.junit.After;
 import org.junit.Before;

@@ -1,6 +1,6 @@
 package io.swagger.service;
 
-import cn.czfshine.tiku.pojo.ProblemFullData;
+import io.swagger.pojo.ProblemFullData;
 import io.swagger.model.Expression;
 import io.swagger.utils.ParserErrorException;
 

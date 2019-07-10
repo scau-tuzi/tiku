@@ -1,7 +1,6 @@
 package io.swagger.api;
 
-import cn.czfshine.tiku.pojo.ProblemFullData;
-import io.swagger.model.AnyValue;
+import io.swagger.pojo.ProblemFullData;
 import io.swagger.model.QuerryInfo;
 import io.swagger.model.QuerryResult;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,7 +21,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 
 @javax.annotation.Generated(value = "io.io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-07-07T02:38:17.975Z[GMT]")
 @Controller

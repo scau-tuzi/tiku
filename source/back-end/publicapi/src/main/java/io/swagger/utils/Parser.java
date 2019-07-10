@@ -1,13 +1,13 @@
 package io.swagger.utils;
 
-import cn.czfshine.tiku.pojo.PaperFullData;
-import cn.czfshine.tiku.pojo.ProblemFullData;
-import cn.czfshine.tiku.pojo.dao.Problem;
-import cn.czfshine.tiku.pojo.dao.ProblemTag;
-import cn.czfshine.tiku.pojo.dao.Tag;
-import cn.czfshine.tiku.pojo.dao.repos.ProblemRepository;
-import cn.czfshine.tiku.pojo.dao.repos.ProblemTagRepository;
-import cn.czfshine.tiku.pojo.dao.repos.TagRepository;
+import io.swagger.pojo.PaperFullData;
+import io.swagger.pojo.ProblemFullData;
+import io.swagger.pojo.dao.Problem;
+import io.swagger.pojo.dao.ProblemTag;
+import io.swagger.pojo.dao.Tag;
+import io.swagger.pojo.dao.repos.ProblemRepository;
+import io.swagger.pojo.dao.repos.ProblemTagRepository;
+import io.swagger.pojo.dao.repos.TagRepository;
 import io.swagger.model.Expression;
 import io.swagger.service.ProblemDataService;
 import lombok.extern.slf4j.Slf4j;
