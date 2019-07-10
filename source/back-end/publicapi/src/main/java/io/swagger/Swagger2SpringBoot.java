@@ -10,7 +10,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
 @EnableSwagger2
-@ComponentScan(basePackages = { "io.swagger", "io.swagger.api" , "io.swagger.configuration"})
+@ComponentScan(basePackages = { "io.swagger.pojo.dao.repos","io.swagger.pojo.dao","io.swagger.pojo.dto","io.swagger.pojo","io.swagger", "io.swagger.api" , "io.swagger.configuration", "cn.czfshine.tiku.pojo.dao.repos"})
 public class Swagger2SpringBoot implements CommandLineRunner {
 
     @Override

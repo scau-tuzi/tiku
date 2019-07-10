@@ -3,7 +3,7 @@ interface MenuInfo {
         title:string;
         subItems:{
             title:string;
-            component:any;
+            //component:any;
             path:string;
         }[]
     }[];
