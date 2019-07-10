@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 功能描述：标签实体Jpa操作类
@@ -15,6 +16,7 @@ import java.util.List;
  */
 @Repository
 public interface TagRepository extends JpaRepository<Tag, Long>{
+    Tag findDistinctByValue(String value);
 
     List<Tag> findAllById(List<Long> id);
 }

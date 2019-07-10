@@ -16,7 +16,7 @@ public class ProblemDataServiceImplTest {
 
     @Autowired
     private ProblemDataServiceImpl problemDataServiceImpl;
-    
+
     @Test
     public void test() {
 

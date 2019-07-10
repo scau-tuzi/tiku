@@ -46,25 +46,35 @@ public class QueryProblemsApiController implements QueryProblemsApi {
     public ResponseEntity<QuerryResult> queryProblems(@ApiParam(value = ""  )  @Valid @RequestBody QuerryInfo body) {
         String accept = request.getHeader("Accept");
 
-        //拼装数据和做下格式转换
-        QuerryResult querryResult = new QuerryResult();
-        querryResult.setStatus(StatusCode.OK);
 
         ArrayList<HashMap<String, Object>> res=new ArrayList<>();
-
+        // 查询
         List<ProblemFullData> problemFullData = null;
         try {
             problemFullData = problemService.queryProblem(body.getQuerry());
         } catch (ParserErrorException e) {
             // todo 表达异常
             e.printStackTrace();
+            QuerryResult querryResult = new QuerryResult();
+            querryResult.setStatus(StatusCode.ERROR);
+            // todo
+            HashMap<String, Object> stringStringHashMap = new HashMap<>();
+            stringStringHashMap.put("message",e.getMessage());
+            querryResult.addResultsItem(stringStringHashMap);
+
+            return new ResponseEntity<>(querryResult,HttpStatus.BAD_REQUEST);
         }
+
+        // 拼装数据和做下格式转换
+        QuerryResult querryResult = new QuerryResult();
+        querryResult.setStatus(StatusCode.OK);
+
+        // 拼装返回数据
         problemFullData.stream().forEach((e)->{
             res.add(e.toMap());
         });
-
         querryResult.setResults(res);
-        return new ResponseEntity<QuerryResult>(HttpStatus.OK);
+        return new ResponseEntity<QuerryResult>(querryResult,HttpStatus.OK);
     }
 
 }

@@ -17,4 +17,6 @@ import java.util.List;
 public interface ProblemTagRepository extends JpaRepository<ProblemTag, Long> {
 
     List<ProblemTag> findAllByProblemId(List<Long> problemIdList);
+
+    List<ProblemTag> findAllByTagIdEquals(Long tadId);
 }
