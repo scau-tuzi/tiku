@@ -64,7 +64,7 @@ public class ProblemDataServiceImpl implements ProblemDataService {
 
         // 查询问题标签map
         Map<Long, List<Tag>> problemIdTagMap = getProblemIdTagMap(problemIds);
-
+        System.out.println(problemIdTagMap);
         //设置每个问题的所有属性
         for (Long problemId : problemIds) {
             ProblemFullData problemFullData = new ProblemFullData();
@@ -165,7 +165,7 @@ public class ProblemDataServiceImpl implements ProblemDataService {
             // 设置问题id和标签id的map
             if (problemIdTagIdMap.containsKey(problemTag.getProblemId())) {
                 List<Long> problemTagIdList = problemIdTagIdMap.get(problemTag.getProblemId());
-                problemTagIdList.add(problemTag.getProblemId());
+                problemTagIdList.add(problemTag.getTagId());
             } else {
                 // 为每一个问题创建存储标签id的list
                 List<Long> problemTagIdList = new ArrayList<>();
