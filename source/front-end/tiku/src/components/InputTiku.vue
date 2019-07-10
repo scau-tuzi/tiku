@@ -41,7 +41,22 @@
           </el-upload>
         </el-form-item>
         <el-form-item label="标签" prop="tags">
-
+          <el-select
+            v-model="value"
+            multiple
+            filterable
+            allow-create
+            default-first-option
+            size="medium"
+            placeholder="请选择题目标签">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+          <div style="margin: 100px 0;"></div>
         </el-form-item>
       </el-form>
     </el-main>
@@ -73,9 +88,20 @@
               { required: true, message: '请输入题目', trigger: 'blur'}
             ]
 
-          }
+          },
+          options: [{
+            value: 'FirstGrade',
+            label: '一年级'
+          }, {
+            value: 'SecondGrade',
+            label: '二年级'
+          }, {
+            value: 'ThirdGrade',
+            label: '三年级'
+          }],
+          value: []
 
-          };
+      };
       },
       methods: {
         submitForm(formName) {

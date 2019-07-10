@@ -77,6 +77,7 @@
       methods: {
         handleEdit(index, row) {
           console.log(index, row)
+          this.$router.push({path: '/ViewProblem'})
         }
       },
       data () {
