@@ -12,6 +12,7 @@ import io.swagger.model.Expression;
 import io.swagger.service.ProblemDataService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
@@ -102,15 +103,19 @@ public class Parser {
 
       for (String tagname: tags
            ) {
-         Tag tagDao = tagRepository.findDistinctByValue(tagname);
-         if(tagDao == null){
+         Tag tag = new Tag();
+         tag.setValue(tagname);
+
+         Optional<Tag> one = tagRepository.findOne(Example.of(tag));
+         List<Tag> byValueEquals = tagRepository.findByValueEquals(tagname);
+         if(byValueEquals == null || byValueEquals.size()==0){
             // 找不到这个标签
-            log.warn("前端请求标签{},但是数据库没有这个标签的记录",tags);
+            log.warn("前端请求标签{},但是数据库没有这个标签的记录",tagname);
             //所有标签是与的关系，一个没有就没有结果
             return res;
          }
 
-         Long id = tagDao.getId();
+         Long id = byValueEquals.get(0).getId();
          List<ProblemTag> pts = problemTagRepository.findAllByTagIdEquals(id);
          pts.forEach((pt)-> tagCount.merge(pt.getProblemId(),1,(n, o)-> n+o));
 
