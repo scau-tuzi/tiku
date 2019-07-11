@@ -32,22 +32,22 @@
           </el-table-column>
           <el-table-column
             fixed="left"
-            prop="date"
+            prop="problem"
             label="问题"
             width="300">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="answer"
             label="答案"
             width="300">
           </el-table-column>
           <el-table-column
-            prop="province"
+            prop="sound"
             label="语音"
             width="200">
           </el-table-column>
           <el-table-column
-            prop="city"
+            prop="pictures"
             label="多图片"
             width="220">
           </el-table-column>
@@ -55,12 +55,12 @@
             prop="tag"
             label="标签"
             width="100"
-            :filters="[{ text: '家', value: '家' }, { text: '公司', value: '公司' }]"
+            :filters="[{ text: '一年级', value: '一年级' }, { text: '英语', value: '英语' }]"
             :filter-method="filterTag"
             filter-placement="bottom-end">
             <template slot-scope="scope">
               <el-tag
-                :type="scope.row.tag === '家' ? 'primary' : 'success'"
+                :type="scope.row.tag === '英语' ? 'primary' : 'success'"
                 disable-transitions>{{scope.row.tag}}</el-tag>
             </template>
           </el-table-column>
@@ -75,7 +75,7 @@
                 @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
               <el-button
                 size="mini"
-                @click="open">修改标签</el-button>
+                @click="centerDialogVisible = true">修改标签</el-button>
               <el-button
                 size="mini"
                 type="danger"
@@ -92,6 +92,36 @@
         :total="100">
       </el-pagination>
     </el-footer>
+    <el-dialog
+      title="修改标签"
+      :visible.sync="centerDialogVisible"
+      width="30%"
+      center>
+      <el-tag
+        :key="tag"
+        v-for="tag in dynamicTags"
+        closable
+        :disable-transitions="false"
+        @close="handleClose(tag)"
+      style="margin-right: 10px; margin-bottom: 10px">
+        {{tag}}
+      </el-tag>
+      <el-input
+        class="input-new-tag"
+        v-if="inputVisible"
+        v-model="inputValue"
+        ref="saveTagInput"
+        size="small"
+        @keyup.enter.native="handleInputConfirm"
+        @blur="handleInputConfirm"
+      >
+      </el-input>
+      <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
+      <span slot="footer" class="dialog-footer">
+    <el-button @click="centerDialogVisible = false">取 消</el-button>
+    <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
+  </span>
+    </el-dialog>
   </el-container>
 </template>
 
@@ -119,75 +149,79 @@
         //this.$router.go(-2)
         //后退两步
       },
-      open(){
-        this.$confirm('修改标签', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning',
-          center: true
-        }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '修改成功!'
-          });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消修改'
-          });
+      handleClose(tag) {
+        this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
+      },
+      showInput() {
+        this.inputVisible = true;
+        this.$nextTick(_ => {
+          this.$refs.saveTagInput.$refs.input.focus();
         });
+      },
+      handleInputConfirm() {
+        let inputValue = this.inputValue;
+        if (inputValue) {
+          this.dynamicTags.push(inputValue);
+        }
+        this.inputVisible = false;
+        this.inputValue = '';
       }
+
     },
     data () {
       return {
+        dynamicTags: ['标签一', '标签二', '标签三'],
+        inputVisible: false,
+        inputValue: '',
+        centerDialogVisible: false,
         tableData: [{
-          date: '2016-05-02',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          tag: '家'
+          problem: '1+2',
+          answer: '3',
+          pictures: '',
+          sound: '',
+          tag: '一年级'
         }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          tag: '家'
+          problem: '4*4',
+          answer: '16',
+          pictures: '',
+          sound: '',
+          tag: '二年级'
         }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          tag: '家'
+          problem: '16*16',
+          answer: '256',
+          pictures: '',
+          sound: '',
+          tag: '三年级'
         }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          tag: '家'
+          problem: 'How are you?',
+          answer: 'I am fine. Thank you',
+          pictures: '',
+          sound: 'VOA.mp3',
+          tag: '英语'
         }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          tag: '家'
+          problem: 'How are you?',
+          answer: 'I am fine. Thank you',
+          pictures: '',
+          sound: 'VOA.mp3',
+          tag: '英语'
         }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          tag: '公司'
+          problem: 'How are you?',
+          answer: 'I am fine. Thank you',
+          pictures: '',
+          sound: 'VOA.mp3',
+          tag: '英语'
         }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          tag: '公司'
+          problem: 'How are you?',
+          answer: 'I am fine. Thank you',
+          pictures: '',
+          sound: 'VOA.mp3',
+          tag: '英语'
         }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          tag: '公司'
+          problem: '1+2',
+          answer: '3',
+          pictures: '',
+          sound: '',
+          tag: '一年级'
         }]
       }
     }
