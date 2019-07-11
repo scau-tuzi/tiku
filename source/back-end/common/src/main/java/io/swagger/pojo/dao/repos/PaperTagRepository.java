@@ -4,6 +4,8 @@ import io.swagger.pojo.dao.PaperTag;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * 功能描述：试卷所属标签实体Jpa操作类
  *
@@ -12,5 +14,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface PaperTagRepository extends JpaRepository<PaperTag, Long>{
-
+    List<PaperTag> findAllByTagIdEquals(Long id);
+    List<PaperTag> findAllByPaperIdIn(List<Long> paperIds);
 }

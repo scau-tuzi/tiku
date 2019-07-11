@@ -73,6 +73,7 @@ public class ProblemDataServiceImpl implements ProblemDataService {
             problemFullData.setStatus(problemIdStatusMap.get(problemId));
             problemFullData.setExtData(problemIdExtDataMap.get(problemId));
             problemFullData.setTags(problemIdTagMap.get(problemId));
+
             problemFullDataList.add(problemFullData);
         }
 
@@ -152,13 +153,13 @@ public class ProblemDataServiceImpl implements ProblemDataService {
         List<ProblemTag> problemTagList = problemTagRepository.findAllByProblemIdIn(problemIds);
         // 所有标签id(用来查询所有标签)
         List<Long> tagIdList = new ArrayList<>();
-        // 问题和标签id的map
+        // 问题id和标签id的map
         Map<Long, List<Long>> problemIdTagIdMap = new HashMap<>();
-        // 问题和标签的map
+        // 问题id和标签的map
         Map<Long, List<Tag>> problemIdTagMap = new HashMap<>();
 
         for (ProblemTag problemTag : problemTagList) {
-            // 获取所有标签id
+            // 循环获取所有标签id
             tagIdList.add(problemTag.getTagId());
 
             // 设置问题id和标签id的map
@@ -176,12 +177,12 @@ public class ProblemDataServiceImpl implements ProblemDataService {
         // 根据所有标签id查询所有标签
         List<Tag> tagList = tagRepository.findAllByIdIn(tagIdList);
         // 设置标签id和标签的map
-        Map<Long, Tag> IdTagMap = new HashMap<>();
+        Map<Long, Tag> tagIdTagMap = new HashMap<>();
         for (Tag tag : tagList) {
-            IdTagMap.put(tag.getId(), tag);
+            tagIdTagMap.put(tag.getId(), tag);
         }
 
-        // 设置问题和标签的map
+        // 设置问题id和标签的map
         for (Long problemId : problemIdTagIdMap.keySet()) {
             // 指定问题的标签id
             List<Long> tagsIdList = problemIdTagIdMap.get(problemId);
@@ -190,7 +191,7 @@ public class ProblemDataServiceImpl implements ProblemDataService {
 
             //将指定问题的标签id->指定问题的标签
             for (Long tagId : tagsIdList) {
-                Tag tag = IdTagMap.get(tagId);
+                Tag tag = tagIdTagMap.get(tagId);
 
                 if (tag != null) {
                     tagsList.add(tag);
