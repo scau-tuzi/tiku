@@ -5,10 +5,14 @@ import io.swagger.pojo.dao.Problem;
 import io.swagger.pojo.dao.Status;
 import io.swagger.pojo.dao.Tag;
 import lombok.Data;
+import org.hibernate.mapping.Collection;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 /**
  *一个问题的内部表达形式,聚合一个问题的所有相关数据
@@ -31,6 +35,29 @@ public class ProblemFullData {
      * @return
      */
     public HashMap<String,Object> toMap(){
-        return new HashMap<>();
+        HashMap<String,Object> map = new HashMap<>();
+        if(problem != null){
+            map.put("problemId",problem.getId());
+            map.put("text",problem.getProblemText());
+        }
+        if(answer!=null){
+            map.put("answer",answer.getAnswerText());
+        }
+
+        List<String> tagstr = new ArrayList<>();
+        if(tags !=null){
+            System.out.println(tags);
+            tagstr=tags.stream().map(Tag::getValue).collect(Collectors.toList());
+        }
+        if(tagstr.size()>0){
+            map.put("tags",tagstr);
+        }
+        if(extData!=null){
+            extData.forEach(map::put);
+        }
+        if(status!=null){
+            map.put("status",status.getVerifyStatus());
+        }
+        return map;
     }
 }

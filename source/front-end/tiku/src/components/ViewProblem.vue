@@ -1,0 +1,97 @@
+<template>
+  <el-container>
+    <el-main>
+      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+        <el-form-item>
+          <el-button type="primary" @click="back" >返回</el-button>
+        </el-form-item>
+        <el-form-item label="题目" prop="ti">
+          <el-input type="textarea":rows="5" v-model="ruleForm.ti":disabled="true"></el-input>
+        </el-form-item>
+        <el-form-item label="答案" prop="answer">
+          <el-input type="textarea":rows="5" v-model="ruleForm.answer":disabled="true"></el-input>
+        </el-form-item>
+        <el-form-item label="多图片" prop="pics">
+            <div style="direction: inherit">
+              <div class="picture" style="float: left; margin-right: 10px" v-for="pic in pics">
+                <el-avatar shape="square" fit="fit" :size="100" :src="pic.url"></el-avatar>
+              </div>
+            </div>
+        </el-form-item>
+        <el-form-item label="音频" prop="sound">
+          <span style="margin-right: 10px">123.mp3</span>
+          <el-button type="primary" icon="el-icon-caret-right" size="mini" circle></el-button>
+        </el-form-item>
+        <el-form-item label="标签" prop="tags">
+          <el-tag>标签一</el-tag>
+          <el-tag type="success">标签二</el-tag>
+          <el-tag type="info">标签三</el-tag>
+          <el-tag type="warning">标签四</el-tag>
+          <el-tag type="danger">标签五</el-tag>
+          <div style="margin: 100px 0;"></div>
+        </el-form-item>
+      </el-form>
+    </el-main>
+  </el-container>
+</template>
+
+<script>
+    export default {
+        name: "ViewProblem",
+      data(){
+        return {
+          pics:[
+            {name:'first',
+              url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg'
+            },
+            {
+              name:'second',
+              url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg'
+            }
+          ],
+          fits: ['fill'],
+          url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+          dialogImageUrl: '',
+          dialogVisible: false,
+          disabled: false,
+          ruleForm: {
+            ti: '',
+            answer: '',
+            pics: '',
+            sound: '',
+            tags: ''
+          },
+          rules: {
+            ti: [
+              { required: true, message: '请输入题目', trigger: 'blur' }
+            ],
+            answer: [
+              { required: true, message: '请输入题目', trigger: 'blur'}
+            ]
+
+          },
+          options: [{
+            value: '一年级',
+            label: 'FirstGrade'
+          }, {
+            value: '二年级',
+            label: 'SecondGrade'
+          }, {
+            value: '三年级',
+            label: 'ThirdGrade'
+          }],
+          value: []
+
+        };
+      },
+      methods: {
+          back(){
+            this.$router.push({path: '/VerifyTable'})
+          }
+      }
+    }
+</script>
+
+<style scoped>
+
+</style>

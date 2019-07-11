@@ -39,6 +39,14 @@ public class Tag extends BasicEntity{
     @Column(name = "parent_id")
     private Long parentId;
 
+    public Tag(Long id, String value, Long parentId) {
+        this.id = id;
+        this.value = value;
+        this.parentId = parentId;
+    }
+
+    public Tag() {
+    }
 }
 
 

@@ -1,5 +1,6 @@
 package io.swagger.service;
 
+import io.swagger.BaseTest;
 import io.swagger.pojo.PaperFullData;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -3,7 +3,7 @@
     <el-main>
       <el-row gutter="0">
         <el-col span="20">
-          <el-button class="el-button" align="left" plain>录入题目</el-button>
+          <el-button class="el-button" align="left" plain @click="jumpInput">录入题目</el-button>
           <el-button type="primary" plain>全选</el-button>
           <el-button type="success" plain>批量删除</el-button>
           <el-button type="info" plain>导入Excel</el-button>
@@ -25,7 +25,6 @@
           border
           stripe="true"
           style="width: 100%"
-          max-height="400"
           @selection-change="handleSelectionChange">
           <el-table-column
             type="selection"
@@ -68,12 +67,15 @@
           <el-table-column
             fixed="right"
             label="操作"
-            width="150"
+            width="250"
           >
             <template slot-scope="scope">
               <el-button
                 size="mini"
                 @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+              <el-button
+                size="mini"
+                @click="open">修改标签</el-button>
               <el-button
                 size="mini"
                 type="danger"
@@ -98,7 +100,8 @@
     name: 'TikuTable',
     methods: {
       handleEdit (index, row) {
-        console.log(index, row)
+        console.log(index, row),
+        this.$router.push({path: '/ModifyProblem'})
       },
       handleDelete (index, row) {
         console.log(index, row)
@@ -108,6 +111,31 @@
       },
       filterTag(value, row) {
         return row.tag === value;
+      },
+      jumpInput(){
+        //this.$router.push("/cart")
+        //传递的参数用{{ $route.query.goodsId }}获取
+        this.$router.push({path: '/InputTiku'})
+        //this.$router.go(-2)
+        //后退两步
+      },
+      open(){
+        this.$confirm('修改标签', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+          center: true
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '修改成功!'
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消修改'
+          });
+        });
       }
     },
     data () {

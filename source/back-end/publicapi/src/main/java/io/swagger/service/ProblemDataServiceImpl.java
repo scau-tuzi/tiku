@@ -45,7 +45,7 @@ public class ProblemDataServiceImpl implements ProblemDataService {
     public List<ProblemFullData> getFullDataByIds(List<Long> problemIds) {
 
         if (problemIds.size() <= 0) {
-            return null;
+            return new ArrayList<>();
         }
 
         List<ProblemFullData> problemFullDataList = new ArrayList<>();
@@ -64,7 +64,6 @@ public class ProblemDataServiceImpl implements ProblemDataService {
 
         // 查询问题标签map
         Map<Long, List<Tag>> problemIdTagMap = getProblemIdTagMap(problemIds);
-
         //设置每个问题的所有属性
         for (Long problemId : problemIds) {
             ProblemFullData problemFullData = new ProblemFullData();

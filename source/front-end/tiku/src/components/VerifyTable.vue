@@ -18,7 +18,6 @@
             border
             stripe="true"
             style="width: 100%"
-            max-height="400"
             @selection-change="handleSelectionChange">
             <el-table-column
               fixed="left"
@@ -77,6 +76,7 @@
       methods: {
         handleEdit(index, row) {
           console.log(index, row)
+          this.$router.push({path: '/ViewProblem'})
         }
       },
       data () {

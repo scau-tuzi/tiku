@@ -14,7 +14,7 @@ import java.util.List;
  */
 @Repository
 public interface TagRepository extends JpaRepository<Tag, Long>{
-    Tag findDistinctByValue(String value);
+    List<Tag> findByValueEquals(String value);
 
     List<Tag> findAllByIdIn(List<Long> id);
 }

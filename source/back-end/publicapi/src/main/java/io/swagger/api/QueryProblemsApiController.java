@@ -53,6 +53,7 @@ public class QueryProblemsApiController implements QueryProblemsApi {
         } catch (ParserErrorException e) {
             // todo 表达异常
             e.printStackTrace();
+            log.error(e.getMessage());
             QuerryResult querryResult = new QuerryResult();
             querryResult.setStatus(StatusCode.ERROR);
             // todo

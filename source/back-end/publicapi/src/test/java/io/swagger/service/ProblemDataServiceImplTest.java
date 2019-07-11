@@ -1,5 +1,6 @@
 package io.swagger.service;
 
+import io.swagger.BaseTest;
 import io.swagger.pojo.ProblemFullData;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ProblemDataServiceImplTest extends BaseTest {
 
+public class ProblemDataServiceImplTest  extends BaseTest {
 
     @Autowired
     private ProblemDataServiceImpl problemDataServiceImpl;

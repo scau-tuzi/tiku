@@ -1,4 +1,4 @@
-
+'
 <template>
   <Framework v-bind:menu-info="mockData">
     <router-view></router-view>
