@@ -2,6 +2,7 @@ package io.swagger.pojo.dao.repos;
 
 import io.swagger.pojo.dao.Problem;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,4 +17,8 @@ import java.util.List;
 public interface ProblemRepository extends JpaRepository<Problem, Long> {
 
     List<Problem> findAllByIdIn(List<Long> idList);
+
+    @Query(nativeQuery = true, value = "select id from problem",
+            countQuery = "select count(*) from problem")
+    List<Long> findIdList(org.springframework.data.domain.Pageable pageable);
 }

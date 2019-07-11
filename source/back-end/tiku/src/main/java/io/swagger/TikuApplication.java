@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
-@EnableJpaRepositories("cn.czfshine.tiku.pojo")
+@EnableJpaRepositories("io.swagger.pojo")
 public class TikuApplication {
 
     public static void main(String[] args) {
