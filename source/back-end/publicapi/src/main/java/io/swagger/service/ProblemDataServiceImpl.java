@@ -64,7 +64,6 @@ public class ProblemDataServiceImpl implements ProblemDataService {
 
         // 查询问题标签map
         Map<Long, List<Tag>> problemIdTagMap = getProblemIdTagMap(problemIds);
-        System.out.println(problemIdTagMap);
         //设置每个问题的所有属性
         for (Long problemId : problemIds) {
             ProblemFullData problemFullData = new ProblemFullData();

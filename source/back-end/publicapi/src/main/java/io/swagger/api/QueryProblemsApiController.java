@@ -50,7 +50,6 @@ public class QueryProblemsApiController implements QueryProblemsApi {
         List<ProblemFullData> problemFullData = null;
         try {
             problemFullData = problemService.queryProblem(body.getQuerry());
-            System.out.println(problemFullData);
         } catch (ParserErrorException e) {
             // todo 表达异常
             e.printStackTrace();

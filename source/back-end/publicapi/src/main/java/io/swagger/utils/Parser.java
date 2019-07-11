@@ -61,7 +61,6 @@ public class Parser {
          switch (fieldName){
             case "problemId":{
                //todo 捕获数字解析错误
-               System.out.println(problemRepository);
                Optional<Problem> byId = problemRepository.findById(Long.valueOf(value));
                byId.ifPresent(problem -> res.add(problem.getId()));
                break;

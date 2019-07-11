@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class HomeController {
     @RequestMapping(value = "/")
     public String index() {
-        System.out.println("io.swagger-ui.html");
         return "redirect:io.swagger-ui.html";
     }
 }
