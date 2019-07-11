@@ -1,6 +1,5 @@
 import MenuInfo from "@/data/model/MenuInfo";
 import Home from "@/views/Home.vue";
-import About from "@/views/About.vue";
 import InputTiku from "@/components/InputTiku.vue";
 import TikuTable from "@/components/TikuTable.vue";
 import VerifyTable from "@/components/VerifyTable.vue";
@@ -11,18 +10,18 @@ let mockData:MenuInfo={
     subItems:[
       {
         title:"首页",
-        component:Home, //todo 热加载脚本，不要编译期使用
+        // component:Home, //todo 热加载脚本，不要编译期使用
         path:"/",
       },
       {
         title:"题目列表",
-        component:TikuTable,
+        // component:TikuTable,
         path:"/TikuTable",
 
       },
       {
         title:"审核列表",
-        component:VerifyTable,
+        // component:VerifyTable,
         path:"/VerifyTable",
 
       }
@@ -33,12 +32,12 @@ let mockData:MenuInfo={
       subItems:[
         {
           title:"子菜单一",
-          component:InputTiku,
+          // component:InputTiku,
           path:"/InputTiku",
         },
         {
           title:"子菜单二",
-          component:Home,
+          // component:Home,
           path:"/1",
         }
       ]
