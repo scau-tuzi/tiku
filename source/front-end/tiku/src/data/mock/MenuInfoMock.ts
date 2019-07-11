@@ -2,7 +2,7 @@ import MenuInfo from "@/data/model/MenuInfo";
 
 let mockData:MenuInfo={
   items:[{
-    title:"题目",
+    title:"题库管理",
     subItems:[
       {
         title:"首页",
@@ -24,15 +24,55 @@ let mockData:MenuInfo={
     ]
   },
     {
-      title:"主菜单",
+      title:"试卷管理",
       subItems:[
         {
-          title:"子菜单一",
+          title:"试卷列表",
           // component:InputTiku,
           path:"/InputTiku",
         },
         {
-          title:"子菜单二",
+          title:"新增试卷",
+          // component:Home,
+          path:"/1",
+        }
+      ]
+    },
+    {
+      title:"标签管理",
+      subItems:[
+        {
+          title:"查看标签",
+          // component:InputTiku,
+          path:"/InputTiku",
+        }
+      ]
+    },
+    {
+      title:"用户管理",
+      subItems:[
+        {
+          title:"角色列表",
+          // component:InputTiku,
+          path:"/InputTiku",
+        },
+        {
+          title:"用户列表",
+          // component:Home,
+          path:"/1",
+        }
+      ]
+    },
+    {
+      title:"授权管理",
+      subItems:[
+        {
+          title:"应用授权",
+          // component:InputTiku,
+          path:"/InputTiku",
+        },
+        {
+          title:"应用角色",
           // component:Home,
           path:"/1",
         }
