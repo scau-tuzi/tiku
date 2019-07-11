@@ -25,7 +25,6 @@
           border
           stripe="true"
           style="width: 100%"
-          max-height="400"
           @selection-change="handleSelectionChange">
           <el-table-column
             type="selection"
