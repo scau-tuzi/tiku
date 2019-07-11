@@ -6,10 +6,10 @@
           <el-button type="primary" @click="back" >返回</el-button>
         </el-form-item>
         <el-form-item label="题目" prop="ti">
-          <el-input type="textarea":rows="5" v-model="ruleForm.ti":disabled="true"></el-input>
+          <el-input type="textarea" rows="5" v-model="ruleForm.ti" disabled="true"></el-input>
         </el-form-item>
         <el-form-item label="答案" prop="answer">
-          <el-input type="textarea":rows="5" v-model="ruleForm.answer":disabled="true"></el-input>
+          <el-input type="textarea" rows="5" v-model="ruleForm.answer" disabled="true"></el-input>
         </el-form-item>
         <el-form-item label="多图片" prop="pics">
             <div style="direction: inherit">

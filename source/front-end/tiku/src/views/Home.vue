@@ -7,7 +7,8 @@
       <ul>
 <!--        todo 3.显示层，从状态拿数据显示-->
         <li v-for="commit in this.$store.state.commits" v-bind:key="commit.sha">
-          {{commit.author.login}} + {{commit.commit.message}}+{{commit.sha}}
+          {{commit.author.login}} + {{commit.commit.message}}+
+          <br/>{{commit.sha}}
         </li>
       </ul>
     </div>
