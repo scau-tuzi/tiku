@@ -1,26 +1,17 @@
-package io.swagger.api;
+package io.swagger;
 
-import io.swagger.Swagger2SpringBoot;
 import io.swagger.pojo.dao.*;
 import io.swagger.pojo.dao.repos.*;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.DefaultMockMvcBuilder;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
-@WebAppConfiguration
-@ComponentScan(basePackages = "io.swagger.api")
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = Swagger2SpringBoot.class)
-public class QueryApiBaseTest {
+@Configuration
+@Slf4j
+public class Initer {
+
     @Autowired
     private ProblemRepository problemRepository;
     @Autowired
@@ -37,19 +28,27 @@ public class QueryApiBaseTest {
 
     @Autowired
     private TagRepository tagRepository;
-    @Autowired
-    private WebApplicationContext wac;
-    protected MockMvc mockMvc;
 
-    @Before
-    public void setUp() throws Exception {
+    @Bean
+    CommandLineRunner initDatabase(
 
-        DefaultMockMvcBuilder builder = MockMvcBuilders.webAppContextSetup(this.wac);
-        this.mockMvc = builder.build();
-        // 测试数据，仅本接口使用，勿改，不然下面的测试都得变
-        //todo 提取到别处
+    ) {
 
-        long tid = 10000;
+        return args -> {
+            initData();
+            if (problemRepository.count() == 0) {
+                //如果数据库没有数据的话才装填数据进去
+
+            } else {
+                log.info("had data.");
+            }
+        };
+    }
+
+    private void initData() {
+        log.info("Preloading data ...");
+
+        long tid = 20000;
         tagRepository.save(new Tag(tid++, "一年级", null));
         tagRepository.save(new Tag(tid++, "二年级", null));
         tagRepository.save(new Tag(tid++, "三年级", null));
@@ -63,7 +62,7 @@ public class QueryApiBaseTest {
         tagRepository.save(new Tag(tid++, "高二", null));
         tagRepository.save(new Tag(tid++, "高三", null));
 
-        tid = 10100;
+        tid = 20100;
 
         tagRepository.save(new Tag(tid++, "语文", null));
         tagRepository.save(new Tag(tid++, "数学", null));
@@ -79,7 +78,7 @@ public class QueryApiBaseTest {
         tagRepository.save(new Tag(tid++, "打码", null));
 
 
-        long baseid = 1000000;
+        long baseid = 2000000;
         long curid = baseid;
         long exid = 1;
         for (int i = 1; i < 27; i++) {
@@ -136,17 +135,13 @@ public class QueryApiBaseTest {
 
                 ProblemTag problemTag = new ProblemTag();
                 problemTag.setProblemId(curid);
-                problemTag.setTagId(curid % 12 + 10000);
+                problemTag.setTagId(curid % 12 + 20000);
                 problemTagRepository.save(problemTag);
                 ProblemTag problemTag2 = new ProblemTag();
                 problemTag2.setProblemId(curid);
-                problemTag2.setTagId(((curid * 13) % 12) + 10100);
+                problemTag2.setTagId(((curid * 13) % 12) + 20100);
                 problemTagRepository.save(problemTag2);
             }
         }
-    }
-    @Test
-    public void test(){
-
     }
 }

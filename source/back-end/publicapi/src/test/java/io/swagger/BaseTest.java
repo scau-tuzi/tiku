@@ -63,14 +63,14 @@ public class BaseTest {
 
         ExtData extData1 = new ExtData();
         extData1.setId(1L);
-        extData1.setKey("A");
+        extData1.setKeyname("A");
         extData1.setValue("eva");
         extData1.setProblemId(1000002L);
         extDataRepository.save(extData1);
 
         ExtData extData2 = new ExtData();
         extData2.setId(2L);
-        extData2.setKey("B");
+        extData2.setKeyname("B");
         extData2.setValue("bobo");
         extData2.setProblemId(1000002L);
         extDataRepository.save(extData2);

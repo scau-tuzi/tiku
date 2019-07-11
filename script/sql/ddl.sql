@@ -13,7 +13,9 @@
 
  Date: 10/07/2019 11:26:01
 */
-
+DROP DATABASE if exists `tiku`;
+CREATE SCHEMA `tiku` DEFAULT CHARACTER SET utf8mb4 ;
+use `tiku`	;
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
@@ -51,7 +53,7 @@ DROP TABLE IF EXISTS `ext_data`;
 CREATE TABLE `ext_data`  (
   `id` int(64) NOT NULL,
   `problem_id` int(64) NULL DEFAULT NULL,
-  `key` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT '数据项的key',
+  `keyname` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT '数据项的key',
   `value` varchar(225) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT '数据项的值',
   `is_del` bit(1) NULL DEFAULT NULL COMMENT '是否删除',
   `create_at` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
