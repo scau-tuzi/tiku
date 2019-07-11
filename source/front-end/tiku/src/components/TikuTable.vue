@@ -23,7 +23,7 @@
         <el-table
           :data="tableData"
           border
-          stripe="true"
+          stripe
           style="width: 100%"
           @selection-change="handleSelectionChange">
           <el-table-column
@@ -89,7 +89,9 @@
       <el-pagination
         background
         layout="prev, pager, next"
-        :total="100">
+        :total="100"
+
+        @current-change="this.handlerchange">
       </el-pagination>
     </el-footer>
     <el-dialog
@@ -125,9 +127,14 @@
   </el-container>
 </template>
 
-<script>
+<script >
+  import {getProblems} from "../api/Problem";
+  import ProblemFullData from "../data/model/ProblemFullData";
+
   export default {
     name: 'TikuTable',
+    datas:[],
+
     methods: {
       handleEdit (index, row) {
         console.log(index, row),
@@ -165,8 +172,34 @@
         }
         this.inputVisible = false;
         this.inputValue = '';
-      }
+      },
+      handlerchange:function(currentPage){
+       this.getData(currentPage);
+      },getData:function (currentPage){
+        console.log("change")
+        var _this=this;
+        let callback=(pd)=>{
+          var res=[];
+          console.log("get it")
+          console.log(pd)
+          pd.filter(v=>{
+            res.push({
+              problem:v.problem.problemText,
+              answer:v.answer.answerText,
+              pictures:'',
+              sound:'',
+              tag:v.tags[0].value
+            })
+          });
+          console.log(res);
+          _this.tableData=res;
+        };
+        getProblems(currentPage,callback);
+      },
 
+    },
+    mounted: function () {
+     this.getData(0);
     },
     data () {
       return {
@@ -174,55 +207,7 @@
         inputVisible: false,
         inputValue: '',
         centerDialogVisible: false,
-        tableData: [{
-          problem: '1+2',
-          answer: '3',
-          pictures: '',
-          sound: '',
-          tag: '一年级'
-        }, {
-          problem: '4*4',
-          answer: '16',
-          pictures: '',
-          sound: '',
-          tag: '二年级'
-        }, {
-          problem: '16*16',
-          answer: '256',
-          pictures: '',
-          sound: '',
-          tag: '三年级'
-        }, {
-          problem: 'How are you?',
-          answer: 'I am fine. Thank you',
-          pictures: '',
-          sound: 'VOA.mp3',
-          tag: '英语'
-        }, {
-          problem: 'How are you?',
-          answer: 'I am fine. Thank you',
-          pictures: '',
-          sound: 'VOA.mp3',
-          tag: '英语'
-        }, {
-          problem: 'How are you?',
-          answer: 'I am fine. Thank you',
-          pictures: '',
-          sound: 'VOA.mp3',
-          tag: '英语'
-        }, {
-          problem: 'How are you?',
-          answer: 'I am fine. Thank you',
-          pictures: '',
-          sound: 'VOA.mp3',
-          tag: '英语'
-        }, {
-          problem: '1+2',
-          answer: '3',
-          pictures: '',
-          sound: '',
-          tag: '一年级'
-        }]
+        tableData: []
       }
     }
 
