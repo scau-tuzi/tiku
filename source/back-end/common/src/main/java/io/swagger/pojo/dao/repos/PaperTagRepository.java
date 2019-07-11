@@ -14,5 +14,6 @@ import java.util.List;
  */
 @Repository
 public interface PaperTagRepository extends JpaRepository<PaperTag, Long>{
-    List<PaperTag> findAllByPaperIdIn(List<Long> paperIdList);
+
+    List<PaperTag> findAllByTagIdEquals(Long id);
 }
