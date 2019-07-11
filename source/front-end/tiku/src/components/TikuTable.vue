@@ -138,9 +138,20 @@
     methods: {
       handleEdit (index, row) {
         console.log(index, row),
-        this.$router.push({path: '/ModifyProblem'})
+          alert(index+row.problem+row.answer),
+          this.$router.push({path: '/ModifyProblem',
+            query: {
+              modifyQues:row.problem,
+              modifyAnsw:row.answer
+            }
+          })
       },
       handleDelete (index, row) {
+        this.tableData.splice(index, 1);//删除该行
+        this.$message({
+          message: "操作成功！",
+          type: 'success'
+        })
         console.log(index, row)
       },
       handleSelectionChange (val) {
