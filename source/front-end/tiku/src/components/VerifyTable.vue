@@ -21,27 +21,27 @@
             @selection-change="handleSelectionChange">
             <el-table-column
               fixed="left"
-              prop="date"
+              prop="problem"
               label="问题"
               width="300">
             </el-table-column>
             <el-table-column
-              prop="name"
+              prop="answer"
               label="答案"
               width="300">
             </el-table-column>
             <el-table-column
-              prop="province"
+              prop="sound"
               label="语音"
               width="150">
             </el-table-column>
             <el-table-column
-              prop="city"
+              prop="pictures"
               label="多图片"
               width="150">
             </el-table-column>
             <el-table-column
-              prop="city"
+              prop="status"
               label="审核状态"
               width="220">
             </el-table-column>
@@ -82,45 +82,61 @@
       data () {
         return {
           tableData: [{
-            date: '2016-05-02',
-            name: '王小虎',
-            province: '上海',
-            city: '普陀区'
+            problem: 'How are you?',
+            answer: 'I am fine. Thank you',
+            pictures: '',
+            sound: 'VOA.mp3',
+            tag: '英语',
+            status: '已通过'
           }, {
-            date: '2016-05-04',
-            name: '王小虎',
-            province: '上海',
-            city: '普陀区'
+            problem: 'How are you?',
+            answer: 'I am fine. Thank you',
+            pictures: '',
+            sound: 'VOA.mp3',
+            tag: '英语',
+            status: '已通过'
           }, {
-            date: '2016-05-01',
-            name: '王小虎',
-            province: '上海',
-            city: '普陀区'
+            problem: 'How are you?',
+            answer: 'I am fine. Thank you',
+            pictures: '',
+            sound: 'VOA.mp3',
+            tag: '英语',
+            status: '已通过'
           }, {
-            date: '2016-05-03',
-            name: '王小虎',
-            province: '上海',
-            city: '普陀区'
+            problem: 'How are you?',
+            answer: 'I am fine. Thank you',
+            pictures: '',
+            sound: 'VOA.mp3',
+            tag: '英语',
+            status: '已通过'
           }, {
-            date: '2016-05-03',
-            name: '王小虎',
-            province: '上海',
-            city: '普陀区'
+            problem: 'How are you?',
+            answer: 'I am fine. Thank you',
+            pictures: '',
+            sound: 'VOA.mp3',
+            tag: '英语',
+            status: '已通过'
           }, {
-            date: '2016-05-03',
-            name: '王小虎',
-            province: '上海',
-            city: '普陀区'
+            problem: 'How are you?',
+            answer: 'I am fine. Thank you',
+            pictures: '',
+            sound: 'VOA.mp3',
+            tag: '英语',
+            status: '已通过'
           }, {
-            date: '2016-05-03',
-            name: '王小虎',
-            province: '上海',
-            city: '普陀区'
+            problem: 'How are you?',
+            answer: 'I am fine. Thank you',
+            pictures: '',
+            sound: 'VOA.mp3',
+            tag: '英语',
+            status: '已通过'
           }, {
-            date: '2016-05-03',
-            name: '王小虎',
-            province: '上海',
-            city: '普陀区'
+            problem: 'How are you?',
+            answer: 'I am fine. Thank you',
+            pictures: '',
+            sound: 'VOA.mp3',
+            tag: '英语',
+            status: '已通过'
           }]
         }
       }
