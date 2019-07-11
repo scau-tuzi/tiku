@@ -1,25 +1,19 @@
 package io.swagger;
 
 
-import io.swagger.Swagger2SpringBoot;
 import io.swagger.pojo.dao.*;
 import io.swagger.pojo.dao.repos.*;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.junit4.SpringRunner;
-
-import javax.annotation.Resource;
-import javax.persistence.EntityManager;
 
 /**
  * 基础测试类，初始化数据用
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = Swagger2SpringBoot.class)
+
 @ContextConfiguration(classes = Swagger2SpringBoot.class)
 public class BaseTest {
     @Autowired
@@ -48,7 +42,7 @@ public class BaseTest {
     @Autowired
     private PaperItemRepository paperItemRepository;
 
-    protected String baseurl="/tiku/api/v1";
+    protected String baseurl = "/tiku/api/v1";
 
     @Before
     public void before() {

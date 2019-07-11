@@ -1,6 +1,5 @@
 package io.swagger.service;
 
-import com.sun.xml.internal.ws.api.message.saaj.SaajStaxWriter;
 import io.swagger.pojo.PaperFullData;
 import io.swagger.pojo.ProblemFullData;
 import io.swagger.pojo.dao.Paper;

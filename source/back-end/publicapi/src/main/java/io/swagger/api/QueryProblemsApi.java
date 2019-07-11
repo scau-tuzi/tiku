@@ -5,9 +5,9 @@
  */
 package io.swagger.api;
 
+import io.swagger.annotations.*;
 import io.swagger.model.QuerryInfo;
 import io.swagger.model.QuerryResult;
-import io.swagger.annotations.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,14 +19,14 @@ import javax.validation.Valid;
 @Api(value = "queryProblems", description = "the queryProblems API")
 public interface QueryProblemsApi {
 
-    @ApiOperation(value = "查询题目信息", nickname = "queryProblems", notes = "按条件查询题目 ", response = QuerryResult.class, tags={  })
-    @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "返回查询到的项目列表", response = QuerryResult.class),
-        @ApiResponse(code = 401, message = "参数格式错误") })
+    @ApiOperation(value = "查询题目信息", nickname = "queryProblems", notes = "按条件查询题目 ", response = QuerryResult.class, tags = {})
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "返回查询到的项目列表", response = QuerryResult.class),
+            @ApiResponse(code = 401, message = "参数格式错误")})
     @RequestMapping(value = "/queryProblems",
-        produces = { "application/json" }, 
-        consumes = { "application/json" },
-        method = RequestMethod.POST)
-    ResponseEntity<QuerryResult> queryProblems(@ApiParam(value = ""  )  @Valid @RequestBody QuerryInfo body);
+            produces = {"application/json"},
+            consumes = {"application/json"},
+            method = RequestMethod.POST)
+    ResponseEntity<QuerryResult> queryProblems(@ApiParam(value = "") @Valid @RequestBody QuerryInfo body);
 
 }

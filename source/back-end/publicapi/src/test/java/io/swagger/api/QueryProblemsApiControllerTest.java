@@ -1,45 +1,23 @@
 package io.swagger.api;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.swagger.BaseTest;
 import io.swagger.Swagger2SpringBoot;
-import io.swagger.model.Expression;
-import io.swagger.model.QuerryInfo;
-import io.swagger.pojo.dao.*;
-import io.swagger.pojo.dao.repos.*;
-import net.minidev.json.JSONObject;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.data.web.JsonPath;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.test.web.servlet.setup.DefaultMockMvcBuilder;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
-import springfox.documentation.spring.web.json.Json;
-
-import java.util.UUID;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 /**
  * 测试queryProblem接口
  */
-public class QueryProblemsApiControllerTest extends QueryApiBaseTest{
+@SpringBootTest(classes = Swagger2SpringBoot.class)
+public class QueryProblemsApiControllerTest extends QueryApiBaseTest {
 
     @After
     public void tearDown() throws Exception {
@@ -85,7 +63,7 @@ public class QueryProblemsApiControllerTest extends QueryApiBaseTest{
         this.mockMvc.perform(content)
                 .andExpect(ok)
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect( jsonPath("$.status").value("ok"));
+                .andExpect(jsonPath("$.status").value("ok"));
 
         MockHttpServletRequestBuilder content2 = MockMvcRequestBuilders.post("/queryProblems")
                 .contentType(MediaType.APPLICATION_JSON).content("{\n" +
@@ -120,7 +98,7 @@ public class QueryProblemsApiControllerTest extends QueryApiBaseTest{
         this.mockMvc.perform(content2)
                 .andExpect(ok)
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect( jsonPath("$.status").value("ok"));
+                .andExpect(jsonPath("$.status").value("ok"));
 
     }
 }

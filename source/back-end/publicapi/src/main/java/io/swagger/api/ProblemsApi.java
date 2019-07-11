@@ -5,9 +5,9 @@
  */
 package io.swagger.api;
 
+import io.swagger.annotations.*;
 import io.swagger.model.BasicResponse;
 import io.swagger.model.ProblemInfo;
-import io.swagger.annotations.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,14 +19,14 @@ import javax.validation.Valid;
 @Api(value = "problems", description = "the problems API")
 public interface ProblemsApi {
 
-    @ApiOperation(value = "增加题目", nickname = "addProblems", notes = "增加一道题目到题库 ", response = BasicResponse.class, tags={  })
-    @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "项目被创建", response = BasicResponse.class),
-        @ApiResponse(code = 401, message = "参数错误") })
+    @ApiOperation(value = "增加题目", nickname = "addProblems", notes = "增加一道题目到题库 ", response = BasicResponse.class, tags = {})
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "项目被创建", response = BasicResponse.class),
+            @ApiResponse(code = 401, message = "参数错误")})
     @RequestMapping(value = "/problems",
-        produces = { "application/json" }, 
-        consumes = { "application/json" },
-        method = RequestMethod.POST)
-    ResponseEntity<BasicResponse> addProblems(@ApiParam(value = ""  )  @Valid @RequestBody ProblemInfo body);
+            produces = {"application/json"},
+            consumes = {"application/json"},
+            method = RequestMethod.POST)
+    ResponseEntity<BasicResponse> addProblems(@ApiParam(value = "") @Valid @RequestBody ProblemInfo body);
 
 }
