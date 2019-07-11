@@ -75,7 +75,7 @@
 
   .el-aside {
 
-    text-align: center;
+    text-align: left;
     display: flex;
     flex-direction: column;
     width: $sideBarWidth !important; //默认被注入300px了

@@ -1,8 +1,4 @@
 import MenuInfo from "@/data/model/MenuInfo";
-import Home from "@/views/Home.vue";
-import InputTiku from "@/components/InputTiku.vue";
-import TikuTable from "@/components/TikuTable.vue";
-import VerifyTable from "@/components/VerifyTable.vue";
 
 let mockData:MenuInfo={
   items:[{
