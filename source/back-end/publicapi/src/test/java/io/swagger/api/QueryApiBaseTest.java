@@ -4,6 +4,7 @@ import io.swagger.Swagger2SpringBoot;
 import io.swagger.pojo.dao.*;
 import io.swagger.pojo.dao.repos.*;
 import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
@@ -18,7 +19,6 @@ import org.springframework.web.context.WebApplicationContext;
 @WebAppConfiguration
 @ComponentScan(basePackages = "io.swagger.api")
 @RunWith(SpringJUnit4ClassRunner.class)
-
 @ContextConfiguration(classes = Swagger2SpringBoot.class)
 public class QueryApiBaseTest {
     @Autowired
@@ -144,5 +144,9 @@ public class QueryApiBaseTest {
                 problemTagRepository.save(problemTag2);
             }
         }
+    }
+    @Test
+    public void test(){
+
     }
 }

@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@SpringBootTest(classes = Swagger2SpringBoot.class)
+
 public class ProblemDataServiceImplTest extends BaseTest {
 
     @Autowired

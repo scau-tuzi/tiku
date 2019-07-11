@@ -1,8 +1,6 @@
 package io.swagger.service;
 
-import io.swagger.Swagger2SpringBoot;
 import io.swagger.TikuApplication;
-import io.swagger.pojo.PaperFullData;
 import io.swagger.pojo.ProblemFullData;
 import io.swagger.pojo.dao.*;
 import io.swagger.pojo.dao.repos.*;
@@ -13,15 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = TikuApplication.class)
 @ContextConfiguration(classes = TikuApplication.class)
+@WebAppConfiguration
 public class ProblemServiceImplTest {
 
     @Autowired

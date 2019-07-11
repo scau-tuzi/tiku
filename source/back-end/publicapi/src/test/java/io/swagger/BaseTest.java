@@ -4,16 +4,20 @@ package io.swagger;
 import io.swagger.pojo.dao.*;
 import io.swagger.pojo.dao.repos.*;
 import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 /**
  * 基础测试类，初始化数据用
  */
+@WebAppConfiguration
+@SpringBootTest(classes = Swagger2SpringBoot.class)
 @RunWith(SpringJUnit4ClassRunner.class)
-
 @ContextConfiguration(classes = Swagger2SpringBoot.class)
 public class BaseTest {
     @Autowired
@@ -128,4 +132,8 @@ public class BaseTest {
 
     }
 
+    @Test
+    public void test(){
+
+    }
 }
