@@ -1,24 +1,22 @@
 package io.swagger.service;
 
-import io.swagger.pojo.ProblemFullData;
+import io.swagger.pojo.PaperFullData;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
-public class ProblemDataServiceImplTest extends BaseTest {
-
+public class PaperDataServiceImplTest extends BaseTest {
 
     @Autowired
-    private ProblemDataServiceImpl problemDataServiceImpl;
+    private PaperDataServiceImpl paperDataServiceImpl;
 
     @Test
     public void test() {
         ArrayList<Long> longs = new ArrayList<>();
-        longs.add(1000002L);
-        List<ProblemFullData> fullDataByIds = problemDataServiceImpl.getFullDataByIds(longs);
+        longs.add(100L);
+        List<PaperFullData> fullDataByIds = paperDataServiceImpl.getFullDataByIds(longs, true);
         System.out.println("--------------------------------------");
         System.out.println(fullDataByIds);
         System.out.println("--------------------------------------");
