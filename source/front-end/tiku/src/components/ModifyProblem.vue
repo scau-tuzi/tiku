@@ -7,7 +7,7 @@
           <el-button @click="back">返回</el-button>
         </el-form-item>
         <el-form-item label="题目" prop="ti">
-          <el-input type="textarea":rows="5" v-model="ruleForm.ti"></el-input>
+          <el-input type="textarea":rows="5" v-model="ruleForm.problem"></el-input>
         </el-form-item>
         <el-form-item label="答案" prop="answer">
           <el-input type="textarea":rows="5" v-model="ruleForm.answer"></el-input>
@@ -77,14 +77,14 @@
           dialogVisible: false,
           disabled: false,
           ruleForm: {
-            ti: '1+1',
+            problem: '1+1',
             answer: '2',
             pics: '',
             sound: '',
             tags: ''
           },
           rules: {
-            ti: [
+            problem: [
               { required: true, message: '请输入题目', trigger: 'blur' }
             ],
             answer: [
@@ -105,6 +105,9 @@
           value: []
 
         };
+      },
+      created(){
+        this.getParams()
       },
       methods: {
         back(){
@@ -142,7 +145,18 @@
             this.$message.warning(`上传文件只能是mp3格式！`);
           }
           return extension;
+        },
+        getParams(){
+          // 取到路由带过来的参数
+          const routerQues = this.$route.query.modifyQues
+          const routerAnsw = this.$route.query.modifyAnsw
+          // 将数据放在当前组件的数据内
+          this.ruleForm.problem = routerQues
+          this.ruleForm.answer = routerAnsw
         }
+      },
+      watch: {
+        '$route': 'getParams'
       }
     }
 </script>
