@@ -1,4 +1,4 @@
-package cn.czfshine.tiku.service;
+package io.swagger.service;
 
 import io.swagger.pojo.dao.Problem;
 

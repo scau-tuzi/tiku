@@ -1,10 +1,11 @@
-package cn.czfshine.tiku.controller;
+package io.swagger.controller;
 
 import io.swagger.pojo.dao.Problem;
 import io.swagger.pojo.dto.BasicResponse;
-import cn.czfshine.tiku.service.ProblemService;
+import io.swagger.service.ProblemService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
