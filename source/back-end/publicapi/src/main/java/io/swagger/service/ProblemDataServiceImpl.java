@@ -44,7 +44,7 @@ public class ProblemDataServiceImpl implements ProblemDataService {
     @Override
     public List<ProblemFullData> getFullDataByIds(List<Long> problemIds) {
 
-        if (problemIds.size() <= 0) {
+        if (problemIds == null || problemIds.size() <= 0) {
             return new ArrayList<>();
         }
 

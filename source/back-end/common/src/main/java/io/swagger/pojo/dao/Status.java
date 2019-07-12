@@ -3,10 +3,7 @@ package io.swagger.pojo.dao;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * 功能描述：问题状态实体类
@@ -18,7 +15,10 @@ import javax.persistence.Table;
 @Data
 @Accessors(chain = true)
 @Table(name = "status")
-public class Status extends BasicEntity{
+public class Status extends BasicEntity {
+
+    public static Integer UNCHECK = 0;
+    public static Integer CHECK = 1;
 
     /**
      * 问题id
@@ -31,7 +31,6 @@ public class Status extends BasicEntity{
      * 审核状态
      */
     @Column(name = "verify_status")
-    private Integer verifyStatus;
-
+    private Integer verifyStatus = UNCHECK;
 
 }

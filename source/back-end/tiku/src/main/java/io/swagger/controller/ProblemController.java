@@ -1,9 +1,9 @@
 package io.swagger.controller;
 
-import io.swagger.InitData;
 import io.swagger.pojo.ProblemFullData;
 import io.swagger.pojo.dto.BasicResponse;
 import io.swagger.service.WebProblemService;
+import io.swagger.service.WebProblemServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +18,9 @@ public class ProblemController {
     @Autowired
     private WebProblemService webProblemService;
 
+    @Autowired
+    private WebProblemServiceImpl webProblemServiceImpl;
+
     // todo 不知道这样写swagger能不能自动生成正确的接口
 
     /**
@@ -28,43 +31,44 @@ public class ProblemController {
      * @return
      */
     @GetMapping("/list")
-    public BasicResponse list(Integer pageNumber, Integer pageSize) {
-
-        List<ProblemFullData> allProblemFullData = webProblemService.getAll(pageNumber, pageSize);
+    public BasicResponse list(@RequestParam Integer pageNumber, Integer pageSize) {
 
         BasicResponse basicResponse = new BasicResponse();
-        basicResponse.setData(allProblemFullData);
+
+        if (pageNumber < 0 || pageSize < 1) {
+            basicResponse.setCode(BasicResponse.ERRORCODE);
+            basicResponse.setData("Param error! pageNumber should >= 0 And pageSize should >= 1");
+        } else {
+            try {
+                List<ProblemFullData> allProblemFullData = webProblemService.getAll(pageNumber, pageSize);
+                basicResponse.setData(allProblemFullData);
+            } catch (Exception e) {
+                basicResponse.setCode(BasicResponse.ERRORCODE);
+                basicResponse.setData("Query error!");
+            }
+        }
 
         return basicResponse;
     }
-
-    @PostMapping("add")
-    public BasicResponse add(@RequestBody List<ProblemFullData> problemFullDataList) {
-
-        System.out.println("-----------------------------------------------------");
-        System.out.println(problemFullDataList);
-        System.out.println("-----------------------------------------------------");
-
-        BasicResponse basicResponse = new BasicResponse();
-        basicResponse.setData(problemFullDataList);
-
-        return basicResponse;
-    }
-
-
-    @Autowired
-    private InitData initData;
 
     /**
-     * 初始化数据
+     * 新增题目
+     * @param problemFullData
      * @return
      */
-    @GetMapping("init")
-    public BasicResponse init() {
-        initData.before();
+    @PostMapping("/add")
+    public BasicResponse add(@RequestBody ProblemFullData problemFullData) {
 
         BasicResponse basicResponse = new BasicResponse();
-        basicResponse.setData("初始化成功");
+
+        Long createBy = 1L;
+        try {
+            webProblemServiceImpl.add(problemFullData, createBy);
+            basicResponse.setData("问题添加成功");
+        } catch (Exception e) {
+            basicResponse.setCode(BasicResponse.ERRORCODE);
+            basicResponse.setData("问题添加失败：" + e.getMessage());
+        }
 
         return basicResponse;
     }
