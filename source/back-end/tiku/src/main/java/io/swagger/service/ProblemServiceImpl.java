@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ProblemServiceImpl implements ProblemService {
+public class ProblemServiceImpl extends BasicService<Problem> implements ProblemService {
 
     @Autowired
     private ProblemDataServiceImpl problemDataServiceImpl;
