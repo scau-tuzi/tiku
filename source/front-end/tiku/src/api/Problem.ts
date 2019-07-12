@@ -9,16 +9,16 @@ function getProblems(page: number, callback: (Problems: ProblemFullData[]) => vo
     /**
      * 查看题目列表
      */
-    // axios
-    //     .get("/api/problem/list?pageNumber=" + page + "&pageSize=2")//服务器网址
-    //     .then(res => {
-    //         let lists: ProblemFullData[] = res.data.data;
+    axios
+        .get("/api/problem/list?pageNumber=" + page + "&pageSize=10")//服务器网址
+        .then(res => {
+            let lists: ProblemFullData[] = res.data.data;
 
-    let lists: ProblemFullData[] = porblemsList;
-    console.log("获取到的数据");
-    console.log(lists);
+    // let lists: ProblemFullData[] = porblemsList;
+    // console.log("获取到的数据");
+    // console.log(lists);
     callback(lists);
-    // })
+    })
 }
 
 function addProblem(problem: ProblemFullData, callback: (b: BasicResponse) => void) {

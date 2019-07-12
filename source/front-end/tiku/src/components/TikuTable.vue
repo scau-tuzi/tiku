@@ -209,8 +209,15 @@
           console.log(pd)
           pd.filter(v=>{
             var ts=[];
-            for(var i =0;i<v.tags.length;i++){
-              ts.push(v.tags[i].value)
+            if(v.tags!==null){
+              for(var i =0;i<v.tags.length;i++){
+                ts.push(v.tags[i].value)
+              }
+            }
+            if(v.answer===null){
+              v.answer={
+                answerText:""
+              }
             }
             res.push({
               problem:v.problem.problemText,
