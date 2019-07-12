@@ -8,4 +8,8 @@ import java.util.List;
 public interface WebProblemService {
 
     List<ProblemFullData> getAll(Integer pageNumber, Integer pageSize);
+
+    void add(ProblemFullData problemFullData, Long createBy) throws Exception;
+
+    Problem addBasicInfo(Problem problem, Long createBy);
 }

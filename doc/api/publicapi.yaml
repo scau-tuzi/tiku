@@ -1,0 +1,513 @@
+openapi: 3.0.0
+# Added by API Auto Mocking Plugin
+servers:
+  - description: 题库测试接口
+    url: http://203.195.239.100:10086/tiku/api/v1/
+info:
+  description: 题库系统供其他应用调用的接口
+  version: "1.1.0"
+  title: 题库外部接口
+  contact:
+    email: czfshine@outlook.com
+  license:
+    name: MIT license
+paths:
+  /problems:
+    post:
+      summary: 增加题目
+      operationId: addProblems
+      description: |
+        增加一道题目到题库
+      responses:
+        '200':
+          description: 项目被创建
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BasicResponse'
+        '401':
+          description: 参数错误
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProblemInfo'
+    delete:
+      summary: 删除题目
+      description: 删除题目，swagger的del不能有请求体，只能写在参数里面了
+      parameters:
+        - name: X-tiku-poolId
+          in: header
+          description: 题库id
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: X-tiku-token
+          in: header
+          description: 授权码
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: problemId
+          in: query
+          description: 待删除的问题
+          required: true
+          example: "13245678"
+          schema:
+            type: string
+            
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BasicResponse'
+        '401':
+          description: 参数错误
+          
+  /queryProblems:
+    post:
+      summary : 查询题目信息
+      operationId: queryProblems
+      description: |
+        按条件查询题目
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuerryInfo'
+      responses:
+        '200':
+          description: 返回查询到的项目列表
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuerryResult'
+        '401':
+          description: 参数格式错误
+  /queryCollection:
+    post:
+      summary : 查询题目集合信息
+      operationId: queryCollection
+      description: |
+        按条件查询集合，与查询题目一模一样，不过是去集合里面找而已
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuerryInfo'
+      responses:
+        '200':
+          description: 返回查询到的项目列表
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuerryResult'
+        '401':
+          description: 参数格式错误
+  /problemStatus:
+    put:
+      operationId: problemStatus
+      summary: 更新题目状态
+      description: 更新错题状态
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StatusInfo'
+      responses:
+        '200':
+          description: 更新状态成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BasicResponse'
+        '401':
+          description: 参数格式错误
+    post:
+      operationId: getProblemStatus
+      summary: 获取题目状态
+      description: 获取错题状态
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProblemIdList'
+      responses:
+        '200':
+          description: 获取状态成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusInfoList'
+        '401':
+          description: 参数格式错误
+  /collection:
+    post:
+      summary: 增加题目集合
+      description: 添加题目集合信息
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CollectionInfo'
+      responses:
+        '200':
+          description: 添加成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectionIdResult'
+        '401':
+          description: 参数格式错误
+  /revokeUserToken:
+    post:
+      summary: 撤销授权
+      requestBody:
+        content:
+           application/json:
+            schema:
+              type: object
+              properties: 
+                token: 
+                  type: string
+                  format: uuid
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BasicResponse'
+        '401':
+          description: 参数错误
+      
+  /grantUserToken:
+    post:
+      summary: 授权
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GrantInfo"
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: 
+                    type: string
+                  token:
+                    type: string
+                    format: uuid
+        '401':
+          description: 参数错误
+components:
+  schemas:
+    AnyValue:
+      description: 题目和其他对象的具体信息，任意对象 https://www.yuque.com/czfshine/olm1pa/xrw896
+      example: {"grade":"一年级","subject":"小学数学","sorce":5.5,"stem":"请写出下列数字的相反数","caption":"1. 5 \n 2. 6 \n 3. -1 \n","answer":[-5,-6,1]}
+    ProblemInfo:
+      type: object
+      required:
+        - poolId
+        - token
+        - properties
+      properties:
+        poolId:
+          type: string
+          format: uuid
+          example: 4468c74d-759e-4d78-8c43-e1c5405f193b
+          description: 题库对应的id，从管理平台获取 
+        token:
+          type: string
+          format: uuid
+          example: 06e599f3-78db-4c71-b4fa-2b496beab1f6
+          description: 验证用户权限的OAuth令牌，从管理平台申请，暂时无用
+        problems:
+          type: array
+          items:
+            $ref: '#/components/schemas/AnyValue'
+    QuerryInfo:
+      type: object
+      required:
+        - poolId
+        - token
+        - querry
+      properties:
+      # 必须的属性
+        poolId:
+          type: string
+          format: uuid
+          example: 4468c74d-759e-4d78-8c43-e1c5405f193b
+          description: 题库对应的id，从管理平台获取 
+        token:
+          type: string
+          format: uuid
+          example: 06e599f3-78db-4c71-b4fa-2b496beab1f6
+          description: 验证用户权限的OAuth令牌，从管理平台申请，暂时无用
+        querry:
+          $ref: '#/components/schemas/Expression'
+        
+      # 可选
+        random:
+          type: boolean
+          example: false
+          description: 是否打乱顺序输出
+        deep:
+          type: boolean
+          example: false
+          description: 是否递归获取所有信息 
+            为false的话，result就只是一个id列表数组 
+            为true的话，result是具体的信息对象，在可能有大量结果的时候慎用
+        ordering: 
+          $ref:  '#/components/schemas/OrderInfo'
+        pagination:
+          $ref:  '#/components/schemas/Pagination'
+    BasicResponse:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          $ref: '#/components/schemas/StatusCode'
+    Expression:
+      type: object
+      description: |
+        要查询执行的操作，类型是一个 操作表达式对象 ，每个 操作表达式 对象包括 operator(操作名),argument1/2 参数。同时参数也可以是另外的一个表达式对象。样例的查询等价于 ((grade == "一年级") and (sroce <= 10))|
+        具体信息在：https://www.yuque.com/czfshine/olm1pa/mxeyum
+      required:
+        - operator
+        - argument1
+        - argument2
+      properties:
+        operator:
+          type: string
+          example: and
+        argument1:
+          oneOf:
+            - type: string
+            - $ref: '#/components/schemas/Expression'
+          example: {"operator":"==","argument1":"grade","argument2":"一年级"}
+        argument2:
+          oneOf:
+            - type: string
+            - type: number
+            - type: array
+              items: {}
+            - $ref: '#/components/schemas/Expression'
+          example: {"operator":"==","argument1":"subject","argument2":"小学数学"}
+    OrderInfo:
+      type : object
+      example: {"field": "create_time","sorttype": "desc"}
+      description: 排序方式，type 有desc 和asce 两种，next是下一级的排序项
+      required:
+        - sorttype
+        - field
+      properties:
+        sorttype:
+          type: string
+          enum:
+            - desc
+            - asce
+        field:
+          type: string
+          example: create_time
+        next:
+          $ref:  '#/components/schemas/OrderInfo'
+    Pagination:
+      type: object
+      description: 分页器
+      required:
+        - page
+        - size
+      properties:
+        page:
+          type: number
+          example: 1
+        size:
+          type: number
+          example : 10
+        total:
+          description: 后端返回还有多少数据的
+          type: number
+    QuerryResult:
+      type: object
+      description: 查询结果
+      required:
+        - status
+        - results
+      properties:
+        status:
+          $ref: '#/components/schemas/StatusCode'
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AnyValue'
+          
+    StatusCode:
+      type: string
+      example: ok
+      enum: 
+        - ok
+        - error
+        
+    StatusInfo:
+      description: 状态信息
+      type: object
+      required:
+        - problemId
+        - unionid
+        - status
+        - poolId
+        - token
+      properties:
+      # 必须的属性
+        poolId:
+          type: string
+          format: uuid
+          example: 4468c74d-759e-4d78-8c43-e1c5405f193b
+          description: 题库对应的id，从管理平台获取 
+        token:
+          type: string
+          format: uuid
+          example: 06e599f3-78db-4c71-b4fa-2b496beab1f6
+          description: 验证用户权限的OAuth令牌，从管理平台申请，暂时无用
+        problemId:
+          type: string
+          example : "123456"
+          description: 题目id
+        unionid:
+          type: string
+          example: xxxxxxxxxxx
+          description: 微信用户唯一id
+        status:
+          type: string
+          example: "错题+已解决"
+          description: 用户对应的问题状态信息，具体格式看上传者的定义
+        date:
+          type: string
+          example: "2019-08-18"
+          description: 状态时间
+          
+    ProblemIdList:
+      description: 待获取的状态查询信息列表，下面三个是and的关系
+      type: object
+      required:
+        - poolId
+        - token
+      properties:
+      # 必须的属性
+        poolId:
+          type: string
+          format: uuid
+          example: 4468c74d-759e-4d78-8c43-e1c5405f193b
+          description: 题库对应的id，从管理平台获取 
+        token:
+          type: string
+          format: uuid
+          example: 06e599f3-78db-4c71-b4fa-2b496beab1f6
+          description: 验证用户权限的OAuth令牌，从管理平台申请，暂时无用
+        ids:
+          description: 问题id列表
+          type: array
+          example: ["123456"]
+          items:
+            type: string
+        unionids:
+          description: 用户id列表
+          type: array
+          example: ["xxxxxxx"]
+          items:
+            type: string
+        status:
+          description: 状态列表
+          type: array
+          example: ["错题"]
+          items:
+            type: string
+    StatusInfoList:
+      type: object
+      description: 查询结果
+      required:
+        - status
+        - results
+      properties:
+        status:
+          $ref: '#/components/schemas/StatusCode'
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/StatusInfo'
+    
+    CollectionInfo:
+      type: object
+      required:
+        - title
+        - problemIds
+        - poolId
+        - token
+      properties:
+      # 必须的属性
+        poolId:
+          type: string
+          format: uuid
+          example: 4468c74d-759e-4d78-8c43-e1c5405f193b
+          description: 题库对应的id，从管理平台获取 
+        token:
+          type: string
+          format: uuid
+          example: 06e599f3-78db-4c71-b4fa-2b496beab1f6
+          description: 验证用户权限的OAuth令牌，从管理平台申请，暂时无用
+        title:
+          type : string
+          example: "试卷标题"
+        problemIds:
+          type: array
+          example: ["123465","654321"]
+          items:
+            type: string
+        tags:
+          type: array
+          example: ["一年级","语文"]
+          items:
+            type: string
+    CollectionIdResult:
+      type: object
+      description: 添加结果
+      required:
+        - status
+        - results
+      properties:
+        status:
+          $ref: '#/components/schemas/StatusCode'
+        results:
+          type: string
+          example: "963258"
+    GrantInfo:
+      type: object
+      required:
+        - appToken
+        - grantRole
+      properties:
+        appToken:
+          type: string
+          format: uuid
+          description: 应用授权id，从管理平台获取
+        userToken:
+          type: string
+          format: uuid
+          description: 待授权的用户授权码，可本地自行生成，或者不传，服务器生成
+        grantRole:
+          type: string
+          description: 权限角色
+        expiresIn:
+          type: string
+          description: 时效，默认300s
+          example: "300"

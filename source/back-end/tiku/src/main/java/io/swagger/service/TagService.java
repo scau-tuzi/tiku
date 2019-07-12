@@ -40,10 +40,10 @@ public class TagService {
             throw new Exception("新标签没有标签值！");
         }
 
-        //判断数据库中是否该标签
-        if (!tagRepository.findByTagId(tag.getId()).equals(null)) {
-            throw new Exception("该标签已存在！");
-        }
+//        //判断数据库中是否该标签
+//        if (!tagRepository.findByTagId(tag.getId()).equals(null)) {
+//            throw new Exception("该标签已存在！");
+//        }
         tagRepository.save(tag);
     }
 
@@ -66,29 +66,29 @@ public class TagService {
      */
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) throws Exception {
-
-        //判断数据库中是否有该标签
-        if (tagRepository.findByTagId(id).equals(null)) {
-            throw new Exception("该标签不存在！");
-        } else {
-
-            //删除问题和试卷中使用的该标签
-            List<PaperTag> paperTagList = paperTagRepository.findAllByTagIdEquals(id);
-            List<Long> paperIdList=new ArrayList<>();
-            for(PaperTag paperTag:paperTagList){
-                paperIdList.add(paperTag.getPaperId());
-            }
-            paperTagRepository.deleteAllByPaperIdIn(paperIdList);
-
-            List<ProblemTag> problemTagList = problemTagRepository.findAllByTagIdEquals(id);
-            List<Long> problemIdList=new ArrayList<>();
-            for(ProblemTag problemTag:problemTagList){
-                problemIdList.add(problemTag.getProblemId());
-            }
-            problemTagRepository.deleteAllByProblemIdIn(problemIdList);
-
-            tagRepository.deleteById(id);
-        }
+//
+//        //判断数据库中是否有该标签
+//        if (tagRepository.findByTagId(id).equals(null)) {
+//            throw new Exception("该标签不存在！");
+//        } else {
+//
+//            //删除问题和试卷中使用的该标签
+//            List<PaperTag> paperTagList = paperTagRepository.findAllByTagIdEquals(id);
+//            List<Long> paperIdList=new ArrayList<>();
+//            for(PaperTag paperTag:paperTagList){
+//                paperIdList.add(paperTag.getPaperId());
+//            }
+//            paperTagRepository.deleteAllByPaperIdIn(paperIdList);
+//
+//            List<ProblemTag> problemTagList = problemTagRepository.findAllByTagIdEquals(id);
+//            List<Long> problemIdList=new ArrayList<>();
+//            for(ProblemTag problemTag:problemTagList){
+//                problemIdList.add(problemTag.getProblemId());
+//            }
+//            problemTagRepository.deleteAllByProblemIdIn(problemIdList);
+//
+//            tagRepository.deleteById(id);
+//        }
     }
 
 
@@ -110,17 +110,17 @@ public class TagService {
      */
     @Transactional(rollbackFor = Exception.class)
     public void update(Tag tag) throws Exception {
-
-        //判断传入参数是否正确
-        if (tagRepository.findByTagId(tag.getId()).equals(null)) {
-            throw new Exception("该标签不存在！");
-        } else if (tagRepository.findByTagId(tag.getId()).getValue().equals(tag.getValue())) {
-            throw new Exception("新标签值与更改前的标签值相同！");
-        } else {
-            Tag newTag = tagRepository.findByTagId(tag.getId());
-            BeanUtils.copyProperties(tag,newTag);
-            tagRepository.save(newTag);
-
-        }
+//
+//        //判断传入参数是否正确
+//        if (tagRepository.findByTagId(tag.getId()).equals(null)) {
+//            throw new Exception("该标签不存在！");
+//        } else if (tagRepository.findByTagId(tag.getId()).getValue().equals(tag.getValue())) {
+//            throw new Exception("新标签值与更改前的标签值相同！");
+//        } else {
+//            Tag newTag = tagRepository.findByTagId(tag.getId());
+//            BeanUtils.copyProperties(tag,newTag);
+//            tagRepository.save(newTag);
+//
+//        }
     }
 }
