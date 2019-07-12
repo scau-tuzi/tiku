@@ -32,7 +32,9 @@ interface ProblemFullData {
         parentId: number,
         answerId: number
     },
-    answer: any,
+    answer: {
+        answerText:string
+    },
     tags:[{
       id: number,
       value: string,

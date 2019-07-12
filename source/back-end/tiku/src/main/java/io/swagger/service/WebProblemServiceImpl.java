@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ProblemServiceImpl implements ProblemService {
+public class WebProblemServiceImpl extends BasicService<Problem> implements WebProblemService {
 
     @Autowired
-    private ProblemDataServiceImpl problemDataServiceImpl;
+    private ProblemDataService problemDataService;
 
     @Autowired
     private ProblemRepository problemRepository;
@@ -23,6 +23,6 @@ public class ProblemServiceImpl implements ProblemService {
 
         List<Long> problemIdList = problemRepository.findIdList(PageRequest.of(pageNumber, pageSize));
 
-        return problemDataServiceImpl.getFullDataByIds(problemIdList);
+        return problemDataService.getFullDataByIds(problemIdList);
     }
 }

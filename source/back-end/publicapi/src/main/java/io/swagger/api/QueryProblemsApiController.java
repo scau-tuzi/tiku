@@ -1,11 +1,11 @@
 package io.swagger.api;
 
-import io.swagger.pojo.ProblemFullData;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.annotations.ApiParam;
 import io.swagger.model.QuerryInfo;
 import io.swagger.model.QuerryResult;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.swagger.annotations.*;
 import io.swagger.model.StatusCode;
+import io.swagger.pojo.ProblemFullData;
 import io.swagger.service.ProblemService;
 import io.swagger.utils.ParserErrorException;
 import org.slf4j.Logger;
@@ -16,8 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -41,11 +41,11 @@ public class QueryProblemsApiController implements QueryProblemsApi {
         this.request = request;
     }
 
-    public ResponseEntity<QuerryResult> queryProblems(@ApiParam(value = ""  )  @Valid @RequestBody QuerryInfo body) {
+    public ResponseEntity<QuerryResult> queryProblems(@ApiParam(value = "") @Valid @RequestBody QuerryInfo body) {
         String accept = request.getHeader("Accept");
 
 
-        ArrayList<HashMap<String, Object>> res=new ArrayList<>();
+        ArrayList<HashMap<String, Object>> res = new ArrayList<>();
         // 查询
         List<ProblemFullData> problemFullData = null;
         try {
@@ -58,10 +58,10 @@ public class QueryProblemsApiController implements QueryProblemsApi {
             querryResult.setStatus(StatusCode.ERROR);
             // todo
             HashMap<String, Object> stringStringHashMap = new HashMap<>();
-            stringStringHashMap.put("message",e.getMessage());
+            stringStringHashMap.put("message", e.getMessage());
             querryResult.addResultsItem(stringStringHashMap);
 
-            return new ResponseEntity<>(querryResult,HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(querryResult, HttpStatus.BAD_REQUEST);
         }
 
         // 拼装数据和做下格式转换
@@ -69,11 +69,11 @@ public class QueryProblemsApiController implements QueryProblemsApi {
         querryResult.setStatus(StatusCode.OK);
 
         // 拼装返回数据
-        problemFullData.stream().forEach((e)->{
+        problemFullData.stream().forEach((e) -> {
             res.add(e.toMap());
         });
         querryResult.setResults(res);
-        return new ResponseEntity<QuerryResult>(querryResult,HttpStatus.OK);
+        return new ResponseEntity<QuerryResult>(querryResult, HttpStatus.OK);
     }
 
 }
