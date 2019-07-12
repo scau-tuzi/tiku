@@ -5,6 +5,11 @@ import porblemsList from '@/data/mock/ProblemFullDataMock'
 import BasicResponse from '@/data/model/BasicResponse';
 
 
+/**
+ * 获取题目列表
+ * @param page 
+ * @param callback 
+ */
 function getProblems(page: number, callback: (Problems: ProblemFullData[]) => void) {
     /**
      * 查看题目列表
@@ -21,6 +26,11 @@ function getProblems(page: number, callback: (Problems: ProblemFullData[]) => vo
     // })
 }
 
+/**
+ * 增加题目方法
+ * @param problem 是一个有关于 problemFullData 的一个对象实例
+ * @param callback  回调函数
+ */
 function addProblem(problem: ProblemFullData, callback: (b: BasicResponse) => void) {
     // axios
     //     .post("", {
@@ -41,8 +51,12 @@ function addProblem(problem: ProblemFullData, callback: (b: BasicResponse) => vo
     callback(response);
 }
 
+// /**
+//  * 删除题目
+//  * @param id 要删除的题目的信息 
+//  * @param callback 回调函数
+//  */
 // function delProblem(id: number, callback: (b: BasicResponse) => void) {
-//     //删除题目
 //     axios
 //         .post("", {
 //             id,
@@ -53,11 +67,12 @@ function addProblem(problem: ProblemFullData, callback: (b: BasicResponse) => vo
 //         })
 // }
 
+/**
+ * 查找题目方法 (暂时只有通过标签来查询 )
+ * @param tags 标签列表( 里面是所有标签内容组成的数组 )
+ * @param callback 回调函数
+ */
 function findProblems(tags: string[], callback: (p: ProblemFullData[]) => void) {
-    //查找题目
-    /**
-     * 暂时仅支持通过标签查找
-     */
     axios
         .post("", {
             tags
@@ -68,7 +83,11 @@ function findProblems(tags: string[], callback: (p: ProblemFullData[]) => void) 
             callback(response);
         })
 }
-
+/**
+ * 修改题目方法
+ * @param problem 一个problemFullData 对象实例
+ * @param callback 回调函数
+ */
 function changeProblem(problem: ProblemFullData, callback: (b: BasicResponse) => void) {
     //修改题目
     axios
