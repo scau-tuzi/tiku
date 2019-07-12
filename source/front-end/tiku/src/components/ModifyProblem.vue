@@ -7,10 +7,10 @@
           <el-button @click="back">返回</el-button>
         </el-form-item>
         <el-form-item label="题目" prop="ti">
-          <el-input type="textarea":rows="5" v-model="ruleForm.problem"></el-input>
+          <el-input type="textarea" :rows="5" v-model="ruleForm.problem"></el-input>
         </el-form-item>
         <el-form-item label="答案" prop="answer">
-          <el-input type="textarea":rows="5" v-model="ruleForm.answer"></el-input>
+          <el-input type="textarea" :rows="5" v-model="ruleForm.answer"></el-input>
         </el-form-item>
         <el-form-item label="多图片" prop="pics">
           <el-upload
@@ -106,6 +106,7 @@
 
         };
       },
+      // 页面渲染前执行取路由带过来的参数
       created(){
         this.getParams()
       },
@@ -150,11 +151,12 @@
           // 取到路由带过来的参数
           const routerQues = this.$route.query.modifyQues
           const routerAnsw = this.$route.query.modifyAnsw
-          // 将数据放在当前组件的数据内
+          // 将问题和答案放在当前组件的数据内
           this.ruleForm.problem = routerQues
           this.ruleForm.answer = routerAnsw
         }
       },
+      //监听路由变化
       watch: {
         '$route': 'getParams'
       }

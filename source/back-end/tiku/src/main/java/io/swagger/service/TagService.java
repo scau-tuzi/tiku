@@ -40,11 +40,19 @@ public class TagService {
 //            throw new Exception("新标签没有标签值！");
 //        }
 //
+        //判断输入的新标签是否有效
+        if (tag.getId().equals(null)) {
+            throw new Exception("新标签没有id值！");
+        } else if (tag.getValue().equals(null)) {
+            throw new Exception("新标签没有标签值！");
+        }
+
 //        //判断数据库中是否该标签
 //        if (!tagRepository.findByTagId(tag.getId()).equals(null)) {
 //            throw new Exception("该标签已存在！");
 //        }
 //        tagRepository.save(tag);
+        tagRepository.save(tag);
     }
 
     /**
@@ -110,7 +118,6 @@ public class TagService {
      */
     @Transactional(rollbackFor = Exception.class)
     public void update(Tag tag) throws Exception {
-
 //        //判断传入参数是否正确
 //        if (tagRepository.findByTagId(tag.getId()).equals(null)) {
 //            throw new Exception("该标签不存在！");

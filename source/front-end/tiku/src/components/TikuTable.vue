@@ -4,24 +4,21 @@
       <el-row gutter="0">
         <el-col span="20">
           <el-button class="el-button" align="left" plain @click="jumpInput">录入题目</el-button>
-          <el-button type="primary" plain>全选</el-button>
+          <!-- <el-button type="primary" plain>全选</el-button> -->
           <el-button type="success" plain>批量删除</el-button>
           <el-button type="info" plain>导入Excel</el-button>
           <el-button type="warning" plain>标签批量修改</el-button>
         </el-col>
         <el-col span="4">
-          <el-autocomplete
-            v-model="state"
-            :fetch-suggestions="querySearchAsync"
-            placeholder="请输入内容"
-            @select="handleSelect"
-          ></el-autocomplete>
+          <el-input v-model="search" style="display: inline-block;width: 180px"
+                    placeholder="请输入搜索内容">
+          </el-input>
         </el-col>
       </el-row>
       <el-row><el-col span="24"><div></div></el-col></el-row>
       <el-row>
         <el-table
-          :data="tableData"
+          :data="tables"
           border
           stripe
           style="width: 100%"
@@ -44,24 +41,28 @@
           <el-table-column
             prop="sound"
             label="语音"
-            width="200">
+            width="100">
           </el-table-column>
           <el-table-column
             prop="pictures"
             label="多图片"
-            width="220">
+            width="100">
+          </el-table-column>
+          <el-table-column label="选项">
+            <el-table-column>
+            </el-table-column>
           </el-table-column>
           <el-table-column
             prop="tag"
             label="标签"
-            width="100"
+            width="220"
             :filters="[{ text: '一年级', value: '一年级' }, { text: '英语', value: '英语' }]"
             :filter-method="filterTag"
             filter-placement="bottom-end">
             <template slot-scope="scope">
-              <el-tag
-                :type="scope.row.tag === '英语' ? 'primary' : 'success'"
-                disable-transitions>{{scope.row.tag}}</el-tag>
+              <el-tag v-for="(tagsrc,index) in scope.row.tag" v-bind:key="index"
+                      :type="scope.row.tag === '英语' ? 'primary' : 'success'"
+                      disable-transitions>{{tagsrc}}</el-tag>
             </template>
           </el-table-column>
           <el-table-column
@@ -105,7 +106,7 @@
         closable
         :disable-transitions="false"
         @close="handleClose(tag)"
-      style="margin-right: 10px; margin-bottom: 10px">
+        style="margin-right: 10px; margin-bottom: 10px">
         {{tag}}
       </el-tag>
       <el-input
@@ -130,16 +131,18 @@
 <script >
   import {getProblems} from "../api/Problem";
   import ProblemFullData from "../data/model/ProblemFullData";
-
+  import { getTagsList } from "../api/Tag";
   export default {
     name: 'TikuTable',
     datas:[],
-
     methods: {
+      //编辑操作
       handleEdit (index, row) {
         console.log(index, row),
-          alert(index+row.problem+row.answer),
+          // alert(index+row.problem+row.answer),
+          //转到ModifyProblem页面
           this.$router.push({path: '/ModifyProblem',
+            //query对象获取问题和答案
             query: {
               modifyQues:row.problem,
               modifyAnsw:row.answer
@@ -167,16 +170,16 @@
         //this.$router.go(-2)
         //后退两步
       },
-      handleClose(tag) {
+      handleClose(tag) {//标签上的叉
         this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
       },
-      showInput() {
+      showInput() {//添加新标签的框
         this.inputVisible = true;
         this.$nextTick(_ => {
           this.$refs.saveTagInput.$refs.input.focus();
         });
       },
-      handleInputConfirm() {
+      handleInputConfirm() {//添加完标签之后的确定
         let inputValue = this.inputValue;
         if (inputValue) {
           this.dynamicTags.push(inputValue);
@@ -184,8 +187,19 @@
         this.inputVisible = false;
         this.inputValue = '';
       },
-      handlerchange:function(currentPage){
-       this.getData(currentPage);
+      /**
+       * tag标签接口测试: 可以在 console 查看是否有tag输出
+       */
+      getTagsdata: function() {
+        let callback = tag => {
+          console.log("tag");
+          console.log(tag);
+        };
+        getTagsList(callback);
+      },
+      /** */
+      handlerchange:function(currentPage){//获取题目
+        this.getData(currentPage);
       },getData:function (currentPage){
         console.log("change")
         var _this=this;
@@ -194,12 +208,16 @@
           console.log("get it")
           console.log(pd)
           pd.filter(v=>{
+            var ts=[];
+            for(var i =0;i<v.tags.length;i++){
+              ts.push(v.tags[i].value)
+            }
             res.push({
               problem:v.problem.problemText,
               answer:v.answer.answerText,
               pictures:'',
               sound:'',
-              tag:v.tags[0].value
+              tag:ts
             })
           });
           console.log(res);
@@ -207,18 +225,35 @@
         };
         getProblems(currentPage,callback);
       },
-
     },
-    mounted: function () {
-     this.getData(0);
+    mounted: function() {
+      this.getTagsdata;
+      this.getData(0);
     },
     data () {
       return {
+        search: '',
         dynamicTags: ['标签一', '标签二', '标签三'],
         inputVisible: false,
         inputValue: '',
         centerDialogVisible: false,
         tableData: []
+      }
+    },
+    // 搜索操作
+    computed:{
+      tables(){
+        const search = this.search
+        if (search) {
+          // 检查指定数组中符合条件的所有元素。
+          return this.tableData.filter(data => {
+            return Object.keys(data).some(key => {
+              // 没有找到返回-1；
+              return String(data[key]).toLowerCase().indexOf(search.toLowerCase()) > -1
+            })
+          })
+        }
+        return this.tableData
       }
     }
   }
@@ -234,5 +269,4 @@
   .el-col {
     border-radius: 4px;
   }
-
 </style>
