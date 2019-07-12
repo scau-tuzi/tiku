@@ -1,4 +1,4 @@
-package io.swagger.pojo.dto.service;
+package io.swagger.service;
 
 import io.swagger.pojo.dao.*;
 import io.swagger.pojo.dao.repos.PaperTagRepository;
