@@ -92,8 +92,8 @@
 
 
   .el-main {
-    background-color: #E9EEF3;
-    color: #333;
+    /*background-color: #E9EEF3;*/
+    /*color: #333;*/
   }
   .el-menu-vertical-demo{
     min-height: 100%;

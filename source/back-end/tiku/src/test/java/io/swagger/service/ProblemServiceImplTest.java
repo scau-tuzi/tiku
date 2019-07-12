@@ -1,8 +1,6 @@
 package io.swagger.service;
 
-import io.swagger.Swagger2SpringBoot;
 import io.swagger.TikuApplication;
-import io.swagger.pojo.PaperFullData;
 import io.swagger.pojo.ProblemFullData;
 import io.swagger.pojo.dao.*;
 import io.swagger.pojo.dao.repos.*;
@@ -13,15 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = TikuApplication.class)
 @ContextConfiguration(classes = TikuApplication.class)
+@WebAppConfiguration
 public class ProblemServiceImplTest {
 
     @Autowired
@@ -59,14 +56,14 @@ public class ProblemServiceImplTest {
 
         ExtData extData1 = new ExtData();
         extData1.setId(1L);
-        extData1.setKey("A");
+        extData1.setKeyname("A");
         extData1.setValue("eva");
         extData1.setProblemId(1000002L);
         extDataRepository.save(extData1);
 
         ExtData extData2 = new ExtData();
         extData2.setId(2L);
-        extData2.setKey("B");
+        extData2.setKeyname("B");
         extData2.setValue("bobo");
         extData2.setProblemId(1000002L);
         extDataRepository.save(extData2);

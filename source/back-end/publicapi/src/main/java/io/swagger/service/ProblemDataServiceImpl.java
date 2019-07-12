@@ -129,11 +129,11 @@ public class ProblemDataServiceImpl implements ProblemDataService {
         for (ExtData extData : extDataList) {
             if (problemIdExtDataMap.containsKey(extData.getProblemId())) {
                 Map<String, String> extDataMap = problemIdExtDataMap.get(extData.getProblemId());
-                extDataMap.put(extData.getKey(), extData.getValue());
+                extDataMap.put(extData.getKeyname(), extData.getValue());
             } else {
                 //为每一个问题创建存储扩展信息的map
                 Map<String, String> extDataMap = new HashMap<>();
-                extDataMap.put(extData.getKey(), extData.getValue());
+                extDataMap.put(extData.getKeyname(), extData.getValue());
                 problemIdExtDataMap.put(extData.getProblemId(), extDataMap);
             }
         }

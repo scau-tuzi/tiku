@@ -36,8 +36,8 @@ public class ExtData extends BasicEntity {
     /**
      * 数据项的key
      */
-    @Column(name = "key")
-    private String key;
+    @Column(name = "keyname")
+    private String keyname;
 
     /**
      * 数据项的值

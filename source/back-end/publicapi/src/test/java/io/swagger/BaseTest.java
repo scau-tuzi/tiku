@@ -1,25 +1,23 @@
 package io.swagger;
 
 
-import io.swagger.Swagger2SpringBoot;
 import io.swagger.pojo.dao.*;
 import io.swagger.pojo.dao.repos.*;
 import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.junit4.SpringRunner;
-
-import javax.annotation.Resource;
-import javax.persistence.EntityManager;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 /**
  * 基础测试类，初始化数据用
  */
-@RunWith(SpringJUnit4ClassRunner.class)
+@WebAppConfiguration
 @SpringBootTest(classes = Swagger2SpringBoot.class)
+@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Swagger2SpringBoot.class)
 public class BaseTest {
     @Autowired
@@ -48,7 +46,7 @@ public class BaseTest {
     @Autowired
     private PaperItemRepository paperItemRepository;
 
-    protected String baseurl="/tiku/api/v1";
+    protected String baseurl = "/tiku/api/v1";
 
     @Before
     public void before() {
@@ -65,14 +63,14 @@ public class BaseTest {
 
         ExtData extData1 = new ExtData();
         extData1.setId(1L);
-        extData1.setKey("A");
+        extData1.setKeyname("A");
         extData1.setValue("eva");
         extData1.setProblemId(1000002L);
         extDataRepository.save(extData1);
 
         ExtData extData2 = new ExtData();
         extData2.setId(2L);
-        extData2.setKey("B");
+        extData2.setKeyname("B");
         extData2.setValue("bobo");
         extData2.setProblemId(1000002L);
         extDataRepository.save(extData2);
@@ -134,4 +132,8 @@ public class BaseTest {
 
     }
 
+    @Test
+    public void test(){
+
+    }
 }

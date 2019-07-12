@@ -25,8 +25,26 @@
                     </execution>
                 </executions>
             </plugin>
+
         </plugins>
+        <resources>
+            <resource>
+                <filtering>true</filtering>
+                <directory>src/test/resources</directory>
+                <includes>
+                    <include>**/*.properties</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*.properties</include>
+                    <include>**/*.xml</include>
+                </includes>
+            </resource>
+        </resources>
     </build>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
