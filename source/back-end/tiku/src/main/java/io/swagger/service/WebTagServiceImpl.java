@@ -4,6 +4,7 @@ import io.swagger.pojo.dao.*;
 import io.swagger.pojo.dao.repos.PaperTagRepository;
 import io.swagger.pojo.dao.repos.ProblemTagRepository;
 import io.swagger.pojo.dao.repos.TagRepository;
+import io.swagger.pojo.dto.BasicResponse;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class TagService {
+public class WebTagServiceImpl extends BasicService<Tag> implements WebTagService {
     @Autowired
     private TagRepository tagRepository;
 
@@ -27,23 +28,24 @@ public class TagService {
     @Autowired
     private PaperTagRepository paperTagRepository;
 
+
     /**
      * 增加新标签
      */
     @Transactional(rollbackFor = Exception.class)
-    public void add(Tag tag) throws Exception {
+    public void add(Tag tag, Long createBy) throws Exception {
 
         //判断输入的新标签是否有效
-        if (tag.getId().equals(null)) {
-            throw new Exception("新标签没有id值！");
-        } else if (tag.getValue().equals(null)) {
+        if (tag.getValue() == null || tag.getValue().equals("")) {
             throw new Exception("新标签没有标签值！");
         }
 
-        //判断数据库中是否该标签
-        if (!tagRepository.findByTagId(tag.getId()).equals(null)) {
-            throw new Exception("该标签已存在！");
+        //判断输入的新标签是否已存在
+        if((tagRepository.findByValueEquals(tag.getValue()).size()==0)){
+            throw new Exception("新标签的标签值已存在！");
         }
+
+        super.beforeAdd(tag, createBy);
         tagRepository.save(tag);
     }
 
@@ -67,28 +69,26 @@ public class TagService {
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) throws Exception {
 
-        //判断数据库中是否有该标签
-        if (tagRepository.findByTagId(id).equals(null)) {
-            throw new Exception("该标签不存在！");
-        } else {
-
-            //删除问题和试卷中使用的该标签
-            List<PaperTag> paperTagList = paperTagRepository.findAllByTagIdEquals(id);
-            List<Long> paperIdList=new ArrayList<>();
-            for(PaperTag paperTag:paperTagList){
-                paperIdList.add(paperTag.getPaperId());
-            }
-            paperTagRepository.deleteAllByPaperIdIn(paperIdList);
-
-            List<ProblemTag> problemTagList = problemTagRepository.findAllByTagIdEquals(id);
-            List<Long> problemIdList=new ArrayList<>();
-            for(ProblemTag problemTag:problemTagList){
-                problemIdList.add(problemTag.getProblemId());
-            }
-            problemTagRepository.deleteAllByProblemIdIn(problemIdList);
-
-            tagRepository.deleteById(id);
+        //删除问题和试卷中使用的该标签
+        List<PaperTag> paperTagList = paperTagRepository.findAllByTagIdEquals(id);
+        List<Long> paperIdList = new ArrayList<>();
+        for (PaperTag paperTag : paperTagList) {
+            paperIdList.add(paperTag.getPaperId());
         }
+        paperTagRepository.deleteAllByPaperIdIn(paperIdList);
+
+        List<ProblemTag> problemTagList = problemTagRepository.findAllByTagIdEquals(id);
+        List<Long> problemIdList = new ArrayList<>();
+        for (ProblemTag problemTag : problemTagList) {
+            problemIdList.add(problemTag.getProblemId());
+        }
+        problemTagRepository.deleteAllByProblemIdIn(problemIdList);
+
+        List<Tag> tagList=new ArrayList<>();
+
+        //beforeDelete(tagRepository.findById(id));
+        tagRepository.deleteById(id);
+
     }
 
 
@@ -109,16 +109,17 @@ public class TagService {
      * 更改标签值
      */
     @Transactional(rollbackFor = Exception.class)
-    public void update(Tag tag) throws Exception {
+    public void update(Tag tag, Long updateBy) throws Exception {
 
         //判断传入参数是否正确
-        if (tagRepository.findByTagId(tag.getId()).equals(null)) {
+        if (tagRepository.findTagById(tag.getId()).equals(null)) {
             throw new Exception("该标签不存在！");
-        } else if (tagRepository.findByTagId(tag.getId()).getValue().equals(tag.getValue())) {
+        } else if (tagRepository.findTagById(tag.getId()).getValue().equals(tag.getValue())) {
             throw new Exception("新标签值与更改前的标签值相同！");
         } else {
-            Tag newTag = tagRepository.findByTagId(tag.getId());
-            BeanUtils.copyProperties(tag,newTag);
+            beforeUpdate(tagRepository.findTagById(tag.getId()), updateBy);
+            Tag newTag = tagRepository.findTagById(tag.getId());
+            BeanUtils.copyProperties(tag, newTag);
             tagRepository.save(newTag);
 
         }
