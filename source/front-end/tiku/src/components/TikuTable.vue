@@ -49,7 +49,7 @@
             width="100">
           </el-table-column>
           <el-table-column label="选项">
-            <el-table-column>
+            <el-table-column v-for="f in fieldInfo" v-bind:key="f" :prop="f.keyname" :label="f.title">
             </el-table-column>
           </el-table-column>
           <el-table-column
@@ -132,6 +132,7 @@
   import {getProblems} from "../api/Problem";
   import ProblemFullData from "../data/model/ProblemFullData";
   import { getTagsList } from "../api/Tag";
+  import AllFieldInfo from "../data/mock/FiledInfoMock";
   export default {
     name: 'TikuTable',
     datas:[],
@@ -219,13 +220,19 @@
                 answerText:""
               }
             }
-            res.push({
+            let ress={
               problem:v.problem.problemText,
               answer:v.answer.answerText,
               pictures:'',
               sound:'',
               tag:ts
-            })
+            };
+            if(v.extData!==null){
+              Object.keys(v.extData).forEach((key)=>{
+                ress[key]=v.extData[key];
+              })
+            }
+            res.push(ress)
           });
           console.log(res);
           _this.tableData=res;
@@ -236,6 +243,15 @@
     mounted: function() {
       this.getTagsdata;
       this.getData(0);
+      var all=[];
+      Object.keys(AllFieldInfo).forEach((key)=>{
+        all.push({
+          keyname:key,
+          title:AllFieldInfo[key].title,
+        })
+      });
+
+      this.fieldInfo=all;
     },
     data () {
       return {
@@ -244,7 +260,8 @@
         inputVisible: false,
         inputValue: '',
         centerDialogVisible: false,
-        tableData: []
+        tableData:[],
+        fieldInfo:[],
       }
     },
     // 搜索操作
