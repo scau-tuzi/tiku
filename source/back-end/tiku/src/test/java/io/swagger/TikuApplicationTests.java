@@ -15,7 +15,7 @@ public class TikuApplicationTests {
     @Test
     public void contextLoads() {
         // todo 自动生成测试数据，再测试，默认数据库啥都没
-//        ProblemTag problemTag = new ProblemTag();
+//        ProblemTagDto problemTag = new ProblemTagDto();
 //        problemTag.setProblemId(1L);
 //        problemTag.setTagId(1L);
 //

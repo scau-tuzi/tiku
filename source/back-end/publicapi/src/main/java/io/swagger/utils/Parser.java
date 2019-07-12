@@ -5,6 +5,7 @@ import io.swagger.pojo.PaperFullData;
 import io.swagger.pojo.ProblemFullData;
 import io.swagger.pojo.dao.*;
 import io.swagger.pojo.dao.repos.*;
+import io.swagger.service.PaperDataService;
 import io.swagger.service.ProblemDataService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,10 +43,10 @@ public class Parser {
      * @param expression
      * @return
      */
-    public List<PaperFullData> getAllPapersByExpression(Expression expression) throws ParserErrorException {
+    public List<PaperFullData> getAllPapersByExpression(Expression expression,boolean isDeep) throws ParserErrorException {
         List<Long> longs = executeExpression(expression, true);
 
-        return new ArrayList<>();
+        return paperDataService.getFullDataByIds(longs,isDeep);
     }
 
 
@@ -356,6 +357,9 @@ public class Parser {
 
     @Autowired
     private ProblemDataService problemDataService;
+    @Autowired
+
+    private PaperDataService paperDataService;
     @Autowired
     private PaperTagRepository paperTagRepository;
     @Autowired

@@ -5,7 +5,7 @@ Vue.use(Router)
 
 export default new Router({
   mode: 'history',
-  base: process.env.BASE_URL,
+  base: '/web/',
   // todo 根据menu信息自动生成路由表
   routes: [
     {

@@ -1,7 +1,7 @@
 // vue.config.js
 module.exports = {
     // 修改的配置
-    baseUrl: '/web/',
+    // baseUrl: '/web/',
     devServer: {
         proxy:'http://localhost:10010/'
     },

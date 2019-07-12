@@ -13,7 +13,7 @@
         </el-form-item>
         <el-form-item label="多图片" prop="pics">
             <div style="direction: inherit">
-              <div class="picture" style="float: left; margin-right: 10px" v-for="pic in pics">
+              <div class="picture" style="float: left; margin-right: 10px" v-for="pic in pics" v-bind:key=pic>
                 <el-avatar shape="square" fit="fit" :size="100" :src="pic.url"></el-avatar>
               </div>
             </div>
