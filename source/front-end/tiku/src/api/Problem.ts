@@ -14,27 +14,31 @@ function getProblems(page: number, callback: (Problems: ProblemFullData[]) => vo
     //     .then(res => {
     //         let lists: ProblemFullData[] = res.data.data;
 
-            let lists: ProblemFullData[] = porblemsList;
-            console.log("获取到的数据");
-            console.log(lists);
-            callback(lists);
-        // })
+    let lists: ProblemFullData[] = porblemsList;
+    console.log("获取到的数据");
+    console.log(lists);
+    callback(lists);
+    // })
 }
 
 function addProblem(problem: ProblemFullData, callback: (b: BasicResponse) => void) {
-    //增加题目
-    axios
-        .post("", {
-            //题目数据   
-            problem
-        })
-        .then(res => {
-            //得到一个返回的参数,以确保题目增加成功
-            let response: BasicResponse = res.data;
-            console.log("获取的数据");
-            console.log(response);
-            callback(response);
-        })
+    // axios
+    //     .post("", {
+    //         //题目数据   
+    //         problem
+    //     })
+    //     .then(res => {
+    //         //得到一个返回的参数,以确保题目增加成功
+    //         let response: BasicResponse = res.data;
+    //         console.log("获取的数据");
+    //         console.log(response);
+    //         callback(response);
+    //     })
+    
+    let response: BasicResponse = { code: 'ok', data: undefined };
+    console.log("获取的数据");
+    console.log(response);
+    callback(response);
 }
 
 // function delProblem(id: number, callback: (b: BasicResponse) => void) {
