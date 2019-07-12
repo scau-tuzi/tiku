@@ -61,14 +61,14 @@
           <div v-for="index in OptionNum" :key="index">
            <el-form ref="form" :model="form" label-width="0px" @input="addOption">
              <el-row>
-               <el-col span=6>
-                 <el-form-item label="" :prop="input">
+               <el-col :span=6>
+                 <el-form-item label="" >
                    <label>key值：</label>
                    <el-input v-model="form.option[index]" placeholder="请输入选项"></el-input>
                  </el-form-item>
                </el-col>
-               <el-col span=6>
-                 <el-form-item label="" :prop="input">
+               <el-col :span= 6 >
+                 <el-form-item label="">
                    <label>value值：</label>
                    <el-input v-model="form.text[index]" placeholder="请输入内容"></el-input>
                  </el-form-item>
@@ -100,6 +100,7 @@
           dialogImageUrl: '',
           dialogVisible: false,
           disabled: false,
+          fileList:[],
           ruleForm: {
             ti: '',
             answer: '',

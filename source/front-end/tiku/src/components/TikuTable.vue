@@ -2,20 +2,20 @@
   <el-container style="border: 1px solid #eee">
     <el-main>
       <el-row gutter="0">
-        <el-col span="20">
+        <el-col span=20>
           <el-button class="el-button" align="left" plain @click="jumpInput">录入题目</el-button>
           <!-- <el-button type="primary" plain>全选</el-button> -->
           <el-button type="success" plain>批量删除</el-button>
           <el-button type="info" plain>导入Excel</el-button>
           <el-button type="warning" plain>标签批量修改</el-button>
         </el-col>
-        <el-col span="4">
+        <el-col span=4>
           <el-input v-model="search" style="display: inline-block;width: 180px"
                     placeholder="请输入搜索内容">
           </el-input>
         </el-col>
       </el-row>
-      <el-row><el-col span="24"><div></div></el-col></el-row>
+      <el-row><el-col span=24><div></div></el-col></el-row>
       <el-row>
         <el-table
           :data="tables"

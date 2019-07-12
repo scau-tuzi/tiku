@@ -2,18 +2,18 @@
   <el-container>
     <el-main>
       <el-row>
-        <el-col span="3">
+        <el-col span=3>
           <el-button class="el-button" align="left" plain @click="jumpInput">完成</el-button>
           <el-button type="primary" plain>全选</el-button>
         </el-col>
-        <el-col span="17">
+        <el-col span=17>
           <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="" style="margin-right: 10px">
             <el-form-item label="" prop="name">
               <el-input v-model="ruleForm.name" placeholder="请输入试卷名称"></el-input>
             </el-form-item>
           </el-form>
         </el-col>
-        <el-col span="4">
+        <el-col span=4>
           <el-autocomplete
             v-model="state"
             :fetch-suggestions="querySearchAsync"
