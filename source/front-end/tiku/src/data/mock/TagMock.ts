@@ -1,4 +1,5 @@
-import Tag from "../model/TAg";
+import Tag from "@/data/model/Tag";
+
 
 let tagslistData :Tag[] = [
     {

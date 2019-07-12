@@ -45,6 +45,6 @@ interface ProblemFullData {
     /**
     * status 问题的状态
     */
-    status: number
+    status: any
 }
 export default ProblemFullData;
