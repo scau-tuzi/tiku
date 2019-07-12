@@ -53,6 +53,7 @@ public class ProblemController {
 
     /**
      * 新增题目
+     *
      * @param problemFullData
      * @return
      */
@@ -73,4 +74,48 @@ public class ProblemController {
         return basicResponse;
     }
 
+
+    /**
+     * 删除题目
+     *
+     * @param id 题目id
+     * @return
+     */
+    @DeleteMapping("/delete")
+    public BasicResponse delete(@RequestParam Long id) {
+        BasicResponse basicResponse = new BasicResponse();
+
+        try {
+            webProblemServiceImpl.delete(id);
+            basicResponse.setData("问题删除成功");
+        } catch (Exception e) {
+            basicResponse.setCode(BasicResponse.ERRORCODE);
+            basicResponse.setData("问题删除失败：" + e.getMessage());
+        }
+
+        return basicResponse;
+    }
+
+    /**
+     * 修改题目
+     *
+     * @param problemFullData
+     * @return
+     */
+    @PutMapping("/update")
+    public BasicResponse update(@RequestBody ProblemFullData problemFullData) {
+
+        BasicResponse basicResponse = new BasicResponse();
+
+        Long updateBy = 1L;
+        try {
+            webProblemServiceImpl.update(problemFullData, updateBy);
+            basicResponse.setData("问题修改成功");
+        } catch (Exception e) {
+            basicResponse.setCode(BasicResponse.ERRORCODE);
+            basicResponse.setData("问题修改失败：" + e.getMessage());
+        }
+
+        return basicResponse;
+    }
 }

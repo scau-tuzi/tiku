@@ -17,5 +17,4 @@ public interface TagRepository extends JpaRepository<Tag, Long>{
     List<Tag> findByValueEquals(String value);
 
     List<Tag> findAllByIdIn(List<Long> id);
-    Tag findByTagId(Long id);
 }

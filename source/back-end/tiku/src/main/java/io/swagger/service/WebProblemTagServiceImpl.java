@@ -21,4 +21,9 @@ public class WebProblemTagServiceImpl extends BasicService<ProblemTag> implement
         }
         return problemTagRepository.saveAll(problemTagList);
     }
+
+    @Override
+    public int deleteByProblemId(Long problemId) {
+        return problemTagRepository.updateIsDelByProblemId(problemId, Boolean.TRUE);
+    }
 }
