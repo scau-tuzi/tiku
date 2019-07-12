@@ -97,7 +97,7 @@ public class Initer {
 
                 Answer answer = new Answer();
                 answer.setId(curid);
-                answer.setAnswerText(ans);
+                answer.setAnswerText("A");
                 answerRepository.save(answer);
 
                 curid++;
@@ -148,7 +148,7 @@ public class Initer {
                 problemTagRepository.save(problemTag);
                 ProblemTag problemTag2 = new ProblemTag();
                 problemTag2.setProblemId(curid);
-                problemTag2.setTagId(((curid * 13) % 12) + 20100);
+                problemTag2.setTagId(((curid /12) % 12) + 20100);
                 problemTagRepository.save(problemTag2);
             }
         }
