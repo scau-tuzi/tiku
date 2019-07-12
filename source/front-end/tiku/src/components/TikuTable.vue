@@ -206,12 +206,13 @@
         var _this=this;
         let callback=(pd)=>{
           var res=[];
-          console.log("get it")
-          console.log(pd)
+          console.log("get it");
+          console.log(pd);
+          this.$store.commit("setNewProblems",pd);
           pd.filter(v=>{
-            var ts=[];
+            let ts = [];
             if(v.tags!==null){
-              for(var i =0;i<v.tags.length;i++){
+              for(let i =0; i<v.tags.length; i++){
                 ts.push(v.tags[i].value)
               }
             }

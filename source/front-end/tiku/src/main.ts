@@ -9,11 +9,15 @@ Vue.config.productionTip = false
 Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
-    commits:[]
+    commits:[],
+    allProblem:[],
   },
   mutations: {
     setNewCommits (state,newcommits) {
       state.commits=newcommits
+    },
+    setNewProblems(state,pd){
+      state.allProblem=pd;
     }
   }
 });
