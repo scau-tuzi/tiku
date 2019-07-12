@@ -24,7 +24,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 DROP TABLE IF EXISTS `answer`;
 CREATE TABLE `answer`  (
-  `id` int(64) NOT NULL COMMENT '标识',
+  `id` int(64) NOT NULL AUTO_INCREMENT COMMENT '标识',
   `answer_text` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT '答案文本',
   `answer_images` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT '答案图片',
   `is_del` bit(1) NULL DEFAULT NULL COMMENT '是否删除',
@@ -51,7 +51,7 @@ INSERT INTO `answer` VALUES (1000006, '塔克拉玛干沙漠', NULL, NULL, '2019
 -- ----------------------------
 DROP TABLE IF EXISTS `ext_data`;
 CREATE TABLE `ext_data`  (
-  `id` int(64) NOT NULL,
+  `id` int(64) NOT NULL AUTO_INCREMENT,
   `problem_id` int(64) NULL DEFAULT NULL,
   `keyname` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT '数据项的key',
   `value` varchar(225) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT '数据项的值',
@@ -76,7 +76,7 @@ INSERT INTO `ext_data` VALUES (10000054, 1000005, 'D', '11', NULL, '2019-07-10 1
 -- ----------------------------
 DROP TABLE IF EXISTS `paper`;
 CREATE TABLE `paper`  (
-  `id` int(64) NOT NULL COMMENT '标识',
+  `id` int(64) NOT NULL AUTO_INCREMENT COMMENT '标识',
   `title` varchar(255) CHARACTER SET utf8mb4  NOT NULL,
   `is_del` bit(1) NULL DEFAULT NULL COMMENT '是否删除',
   `create_at` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
@@ -145,7 +145,7 @@ INSERT INTO `paper_tag` VALUES (101, 24, NULL, '2019-07-10 11:16:34', 4, NULL, N
 -- ----------------------------
 DROP TABLE IF EXISTS `permission`;
 CREATE TABLE `permission`  (
-  `id` int(64) NOT NULL COMMENT '标识',
+  `id` int(64) NOT NULL AUTO_INCREMENT COMMENT '标识',
   `name` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL,
   `url` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT '请求接口',
   `method` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT '请求方法',
@@ -170,7 +170,7 @@ INSERT INTO `permission` VALUES (123458, 'get', NULL, 'get', NULL, NULL, '2019-0
 -- ----------------------------
 DROP TABLE IF EXISTS `problem`;
 CREATE TABLE `problem`  (
-  `id` int(64) NOT NULL COMMENT '标识',
+  `id` int(64) NOT NULL AUTO_INCREMENT COMMENT '标识',
   `problem_text` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT '问题主体文本',
   `parent_id` int(64) NULL DEFAULT NULL COMMENT '父问题',
   `answer_id` int(64) NULL DEFAULT NULL COMMENT '对应的答案',
@@ -231,7 +231,7 @@ INSERT INTO `problem_tag` VALUES (1000006, 24, NULL, '2019-07-10 11:13:41', 1, N
 -- ----------------------------
 DROP TABLE IF EXISTS `role`;
 CREATE TABLE `role`  (
-  `id` int(64) NOT NULL COMMENT '标识',
+  `id` int(64) NOT NULL AUTO_INCREMENT COMMENT '标识',
   `rolename` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL,
   `is_del` bit(1) NULL DEFAULT NULL COMMENT '是否删除',
   `create_at` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
@@ -300,7 +300,7 @@ INSERT INTO `status` VALUES (1000005, 1, NULL, '2019-07-10 11:10:06', 1, NULL, N
 -- ----------------------------
 DROP TABLE IF EXISTS `tag`;
 CREATE TABLE `tag`  (
-  `id` int(64) NOT NULL COMMENT '标识',
+  `id` int(64) NOT NULL AUTO_INCREMENT COMMENT '标识',
   `value` varchar(255) CHARACTER SET utf8mb4  NOT NULL COMMENT '标签名称',
   `parent_id` int(64) NULL DEFAULT NULL COMMENT '父标签',
   `is_del` bit(1) NULL DEFAULT NULL COMMENT '是否删除',
@@ -328,7 +328,7 @@ INSERT INTO `tag` VALUES (24, 'geography', 2, NULL, '2019-07-10 10:47:31', 1, NU
 -- ----------------------------
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user`  (
-  `id` bigint(20) NOT NULL COMMENT '标识',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '标识',
   `username` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL,
   `password_salt_md5` varchar(32) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT '密码加盐后的md5',
   `salt` varchar(32) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT '盐值',
