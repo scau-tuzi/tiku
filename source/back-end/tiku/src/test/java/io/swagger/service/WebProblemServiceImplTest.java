@@ -19,10 +19,10 @@ import java.util.List;
 @SpringBootTest(classes = TikuApplication.class)
 @ContextConfiguration(classes = TikuApplication.class)
 @WebAppConfiguration
-public class ProblemServiceImplTest {
+public class WebProblemServiceImplTest {
 
     @Autowired
-    private ProblemServiceImpl problemServiceImpl;
+    private WebProblemService webProblemService;
 
     @Autowired
     private ProblemRepository problemRepository;
@@ -99,7 +99,7 @@ public class ProblemServiceImplTest {
 
     @Test
     public void test() {
-        List<ProblemFullData> problemFullDataList = problemServiceImpl.getAll(0, 2);
+        List<ProblemFullData> problemFullDataList = webProblemService.getAll(0, 2);
         System.out.println("--------------------------------------");
         System.out.println(problemFullDataList);
         System.out.println("--------------------------------------");

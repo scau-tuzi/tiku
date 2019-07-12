@@ -81,3 +81,7 @@ source/back-end/\.idea/
 *.iml
 
 source/back-end/tiku/src/main/resources/static/**/*.*
+
+*.jar
+
+*.MF

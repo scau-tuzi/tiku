@@ -1,7 +1,6 @@
 package io.swagger.service;
 
 import io.swagger.pojo.ProblemFullData;
-import io.swagger.pojo.dao.Problem;
 import io.swagger.pojo.dao.repos.ProblemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -10,10 +9,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ProblemServiceImpl implements ProblemService {
+public class WebProblemServiceImpl implements WebProblemService {
 
     @Autowired
-    private ProblemDataServiceImpl problemDataServiceImpl;
+    private ProblemDataService problemDataService;
 
     @Autowired
     private ProblemRepository problemRepository;
@@ -23,6 +22,6 @@ public class ProblemServiceImpl implements ProblemService {
 
         List<Long> problemIdList = problemRepository.findIdList(PageRequest.of(pageNumber, pageSize));
 
-        return problemDataServiceImpl.getFullDataByIds(problemIdList);
+        return problemDataService.getFullDataByIds(problemIdList);
     }
 }
