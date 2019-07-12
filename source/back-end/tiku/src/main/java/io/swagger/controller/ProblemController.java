@@ -1,14 +1,12 @@
 package io.swagger.controller;
 
+import io.swagger.InitData;
 import io.swagger.pojo.ProblemFullData;
 import io.swagger.pojo.dto.BasicResponse;
 import io.swagger.service.WebProblemService;
-import io.swagger.service.WebProblemServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,8 +22,9 @@ public class ProblemController {
 
     /**
      * 分页返回问题的具体信息列表
+     *
      * @param pageNumber 当前页
-     * @param pageSize 分页大小
+     * @param pageSize   分页大小
      * @return
      */
     @GetMapping("/list")
@@ -35,6 +34,37 @@ public class ProblemController {
 
         BasicResponse basicResponse = new BasicResponse();
         basicResponse.setData(allProblemFullData);
+
+        return basicResponse;
+    }
+
+    @PostMapping("add")
+    public BasicResponse add(@RequestBody List<ProblemFullData> problemFullDataList) {
+
+        System.out.println("-----------------------------------------------------");
+        System.out.println(problemFullDataList);
+        System.out.println("-----------------------------------------------------");
+
+        BasicResponse basicResponse = new BasicResponse();
+        basicResponse.setData(problemFullDataList);
+
+        return basicResponse;
+    }
+
+
+    @Autowired
+    private InitData initData;
+
+    /**
+     * 初始化数据
+     * @return
+     */
+    @GetMapping("init")
+    public BasicResponse init() {
+        initData.before();
+
+        BasicResponse basicResponse = new BasicResponse();
+        basicResponse.setData("初始化成功");
 
         return basicResponse;
     }

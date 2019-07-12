@@ -1,6 +1,7 @@
 package io.swagger.service;
 
 import io.swagger.pojo.ProblemFullData;
+import io.swagger.pojo.dao.Problem;
 import io.swagger.pojo.dao.repos.ProblemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class WebProblemServiceImpl implements WebProblemService {
+public class WebProblemServiceImpl extends BasicService<Problem> implements WebProblemService {
 
     @Autowired
     private ProblemDataService problemDataService;
