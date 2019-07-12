@@ -6,7 +6,7 @@ import io.swagger.pojo.dao.repos.ProblemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-
+import io.swagger.service.BasicService;
 import java.util.List;
 
 @Service

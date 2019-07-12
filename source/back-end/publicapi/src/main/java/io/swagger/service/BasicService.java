@@ -1,6 +1,7 @@
 package io.swagger.service;
 
 import io.swagger.pojo.dao.BasicEntity;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
@@ -10,6 +11,7 @@ import java.util.Date;
  * @作者：黄宽波
  * @时间：2019-07-12
  */
+@Service
 public class BasicService<T extends BasicEntity> {
 
     /**

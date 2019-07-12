@@ -46,7 +46,6 @@ public class ProblemFullData {
 
         List<String> tagstr = new ArrayList<>();
         if(tags !=null){
-            System.out.println(tags);
             tagstr=tags.stream().map(Tag::getValue).collect(Collectors.toList());
         }
         if(tagstr.size()>0){
