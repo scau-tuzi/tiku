@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.annotation.Transient;
 
 @Configuration
 @Slf4j
@@ -52,7 +53,7 @@ public class Initer {
             }
         };
     }
-
+    @Transient
     private void initData() {
         log.info("Preloading data ...");
 
@@ -153,9 +154,10 @@ public class Initer {
             }
         }
 
+        long papid=23456789;
         for (int i = 0; i < 144; i++) {
-            long a= i/12+20000;
-            long b= i%12+20100;
+            long a= i/12+tid-24;
+            long b= i%12+tid-24;
             Paper paper = new Paper();
             paper.setId(papid+i);
             paper.setTitle("第"+i+"张试卷略略略");
