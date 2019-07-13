@@ -54,9 +54,6 @@ CREATE TABLE `paper_item`  (
   PRIMARY KEY (`problem_id`, `paper_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COMMENT = '试卷项，每一项对应一个问题' ROW_FORMAT = Dynamic;
 
-
-
-
 DROP TABLE IF EXISTS `paper_tag`;
 CREATE TABLE `paper_tag`  (
   `paper_id` int(64) NOT NULL,
@@ -68,6 +65,7 @@ CREATE TABLE `paper_tag`  (
   `update_by` bigint(20) NULL DEFAULT NULL COMMENT '更新人',
   PRIMARY KEY (`paper_id`, `tag_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COMMENT = '试卷所属的标签' ROW_FORMAT = Dynamic;
+
 DROP TABLE IF EXISTS `permission`;
 CREATE TABLE `permission`  (
   `id` int(64) NOT NULL AUTO_INCREMENT COMMENT '标识',
@@ -170,6 +168,7 @@ CREATE TABLE `user`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COMMENT = '用户表' ROW_FORMAT = Dynamic;
 
 -- 一个用户某道题目的状态
+-- 比如用户A题目100001状态为“错题”
 CREATE TABLE `user_problem_status`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '标识',
 
@@ -186,6 +185,7 @@ CREATE TABLE `user_problem_status`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COMMENT = '用户题目状态表' ROW_FORMAT = Dynamic;
 
 -- 题库用户 user表是后台用户
+-- 判断不同应用相同用户用的
 CREATE TABLE `tiku_user`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '标识',
   `username` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL,
@@ -201,24 +201,3 @@ CREATE TABLE `tiku_user`  (
   `update_by` bigint(20) NULL DEFAULT NULL COMMENT '更新人',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COMMENT = '题库用户' ROW_FORMAT = Dynamic;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
