@@ -1,17 +1,23 @@
 package io.swagger.service;
 
+import io.swagger.model.Pagination;
 import io.swagger.pojo.ProblemFullData;
 import io.swagger.pojo.dao.*;
 import io.swagger.pojo.dao.repos.ExtDataRepository;
 import io.swagger.pojo.dao.repos.ProblemRepository;
 import io.swagger.pojo.dao.repos.ProblemTagRepository;
+import io.swagger.pojo.dao.repos.StatusRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.test.web.servlet.result.StatusResultMatchersExtensionsKt;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -42,12 +48,36 @@ public class WebProblemServiceImpl extends BasicService<Problem> implements WebP
     @Autowired
     private ExtDataRepository extDataRepository;
 
+    @Autowired
+    private StatusRepository statusRepository;
+
     @Override
-    public List<ProblemFullData> getAll(Integer pageNumber, Integer pageSize) {
+    public Map<String, Object> getAll(Integer pageNumber, Integer pageSize, Integer verifyStatus, Boolean isDel) {
 
-        List<Long> problemIdList = problemRepository.findIdList(PageRequest.of(pageNumber, pageSize));
+        Map<String, Object> resultMap = new HashMap<>();
 
-        return problemDataService.getFullDataByIds(problemIdList);
+        //查找符合条件的问题id
+        Page<Object> page = statusRepository.findProblemIdList(PageRequest.of(pageNumber, pageSize), verifyStatus, isDel);
+
+        //分页信息
+        Pagination pagination = new Pagination();
+        pagination.setPage(BigDecimal.valueOf(page.getNumber()));
+        pagination.setSize(BigDecimal.valueOf(page.getSize()));
+        pagination.setTotal(BigDecimal.valueOf(page.getTotalPages()));
+
+        //将id存储进id列表
+        List<Long> problemIdList = new ArrayList<>();
+        for (Object id : page.getContent()) {
+            problemIdList.add(Long.parseLong(id.toString()));
+        }
+
+        //问题具体信息
+        List<ProblemFullData> problemFullDataList = problemDataService.getFullDataByIds(problemIdList);
+
+        resultMap.put("pagination", pagination);
+        resultMap.put("problemFullDataList", problemFullDataList);
+
+        return resultMap;
     }
 
     @Override
