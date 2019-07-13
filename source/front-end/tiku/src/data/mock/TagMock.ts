@@ -1,5 +1,7 @@
 import Tag from "../model/TAg";
-
+/**
+ * 本地标签实例
+ */
 let tagslistData :Tag[] = [
     {
         id: 1,

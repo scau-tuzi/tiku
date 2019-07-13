@@ -1,6 +1,7 @@
 package io.swagger.controller;
 
 import io.swagger.pojo.ProblemFullData;
+import io.swagger.pojo.dao.Status;
 import io.swagger.pojo.dto.BasicResponse;
 import io.swagger.service.WebProblemService;
 import io.swagger.service.WebProblemServiceImpl;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RequestMapping("/api/problem")
 @RestController
@@ -28,25 +30,30 @@ public class ProblemController {
      *
      * @param pageNumber 当前页
      * @param pageSize   分页大小
+     * @param isCheck    是否通过审核
      * @return
      */
     @GetMapping("/list")
-    public BasicResponse list(@RequestParam Integer pageNumber, Integer pageSize) {
+    public BasicResponse list(@RequestParam Integer pageNumber, Integer pageSize, Integer isCheck) {
 
         BasicResponse basicResponse = new BasicResponse();
 
-        if (pageNumber < 0 || pageSize < 1) {
+        pageNumber = (pageNumber < 0 ? 0 : pageNumber);
+        pageSize = (pageSize < 1 || pageSize > 100 ? 100 : pageSize);
+        isCheck = (isCheck == null ? Status.CHECK : isCheck);
+
+        /**
+         * 定义一个页对象?
+         */
+
+        try {
+            Map<String, Object> resultMap = webProblemService.getAll(pageNumber, pageSize, isCheck, Boolean.FALSE);
+            basicResponse.setData(resultMap);
+        } catch (Exception e) {
             basicResponse.setCode(BasicResponse.ERRORCODE);
-            basicResponse.setData("Param error! pageNumber should >= 0 And pageSize should >= 1");
-        } else {
-            try {
-                List<ProblemFullData> allProblemFullData = webProblemService.getAll(pageNumber, pageSize);
-                basicResponse.setData(allProblemFullData);
-            } catch (Exception e) {
-                basicResponse.setCode(BasicResponse.ERRORCODE);
-                basicResponse.setData("Query error!");
-            }
+            basicResponse.setData("Query error!");
         }
+
 
         return basicResponse;
     }

@@ -16,9 +16,16 @@
             @selection-change="handleSelectionChange">
             <el-table-column
               fixed="left"
-              prop="problem"
-              label="问题"
-              width="300">
+              prop="problemId"
+              label="问题id"
+              width="0"
+            hidden>
+            </el-table-column>
+            <el-table-column
+                    fixed="left"
+                    prop="problem"
+                    label="问题"
+                    width="300">
             </el-table-column>
             <el-table-column
               prop="answer"
@@ -82,8 +89,7 @@
           this.$router.push({path: '/ViewProblem',
             //query对象获取参数
             query: {
-              viewQues:row.problem,
-              viewAnsw:row.answer
+              problemId:row.problemId
             }
           })
       },
@@ -99,6 +105,7 @@
           console.log(pd)
           pd.filter(v=>{
             res.push({
+              problemId:v.problem.id,
               problem:v.problem.problemText,
               answer:v.answer.answerText,
               pictures:'',

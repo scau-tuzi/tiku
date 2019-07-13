@@ -1,10 +1,18 @@
 interface ProblemFullData {
     /**
+<<<<<<< HEAD
      * problem 问题的主体, 
      *  id： 问题的id；
      *  problemText： 问题的内容；
      *  parentId: 父问题的id
      *  answer：问题的答案id
+=======
+     * @problem 问题的主体:
+     *  @id 问题的id;
+     *  @problemText 问题的内容;
+     *  @parentId 父问题的id;
+     *  @answer 问题的答案id;
+>>>>>>> ec267ee6943a37c04ce53aa8713730db0dd39465
      */
     /**
      * answer 问题的答案
@@ -23,6 +31,7 @@ interface ProblemFullData {
      */
 
     /**
+<<<<<<< HEAD
      * status 问题的状态
      */
 
@@ -40,5 +49,10 @@ interface ProblemFullData {
     }],
     extData: any,
     status: number
+=======
+    * status 问题的状态
+    */
+    status: any
+>>>>>>> ec267ee6943a37c04ce53aa8713730db0dd39465
 }
 export default ProblemFullData;
