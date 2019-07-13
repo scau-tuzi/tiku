@@ -170,7 +170,7 @@ CREATE TABLE `user`  (
 -- 一个用户某道题目的状态
 -- 比如用户A题目100001状态为“错题”
 CREATE TABLE `user_problem_status`  (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '标识',
+  `id` int(64) NOT NULL AUTO_INCREMENT COMMENT '标识',
 
   `problem_id` int(64) NOT NULL, COMMENT '问题id',
   `user_uuid` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT '用户uuid',
