@@ -5,8 +5,8 @@ import BasicResponse from '@/data/model/BasicResponse';
 
 
 /**
- * 获得标签列表
- * @param callback 回调函数,
+ * 获得标签列表方法
+ * @param callback 回调函数
  */
 function getTagsList(callback: (t: Tag[]) => void) {
 
@@ -14,10 +14,8 @@ function getTagsList(callback: (t: Tag[]) => void) {
     //     .post("")//服务器地址
     //     .then(res => {
     //         let lists: Tag[] = res.data;
-
     //         callback(lists)
     //     })
-
 
     let lists: Tag[] = tagslistData;
     console.log("get it");
@@ -25,21 +23,14 @@ function getTagsList(callback: (t: Tag[]) => void) {
     callback(lists)
 }
 
-
 /**
- * 增加标签
- * @param tagValue: 标签的内容文本
- * @param parentId: 父标签的id(没有的时候可以不用填写)
- * @param Callback: 回调函数
+ * 增加标签方法
+ * @param tags 增加的标签数组 ( 一个或者多个 )
+ * @param Callback 回调函数
  */
-function addTags(tagValue: string, parentId: -1 | number, Callback: (p: BasicResponse) => void) {
-
+function addTags(tags: Tag[], Callback: (p: BasicResponse) => void) {
     axios
-        .post("", {
-            //标签数据
-            parentId,
-            tagValue
-        })
+        .post("", tags)
         .then(res => {
             //获取添加成功参数
             let response: BasicResponse = res.data;
@@ -51,27 +42,36 @@ function addTags(tagValue: string, parentId: -1 | number, Callback: (p: BasicRes
 
 /**
  * 删除标签
- * @param tagValue 要删除的标签的内容
+ * @param tagID 要删除的标签的 id
  * @param callback 回调函数
  */
-function delTag(tagValue: string, callback: (b: BasicResponse) => void) {
-    // 删除标签
+function delTag(tagId: number, callback: (b: BasicResponse) => void) {
     axios
-        .post("", {
-            //删除标签的参数
-            tagValue
-        })
+        .post("", tagId)
         .then(res => {
-            //成功与否
-            let response : BasicResponse= res.data;
-
+            let response: BasicResponse = res.data;
             callback(response)
         })
 
 }
 
+/**
+ * 修改标签方法
+ * @param tagID 要删除的标签的 id 
+ * @param callback 回调函数
+ */
+function ChangeTag(tagId: number, callback: (b: BasicResponse) => void) {
+    axios
+        .post("", tagId)
+        .then(res => {
+            let response: BasicResponse = res.data;
+            callback(response)
+        })
+}
+
 export {
     getTagsList,
     addTags,
-    delTag
+    delTag,
+    ChangeTag
 }
