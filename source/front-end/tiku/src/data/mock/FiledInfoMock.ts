@@ -1,5 +1,5 @@
 import FieldInfo from "@/data/model/FieldInfo"
-let AllFieldInfo:FieldInfo={
+export let AllFieldInfo:FieldInfo={
     "choice_A":{
         title:"A选项",
     },
@@ -13,4 +13,24 @@ let AllFieldInfo:FieldInfo={
         title:"D选项",
     },
 };
-export default AllFieldInfo;
+
+let BasicFieldList:FieldInfo={
+    "problemText":{
+        title:"题目",
+        type:"LongText"
+    },
+    "answerText":{
+        title:"答案",
+        type:"LongText"
+    },
+    "tags":{
+        title:"标签",
+        type:"enum",
+        ext:"tag"
+    }
+};
+
+export default {
+    AllFieldInfo,
+    BasicFieldList
+};

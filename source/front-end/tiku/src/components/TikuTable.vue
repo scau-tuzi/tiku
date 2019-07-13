@@ -90,7 +90,7 @@
       <el-pagination
         background
         layout="prev, pager, next"
-        :total="100"
+        :total="1000"
 
         @current-change="this.handlerchange">
       </el-pagination>
@@ -132,7 +132,7 @@
   import {getProblems} from "../api/Problem";
   import ProblemFullData from "../data/model/ProblemFullData";
   import { getTagsList } from "../api/Tag";
-  import AllFieldInfo from "../data/mock/FiledInfoMock";
+  import {AllFieldInfo} from "../data/mock/FiledInfoMock";
   export default {
     name: 'TikuTable',
     datas:[],
