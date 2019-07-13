@@ -2,8 +2,6 @@ package io.swagger.service;
 
 import io.swagger.pojo.dao.Answer;
 import io.swagger.pojo.dao.repos.AnswerRepository;
-import org.omg.PortableServer.AdapterActivator;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
