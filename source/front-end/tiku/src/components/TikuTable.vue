@@ -2,20 +2,20 @@
   <el-container style="border: 1px solid #eee">
     <el-main>
       <el-row gutter="0">
-        <el-col span="20">
+        <el-col span=20>
           <el-button class="el-button" align="left" plain @click="jumpInput">录入题目</el-button>
           <!-- <el-button type="primary" plain>全选</el-button> -->
           <el-button type="success" plain>批量删除</el-button>
           <el-button type="info" plain>导入Excel</el-button>
           <el-button type="warning" plain>标签批量修改</el-button>
         </el-col>
-        <el-col span="4">
+        <el-col span=4>
           <el-input v-model="search" style="display: inline-block;width: 180px"
                     placeholder="请输入搜索内容">
           </el-input>
         </el-col>
       </el-row>
-      <el-row><el-col span="24"><div></div></el-col></el-row>
+      <el-row><el-col span=24><div></div></el-col></el-row>
       <el-row>
         <el-table
           :data="tables"
@@ -49,7 +49,7 @@
             width="100">
           </el-table-column>
           <el-table-column label="选项">
-            <el-table-column>
+            <el-table-column v-for="f in fieldInfo" v-bind:key="f" :prop="f.keyname" :label="f.title">
             </el-table-column>
           </el-table-column>
           <el-table-column
@@ -90,7 +90,7 @@
       <el-pagination
         background
         layout="prev, pager, next"
-        :total="100"
+        :total="1000"
 
         @current-change="this.handlerchange">
       </el-pagination>
@@ -132,6 +132,7 @@
   import {getProblems} from "../api/Problem";
   import ProblemFullData from "../data/model/ProblemFullData";
   import { getTagsList } from "../api/Tag";
+  import {AllFieldInfo} from "../data/mock/FiledInfoMock";
   export default {
     name: 'TikuTable',
     datas:[],
@@ -205,20 +206,34 @@
         var _this=this;
         let callback=(pd)=>{
           var res=[];
-          console.log("get it")
-          console.log(pd)
+          console.log("get it");
+          console.log(pd);
+          this.$store.commit("setNewProblems",pd);
           pd.filter(v=>{
-            var ts=[];
-            for(var i =0;i<v.tags.length;i++){
-              ts.push(v.tags[i].value)
+            let ts = [];
+            if(v.tags!==null){
+              for(let i =0; i<v.tags.length; i++){
+                ts.push(v.tags[i].value)
+              }
             }
-            res.push({
+            if(v.answer===null){
+              v.answer={
+                answerText:""
+              }
+            }
+            let ress={
               problem:v.problem.problemText,
               answer:v.answer.answerText,
               pictures:'',
               sound:'',
               tag:ts
-            })
+            };
+            if(v.extData!==null){
+              Object.keys(v.extData).forEach((key)=>{
+                ress[key]=v.extData[key];
+              })
+            }
+            res.push(ress)
           });
           console.log(res);
           _this.tableData=res;
@@ -229,6 +244,15 @@
     mounted: function() {
       this.getTagsdata;
       this.getData(0);
+      var all=[];
+      Object.keys(AllFieldInfo).forEach((key)=>{
+        all.push({
+          keyname:key,
+          title:AllFieldInfo[key].title,
+        })
+      });
+
+      this.fieldInfo=all;
     },
     data () {
       return {
@@ -237,7 +261,8 @@
         inputVisible: false,
         inputValue: '',
         centerDialogVisible: false,
-        tableData: []
+        tableData:[],
+        fieldInfo:[],
       }
     },
     // 搜索操作

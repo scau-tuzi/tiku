@@ -7,6 +7,7 @@ import io.swagger.pojo.dao.repos.ExtDataRepository;
 import io.swagger.pojo.dao.repos.ProblemRepository;
 import io.swagger.pojo.dao.repos.ProblemTagRepository;
 import io.swagger.pojo.dao.repos.StatusRepository;
+import io.swagger.pojo.dao.repos.TagRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -44,6 +45,9 @@ public class WebProblemServiceImpl extends BasicService<Problem> implements WebP
 
     @Autowired
     private ProblemTagRepository problemTagRepository;
+
+    @Autowired
+    private TagRepository tagRepository;
 
     @Autowired
     private ExtDataRepository extDataRepository;
@@ -120,7 +124,13 @@ public class WebProblemServiceImpl extends BasicService<Problem> implements WebP
             List<ProblemTag> problemTagList = new ArrayList<>();
             for (Tag tag : tagList) {
                 ProblemTag problemTag = new ProblemTag();
-                problemTag.setTagId(tag.getId());
+                // 这里假定只上传了标签的值，没有上传标签的id
+                List<Tag> tagss = tagRepository.findByValueEquals(tag.getValue());
+                if(tagss==null || tagss.size()==0){
+                    // todo 如果标签不存在就新增标签
+                    throw new Exception("所选标签不在数据库中");
+                }
+                problemTag.setTagId(tagss.get(0).getId());
                 problemTag.setProblemId(problem.getId());
                 problemTagList.add(problemTag);
             }

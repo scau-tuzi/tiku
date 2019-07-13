@@ -13,4 +13,4 @@ script:
   - yarn 
   - yarn build
   - cd ../../back-end/
-  - mvn package
+  - mvn package -Dmaven.test.skip=true

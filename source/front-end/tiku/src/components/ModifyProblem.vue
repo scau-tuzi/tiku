@@ -149,11 +149,21 @@
         },
         getParams(){
           // 取到路由带过来的参数
+          const problemId = this.$route.query.problemId
           const routerQues = this.$route.query.modifyQues
           const routerAnsw = this.$route.query.modifyAnsw
           // 将问题和答案放在当前组件的数据内
           this.ruleForm.problem = routerQues
           this.ruleForm.answer = routerAnsw
+
+          let problems=this.$store.state.problem
+          problems.forEach((v)=>{
+            if(v.problem.id === problemId){
+              this.ruleForm.problem=v.problem.problemText;
+              this.ruleForm.answer=v.answer.answerText;
+
+            }
+          })
         }
       },
       //监听路由变化
