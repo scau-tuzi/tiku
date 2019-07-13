@@ -169,6 +169,40 @@ CREATE TABLE `user`  (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COMMENT = '用户表' ROW_FORMAT = Dynamic;
 
+-- 一个用户某道题目的状态
+CREATE TABLE `user_problem_status`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '标识',
+
+  `problem_id` int(64) NOT NULL, COMMENT '问题id',
+  `user_uuid` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT '用户uuid',
+  `status` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT '状态字符串',
+
+  `is_del` bit(1) NULL DEFAULT NULL COMMENT '是否删除',
+  `create_at` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `create_by` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+  `update_at` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  `update_by` bigint(20) NULL DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COMMENT = '用户题目状态表' ROW_FORMAT = Dynamic;
+
+-- 题库用户 user表是后台用户
+CREATE TABLE `tiku_user`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '标识',
+  `username` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL,
+  `password_salt_md5` varchar(32) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT '密码加盐后的md5',
+  `salt` varchar(32) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT '盐值',
+  `image` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT '头像url',
+  `user_uuid` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT '用户uuid',
+  `role_id` int(64) NULL DEFAULT NULL COMMENT '所属角色',
+  `is_del` bit(1) NULL DEFAULT NULL COMMENT '是否删除',
+  `create_at` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `create_by` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+  `update_at` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  `update_by` bigint(20) NULL DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COMMENT = '题库用户' ROW_FORMAT = Dynamic;
+
+
 
 
 
