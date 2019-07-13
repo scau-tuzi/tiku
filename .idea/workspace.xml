@@ -2,11 +2,58 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e1f752a3-9e83-4f9b-abc1-4f7b61ec88e1" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/back-end/common/src/main/java/io/swagger/pojo/dao/repos/PaperRepository.java" afterPath="$PROJECT_DIR$/source/back-end/common/src/main/java/io/swagger/pojo/dao/repos/PaperRepository.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/back-end/common/src/main/java/io/swagger/pojo/dao/repos/PaperTagRepository.java" afterPath="$PROJECT_DIR$/source/back-end/common/src/main/java/io/swagger/pojo/dao/repos/PaperTagRepository.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/source/back-end/publicapi/src/main/java/io/swagger/api/CollectionApi.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/source/back-end/publicapi/src/main/java/io/swagger/api/CollectionApiController.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/source/back-end/publicapi/src/main/java/io/swagger/api/GrantUserTokenApi.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/source/back-end/publicapi/src/main/java/io/swagger/api/GrantUserTokenApiController.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/source/back-end/publicapi/src/main/java/io/swagger/api/ProblemStatusApi.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/source/back-end/publicapi/src/main/java/io/swagger/api/ProblemStatusApiController.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/source/back-end/publicapi/src/main/java/io/swagger/api/RevokeUserTokenApi.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/source/back-end/publicapi/src/main/java/io/swagger/api/RevokeUserTokenApiController.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/source/back-end/publicapi/src/main/java/io/swagger/model/Body.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/source/back-end/publicapi/src/main/java/io/swagger/model/CollectionIdResult.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/source/back-end/publicapi/src/main/java/io/swagger/model/CollectionInfo.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/source/back-end/publicapi/src/main/java/io/swagger/model/GrantInfo.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/source/back-end/publicapi/src/main/java/io/swagger/model/InlineResponse200.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/source/back-end/publicapi/src/main/java/io/swagger/model/OneOfExpressionArgument2.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/source/back-end/publicapi/src/main/java/io/swagger/model/ProblemIdList.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/source/back-end/publicapi/src/main/java/io/swagger/model/StatusInfo.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/source/back-end/publicapi/src/main/java/io/swagger/model/StatusInfoList.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/source/front-end/tiku/src/api/Tag.ts" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/source/front-end/tiku/src/components/PaperTable.vue" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/source/front-end/tiku/src/data/mock/TagMock.ts" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/source/front-end/tiku/src/data/model/Tag.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/back-end/common/src/main/java/io/swagger/pojo/dao/repos/AnswerRepository.java" afterPath="$PROJECT_DIR$/source/back-end/common/src/main/java/io/swagger/pojo/dao/repos/AnswerRepository.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/back-end/common/src/main/java/io/swagger/pojo/dao/repos/ExtDataRepository.java" afterPath="$PROJECT_DIR$/source/back-end/common/src/main/java/io/swagger/pojo/dao/repos/ExtDataRepository.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/back-end/common/src/main/java/io/swagger/pojo/dao/repos/ProblemRepository.java" afterPath="$PROJECT_DIR$/source/back-end/common/src/main/java/io/swagger/pojo/dao/repos/ProblemRepository.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/back-end/common/src/main/java/io/swagger/pojo/dao/repos/ProblemTagRepository.java" afterPath="$PROJECT_DIR$/source/back-end/common/src/main/java/io/swagger/pojo/dao/repos/ProblemTagRepository.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/back-end/common/src/main/java/io/swagger/pojo/dao/repos/StatusRepository.java" afterPath="$PROJECT_DIR$/source/back-end/common/src/main/java/io/swagger/pojo/dao/repos/StatusRepository.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/back-end/common/src/main/java/io/swagger/pojo/dao/repos/TagRepository.java" afterPath="$PROJECT_DIR$/source/back-end/common/src/main/java/io/swagger/pojo/dao/repos/TagRepository.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/back-end/tiku/src/test/java/io/swagger/TikuApplicationTests.java" afterPath="$PROJECT_DIR$/source/back-end/tiku/src/test/java/io/swagger/TikuApplicationTests.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/back-end/tiku/src/main/java/io/swagger/controller/ProblemController.java" afterPath="$PROJECT_DIR$/source/back-end/tiku/src/main/java/io/swagger/controller/ProblemController.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/back-end/tiku/src/main/java/io/swagger/service/WebAnswerService.java" afterPath="$PROJECT_DIR$/source/back-end/tiku/src/main/java/io/swagger/service/WebAnswerService.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/back-end/tiku/src/main/java/io/swagger/service/WebAnswerServiceImpl.java" afterPath="$PROJECT_DIR$/source/back-end/tiku/src/main/java/io/swagger/service/WebAnswerServiceImpl.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/back-end/tiku/src/main/java/io/swagger/service/WebExtDataService.java" afterPath="$PROJECT_DIR$/source/back-end/tiku/src/main/java/io/swagger/service/WebExtDataService.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/back-end/tiku/src/main/java/io/swagger/service/WebExtDataServiceImpl.java" afterPath="$PROJECT_DIR$/source/back-end/tiku/src/main/java/io/swagger/service/WebExtDataServiceImpl.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/back-end/tiku/src/main/java/io/swagger/service/WebProblemService.java" afterPath="$PROJECT_DIR$/source/back-end/tiku/src/main/java/io/swagger/service/WebProblemService.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/back-end/tiku/src/main/java/io/swagger/service/WebProblemServiceImpl.java" afterPath="$PROJECT_DIR$/source/back-end/tiku/src/main/java/io/swagger/service/WebProblemServiceImpl.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/back-end/tiku/src/main/java/io/swagger/service/WebProblemTagService.java" afterPath="$PROJECT_DIR$/source/back-end/tiku/src/main/java/io/swagger/service/WebProblemTagService.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/back-end/tiku/src/main/java/io/swagger/service/WebProblemTagServiceImpl.java" afterPath="$PROJECT_DIR$/source/back-end/tiku/src/main/java/io/swagger/service/WebProblemTagServiceImpl.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/back-end/tiku/src/main/java/io/swagger/service/WebStatusService.java" afterPath="$PROJECT_DIR$/source/back-end/tiku/src/main/java/io/swagger/service/WebStatusService.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/back-end/tiku/src/main/java/io/swagger/service/WebStatusServiceImpl.java" afterPath="$PROJECT_DIR$/source/back-end/tiku/src/main/java/io/swagger/service/WebStatusServiceImpl.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/back-end/tiku/src/main/java/io/swagger/service/WebTagService.java" afterPath="$PROJECT_DIR$/source/back-end/tiku/src/main/java/io/swagger/service/WebTagService.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/back-end/tiku/src/main/java/io/swagger/service/WebTagServiceImpl.java" afterPath="$PROJECT_DIR$/source/back-end/tiku/src/main/java/io/swagger/service/WebTagServiceImpl.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/front-end/tiku/src/api/Paper.ts" afterPath="$PROJECT_DIR$/source/front-end/tiku/src/api/Paper.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/front-end/tiku/src/api/Problem.ts" afterPath="$PROJECT_DIR$/source/front-end/tiku/src/api/Problem.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/front-end/tiku/src/components/InputTiku.vue" afterPath="$PROJECT_DIR$/source/front-end/tiku/src/components/InputTiku.vue" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/front-end/tiku/src/components/ModifyProblem.vue" afterPath="$PROJECT_DIR$/source/front-end/tiku/src/components/ModifyProblem.vue" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/front-end/tiku/src/components/TikuTable.vue" afterPath="$PROJECT_DIR$/source/front-end/tiku/src/components/TikuTable.vue" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/front-end/tiku/src/components/VerifyTable.vue" afterPath="$PROJECT_DIR$/source/front-end/tiku/src/components/VerifyTable.vue" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/front-end/tiku/src/components/ViewProblem.vue" afterPath="$PROJECT_DIR$/source/front-end/tiku/src/components/ViewProblem.vue" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/front-end/tiku/src/data/mock/ProblemFullDataMock.ts" afterPath="$PROJECT_DIR$/source/front-end/tiku/src/data/mock/ProblemFullDataMock.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/front-end/tiku/src/data/model/BasicResponse.ts" afterPath="$PROJECT_DIR$/source/front-end/tiku/src/data/model/BasicResponse.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/front-end/tiku/src/data/model/PaperFullData.ts" afterPath="$PROJECT_DIR$/source/front-end/tiku/src/data/model/PaperFullData.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/front-end/tiku/src/data/model/ProblemFullData.ts" afterPath="$PROJECT_DIR$/source/front-end/tiku/src/data/model/ProblemFullData.ts" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -63,8 +110,9 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="AndroidView" />
+      <pane id="PackagesPane" />
       <pane id="Scratches" />
+      <pane id="AndroidView" />
       <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
@@ -78,11 +126,23 @@
               <item name="tiku" type="462c0819:PsiDirectoryNode" />
               <item name="source" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="tiku" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tiku" type="462c0819:PsiDirectoryNode" />
+              <item name="source" type="462c0819:PsiDirectoryNode" />
+              <item name="back-end" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="tiku" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tiku" type="462c0819:PsiDirectoryNode" />
+              <item name="source" type="462c0819:PsiDirectoryNode" />
+              <item name="back-end" type="462c0819:PsiDirectoryNode" />
+              <item name="tiku" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -197,41 +257,42 @@
       <option name="presentableId" value="Default" />
       <updated>1562898185474</updated>
       <workItem from="1562898186967" duration="8000" />
+      <workItem from="1562979855758" duration="30000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="8000" />
+    <option name="totallyTimeSpent" value="38000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <layout>
-      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24963397" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">

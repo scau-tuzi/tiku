@@ -1,20 +1,15 @@
 <template>
+  <div>
     <el-container>
       <el-main>
-        <el-row>
-          <el-col span="24" align="right">
-            <el-autocomplete
-              v-model="state"
-              :fetch-suggestions="querySearchAsync"
-              placeholder="请输入内容"
-              @select="handleSelect"
-            ></el-autocomplete>
-          </el-col>
-        </el-row>
+        <!-- 搜索框 -->
+        <el-input v-model="search" style="display: inline-block;width: 300px"
+                  placeholder="请输入搜索内容">
+        </el-input>
         <div style="margin: 20px 0;"></div>
         <el-row>
           <el-table
-            :data="tableData"
+            :data="tables"
             border
             stripe="true"
             style="width: 100%"
@@ -54,7 +49,7 @@
                 <el-button
                   size="mini"
                   type="text"
-                  @click="handleEdit(scope.$index, scope.row)">查看</el-button>
+                  @click="handleView(scope.$index, scope.row)">查看</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -64,85 +59,106 @@
         <el-pagination
           background
           layout="prev, pager, next"
-          :total="100">
+          :total="100"
+          @current-change="this.handlerchange">
         </el-pagination>
       </el-footer>
     </el-container>
+  </div>
 </template>
 
 <script>
-    export default {
-        name: "VerifyTable",
-      methods: {
-        handleEdit(index, row) {
-          console.log(index, row)
-          this.$router.push({path: '/ViewProblem'})
-        }
+  import {getProblems} from "../api/Problem";
+  import ProblemFullData from "../data/model/ProblemFullData";
+  export default {
+    name: "VerifyTable",
+    datas:[],
+    methods: {
+      //查看操作
+      handleView(index, row) {
+        console.log(index, row),
+          // alert(index+row.problem+row.answer),
+          //转到ViewProblem页面
+          this.$router.push({path: '/ViewProblem',
+            //query对象获取参数
+            query: {
+              viewQues:row.problem,
+              viewAnsw:row.answer
+            }
+          })
       },
-      data () {
-        return {
-          tableData: [{
-            problem: 'How are you?',
-            answer: 'I am fine. Thank you',
-            pictures: '',
-            sound: 'VOA.mp3',
-            tag: '英语',
-            status: '已通过'
-          }, {
-            problem: 'How are you?',
-            answer: 'I am fine. Thank you',
-            pictures: '',
-            sound: 'VOA.mp3',
-            tag: '英语',
-            status: '已通过'
-          }, {
-            problem: 'How are you?',
-            answer: 'I am fine. Thank you',
-            pictures: '',
-            sound: 'VOA.mp3',
-            tag: '英语',
-            status: '已通过'
-          }, {
-            problem: 'How are you?',
-            answer: 'I am fine. Thank you',
-            pictures: '',
-            sound: 'VOA.mp3',
-            tag: '英语',
-            status: '已通过'
-          }, {
-            problem: 'How are you?',
-            answer: 'I am fine. Thank you',
-            pictures: '',
-            sound: 'VOA.mp3',
-            tag: '英语',
-            status: '已通过'
-          }, {
-            problem: 'How are you?',
-            answer: 'I am fine. Thank you',
-            pictures: '',
-            sound: 'VOA.mp3',
-            tag: '英语',
-            status: '已通过'
-          }, {
-            problem: 'How are you?',
-            answer: 'I am fine. Thank you',
-            pictures: '',
-            sound: 'VOA.mp3',
-            tag: '英语',
-            status: '已通过'
-          }, {
-            problem: 'How are you?',
-            answer: 'I am fine. Thank you',
-            pictures: '',
-            sound: 'VOA.mp3',
-            tag: '英语',
-            status: '已通过'
-          }]
+      handlerchange:function(currentPage){//获取题目
+        this.getData(currentPage);
+      },
+      getData:function (currentPage){
+        console.log("change")
+        var _this=this;
+        let callback=(pd)=>{
+          var res=[];
+          console.log("get it")
+          console.log(pd)
+          pd.filter(v=>{
+            res.push({
+              problem:v.problem.problemText,
+              answer:v.answer.answerText,
+              pictures:'',
+              sound:'',
+              status:(!v.status?'未通过':'通过')
+            })
+          });
+          console.log(res);
+          _this.tableData=res;
+        };
+        getProblems(currentPage,callback);
+      },
+    },
+    mounted: function () {
+      this.getData(0);
+    },
+    data () {
+      return {
+        search: '',
+        tableData: [{
+          problem: 'How are you?',
+          answer: 'I am fine. Thank you',
+          pictures: '',
+          sound: 'VOA.mp3',
+          tag: '英语',
+          status: '已通过'
+        }, {
+          problem: 'How old are you?',
+          answer: '12',
+          pictures: '',
+          sound: 'VOA.mp3',
+          tag: '英语',
+          status: '已通过'
+        }, {
+          problem: 'Have a nice day !',
+          answer: 'Thank you ! I hope so !',
+          pictures: '',
+          sound: 'VOA.mp3',
+          tag: '英语',
+          status: '已通过'
+        }]
+      }
+    },
+    // 搜索操作
+    computed:{
+      tables(){
+        const search = this.search
+        if (search) {
+          // 检查指定数组中符合条件的所有元素。
+          return this.tableData.filter(data => {
+            return Object.keys(data).some(key => {
+              // 没有找到返回-1；
+              return String(data[key]).toLowerCase().indexOf(search.toLowerCase()) > -1
+            })
+          })
         }
+        return this.tableData
       }
     }
+  }
 </script>
-
 <style scoped>
-
 </style>

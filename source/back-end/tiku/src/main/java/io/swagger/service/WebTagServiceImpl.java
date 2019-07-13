@@ -1,10 +1,10 @@
 package io.swagger.service;
 
+import io.swagger.model.Pagination;
 import io.swagger.pojo.dao.*;
 import io.swagger.pojo.dao.repos.PaperTagRepository;
 import io.swagger.pojo.dao.repos.ProblemTagRepository;
 import io.swagger.pojo.dao.repos.TagRepository;
-import io.swagger.pojo.dto.BasicResponse;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,8 +14,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.naming.ldap.PagedResultsControl;
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class WebTagServiceImpl extends BasicService<Tag> implements WebTagService {
@@ -28,6 +31,11 @@ public class WebTagServiceImpl extends BasicService<Tag> implements WebTagServic
     @Autowired
     private PaperTagRepository paperTagRepository;
 
+    @Autowired
+    private WebProblemTagServiceImpl webProblemTagServiceImpl;
+
+    @Autowired
+    private WebPaperTagServiceImpl webPaperTagServiceImpl;
 
     /**
      * 增加新标签
@@ -41,7 +49,7 @@ public class WebTagServiceImpl extends BasicService<Tag> implements WebTagServic
         }
 
         //判断输入的新标签是否已存在
-        if((tagRepository.findByValueEquals(tag.getValue()).size()==0)){
+        if (tagRepository.findByValueEquals(tag.getValue()).size() > 0) {
             throw new Exception("新标签的标签值已存在！");
         }
 
@@ -69,40 +77,43 @@ public class WebTagServiceImpl extends BasicService<Tag> implements WebTagServic
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) throws Exception {
 
-        //删除问题和试卷中使用的该标签
-        List<PaperTag> paperTagList = paperTagRepository.findAllByTagIdEquals(id);
-        List<Long> paperIdList = new ArrayList<>();
-        for (PaperTag paperTag : paperTagList) {
-            paperIdList.add(paperTag.getPaperId());
-        }
-        paperTagRepository.deleteAllByPaperIdIn(paperIdList);
+        //删除标签本身
+        this.deleteBasicInfo(id);
 
-        List<ProblemTag> problemTagList = problemTagRepository.findAllByTagIdEquals(id);
-        List<Long> problemIdList = new ArrayList<>();
-        for (ProblemTag problemTag : problemTagList) {
-            problemIdList.add(problemTag.getProblemId());
-        }
-        problemTagRepository.deleteAllByProblemIdIn(problemIdList);
+        //删除标签和问题的关联
+        webProblemTagServiceImpl.deleteByTagId(id);
 
-        List<Tag> tagList=new ArrayList<>();
-
-        //beforeDelete(tagRepository.findById(id));
-        tagRepository.deleteById(id);
-
+        //删除标签和试卷的关联
+        webPaperTagServiceImpl.deleteByTagId(id);
     }
 
+    @Override
+    public int deleteBasicInfo(Long id) {
+        return tagRepository.updateIsDelById(id, Boolean.TRUE);
+    }
 
     /**
      * 查找出所有标签
      */
-    public List<Tag> select(Integer pageNumber, Integer pageSize) throws Exception {
-        //判断传入参数是否正确
-        if (pageNumber > 0 && pageSize > 0) {
-            Page<Tag> page = tagRepository.findAll(PageRequest.of(pageNumber, pageSize));
-            return page.getContent();
-        } else {
-            throw new Exception("页数或页大小参数小于1！");
-        }
+    @Override
+    public Map<String, Object> list(Integer pageNumber, Integer pageSize) {
+
+        Page<Tag> page = tagRepository.findAllByIsDel(PageRequest.of(pageNumber, pageSize), Boolean.FALSE);
+
+        //标签信息
+        List<Tag> tagList = new ArrayList<>(page.getContent());
+
+        //分页信息
+        Pagination pagination = new Pagination();
+        pagination.setPage(BigDecimal.valueOf(page.getNumber()));
+        pagination.setSize(BigDecimal.valueOf(page.getSize()));
+        pagination.setTotal(BigDecimal.valueOf(page.getTotalPages()));
+
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("tagList", tagList);
+        resultMap.put("pagination", pagination);
+
+        return resultMap;
     }
 
     /**
@@ -111,17 +122,19 @@ public class WebTagServiceImpl extends BasicService<Tag> implements WebTagServic
     @Transactional(rollbackFor = Exception.class)
     public void update(Tag tag, Long updateBy) throws Exception {
 
-        //判断传入参数是否正确
-        if (tagRepository.findTagById(tag.getId()).equals(null)) {
-            throw new Exception("该标签不存在！");
-        } else if (tagRepository.findTagById(tag.getId()).getValue().equals(tag.getValue())) {
-            throw new Exception("新标签值与更改前的标签值相同！");
-        } else {
-            beforeUpdate(tagRepository.findTagById(tag.getId()), updateBy);
-            Tag newTag = tagRepository.findTagById(tag.getId());
-            BeanUtils.copyProperties(tag, newTag);
-            tagRepository.save(newTag);
-
+        if (tag.getId() == null) {
+            throw new Exception("标签id不能为空");
         }
+
+        //判断传入参数是否正确
+        if (tagRepository.findByValueEquals(tag.getValue()).size() > 0) {
+            throw new Exception("新标签值与更改前的标签值相同！");
+        }
+
+        Tag dbTag = tagRepository.findTagById(tag.getId());
+        dbTag.setValue(tag.getValue());
+        dbTag.setParentId(tag.getParentId());
+        beforeUpdate(dbTag, updateBy);
+        tagRepository.save(dbTag);
     }
 }

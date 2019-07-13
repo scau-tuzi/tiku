@@ -8,10 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 
 @Slf4j
-@RequestMapping("/test")
+@RequestMapping("/api/tag")
 @RestController
 public class TagController {
 
@@ -19,20 +20,18 @@ public class TagController {
     private WebTagServiceImpl tagService;
 
 
-
     /**
      * 增加标签
      */
     @PostMapping("/add")
-    public BasicResponse add(@RequestBody @RequestParam Tag tag){
+    public BasicResponse add(@RequestBody Tag tag) {
         BasicResponse basicResponse = new BasicResponse();
 
-        //判断输入的新标签是否有效
         Long createBy = 1L;
         try {
-            tagService.add(tag,createBy);
+            tagService.add(tag, createBy);
             basicResponse.setData("标签添加成功");
-        }catch (Exception e){
+        } catch (Exception e) {
             basicResponse.setCode(BasicResponse.ERRORCODE);
             basicResponse.setData("标签添加失败: " + e.getMessage());
         }
@@ -44,13 +43,13 @@ public class TagController {
      * 删除一个标签
      */
     @DeleteMapping("/delete")
-    public BasicResponse delete(@RequestParam Long id){
+    public BasicResponse delete(@RequestParam Long id) {
         BasicResponse basicResponse = new BasicResponse();
 
         try {
             tagService.delete(id);
             basicResponse.setData("标签删除成功");
-        }catch (Exception e){
+        } catch (Exception e) {
             basicResponse.setData("标签删除失败");
             basicResponse.setCode(BasicResponse.ERRORCODE);
         }
@@ -61,39 +60,40 @@ public class TagController {
     /**
      * 查找所有标签
      */
-    @PostMapping("/select")
-    public BasicResponse select(Integer pageNumber, Integer pageSize){
+    @GetMapping("/list")
+    public BasicResponse list(@RequestParam Integer pageNumber, @RequestParam Integer pageSize) {
         BasicResponse basicResponse = new BasicResponse();
-       try {
-           basicResponse.setData("查找标签成功"+tagService.select(pageNumber, pageSize));
 
+        pageNumber = (pageNumber < 0 ? 0 : pageNumber);
+        pageSize = (pageSize < 1 || pageSize > 100 ? 100 : pageSize);
 
-       }catch (Exception e){
-           basicResponse.setCode(BasicResponse.ERRORCODE);
-           basicResponse.setData("查找标签失败: " + e.getMessage());
-           e.getMessage();
-       }
-       return basicResponse;
+        try {
+            Map<String, Object> resultMap = tagService.list(pageNumber, pageSize);
+            basicResponse.setData(resultMap);
+        } catch (Exception e) {
+            basicResponse.setCode(BasicResponse.ERRORCODE);
+            basicResponse.setData("query error : " + e.getMessage());
+        }
+
+        return basicResponse;
     }
 
     /**
      * 更改标签值
      */
     @PutMapping("/update")
-    public BasicResponse update(@RequestBody Tag tag,@RequestBody Long updateBy){
+    public BasicResponse update(@RequestBody Tag tag) {
         BasicResponse basicResponse = new BasicResponse();
-       try{
 
-           tagService.update(tag,updateBy);
-           basicResponse.setData("更改标签成功");
-       }catch (Exception e){
-           basicResponse.setCode(BasicResponse.ERRORCODE);
-           basicResponse.setData("更改标签失败: " + e.getMessage());
+        try {
+            Long updateBy = 1L;
+            tagService.update(tag, updateBy);
+            basicResponse.setData("更改标签成功");
+        } catch (Exception e) {
+            basicResponse.setCode(BasicResponse.ERRORCODE);
+            basicResponse.setData("更改标签失败: " + e.getMessage());
+        }
 
-       }
-
-       return basicResponse;
+        return basicResponse;
     }
-
-
 }

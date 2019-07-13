@@ -41,22 +41,42 @@
           </el-upload>
         </el-form-item>
         <el-form-item label="标签" prop="tags">
-          <el-select
-            v-model="value"
-            multiple
-            filterable
-            allow-create
-            default-first-option
-            size="medium"
-            placeholder="请选择题目标签">
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-            </el-option>
-          </el-select>
-          <div style="margin: 100px 0;"></div>
+          <div style="margin-bottom: 0px">
+            <el-select
+              v-model="value"
+              multiple
+              filterable
+              allow-create
+              default-first-option
+              size="medium"
+              placeholder="请选择题目标签">
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </div>
+        </el-form-item>
+        <el-form-item label="选项">
+          <el-input-number v-model="OptionNum" @change="OptionHandleChange" :min="1" :max="10" label="描述文字"></el-input-number>
+          <div v-for="index in OptionNum" :key="index">
+           <el-form ref="form" :model="form" label-width="0px" @input="addOption">
+             <el-row>
+               <el-col span="6">
+                 <el-form-item label="" :prop="input">
+                   <el-input v-model="form.option" placeholder="请输入选项"></el-input>
+                 </el-form-item>
+               </el-col>
+               <el-col span="6">
+                 <el-form-item label="" :prop="input">
+                   <el-input v-model="form.text" placeholder="请输入内容"></el-input>
+                 </el-form-item>
+               </el-col>
+             </el-row>
+           </el-form>
+          </div>
         </el-form-item>
       </el-form>
     </el-main>
@@ -70,6 +90,7 @@
         name: "InputTiku",
       data(){
         return {
+          OptionNum: '1',
           dialogImageUrl: '',
           dialogVisible: false,
           disabled: false,
@@ -79,6 +100,18 @@
             pics: '',
             sound: '',
             tags: ''
+          },
+          form: {
+            option: '',
+            text: '',
+            input: [{
+              option: '',
+              text: ''
+            },
+              {
+                option: '',
+                text: ''
+              }],
           },
           rules: {
             ti: [
@@ -136,7 +169,17 @@
             this.$message.warning(`上传文件只能是mp3格式！`);
           }
           return extension;
+        },
+        OptionHandleChange(value) {
+          console.log(value);
+        },
+        addOption(){
+          this.form.input.push({
+            option: '',
+            text: ''
+          })
         }
+
       }
 
     }
