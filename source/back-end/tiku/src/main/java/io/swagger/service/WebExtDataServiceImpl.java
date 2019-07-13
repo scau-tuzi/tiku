@@ -21,4 +21,9 @@ public class WebExtDataServiceImpl extends BasicService<ExtData> implements WebE
 
         return extDataRepository.saveAll(extDataList);
     }
+
+    @Override
+    public int deleteByProblemId(Long problemId) {
+        return extDataRepository.updateIsDelByProblemId(problemId, Boolean.TRUE);
+    }
 }

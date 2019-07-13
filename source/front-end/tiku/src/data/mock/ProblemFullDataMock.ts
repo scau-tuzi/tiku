@@ -24,7 +24,10 @@ let porblemsList: ProblemFullData[] = [
             value: "常识",
             parentId: -1
         }],
-        extData: null,
+        extData: {
+            A:"有",
+            B:"没有"
+        },
         status: 0
     }, {
         problem: {
@@ -49,7 +52,10 @@ let porblemsList: ProblemFullData[] = [
                 parentId: 0,
             }
         ],
-        extData: null,
+        extData: {
+            A:"有",
+            B:"没有"
+        },
         status: 0
     },{
         problem:{
@@ -74,7 +80,10 @@ let porblemsList: ProblemFullData[] = [
                 parentId: 0,
             }
         ],
-        extData: null,
+        extData: {
+            A:"有",
+            B:"没有"
+        },
         status: 0
     } 
 ]

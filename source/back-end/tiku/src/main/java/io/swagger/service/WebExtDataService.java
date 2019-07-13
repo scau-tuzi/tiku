@@ -7,4 +7,6 @@ import java.util.List;
 public interface WebExtDataService {
 
     List<ExtData> addAll(List<ExtData> extDataList, Long createBy);
+
+    int deleteByProblemId(Long problemId);
 }

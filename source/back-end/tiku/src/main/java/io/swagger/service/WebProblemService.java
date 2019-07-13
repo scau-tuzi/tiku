@@ -12,4 +12,12 @@ public interface WebProblemService {
     void add(ProblemFullData problemFullData, Long createBy) throws Exception;
 
     Problem addBasicInfo(Problem problem, Long createBy);
+
+    void delete(Long id);
+
+    int deleteBasicInfo(Long id);
+
+    void update(ProblemFullData problemFullData, Long updateBy) throws Exception;
+
+    Problem updateBasicInfo(Problem problem, Long updateBy);
 }

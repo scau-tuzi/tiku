@@ -6,9 +6,12 @@
           <el-button type="primary" @click="back" >返回</el-button>
         </el-form-item>
         <el-form-item label="题目" prop="ti">
+          <!-- 设置输入框为不可编辑 -->
           <el-input type="textarea" rows="5" v-model="ruleForm.ti" disabled="true"></el-input>
         </el-form-item>
         <el-form-item label="答案" prop="answer">
+
+          <!-- 设置输入框为不可编辑 -->
           <el-input type="textarea" rows="5" v-model="ruleForm.answer" disabled="true"></el-input>
         </el-form-item>
         <el-form-item label="多图片" prop="pics">
@@ -84,10 +87,26 @@
 
         };
       },
+      // 页面渲染前执行取路由带过来的参数
+      created(){
+        this.getParams()
+      },
       methods: {
-          back(){
-            this.$router.push({path: '/VerifyTable'})
-          }
+        getParams(){
+          // 取到路由带过来的参数
+          const routerQues = this.$route.query.viewQues
+          const routerAnsw = this.$route.query.viewAnsw
+          // 将数据放在当前组件的数据内
+          this.ruleForm.ti = routerQues
+          this.ruleForm.answer = routerAnsw
+        },
+        back(){
+          this.$router.push({path: '/VerifyTable'})
+        }
+      },
+      //监听路由变化
+      watch: {
+        '$route': 'getParams'
       }
     }
 </script>

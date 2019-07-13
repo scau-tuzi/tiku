@@ -18,17 +18,17 @@
 
       <el-aside>
         <el-row class="tac">
-          <el-col :span="24">
+          <el-col :span=24>
             <el-menu :router=true :default-active="$route.name" class="el-menu-vertical-demo">
               <el-submenu v-for="(menu,index) in menuInfo.items"
-                          v-bind:index=index+1 v-bind:key="menu.title">
+                          v-bind:index="index+1+''" v-bind:key="menu.title">
                 <template slot="title">
                   <i class="el-icon-location"></i>
                   <span>{{menu.title}} </span>
                 </template>
                 <!--                                todo index-->
                 <el-menu-item  v-bind:index="toString(index+1)+'-'+toString(indexs+1)"
-                               v-for="(item,index) in menu.subItems" v-bind:key="item.title"
+                               v-for="(item,indexs) in menu.subItems" v-bind:key="item.title"
                                v-bind:route="item.path">
                   {{item.title}}
                   <!-- v-bind:index="toString(index+1)+'-'+toString(indexs+1)" -->
