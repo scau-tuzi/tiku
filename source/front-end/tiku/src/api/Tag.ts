@@ -11,7 +11,7 @@ import BasicResponse from '@/data/model/BasicResponse';
 function getTagsList(callback: (t: Tag[]) => void) {
 
     // axios
-    //     .post("")//服务器地址
+    //     .post("/api/tag/list")//服务器地址
     //     .then(res => {
     //         let lists: Tag[] = res.data;
     //         callback(lists)
@@ -30,7 +30,7 @@ function getTagsList(callback: (t: Tag[]) => void) {
  */
 function addTags(tags: Tag[], Callback: (p: BasicResponse) => void) {
     axios
-        .post("", tags)
+        .post("/api/tag/add", tags)
         .then(res => {
             //获取添加成功参数
             let response: BasicResponse = res.data;
@@ -47,7 +47,7 @@ function addTags(tags: Tag[], Callback: (p: BasicResponse) => void) {
  */
 function delTag(tagId: number, callback: (b: BasicResponse) => void) {
     axios
-        .post("", tagId)
+        .post("/api/tag/delete", tagId)
         .then(res => {
             let response: BasicResponse = res.data;
             callback(response)
@@ -62,7 +62,7 @@ function delTag(tagId: number, callback: (b: BasicResponse) => void) {
  */
 function ChangeTag(tagId: number, callback: (b: BasicResponse) => void) {
     axios
-        .post("", tagId)
+        .post("/api/tag/update", tagId)
         .then(res => {
             let response: BasicResponse = res.data;
             callback(response)

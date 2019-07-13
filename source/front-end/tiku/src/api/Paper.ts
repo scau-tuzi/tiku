@@ -8,7 +8,7 @@ import Tag from '@/data/model/Tag';
  */
 function getPapers(callback: (p: PaperFullData[]) => void) {
     axios
-        .post("")//服务器地址
+        .post("/api/paper/list")//服务器地址
         .then(res => {
             let lists: PaperFullData[] = res.data;
             callback(lists)
@@ -23,7 +23,7 @@ function getPapers(callback: (p: PaperFullData[]) => void) {
 function addPaper(paper: PaperFullData, callback: (b: BasicResponse) => void) {
 
     axios
-        .post("", paper)
+        .post("/api/paper/add", paper)
         .then(res => {
             //是否添加试卷
             let response: BasicResponse = res.data;
@@ -39,7 +39,7 @@ function addPaper(paper: PaperFullData, callback: (b: BasicResponse) => void) {
  */
 function delPaper(paperId: number, callback: (b: BasicResponse) => void) {
     axios
-        .post("", paperId)
+        .post("/api/paper/delete", paperId)
         .then(res => {
             let response: BasicResponse = res.data;
             callback(response)
@@ -53,7 +53,7 @@ function delPaper(paperId: number, callback: (b: BasicResponse) => void) {
  */
 function findPaperByTitle(paperTitle: string, callback: (p: PaperFullData[]) => void) {
     axios
-        .post("", paperTitle)
+        .post("/api/paper/find/title", paperTitle)
         .then(res => {
             let response: PaperFullData[] = res.data;
             callback(response)
@@ -67,7 +67,7 @@ function findPaperByTitle(paperTitle: string, callback: (p: PaperFullData[]) => 
  */
 function findPaperBytags(tags: Tag[], callback: (p: PaperFullData[]) => void) {
     axios
-        .post("", tags)
+        .post("/api/paper/find/tag", tags)
         .then(res => {
             let response: PaperFullData[] = res.data;
             callback(response)
@@ -81,7 +81,7 @@ function findPaperBytags(tags: Tag[], callback: (p: PaperFullData[]) => void) {
  */
 function changePaper(paperId: number, callback: (b: BasicResponse) => void) {
     axios
-        .post("", paperId)
+        .post("/api/paper/update", paperId)
         .then(res => {
             let response: BasicResponse = res.data;
 

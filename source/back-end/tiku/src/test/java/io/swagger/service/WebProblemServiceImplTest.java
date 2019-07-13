@@ -99,9 +99,9 @@ public class WebProblemServiceImplTest {
 
     @Test
     public void test() {
-        List<ProblemFullData> problemFullDataList = webProblemService.getAll(0, 2);
+//        List<ProblemFullData> problemFullDataList = webProblemService.getAll(0, 2);
         System.out.println("--------------------------------------");
-        System.out.println(problemFullDataList);
+//        System.out.println(problemFullDataList);
         System.out.println("--------------------------------------");
     }
 }

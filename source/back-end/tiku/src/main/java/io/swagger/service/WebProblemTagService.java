@@ -9,4 +9,6 @@ public interface WebProblemTagService {
     List<ProblemTag> addAll(List<ProblemTag> problemTagList, Long createBy);
 
     int deleteByProblemId(Long problemId);
+
+    int deleteByTagId(Long tagId);
 }

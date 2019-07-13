@@ -17,7 +17,7 @@ import java.util.List;
 @Repository
 public interface ProblemTagRepository extends JpaRepository<ProblemTag, Long> {
 
-    List<ProblemTag> findAllByProblemIdIn(List<Long> problemIdList);
+    List<ProblemTag> findAllByIsDelAndProblemIdIn(Boolean isDel, List<Long> problemIdList);
 
     List<ProblemTag> findAllByTagIdEquals(Long tagId);
 
@@ -29,4 +29,9 @@ public interface ProblemTagRepository extends JpaRepository<ProblemTag, Long> {
     @Query(nativeQuery = true,
             value = "update problem_tag set is_del=?2 where problem_id=?1")
     int updateIsDelByProblemId(Long problemId, Boolean isDel);
+
+    @Modifying
+    @Query(nativeQuery = true,
+            value = "update problem_tag set is_del=?2 where tag_id=?1")
+    int updateIsDelByTagId(Long tagId, Boolean isDel);
 }

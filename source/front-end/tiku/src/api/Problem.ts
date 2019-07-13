@@ -56,7 +56,7 @@ function addProblem(problem: ProblemFullData, callback: (b: BasicResponse) => vo
  */
 function delProblem(id: number[], callback: (b: BasicResponse) => void) {
     axios
-        .post("", id)
+        .post("/api/problem/delete", id)
         .then(res => {
             let response: BasicResponse = res.data;
             callback(response);
@@ -70,7 +70,7 @@ function delProblem(id: number[], callback: (b: BasicResponse) => void) {
  */
 function findProblems(tags: string[], callback: (p: ProblemFullData[]) => void) {
     axios
-        .post("", tags)
+        .post("/api/problem/findproblem", tags)
         .then(res => {
             let response: ProblemFullData[] = res.data;
 
@@ -85,7 +85,7 @@ function findProblems(tags: string[], callback: (p: ProblemFullData[]) => void) 
  */
 function changeProblem(problem: ProblemFullData, callback: (b: BasicResponse) => void) {
     axios
-        .post("", problem)
+        .post("/api/problem/update", problem)
         .then(res => {
             //获取修改结果
             let response: BasicResponse = res.data;

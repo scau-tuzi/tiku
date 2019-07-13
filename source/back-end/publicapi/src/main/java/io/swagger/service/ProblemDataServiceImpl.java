@@ -150,7 +150,7 @@ public class ProblemDataServiceImpl implements ProblemDataService {
      */
     public Map<Long, List<Tag>> getProblemIdTagMap(List<Long> problemIds) {
         // 所有问题标签
-        List<ProblemTag> problemTagList = problemTagRepository.findAllByProblemIdIn(problemIds);
+        List<ProblemTag> problemTagList = problemTagRepository.findAllByIsDelAndProblemIdIn(Boolean.FALSE, problemIds);
         // 所有标签id(用来查询所有标签)
         List<Long> tagIdList = new ArrayList<>();
         // 问题id和标签id的map

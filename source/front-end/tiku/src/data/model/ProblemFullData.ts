@@ -29,7 +29,9 @@ interface ProblemFullData {
         answerImg?: string
     },
 
-
+    /**
+     * @tags 试卷的标签数组
+     */
     tags?: Tag[],
 
     /**
@@ -40,6 +42,6 @@ interface ProblemFullData {
     /**
     * @status 问题的状态
     */
-    status: any
+   status: any
 }
 export default ProblemFullData;
