@@ -23,7 +23,7 @@ public class UserProblemStatus extends BasicEntity {
      * 问题id
      */
     @Column(name = "problem_id")
-    private String problemId;
+    private Long problemId;
     /**
      * 用户唯一id
      */
