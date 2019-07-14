@@ -37,7 +37,7 @@
             <template slot-scope="scope">
               <el-button
                 size="mini"
-                @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                @click="editTags(scope.row,scope.column, scope.$index)">编辑</el-button>
               <el-button
                 size="mini"
                 type="danger"
@@ -118,7 +118,25 @@
             _this.tableData=res;
             };
             getTagsList(callback);
-            }            
+            },
+            editTags(row,column,index){//修改标签的弹窗
+                this.$prompt('请输入修改后的标签名称', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                inputValue:row.tag//初始文本为该标签
+                }).then(({ value }) => {
+                    this.$message({
+                        type: 'success',
+                        message: '修改后的标签名称为: ' + value
+                    });
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '取消修改'
+                    });       
+                });
+            }
+
         },
         mounted: function() {
             this.getData();
