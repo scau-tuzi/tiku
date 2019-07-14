@@ -26,11 +26,7 @@
           <el-button type="primary" icon="el-icon-caret-right" size="mini" circle></el-button>
         </el-form-item>
         <el-form-item label="标签" prop="tags">
-          <el-tag>标签一</el-tag>
-          <el-tag type="success">标签二</el-tag>
-          <el-tag type="info">标签三</el-tag>
-          <el-tag type="warning">标签四</el-tag>
-          <el-tag type="danger">标签五</el-tag>
+          <el-tag v-for="(tag,index) in ruleForm.tags" v-bind:key="index">{{tag}}</el-tag>
           <div style="margin: 100px 0;"></div>
         </el-form-item>
       </el-form>
@@ -62,7 +58,7 @@
             answer: '',
             pics: '',
             sound: '',
-            tags: ''
+            tags: []
           },
           rules: {
             ti: [
@@ -73,16 +69,6 @@
             ]
 
           },
-          options: [{
-            value: '一年级',
-            label: 'FirstGrade'
-          }, {
-            value: '二年级',
-            label: 'SecondGrade'
-          }, {
-            value: '三年级',
-            label: 'ThirdGrade'
-          }],
           value: []
 
         };
@@ -96,9 +82,12 @@
           // 取到路由带过来的参数
           const routerQues = this.$route.query.viewQues
           const routerAnsw = this.$route.query.viewAnsw
+          const routerTags = this.$route.query.viewTags
           // 将数据放在当前组件的数据内
+          
           this.ruleForm.ti = routerQues
           this.ruleForm.answer = routerAnsw
+          this.ruleForm.tags = routerTags
         },
         back(){
           this.$router.push({path: '/VerifyTable'})

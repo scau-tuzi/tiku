@@ -56,12 +56,10 @@
             prop="tag"
             label="标签"
             width="220"
-            :filters="[{ text: '一年级', value: '一年级' }, { text: '英语', value: '英语' }]"
             :filter-method="filterTag"
             filter-placement="bottom-end">
             <template slot-scope="scope">
               <el-tag v-for="(tagsrc,index) in scope.row.tag" v-bind:key="index"
-                      :type="scope.row.tag === '英语' ? 'primary' : 'success'"
                       disable-transitions>{{tagsrc}}</el-tag>
             </template>
           </el-table-column>
