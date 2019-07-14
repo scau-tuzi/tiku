@@ -60,6 +60,7 @@
 </template>
 
 <script>
+  import {getTagsList} from "../api/Tag";
    export default {
       data() {
         return {
@@ -81,7 +82,7 @@
           }]
         }
       },
-        computed:{
+        computed:{//搜索功能
         tables(){
             const search = this.search
             if (search) {
@@ -95,7 +96,33 @@
             }
             return this.tableData
         }
-        }      
+        },
+        methods:{
+        handlerchange:function(){//获取标签列表
+            this.getData();
+        },getData:function (){
+            console.log("change")
+            var _this=this;
+            let callback=(pd)=>{
+            var res=[];
+            console.log("get it");
+            console.log(pd);
+            this.$store.commit("setNewCommits",pd);
+            pd.filter(v=>{
+                let ress={
+                tag:v.value
+                };
+                res.push(ress)
+            });
+            console.log(res);
+            _this.tableData=res;
+            };
+            getTagsList(callback);
+            }            
+        },
+        mounted: function() {
+            this.getData();
+        }    
     }
 </script>
 
