@@ -11,8 +11,9 @@
   import VerifyTable from "../components/VerifyTable";
   import ViewProblem from "../components/ViewProblem";
   import ModifyProblem from "../components/ModifyProblem";
+  import ViewTags from "../components/ViewTags";
   export default {
-    components: {ModifyProblem, ViewProblem, VerifyTable, InputTiku, TikuTable}
+    components: {ModifyProblem, ViewProblem, VerifyTable, InputTiku, TikuTable,ViewTags}
   }
 </script>
 

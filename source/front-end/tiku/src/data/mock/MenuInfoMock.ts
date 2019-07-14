@@ -34,7 +34,7 @@ let mockData:MenuInfo={
         {
           title:"新增试卷",
           // component:Home,
-          path:"/1",
+          path:"/PaperTable",
         }
       ]
     },
@@ -44,7 +44,7 @@ let mockData:MenuInfo={
         {
           title:"查看标签",
           // component:InputTiku,
-          path:"/InputTiku",
+          path:"/ViewTags",
         }
       ]
     },
