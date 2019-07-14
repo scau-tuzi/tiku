@@ -89,7 +89,8 @@
           this.$router.push({path: '/ViewProblem',
             //query对象获取参数
             query: {
-              problemId:row.problemId
+              viewQues:row.problem,
+              viewAnsw:row.answer
             }
           })
       },

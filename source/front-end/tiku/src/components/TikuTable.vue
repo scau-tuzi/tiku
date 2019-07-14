@@ -76,7 +76,7 @@
                 @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
               <el-button
                 size="mini"
-                @click="centerDialogVisible = true">修改标签</el-button>
+                @click="centerDialogVisible = true" v-on:click="showTags(scope.row,scope.column, scope.$index)">修改标签</el-button>
               <el-button
                 size="mini"
                 type="danger"
@@ -240,6 +240,13 @@
         };
         getProblems(currentPage,callback);
       },
+      showTags:function(row,col,index){//在修改标签窗口显示已有标签
+        let dynamicTags_tmp=[];
+        for(let i=0;i<this.$store.state.allProblem[0].tags.length;i++){
+          dynamicTags_tmp.push(this.$store.state.allProblem[index].tags[i].value);//获取store的标签
+        }
+        this.dynamicTags=dynamicTags_tmp;
+      }      
     },
     mounted: function() {
       this.getTagsdata;
@@ -257,7 +264,7 @@
     data () {
       return {
         search: '',
-        dynamicTags: ['标签一', '标签二', '标签三'],
+        dynamicTags: [],
         inputVisible: false,
         inputValue: '',
         centerDialogVisible: false,
