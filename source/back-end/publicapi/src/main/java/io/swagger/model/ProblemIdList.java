@@ -2,7 +2,6 @@ package io.swagger.model;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.math.BigDecimal;
@@ -45,8 +44,8 @@ public class ProblemIdList   {
   @JsonProperty("startTime")
   private BigDecimal startTime = null;
 
-  @JsonProperty("endTIme")
-  private BigDecimal endTIme = null;
+  @JsonProperty("endTime")
+  private BigDecimal endTime = null;
 
   public ProblemIdList poolId(UUID poolId) {
     this.poolId = poolId;
@@ -219,23 +218,23 @@ public class ProblemIdList   {
   }
 
   public ProblemIdList endTIme(BigDecimal endTIme) {
-    this.endTIme = endTIme;
+    this.endTime = endTIme;
     return this;
   }
 
   /**
    * 结束时间，左闭右开
-   * @return endTIme
+   * @return endTime
   **/
   @ApiModelProperty(example = "987654321000", value = "结束时间，左闭右开")
 
   @Valid
-  public BigDecimal getEndTIme() {
-    return endTIme;
+  public BigDecimal getEndTime() {
+    return endTime;
   }
 
-  public void setEndTIme(BigDecimal endTIme) {
-    this.endTIme = endTIme;
+  public void setEndTime(BigDecimal endTime) {
+    this.endTime = endTime;
   }
 
 
@@ -255,12 +254,12 @@ public class ProblemIdList   {
         Objects.equals(this.unionids, problemIdList.unionids) &&
         Objects.equals(this.status, problemIdList.status) &&
         Objects.equals(this.startTime, problemIdList.startTime) &&
-        Objects.equals(this.endTIme, problemIdList.endTIme);
+        Objects.equals(this.endTime, problemIdList.endTime);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(poolId, token, ids, tags, unionids, status, startTime, endTIme);
+    return Objects.hash(poolId, token, ids, tags, unionids, status, startTime, endTime);
   }
 
   @Override
@@ -275,7 +274,7 @@ public class ProblemIdList   {
     sb.append("    unionids: ").append(toIndentedString(unionids)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    startTime: ").append(toIndentedString(startTime)).append("\n");
-    sb.append("    endTIme: ").append(toIndentedString(endTIme)).append("\n");
+    sb.append("    endTime: ").append(toIndentedString(endTime)).append("\n");
     sb.append("}");
     return sb.toString();
   }
