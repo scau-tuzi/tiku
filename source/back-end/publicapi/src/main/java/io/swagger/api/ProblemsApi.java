@@ -10,20 +10,15 @@ import io.swagger.model.ProblemInfo;
 import java.util.UUID;
 import io.swagger.annotations.*;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.*;
-import java.util.List;
-import java.util.Map;
+
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-07-15T03:10:29.413Z[GMT]")
 @Api(value = "problems", description = "the problems API")
 public interface ProblemsApi {
@@ -36,7 +31,7 @@ public interface ProblemsApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
-    ResponseEntity<BasicResponse> addProblems(@ApiParam(value = ""  )  @Valid @RequestBody ProblemInfo body);
+    ResponseEntity<io.swagger.pojo.dto.BasicResponse> addProblems(@ApiParam(value = ""  )  @Valid @RequestBody ProblemInfo body);
 
 
     @ApiOperation(value = "删除题目", nickname = "problemsDelete", notes = "删除题目，swagger的del不能有请求体，只能写在参数里面了", response = BasicResponse.class, tags={  })
@@ -46,6 +41,6 @@ public interface ProblemsApi {
     @RequestMapping(value = "/problems",
         produces = { "application/json" }, 
         method = RequestMethod.DELETE)
-    ResponseEntity<BasicResponse> problemsDelete(@ApiParam(value = "题库id" ,required=true) @RequestHeader(value="X-tiku-poolId", required=true) UUID xTikuPoolId,@ApiParam(value = "授权码" ,required=true) @RequestHeader(value="X-tiku-token", required=true) UUID xTikuToken,@NotNull @ApiParam(value = "待删除的问题", required = true) @Valid @RequestParam(value = "problemId", required = true) String problemId);
+    ResponseEntity<io.swagger.pojo.dto.BasicResponse> problemsDelete(@ApiParam(value = "题库id" ,required=true) @RequestHeader(value="X-tiku-poolId", required=true) UUID xTikuPoolId,@ApiParam(value = "授权码" ,required=true) @RequestHeader(value="X-tiku-token", required=true) UUID xTikuToken,@NotNull @ApiParam(value = "待删除的问题", required = true) @Valid @RequestParam(value = "problemId", required = true) String problemId);
 
 }

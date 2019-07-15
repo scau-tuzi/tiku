@@ -6,10 +6,7 @@ import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * ProblemInfo
@@ -25,7 +22,7 @@ public class ProblemInfo {
 
     @JsonProperty("problems")
     @Valid
-    private List<AnyValue> problems = null;
+    private List<HashMap<String,Object>> problems = null;
 
     public ProblemInfo poolId(UUID poolId) {
         this.poolId = poolId;
@@ -71,14 +68,14 @@ public class ProblemInfo {
         this.token = token;
     }
 
-    public ProblemInfo problems(List<AnyValue> problems) {
+    public ProblemInfo problems(List<HashMap<String,Object>> problems) {
         this.problems = problems;
         return this;
     }
 
-    public ProblemInfo addProblemsItem(AnyValue problemsItem) {
+    public ProblemInfo addProblemsItem(HashMap<String,Object> problemsItem) {
         if (this.problems == null) {
-            this.problems = new ArrayList<AnyValue>();
+            this.problems = new ArrayList<HashMap<String,Object>>();
         }
         this.problems.add(problemsItem);
         return this;
@@ -91,11 +88,11 @@ public class ProblemInfo {
      **/
     @ApiModelProperty(value = "")
     @Valid
-    public List<AnyValue> getProblems() {
+    public List<HashMap<String,Object>> getProblems() {
         return problems;
     }
 
-    public void setProblems(List<AnyValue> problems) {
+    public void setProblems(List<HashMap<String,Object>> problems) {
         this.problems = problems;
     }
 

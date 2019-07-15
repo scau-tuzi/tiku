@@ -1,11 +1,10 @@
 package io.swagger.service;
 
 import io.swagger.model.Pagination;
-import io.swagger.pojo.dao.*;
+import io.swagger.pojo.dao.Tag;
 import io.swagger.pojo.dao.repos.PaperTagRepository;
 import io.swagger.pojo.dao.repos.ProblemTagRepository;
 import io.swagger.pojo.dao.repos.TagRepository;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import javax.naming.ldap.PagedResultsControl;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,9 +37,10 @@ public class WebTagServiceImpl extends BasicService<Tag> implements WebTagServic
 
     /**
      * 增加新标签
+     * @return
      */
     @Transactional(rollbackFor = Exception.class)
-    public void add(Tag tag, Long createBy) throws Exception {
+    public Tag add(Tag tag, Long createBy) throws Exception {
 
         //判断输入的新标签是否有效
         if (tag.getValue() == null || tag.getValue().equals("")) {
@@ -54,7 +53,7 @@ public class WebTagServiceImpl extends BasicService<Tag> implements WebTagServic
         }
 
         super.beforeAdd(tag, createBy);
-        tagRepository.save(tag);
+        return tagRepository.save(tag);
     }
 
     /**

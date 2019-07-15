@@ -3,11 +3,10 @@ package io.swagger.service;
 import io.swagger.pojo.dao.Tag;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.List;
 import java.util.Map;
 
 public interface WebTagService {
-    void add(Tag tag, Long createBy) throws Exception;
+    Tag add(Tag tag, Long createBy) throws Exception;
 
     Integer findIfUsed(@RequestBody Tag tag);
 
