@@ -2,12 +2,8 @@ package io.swagger.service;
 
 import io.swagger.model.ProblemIdList;
 import io.swagger.model.StatusInfo;
-import io.swagger.pojo.dao.Problem;
-import io.swagger.pojo.dao.TikuUser;
-import io.swagger.pojo.dao.UserProblemStatus;
-import io.swagger.pojo.dao.repos.ProblemRepository;
-import io.swagger.pojo.dao.repos.TikuUserRepository;
-import io.swagger.pojo.dao.repos.UserProblemStatusRepository;
+import io.swagger.pojo.dao.*;
+import io.swagger.pojo.dao.repos.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.Transient;
@@ -16,12 +12,10 @@ import org.springframework.stereotype.Service;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
+import static java.util.Collections.addAll;
 import static java.util.stream.Collectors.toList;
 
 @Service
@@ -44,6 +38,12 @@ public class ProblemStatusServiceImpl implements ProblemStatusService {
 
     @Autowired
     private ProblemRepository problemRepository;
+
+    @Autowired
+    private ProblemTagRepository problemTagRepository;
+
+    @Autowired
+    private TagRepository tagRepository;
     /**更新题目状态信息
      * @param statusInfo
      */
@@ -182,7 +182,86 @@ public class ProblemStatusServiceImpl implements ProblemStatusService {
                 return res;
             }
         }
-        // todo 标签
+
+        List<String> tags = problemIdList.getTags();
+        if(tags !=null && tags.size()>0){
+            if(res.size()==0){
+                throw new ProblemStatusArgumentException("不能单独按标签查找");
+            }
+
+            log.debug("开始根据{}标签查找",tags);
+
+            //一次性从数据库拿数据，不要在循环调用数据库取值
+            //下面两个表只取两次所需的数据即可
+
+            List<Long> pids = res.stream().map(UserProblemStatus::getProblemId).collect(toList());
+            List<ProblemTag> problemTags = problemTagRepository.findAllByIsDelAndProblemIdIn(false, pids);
+            //弄成 问题id -> 标签id列表的映射，方便操作
+            HashMap<Long, List<Long>> problemTagMap = new HashMap<>();
+            problemTags.stream()
+                    .collect(Collectors.groupingBy(ProblemTag::getProblemId))
+                    .forEach((k,v)->{
+                        List<Long> collect = v.stream()
+                                .map(ProblemTag::getTagId)
+                                .sorted(Long::compareTo)
+                                .collect(toList());
+                        problemTagMap.put(k,collect);
+                    });
+
+
+            //传进来的标签是字符串，弄成标签id数组
+            List<Long> tids = problemTags
+                    .stream()
+                    .map(ProblemTag::getTagId)
+                    .distinct()
+                    .collect(toList());
+            List<Tag> tagValues = tagRepository.findAllByIdIn(tids);
+
+            List<Long> collect = new ArrayList<>();
+            for (String t:tags){
+                Optional<Tag> first = Optional.empty();
+                for (Tag tv : tagValues) {
+                    if (tv.getValue().equals(t)) {
+                        first = Optional.of(tv);
+                        break;
+                    }
+                }
+                if (!first.isPresent()) {
+                    //找不到该标签，证明至少一个满足的都没有，直接抛出异常
+                    throw new ProblemStatusArgumentException("标签" + t + "在满足条件的数据中不存在");
+                } else {
+                    collect.add(first.get().getId());
+                }
+            }
+
+            //两个数组应该一样长的
+            if (tags.size() != collect.size())
+                throw new AssertionError();
+
+            //***开始查找***//
+
+            //查找结果
+            List<UserProblemStatus> ress=new ArrayList<>();
+
+            for(UserProblemStatus ups:res){
+                Long problemId = ups.getProblemId();
+                List<Long> hastids = problemTagMap.getOrDefault(problemId, null);
+
+                ArrayList<Long> compare = new ArrayList<>();
+                compare.addAll(collect);
+                compare.removeAll(hastids);
+                //如果一个问题的标签包含所有传进来的标签，会全删了的
+                if(compare.size()==0){
+                    ress.add(ups);
+                }
+            }
+            res=ress;
+            log.debug("标签查找结果{}",res.size());
+            if(res.size()==0){
+                return res;
+            }
+        }
+
         return res;
     }
 
