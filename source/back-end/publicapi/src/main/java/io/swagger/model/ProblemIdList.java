@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -17,7 +18,7 @@ import javax.validation.constraints.*;
  */
 @ApiModel(description = "待获取的状态查询信息列表，下面三个是and的关系")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-07-12T09:08:16.977Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-07-15T03:10:29.413Z[GMT]")
 public class ProblemIdList   {
   @JsonProperty("poolId")
   private UUID poolId = null;
@@ -29,6 +30,10 @@ public class ProblemIdList   {
   @Valid
   private List<String> ids = null;
 
+  @JsonProperty("tags")
+  @Valid
+  private List<String> tags = null;
+
   @JsonProperty("unionids")
   @Valid
   private List<String> unionids = null;
@@ -36,6 +41,12 @@ public class ProblemIdList   {
   @JsonProperty("status")
   @Valid
   private List<String> status = null;
+
+  @JsonProperty("startTime")
+  private BigDecimal startTime = null;
+
+  @JsonProperty("endTIme")
+  private BigDecimal endTIme = null;
 
   public ProblemIdList poolId(UUID poolId) {
     this.poolId = poolId;
@@ -106,6 +117,33 @@ public class ProblemIdList   {
     this.ids = ids;
   }
 
+  public ProblemIdList tags(List<String> tags) {
+    this.tags = tags;
+    return this;
+  }
+
+  public ProblemIdList addTagsItem(String tagsItem) {
+    if (this.tags == null) {
+      this.tags = new ArrayList<String>();
+    }
+    this.tags.add(tagsItem);
+    return this;
+  }
+
+  /**
+   * 包含的标签列表
+   * @return tags
+  **/
+  @ApiModelProperty(example = "[\"数学\"]", value = "包含的标签列表")
+
+  public List<String> getTags() {
+    return tags;
+  }
+
+  public void setTags(List<String> tags) {
+    this.tags = tags;
+  }
+
   public ProblemIdList unionids(List<String> unionids) {
     this.unionids = unionids;
     return this;
@@ -160,6 +198,46 @@ public class ProblemIdList   {
     this.status = status;
   }
 
+  public ProblemIdList startTime(BigDecimal startTime) {
+    this.startTime = startTime;
+    return this;
+  }
+
+  /**
+   * 开始时间
+   * @return startTime
+  **/
+  @ApiModelProperty(example = "123456789000", value = "开始时间")
+
+  @Valid
+  public BigDecimal getStartTime() {
+    return startTime;
+  }
+
+  public void setStartTime(BigDecimal startTime) {
+    this.startTime = startTime;
+  }
+
+  public ProblemIdList endTIme(BigDecimal endTIme) {
+    this.endTIme = endTIme;
+    return this;
+  }
+
+  /**
+   * 结束时间，左闭右开
+   * @return endTIme
+  **/
+  @ApiModelProperty(example = "987654321000", value = "结束时间，左闭右开")
+
+  @Valid
+  public BigDecimal getEndTIme() {
+    return endTIme;
+  }
+
+  public void setEndTIme(BigDecimal endTIme) {
+    this.endTIme = endTIme;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -173,13 +251,16 @@ public class ProblemIdList   {
     return Objects.equals(this.poolId, problemIdList.poolId) &&
         Objects.equals(this.token, problemIdList.token) &&
         Objects.equals(this.ids, problemIdList.ids) &&
+        Objects.equals(this.tags, problemIdList.tags) &&
         Objects.equals(this.unionids, problemIdList.unionids) &&
-        Objects.equals(this.status, problemIdList.status);
+        Objects.equals(this.status, problemIdList.status) &&
+        Objects.equals(this.startTime, problemIdList.startTime) &&
+        Objects.equals(this.endTIme, problemIdList.endTIme);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(poolId, token, ids, unionids, status);
+    return Objects.hash(poolId, token, ids, tags, unionids, status, startTime, endTIme);
   }
 
   @Override
@@ -190,8 +271,11 @@ public class ProblemIdList   {
     sb.append("    poolId: ").append(toIndentedString(poolId)).append("\n");
     sb.append("    token: ").append(toIndentedString(token)).append("\n");
     sb.append("    ids: ").append(toIndentedString(ids)).append("\n");
+    sb.append("    tags: ").append(toIndentedString(tags)).append("\n");
     sb.append("    unionids: ").append(toIndentedString(unionids)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
+    sb.append("    startTime: ").append(toIndentedString(startTime)).append("\n");
+    sb.append("    endTIme: ").append(toIndentedString(endTIme)).append("\n");
     sb.append("}");
     return sb.toString();
   }

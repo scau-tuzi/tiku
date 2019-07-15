@@ -5,8 +5,8 @@
  */
 package io.swagger.api;
 
-import io.swagger.model.QuerryInfo;
-import io.swagger.model.QuerryResult;
+import io.swagger.model.BasicResponse;
+import io.swagger.model.UserInfo;
 import io.swagger.annotations.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -24,17 +24,17 @@ import javax.validation.constraints.*;
 import java.util.List;
 import java.util.Map;
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-07-15T03:10:29.413Z[GMT]")
-@Api(value = "queryCollection", description = "the queryCollection API")
-public interface QueryCollectionApi {
+@Api(value = "userInfo", description = "the userInfo API")
+public interface UserInfoApi {
 
-    @ApiOperation(value = "查询题目集合信息", nickname = "queryCollection", notes = "按条件查询集合，与查询题目一模一样，不过是去集合里面找而已 ", response = QuerryResult.class, tags={  })
+    @ApiOperation(value = "增加用户信息", nickname = "userInfoPost", notes = "", response = BasicResponse.class, tags={  })
     @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "返回查询到的项目列表", response = QuerryResult.class),
-        @ApiResponse(code = 401, message = "参数格式错误") })
-    @RequestMapping(value = "/queryCollection",
+        @ApiResponse(code = 200, message = "成功", response = BasicResponse.class),
+        @ApiResponse(code = 401, message = "参数错误") })
+    @RequestMapping(value = "/userInfo",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
-    ResponseEntity<QuerryResult> queryCollection(@ApiParam(value = ""  )  @Valid @RequestBody QuerryInfo body);
+    ResponseEntity<BasicResponse> userInfoPost(@ApiParam(value = ""  )  @Valid @RequestBody UserInfo body);
 
 }
