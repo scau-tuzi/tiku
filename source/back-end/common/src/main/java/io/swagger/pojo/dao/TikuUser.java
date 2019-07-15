@@ -43,6 +43,11 @@ public class TikuUser extends BasicEntity {
     private String userUuid;
 
     /**
+     * 用户所属年级
+     */
+    @Column(name = "grade")
+    private String grade;
+    /**
      * 用户头像
      */
     @Column(name = "image")

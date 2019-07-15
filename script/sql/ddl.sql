@@ -172,10 +172,10 @@ CREATE TABLE `user`  (
 CREATE TABLE `user_problem_status`  (
   `id` int(64) NOT NULL AUTO_INCREMENT COMMENT '标识',
 
-  `problem_id` int(64) NOT NULL, COMMENT '问题id',
+  `problem_id` int(64) NOT NULL COMMENT '问题id',
   `user_uuid` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT '用户uuid',
   `status` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT '状态字符串',
-
+  `date`  datetime(0) NULL DEFAULT NULL COMMENT '传进来的时间参数',
   `is_del` bit(1) NULL DEFAULT NULL COMMENT '是否删除',
   `create_at` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `create_by` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
@@ -193,6 +193,7 @@ CREATE TABLE `tiku_user`  (
   `salt` varchar(32) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT '盐值',
   `image` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT '头像url',
   `user_uuid` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT '用户uuid',
+  `grade` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT '用户所属年级信息',
   `role_id` int(64) NULL DEFAULT NULL COMMENT '所属角色',
   `is_del` bit(1) NULL DEFAULT NULL COMMENT '是否删除',
   `create_at` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
