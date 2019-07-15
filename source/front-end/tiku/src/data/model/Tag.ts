@@ -1,7 +1,7 @@
 /**
  * 标签模型对象
  */
-interface Tag {
+interface TagInfo {
     /**
      * @id 标签的id
      */
@@ -17,4 +17,4 @@ interface Tag {
      */
     parentId?: number
 }
-export default Tag;
+export default TagInfo;

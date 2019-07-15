@@ -1,4 +1,4 @@
-import Tag from './Tag';
+import TagInfo from './Tag';
 /**
  * 问题模型对象 ( 包含问题的所有信息 )
  */
@@ -32,7 +32,7 @@ interface ProblemFullData {
     /**
      * @tags 试卷的标签数组
      */
-    tags?: Tag[],
+    tags?: TagInfo[],
 
     /**
     * @extData 问题的额外数据,例如: 图片、语音 等 (非必须)
