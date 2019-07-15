@@ -115,4 +115,9 @@ public class ProblemServiceImpl implements ProblemService {
         }
         return res;
     }
+
+    @Override
+    public void deleteById(String id) {
+        webProblemService.delete(Long.valueOf(id));
+    }
 }

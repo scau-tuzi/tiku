@@ -67,15 +67,16 @@ public class ProblemsApiController implements ProblemsApi {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try {
-                return new ResponseEntity<BasicResponse>(objectMapper.readValue("{\n" +
-                        "  \"status\" : \"ok\"\n" +
-                        "}", BasicResponse.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<BasicResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
+                problemService.deleteById(problemId);
+                return new ResponseEntity<BasicResponse>(new BasicResponse(), HttpStatus.OK);
+            } catch (Exception e) {
+                e.printStackTrace();
+                BasicResponse basicResponse = new BasicResponse();
+                basicResponse.setCode("error");
+                basicResponse.setData(e.getMessage());
+                return new ResponseEntity<BasicResponse>(basicResponse,HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
-
         return new ResponseEntity<BasicResponse>(HttpStatus.NOT_IMPLEMENTED);
     }
 

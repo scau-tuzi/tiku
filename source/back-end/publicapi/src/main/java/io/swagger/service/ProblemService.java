@@ -14,4 +14,5 @@ import java.util.List;
 public interface ProblemService {
     List<ProblemFullData> queryProblem(Expression expressione) throws ParserErrorException;
     ArrayList<Long> addProblemByProblemInfo(ProblemInfo problemInfo) throws Exception;
+    void deleteById(String id);
 }
