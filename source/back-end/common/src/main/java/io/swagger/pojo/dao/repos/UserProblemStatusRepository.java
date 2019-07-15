@@ -11,5 +11,6 @@ public interface UserProblemStatusRepository extends JpaRepository<UserProblemSt
 
      List<UserProblemStatus> findAllByProblemIdIn(List<Long> problemIds);
      List<UserProblemStatus> findAllByUserUuidIn(List<String> uuids);
+     List<UserProblemStatus> findAllByUserUuid(String uuid);
      List<UserProblemStatus> findAllByStatusContains(String status);
 }

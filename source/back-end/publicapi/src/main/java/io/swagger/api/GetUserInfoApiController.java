@@ -4,8 +4,11 @@ import io.swagger.model.UserId;
 import io.swagger.model.UserInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.*;
+import io.swagger.service.UserInfoService;
+import io.swagger.service.UserInfoServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -38,23 +41,20 @@ public class GetUserInfoApiController implements GetUserInfoApi {
         this.request = request;
     }
 
+    @Autowired
+    private UserInfoService userInfoService;
     public ResponseEntity<UserInfo> getUserInfoPost(@ApiParam(value = ""  )  @Valid @RequestBody UserId body) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try {
-                return new ResponseEntity<UserInfo>(objectMapper.readValue("{\n" +
-                        "  \"unionid\" : \"xxxxxxxxxxx\",\n" +
-                        "  \"grade\" : \"一年级\",\n" +
-                        "  \"poolId\" : \"4468c74d-759e-4d78-8c43-e1c5405f193b\",\n" +
-                        "  \"hasTags\" : [ \"语文\", \"数学\" ],\n" +
-                        "  \"token\" : \"06e599f3-78db-4c71-b4fa-2b496beab1f6\"\n" +
-                        "}", UserInfo.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<UserInfo>(HttpStatus.INTERNAL_SERVER_ERROR);
+                UserInfo userInfo = userInfoService.getUserInfo(body);
+                return new ResponseEntity<UserInfo>(userInfo, HttpStatus.OK);
+            } catch (UserInfoServiceImpl.UserInfoServiceException e) {
+                ResponseEntity<UserInfo> objectResponseEntity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                objectResponseEntity.getHeaders().add("X-tiku-error-message",e.getMessage());
+                return objectResponseEntity;
             }
         }
-
         return new ResponseEntity<UserInfo>(HttpStatus.NOT_IMPLEMENTED);
     }
 
