@@ -11,31 +11,21 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * 状态信息
+ * UserId
  */
-@ApiModel(description = "状态信息")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-07-12T09:08:16.977Z[GMT]")
-public class StatusInfo   {
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-07-15T03:10:29.413Z[GMT]")
+public class UserId   {
   @JsonProperty("poolId")
   private UUID poolId = null;
 
   @JsonProperty("token")
   private UUID token = null;
 
-  @JsonProperty("problemId")
-  private String problemId = null;
-
   @JsonProperty("unionid")
   private String unionid = null;
 
-  @JsonProperty("status")
-  private String status = null;
-
-  @JsonProperty("date")
-  private Long date = null;
-
-  public StatusInfo poolId(UUID poolId) {
+  public UserId poolId(UUID poolId) {
     this.poolId = poolId;
     return this;
   }
@@ -56,7 +46,7 @@ public class StatusInfo   {
     this.poolId = poolId;
   }
 
-  public StatusInfo token(UUID token) {
+  public UserId token(UUID token) {
     this.token = token;
     return this;
   }
@@ -77,27 +67,7 @@ public class StatusInfo   {
     this.token = token;
   }
 
-  public StatusInfo problemId(String problemId) {
-    this.problemId = problemId;
-    return this;
-  }
-
-  /**
-   * 题目id
-   * @return problemId
-  **/
-  @ApiModelProperty(example = "123456", required = true, value = "题目id")
-  @NotNull
-
-  public String getProblemId() {
-    return problemId;
-  }
-
-  public void setProblemId(String problemId) {
-    this.problemId = problemId;
-  }
-
-  public StatusInfo unionid(String unionid) {
+  public UserId unionid(String unionid) {
     this.unionid = unionid;
     return this;
   }
@@ -117,45 +87,6 @@ public class StatusInfo   {
     this.unionid = unionid;
   }
 
-  public StatusInfo status(String status) {
-    this.status = status;
-    return this;
-  }
-
-  /**
-   * 用户对应的问题状态信息，具体格式看上传者的定义
-   * @return status
-  **/
-  @ApiModelProperty(example = "错题+已解决", required = true, value = "用户对应的问题状态信息，具体格式看上传者的定义")
-  @NotNull
-
-  public String getStatus() {
-    return status;
-  }
-
-  public void setStatus(String status) {
-    this.status = status;
-  }
-
-  public StatusInfo date(Long date) {
-    this.date = date;
-    return this;
-  }
-
-  /**
-   * 状态时间
-   * @return date
-  **/
-  @ApiModelProperty(example = "2019-08-18", value = "状态时间")
-
-  public Long getDate() {
-    return date;
-  }
-
-  public void setDate(Long date) {
-    this.date = date;
-  }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -165,31 +96,25 @@ public class StatusInfo   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    StatusInfo statusInfo = (StatusInfo) o;
-    return Objects.equals(this.poolId, statusInfo.poolId) &&
-        Objects.equals(this.token, statusInfo.token) &&
-        Objects.equals(this.problemId, statusInfo.problemId) &&
-        Objects.equals(this.unionid, statusInfo.unionid) &&
-        Objects.equals(this.status, statusInfo.status) &&
-        Objects.equals(this.date, statusInfo.date);
+    UserId userId = (UserId) o;
+    return Objects.equals(this.poolId, userId.poolId) &&
+        Objects.equals(this.token, userId.token) &&
+        Objects.equals(this.unionid, userId.unionid);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(poolId, token, problemId, unionid, status, date);
+    return Objects.hash(poolId, token, unionid);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class StatusInfo {\n");
+    sb.append("class UserId {\n");
     
     sb.append("    poolId: ").append(toIndentedString(poolId)).append("\n");
     sb.append("    token: ").append(toIndentedString(token)).append("\n");
-    sb.append("    problemId: ").append(toIndentedString(problemId)).append("\n");
     sb.append("    unionid: ").append(toIndentedString(unionid)).append("\n");
-    sb.append("    status: ").append(toIndentedString(status)).append("\n");
-    sb.append("    date: ").append(toIndentedString(date)).append("\n");
     sb.append("}");
     return sb.toString();
   }

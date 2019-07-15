@@ -1,7 +1,7 @@
 import axios from 'axios'
 import PaperFullData from '@/data/model/PaperFullData';
 import BasicResponse from '@/data/model/BasicResponse';
-import Tag from '@/data/model/Tag';
+import TagInfo from '@/data/model/Tag';
 /**
  * 拿到试卷列表方法
  * @param callback 回调函数
@@ -65,7 +65,7 @@ function findPaperByTitle(paperTitle: string, callback: (p: PaperFullData[]) => 
  * @param tags 试卷标签查询
  * @param callback 回调函数
  */
-function findPaperBytags(tags: Tag[], callback: (p: PaperFullData[]) => void) {
+function findPaperBytags(tags: TagInfo[], callback: (p: PaperFullData[]) => void) {
     axios
         .post("/api/paper/find/tag", tags)
         .then(res => {

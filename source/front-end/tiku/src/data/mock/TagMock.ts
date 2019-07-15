@@ -1,8 +1,8 @@
-import Tag from "../model/Tag";
+import TagInfo from "../model/Tag";
 /**
  * 本地标签实例
  */
-let tagslistData :Tag[] = [
+let tagslistData :TagInfo[] = [
     {
         id: 1,
         value: "幼儿园",
@@ -25,7 +25,17 @@ let tagslistData :Tag[] = [
         parentId: -1
     },{
         id: 6,
-        value: "计算",
+        value: "初中",
+        parentId: -1
+    },
+    {
+        id: 7,
+        value: "高中",
+        parentId: -1
+    },
+    {
+        id: 8,
+        value: "大学",
         parentId: -1
     }
 ]
