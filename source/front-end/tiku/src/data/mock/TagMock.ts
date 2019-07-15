@@ -1,41 +1,31 @@
-import TagInfo from "../model/Tag";
+import Tag from "../model/TAg";
 /**
  * 本地标签实例
  */
-let tagslistData :TagInfo[] = [
+let tagslistData :Tag[] = [
     {
-        id: 1,
+        id: 87954651315,
         value: "幼儿园",
         parentId: -1
     },{
-        id: 2,
+        id: 895451844,
         value: "常识",
         parentId: -1
     },{
-        id: 3,
+        id: 56467578563,
         value: "小学",
         parentId: -1
     },{
-        id: 4,
+        id: 90786756,
         value: "基础",
         parentId: -1
     },{
-        id: 5,
+        id: 4537654765,
         value: "一年级",
         parentId: -1
     },{
-        id: 6,
-        value: "初中",
-        parentId: -1
-    },
-    {
-        id: 7,
-        value: "高中",
-        parentId: -1
-    },
-    {
-        id: 8,
-        value: "大学",
+        id: 97868764653,
+        value: "计算",
         parentId: -1
     }
 ]
