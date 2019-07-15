@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Data
@@ -35,5 +36,11 @@ public class UserProblemStatus extends BasicEntity {
      */
     @Column(name="status")
     private String status;
+
+    /**
+     * 传进来的时间
+     */
+    @Column(name="date")
+    private Date date;
 
 }
