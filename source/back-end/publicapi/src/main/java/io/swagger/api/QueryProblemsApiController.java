@@ -49,7 +49,7 @@ public class QueryProblemsApiController implements QueryProblemsApi {
         // 查询
         List<ProblemFullData> problemFullData = null;
         try {
-            problemFullData = problemService.queryProblem(body.getQuerry());
+            problemFullData = problemService.queryProblem(body);
         } catch (ParserErrorException e) {
             // todo 表达异常
             e.printStackTrace();
@@ -67,7 +67,6 @@ public class QueryProblemsApiController implements QueryProblemsApi {
         // 拼装数据和做下格式转换
         QuerryResult querryResult = new QuerryResult();
         querryResult.setStatus(StatusCode.OK);
-
         // 拼装返回数据
         problemFullData.stream().forEach((e) -> {
             res.add(e.toMap());

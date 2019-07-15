@@ -1,6 +1,7 @@
 package io.swagger.utils;
 
 import io.swagger.model.Expression;
+import io.swagger.model.QuerryInfo;
 import io.swagger.pojo.PaperFullData;
 import io.swagger.pojo.ProblemFullData;
 import io.swagger.pojo.dao.*;
@@ -31,9 +32,10 @@ public class Parser {
      * @param expression
      * @return
      */
-    public List<ProblemFullData> getAllProblemsByExpression(Expression expression) throws ParserErrorException {
-        List<Long> longs = executeExpression(expression, false);
-        return problemDataService.getFullDataByIds(longs);
+    public List<Long> getAllProblemsByExpression(QuerryInfo expression) throws ParserErrorException {
+        List<Long> longs = executeExpression(expression.getQuerry(), false);
+
+        return longs;
     }
 
 

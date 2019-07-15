@@ -1,19 +1,24 @@
 package io.swagger.service;
 
 import io.swagger.model.Expression;
+import io.swagger.model.Pagination;
 import io.swagger.model.ProblemInfo;
+import io.swagger.model.QuerryInfo;
 import io.swagger.pojo.ProblemFullData;
 import io.swagger.pojo.dao.Answer;
 import io.swagger.pojo.dao.Problem;
 import io.swagger.pojo.dao.Tag;
 import io.swagger.utils.Parser;
 import io.swagger.utils.ParserErrorException;
+import org.hibernate.mapping.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -30,9 +35,36 @@ public class ProblemServiceImpl implements ProblemService {
     private Parser parser;
     @Autowired
     private WebProblemService webProblemService;
+    @Autowired
+    private ProblemDataService problemDataService;
     @Override
-    public List<ProblemFullData> queryProblem(Expression expression) throws ParserErrorException {
-        return parser.getAllProblemsByExpression(expression);
+    public List<ProblemFullData> queryProblem(QuerryInfo querryInfo) throws ParserErrorException {
+        List<Long> longs = parser.getAllProblemsByExpression(querryInfo);
+
+        Boolean random = querryInfo.isRandom();
+        if(random!=null && random){
+            Collections.shuffle(longs);
+        }
+
+        @Valid Pagination pagination = querryInfo.getPagination();
+        if(pagination!=null){
+            int page = pagination.getPage().intValue();
+            int size = pagination.getSize().intValue();
+            // total = 24 page=3 size=7 => 21-23
+            //                = 4       error
+            //                =4     =6 error
+            if(page*size<longs.size()){
+                int to=(page+1)*size;
+                if(to>(longs.size()-1)){
+                    to=longs.size()-1;
+                }
+                longs=longs.subList(page*size,to);
+            }else{
+                //todo
+                throw new ParserErrorException("分页参数错误，总共有"+longs.size()+"个");
+            }
+        }
+        return problemDataService.getFullDataByIds(longs);
     }
 
     private @NotNull String getRequireStringField(HashMap<String,Object> map, String fieldName) throws ProblemServiceException {
