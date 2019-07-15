@@ -5,7 +5,7 @@
         <el-col span=20>
           <el-button class="el-button" align="left" plain @click="addTags">添加标签</el-button>
           <!-- <el-button type="primary" plain>全选</el-button> -->
-          <el-button type="success" plain>批量删除</el-button>
+          <el-button type="success" plain @click="batchDelete(tableChecked)">批量删除</el-button>
         </el-col>
         <el-col span=4>
           <el-input v-model="search" style="display: inline-block;width: 180px"
@@ -41,7 +41,7 @@
               <el-button
                 size="mini"
                 type="danger"
-                @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                @click="handleDelete(scope.$index)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -60,26 +60,17 @@
 </template>
 
 <script>
+  import {addTags} from "../api/Tag";
   import {getTagsList} from "../api/Tag";
+  import {ChangeTag} from "../api/Tag";
+  import {delTag} from "../api/Tag";
    export default {
       data() {
         return {
+          tableChecked:[],//被选中的记录数据
+          ids:[],//批量删除的id
           search: '',
-          tableData: [{
-            tag: '2016-05-02'
-          }, {
-            tag: '2016-05-04'
-          }, {
-            tag: '2016-05-01'
-          }, {
-            tag: '2016-05-03'
-          }, {
-            tag: '2016-05-04'
-          }, {
-            tag: '2016-05-01'
-          }, {
-            tag: '2016-05-03'
-          }]
+          tableData: []
         }
       },
         computed:{//搜索功能
@@ -108,6 +99,9 @@
             console.log("get it");
             console.log(pd);
             this.$store.commit("setNewCommits",pd);
+            console.log("aha");
+            // console.log(this.$store.state.commits);
+            // console.log(this.$store.state.commits[0].id);
             pd.filter(v=>{
                 let ress={
                 tag:v.value
@@ -119,22 +113,118 @@
             };
             getTagsList(callback);
             },
+
+            //待测试
+            handleSelectionChange(val){
+              console.log("handleSelectionChange--",val);
+              this.tableChecked=val;
+            },
+
+            //待测试
+            batchDelete(rows){
+          var _this = this;
+          _this.$confirm('确定删除吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {  })           
+            },
+
+            //待测试
+            handleDelete(index){
+              this.$confirm('确定删除该标签?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+
+              console.log("删除标签");
+              console.log(this.$store.state.commits[index].id);
+              //alert('submit!');
+              delTag(this.$store.state.commits[index].id,(b)=>{
+                if(b.code==="ok"){
+                  alert("删除成功");                 
+                }
+              });
+
+            }).catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消删除'
+              });          
+            });
+          },
+
+            //待测试
             editTags(row,column,index){//修改标签的弹窗
                 this.$prompt('请输入修改后的标签名称', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 inputValue:row.tag//初始文本为该标签
                 }).then(({ value }) => {
+
+              console.log("修改标签");
+              var pd=[];
+              let pd_tmp={
+                id:this.$store.state.commits[index].id,
+                value:value
+              }
+              pd.push(pd_tmp);
+              // alert(pd);
+              console.log(pd);
+
+              //alert('submit!');
+              ChangeTag(pd,(b)=>{
+                if(b.code==="ok"){
+                  alert("修改成功");
+                  // todo 返回上一页
                     this.$message({
                         type: 'success',
-                        message: '修改后的标签名称为: ' + value
-                    });
+                        message: '修改后标签为: ' + value
+                    });                  
+                }
+              });
+
                 }).catch(() => {
                     this.$message({
                         type: 'info',
                         message: '取消修改'
                     });       
                 });
+            },
+
+            //待测试
+            addTags(){
+                this.$prompt('请输入新增的标签名称', '提示', {
+                confirmButtonText: '保存',
+                cancelButtonText: '取消',
+                }).then(({ value }) => {
+
+              console.log("提交标签");
+              let pd={value};
+              pd.value=value;
+              // alert(pd);
+              console.log(pd)
+
+              //alert('submit!');
+              addTags(pd,(b)=>{
+                if(b.code==="ok"){
+                  alert("添加成功");
+                  // todo 返回上一页
+                    this.$message({
+                        type: 'success',
+                        message: '新增标签: ' + value
+                    });                  
+                }
+              });
+
+
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '取消添加'
+                    });       
+                });              
             }
 
         },
