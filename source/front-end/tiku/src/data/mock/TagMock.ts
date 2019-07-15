@@ -1,8 +1,8 @@
-import Tag from "../model/TAg";
+import TagInfo from "../model/Tag";
 /**
  * 本地标签实例
  */
-let tagslistData :Tag[] = [
+let tagslistData :TagInfo[] = [
     {
         id: 87954651315,
         value: "幼儿园",

@@ -145,18 +145,19 @@ public class Parser {
         try {
 
             switch (fieldName) {
-                case "paperId": {
+                case "paperId":
+                case "collectionId":{
                     //todo 捕获数字解析错误
                     Optional<Paper> byId = paperRepository.findById(Long.valueOf(value));
                     byId.ifPresent(problem -> res.add(problem.getId()));
                     break;
                 }
                 default:
-                    throw new ParserErrorException("域[" + fieldName + "]不支持[==]操作");
+                    throw new ParserErrorException("域[" + fieldName + "]不支持[==]操作,或者域未定义在规范里面");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            throw new ParserErrorException("未知错误:" + e.getClass());
+            throw new ParserErrorException("未知错误:" + e.getClass()+":"+e.getMessage());
         }
         return res;
     }
@@ -174,7 +175,7 @@ public class Parser {
                 return paperContainsTags(strings);
             }
             default:
-                throw new ParserErrorException("域[" + fieldName + "]不支持[contains]操作");
+                throw new ParserErrorException("域[" + fieldName + "]不支持[contains]操作 ");
         }
     }
 

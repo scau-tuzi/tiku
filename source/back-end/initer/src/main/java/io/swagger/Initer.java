@@ -17,27 +17,24 @@ public class Initer {
     private ProblemRepository problemRepository;
     @Autowired
     private AnswerRepository answerRepository;
-
     @Autowired
     private StatusRepository statusRepository;
-
     @Autowired
     private ExtDataRepository extDataRepository;
-
     @Autowired
     private ProblemTagRepository problemTagRepository;
-
     @Autowired
     private TagRepository tagRepository;
-
     @Autowired
     private PaperRepository paperRepository;
-
     @Autowired
     private PaperItemRepository paperItemRepository;
     @Autowired
     private PaperTagRepository paperTagRepository;
-
+    @Autowired
+    private TikuUserRepository tikuUserRepository;
+    @Autowired
+    private UserProblemStatusRepository userProblemStatusRepository;
     @Bean
     CommandLineRunner initDatabase(
 
@@ -179,8 +176,34 @@ public class Initer {
             paperTag2.setPaperId(pa.getId());
             paperTag2.setTagId(b);
             paperTagRepository.save(paperTag2);
-
         }
+
+        //用户的
+
+        TikuUser tikuUser = new TikuUser();
+        tikuUser.setSalt("c80f4f74bb1b897252c5a8ff961ef504")
+                .setPasswordSaltMd5("17279512649567851aa2a174741e539c")
+                .setUsername("czfshine")
+                .setUserUuid("1db837b9-c6b2-432d-a1d2-1c3cff8db473");
+        TikuUser save = tikuUserRepository.save(tikuUser);
+
+        userProblemStatusRepository.save(new UserProblemStatus()
+                .setProblemId(curid-10)
+                .setUserUuid(save.getUserUuid())
+                .setStatus("错题"));
+
+        userProblemStatusRepository.save(new UserProblemStatus()
+                .setProblemId(curid-12)
+                .setUserUuid(save.getUserUuid())
+                .setStatus("错题"));
+        userProblemStatusRepository.save(new UserProblemStatus()
+                .setProblemId(curid-11)
+                .setUserUuid(save.getUserUuid())
+                .setStatus("错题"));
+        userProblemStatusRepository.save(new UserProblemStatus()
+                .setProblemId(curid-13)
+                .setUserUuid(save.getUserUuid())
+                .setStatus("错题"));
 
     }
 }

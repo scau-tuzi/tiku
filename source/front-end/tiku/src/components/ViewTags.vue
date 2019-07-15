@@ -3,7 +3,7 @@
     <el-main>
       <el-row gutter="0">
         <el-col span=20>
-          <el-button class="el-button" align="left" plain @click="addTags">添加标签</el-button>
+          <el-button class="el-button" align="left" plain @click="addTag">添加标签</el-button>
           <!-- <el-button type="primary" plain>全选</el-button> -->
           <el-button type="success" plain @click="batchDelete(tableChecked)">批量删除</el-button>
         </el-col>
@@ -24,7 +24,7 @@
           <el-table-column
             type="selection"
             width="55">
-          </el-table-column>
+          </el-table-column>      
           <el-table-column
             prop="tag"
             label="标签名称"
@@ -68,9 +68,8 @@
       data() {
         return {
           tableChecked:[],//被选中的记录数据
-          ids:[],//批量删除的id
           search: '',
-          tableData: []
+          tableData: [],
         }
       },
         computed:{//搜索功能
@@ -89,7 +88,8 @@
         }
         },
         methods:{
-        handlerchange:function(){//获取标签列表
+        //获取标签列表
+        handlerchange:function(){
             this.getData();
         },getData:function (){
             console.log("change")
@@ -114,39 +114,65 @@
             getTagsList(callback);
             },
 
-            //待测试
+            //多选触发
             handleSelectionChange(val){
-              console.log("handleSelectionChange--",val);
-              this.tableChecked=val;
+              console.log("handleSelectionChange--",val); //选中项
+              this.tableChecked = val;             
             },
 
-            //待测试
-            batchDelete(rows){
-          var _this = this;
-          _this.$confirm('确定删除吗?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {  })           
+            //批量删除
+            batchDelete(rows){ 
+              let delIndex=[];
+              let delId=[];
+              // console.log("batchDelete--",rows); 
+              for(var i=0;i<this.tableData.length;i++){//获取选中项id
+                for(var j=0;j<rows.length;j++){
+                  if(this.tableData[i].tag==rows[j].tag){
+                    // delIndex.push(i);
+                    delId.push(this.$store.state.commits[i].id);
+                  }
+                }
+              }
+              // console.log("4--",delId);
+              this.$confirm('确定批量删除标签?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              //alert('submit!');           
+              delTag(delId,(b)=>{
+                if(b.code==="ok"){
+                  alert("删除成功");                 
+                };
+                // this.$router.go(0); //页面刷新（要加上）                
+              });
+            }).catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消删除'
+              });          
+            });              
+
             },
 
-            //待测试
+            //删除选中项
             handleDelete(index){
               this.$confirm('确定删除该标签?', '提示', {
               confirmButtonText: '确定',
               cancelButtonText: '取消',
               type: 'warning'
             }).then(() => {
-
               console.log("删除标签");
               console.log(this.$store.state.commits[index].id);
               //alert('submit!');
-              delTag(this.$store.state.commits[index].id,(b)=>{
+              let tagId=[];
+              tagId[0]=this.$store.state.commits[index].id;              
+              delTag(tagId,(b)=>{
                 if(b.code==="ok"){
                   alert("删除成功");                 
-                }
+                };
+                // this.$router.go(0); //页面刷新（要加上）                
               });
-
             }).catch(() => {
               this.$message({
                 type: 'info',
@@ -155,14 +181,13 @@
             });
           },
 
-            //待测试
+            //修改标签待测试
             editTags(row,column,index){//修改标签的弹窗
                 this.$prompt('请输入修改后的标签名称', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 inputValue:row.tag//初始文本为该标签
                 }).then(({ value }) => {
-
               console.log("修改标签");
               var pd=[];
               let pd_tmp={
@@ -172,19 +197,17 @@
               pd.push(pd_tmp);
               // alert(pd);
               console.log(pd);
-
               //alert('submit!');
               ChangeTag(pd,(b)=>{
                 if(b.code==="ok"){
                   alert("修改成功");
                   // todo 返回上一页
-                    this.$message({
-                        type: 'success',
-                        message: '修改后标签为: ' + value
-                    });                  
+                  this.$message({
+                      type: 'success',
+                      message: '修改后标签为: ' + value
+                  });   
                 }
               });
-
                 }).catch(() => {
                     this.$message({
                         type: 'info',
@@ -193,19 +216,20 @@
                 });
             },
 
-            //待测试
-            addTags(){
-                this.$prompt('请输入新增的标签名称', '提示', {
-                confirmButtonText: '保存',
-                cancelButtonText: '取消',
-                }).then(({ value }) => {
-
+            //添加标签
+            addTag(){
+              this.$prompt('请输入新增的标签名称', '提示', {
+              confirmButtonText: '保存',
+              cancelButtonText: '取消',
+              }).then(({ value }) => {
               console.log("提交标签");
-              let pd={value};
-              pd.value=value;
+              let pd=[];
+              let res={
+                value:value
+              };
+              pd.push(res);
               // alert(pd);
-              console.log(pd)
-
+              console.log(pd);
               //alert('submit!');
               addTags(pd,(b)=>{
                 if(b.code==="ok"){
@@ -214,17 +238,16 @@
                     this.$message({
                         type: 'success',
                         message: '新增标签: ' + value
-                    });                  
+                    });  
+                    // this.$router.go(0); //页面刷新（要加上）              
                 }
               });
-
-
                 }).catch(() => {
                     this.$message({
                         type: 'info',
                         message: '取消添加'
                     });       
-                });              
+                });             
             }
 
         },
