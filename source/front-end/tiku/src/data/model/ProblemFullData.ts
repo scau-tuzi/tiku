@@ -32,7 +32,7 @@ interface ProblemFullData {
     /**
      * @tags 试卷的标签数组
      */
-    tags?: TagInfo[],
+    tags: TagInfo[],
 
     /**
     * @extData 问题的额外数据,例如: 图片、语音 等 (非必须)

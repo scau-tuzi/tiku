@@ -108,7 +108,7 @@
 </template>
 
 <script>
-import { getProblems } from "../api/Problem";
+import { getProblems, addProblem, findProbLemsByTags, findProblemsVaguely, delProblem } from "../api/Problem";
 import ProblemFullData from "../data/model/ProblemFullData";
 import { getTagsList, addTags, delTag } from "../api/Tag";
 import { AllFieldInfo } from "../data/mock/FiledInfoMock";
@@ -171,6 +171,49 @@ export default {
       this.inputVisible = false;
       this.inputValue = "";
     },
+    /**
+     * problem题目接口测试:测试结果可在 console 观察
+     */
+    addProblemData: function() {
+      //增加题目方法测试
+      let temp = {
+        problem: {
+          problemText: "李小米的爸爸姓什么?"
+        },
+        answer: {
+          answerText: "李"
+        },
+        tags: [],
+        status: 1
+      };
+      let callback = p => {};
+      addProblem(temp, callback);
+    },
+    findProblemDataByTags: function() {
+      //标签查找题目方法测试
+      let temp = [
+        {
+          value: "幼儿园"
+        }
+      ];
+      let callback = p => {};
+      findProbLemsByTags(temp, callback);
+    },
+    findProblemDataByVaguely: function() {
+      //模糊查询题目方法测试
+      let temp ="没";
+      let callback = p =>{};
+      findProblemsVaguely(temp,callback)
+    },
+    delProblemData: function() {
+      //删除题目方法测试
+      let temp = [1,2];
+      let callback = p=>{};
+      delProblem(temp,callback)
+    },
+
+    /** */
+
     /**
      * tag标签接口测试: 可以在 console 查看是否有tag输出
      */
@@ -256,7 +299,7 @@ export default {
             sound: "",
             tag: ts
           };
-          if (v.extData !== null) {
+          if (v.extData !== undefined) {
             Object.keys(v.extData).forEach(key => {
               ress[key] = v.extData[key];
             });
@@ -279,10 +322,13 @@ export default {
   },
   mounted: function() {
     this.getTagsdata();
+    this.addProblemData();
     this.getData(0);
     this.addTagsdata();
-    this.delTagData();
-
+    this.delTagData()
+    this.findProblemDataByTags();
+    this.findProblemDataByVaguely();
+    this.delProblemData();
     var all = [];
     Object.keys(AllFieldInfo).forEach(key => {
       all.push({
