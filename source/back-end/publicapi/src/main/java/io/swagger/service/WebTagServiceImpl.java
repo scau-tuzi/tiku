@@ -64,8 +64,8 @@ public class WebTagServiceImpl extends BasicService<Tag> implements WebTagServic
      * 1：已被问题或试卷使用
      */
     public Integer findIfUsed(@RequestBody Tag tag) {
-        if (paperTagRepository.findAllByTagIdEquals(tag.getId()).equals(null)
-                && problemTagRepository.findAllByTagIdEquals(tag.getId()).equals(null)) {
+        if (paperTagRepository.findAllByTagIdEquals(tag.getId()).size()==0
+                && problemTagRepository.findAllByTagIdEquals(tag.getId()).size()==0) {
             return 0;
         } else
             return 1;
