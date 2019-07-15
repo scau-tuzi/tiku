@@ -20,9 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.io.IOException;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,7 +40,7 @@ public class ProblemStatusApiController implements ProblemStatusApi {
         this.request = request;
     }
 
-    public ResponseEntity<StatusInfoList> getProblemStatus(@ApiParam(value = ""  )  @Valid @RequestBody ProblemIdList body) {
+    public ResponseEntity<StatusInfoList> getProblemStatus(@ApiParam(value = "") @Valid @RequestBody ProblemIdList body) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try {
@@ -52,9 +50,9 @@ public class ProblemStatusApiController implements ProblemStatusApi {
                 List<StatusInfo> collect = problemStatus.stream().map((u) -> {
                     StatusInfo statusInfo = new StatusInfo();
                     Date date = u.getDate();
-                    if(date==null){
-                        log.warn("查询结果{}的date为null",u);
-                        date=new Date();
+                    if (date == null) {
+                        log.warn("查询结果{}的date为null", u);
+                        date = new Date();
                     }
                     statusInfo.setDate(date.getTime());
                     statusInfo.setProblemId(String.valueOf(u.getProblemId()));
@@ -74,7 +72,7 @@ public class ProblemStatusApiController implements ProblemStatusApi {
                 StatusInfo statusInfo = new StatusInfo();
                 statusInfo.setStatus(e.getMessage());
                 statusInfoList.addResultsItem(statusInfo);
-                return new ResponseEntity<StatusInfoList>(statusInfoList,HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<StatusInfoList>(statusInfoList, HttpStatus.BAD_REQUEST);
             }
         }
         return new ResponseEntity<StatusInfoList>(HttpStatus.NOT_IMPLEMENTED);
@@ -84,7 +82,7 @@ public class ProblemStatusApiController implements ProblemStatusApi {
     private ProblemStatusService problemStatusService;
 
     //put
-    public ResponseEntity<BasicResponse> problemStatus(@ApiParam(value = ""  )  @Valid @RequestBody StatusInfo body) {
+    public ResponseEntity<BasicResponse> problemStatus(@ApiParam(value = "") @Valid @RequestBody StatusInfo body) {
         String accept = request.getHeader("Accept");
 
         if (accept != null && accept.contains("application/json")) {

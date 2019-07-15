@@ -1,9 +1,9 @@
 package io.swagger.api;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.annotations.ApiParam;
 import io.swagger.model.UserId;
 import io.swagger.model.UserInfo;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.swagger.annotations.*;
 import io.swagger.service.UserInfoService;
 import io.swagger.service.UserInfoServiceImpl;
 import org.slf4j.Logger;
@@ -12,19 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.*;
-import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
+import javax.validation.Valid;
+
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-07-15T03:10:29.413Z[GMT]")
 @Controller
 public class GetUserInfoApiController implements GetUserInfoApi {
@@ -43,7 +35,8 @@ public class GetUserInfoApiController implements GetUserInfoApi {
 
     @Autowired
     private UserInfoService userInfoService;
-    public ResponseEntity<UserInfo> getUserInfoPost(@ApiParam(value = ""  )  @Valid @RequestBody UserId body) {
+
+    public ResponseEntity<UserInfo> getUserInfoPost(@ApiParam(value = "") @Valid @RequestBody UserId body) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try {
@@ -51,7 +44,7 @@ public class GetUserInfoApiController implements GetUserInfoApi {
                 return new ResponseEntity<UserInfo>(userInfo, HttpStatus.OK);
             } catch (UserInfoServiceImpl.UserInfoServiceException e) {
                 ResponseEntity<UserInfo> objectResponseEntity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-                objectResponseEntity.getHeaders().add("X-tiku-error-message",e.getMessage());
+                objectResponseEntity.getHeaders().add("X-tiku-error-message", e.getMessage());
                 return objectResponseEntity;
             }
         }

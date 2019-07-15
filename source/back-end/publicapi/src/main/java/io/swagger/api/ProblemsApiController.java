@@ -19,9 +19,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.UUID;
+
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-07-15T03:10:29.413Z[GMT]")
 @Controller
 public class ProblemsApiController implements ProblemsApi {
@@ -37,10 +37,12 @@ public class ProblemsApiController implements ProblemsApi {
         this.objectMapper = objectMapper;
         this.request = request;
     }
+
     @Autowired
     private ProblemService problemService;
+
     // TODO 返回值
-    public ResponseEntity<BasicResponse> addProblems(@ApiParam(value = ""  )  @Valid @RequestBody ProblemInfo body) {
+    public ResponseEntity<BasicResponse> addProblems(@ApiParam(value = "") @Valid @RequestBody ProblemInfo body) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             BasicResponse basicResponse = new BasicResponse();
@@ -48,12 +50,11 @@ public class ProblemsApiController implements ProblemsApi {
                 ArrayList<Long> longs = problemService.addProblemByProblemInfo(body);
                 basicResponse.setData(longs);
                 return new ResponseEntity<BasicResponse>(basicResponse, HttpStatus.NOT_IMPLEMENTED);
-            } catch (ProblemServiceImpl.ProblemServiceException e){
+            } catch (ProblemServiceImpl.ProblemServiceException e) {
                 basicResponse.setCode("error");
                 basicResponse.setData(e.getMessage());
                 return new ResponseEntity<BasicResponse>(basicResponse, HttpStatus.BAD_REQUEST);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 basicResponse.setCode("error");
                 return new ResponseEntity<BasicResponse>(basicResponse, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -63,7 +64,7 @@ public class ProblemsApiController implements ProblemsApi {
         return new ResponseEntity<BasicResponse>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<BasicResponse> problemsDelete(@ApiParam(value = "题库id" ,required=true) @RequestHeader(value="X-tiku-poolId", required=true) UUID xTikuPoolId, @ApiParam(value = "授权码" ,required=true) @RequestHeader(value="X-tiku-token", required=true) UUID xTikuToken, @NotNull @ApiParam(value = "待删除的问题", required = true) @Valid @RequestParam(value = "problemId", required = true) String problemId) {
+    public ResponseEntity<BasicResponse> problemsDelete(@ApiParam(value = "题库id", required = true) @RequestHeader(value = "X-tiku-poolId", required = true) UUID xTikuPoolId, @ApiParam(value = "授权码", required = true) @RequestHeader(value = "X-tiku-token", required = true) UUID xTikuToken, @NotNull @ApiParam(value = "待删除的问题", required = true) @Valid @RequestParam(value = "problemId", required = true) String problemId) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try {
@@ -74,7 +75,7 @@ public class ProblemsApiController implements ProblemsApi {
                 BasicResponse basicResponse = new BasicResponse();
                 basicResponse.setCode("error");
                 basicResponse.setData(e.getMessage());
-                return new ResponseEntity<BasicResponse>(basicResponse,HttpStatus.INTERNAL_SERVER_ERROR);
+                return new ResponseEntity<BasicResponse>(basicResponse, HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
         return new ResponseEntity<BasicResponse>(HttpStatus.NOT_IMPLEMENTED);

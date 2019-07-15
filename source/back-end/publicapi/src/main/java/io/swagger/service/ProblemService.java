@@ -12,6 +12,8 @@ import java.util.ArrayList;
  */
 public interface ProblemService {
     QuerryResult queryProblem(QuerryInfo querryInfo) throws ParserErrorException;
+
     ArrayList<Long> addProblemByProblemInfo(ProblemInfo problemInfo) throws Exception;
+
     void deleteById(String id);
 }

@@ -3,11 +3,7 @@ package io.swagger.service;
 import io.swagger.model.Pagination;
 import io.swagger.pojo.ProblemFullData;
 import io.swagger.pojo.dao.*;
-import io.swagger.pojo.dao.repos.ExtDataRepository;
-import io.swagger.pojo.dao.repos.ProblemRepository;
-import io.swagger.pojo.dao.repos.ProblemTagRepository;
-import io.swagger.pojo.dao.repos.StatusRepository;
-import io.swagger.pojo.dao.repos.TagRepository;
+import io.swagger.pojo.dao.repos.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -128,13 +124,13 @@ public class WebProblemServiceImpl extends BasicService<Problem> implements WebP
             for (Tag tag : tagList) {
                 ProblemTag problemTag = new ProblemTag();
                 //todo 标签不存在 这些代码好像在某个地方出现过一次了....
-                if(tag.getId()==null){
+                if (tag.getId() == null) {
                     String value = tag.getValue();
                     List<Tag> byValueEquals = tagRepository.findByValueEquals(value);
-                    if(byValueEquals==null || byValueEquals.size()==0){
+                    if (byValueEquals == null || byValueEquals.size() == 0) {
                         tag = webTagService.add(tag, createBy);
-                    }else{
-                        tag=byValueEquals.get(0);
+                    } else {
+                        tag = byValueEquals.get(0);
                     }
                 }
                 problemTag.setTagId(tag.getId());

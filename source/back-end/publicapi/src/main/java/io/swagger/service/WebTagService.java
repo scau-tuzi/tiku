@@ -18,5 +18,6 @@ public interface WebTagService {
     void update(Tag tag, Long updateBy) throws Exception;
 
     int deleteBasicInfo(Long id);
+
     List<Tag> getTagsByValueList(List<String> values);
 }

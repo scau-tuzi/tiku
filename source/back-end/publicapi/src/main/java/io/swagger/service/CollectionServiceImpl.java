@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.List;
+
 @Service
 public class CollectionServiceImpl implements CollectionService {
     @Autowired
@@ -20,9 +21,10 @@ public class CollectionServiceImpl implements CollectionService {
     private WebPaperService webPaperService;
     @Autowired
     private WebTagService webTagService;
+
     @Override
-    public List<PaperFullData> queryCollection(Expression expression,boolean isDeep) throws ParserErrorException {
-         return parser.getAllPapersByExpression(expression,isDeep);
+    public List<PaperFullData> queryCollection(Expression expression, boolean isDeep) throws ParserErrorException {
+        return parser.getAllPapersByExpression(expression, isDeep);
 
     }
 
@@ -38,10 +40,10 @@ public class CollectionServiceImpl implements CollectionService {
         HashMap<Integer, Long> serialProblemIdMap = new HashMap<>();
         @NotNull List<String> problemIds = collectionInfo.getProblemIds();
         for (int i = 0; i < problemIds.size(); i++) {
-            serialProblemIdMap.put(i,Long.valueOf(problemIds.get(i)));
+            serialProblemIdMap.put(i, Long.valueOf(problemIds.get(i)));
         }
         paperFullData.setSerialProblemIdMap(serialProblemIdMap);
         paperFullData.setTags(webTagService.getTagsByValueList(collectionInfo.getTags()));
-        return webPaperService.add(paperFullData,0L);
+        return webPaperService.add(paperFullData, 0L);
     }
 }

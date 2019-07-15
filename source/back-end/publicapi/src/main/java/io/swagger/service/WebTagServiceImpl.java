@@ -38,6 +38,7 @@ public class WebTagServiceImpl extends BasicService<Tag> implements WebTagServic
 
     /**
      * 增加新标签
+     *
      * @return
      */
     @Transactional(rollbackFor = Exception.class)
@@ -64,8 +65,8 @@ public class WebTagServiceImpl extends BasicService<Tag> implements WebTagServic
      * 1：已被问题或试卷使用
      */
     public Integer findIfUsed(@RequestBody Tag tag) {
-        if (paperTagRepository.findAllByTagIdEquals(tag.getId()).size()==0
-                && problemTagRepository.findAllByTagIdEquals(tag.getId()).size()==0) {
+        if (paperTagRepository.findAllByTagIdEquals(tag.getId()).size() == 0
+                && problemTagRepository.findAllByTagIdEquals(tag.getId()).size() == 0) {
             return 0;
         } else
             return 1;
@@ -95,15 +96,15 @@ public class WebTagServiceImpl extends BasicService<Tag> implements WebTagServic
     @Override
     public List<Tag> getTagsByValueList(List<String> values) {
         //todo
-        return values.stream().map((v)->{
+        return values.stream().map((v) -> {
             Tag res;
             List<Tag> byValueEquals = tagRepository.findByValueEquals(v);
-            if(byValueEquals==null || byValueEquals.size()==0){
+            if (byValueEquals == null || byValueEquals.size() == 0) {
                 Tag tag = new Tag();
                 tag.setValue(v);
-                res=tagRepository.save(tag);
-            }else{
-                res=byValueEquals.get(0);
+                res = tagRepository.save(tag);
+            } else {
+                res = byValueEquals.get(0);
             }
             return res;
         }).collect(Collectors.toList());

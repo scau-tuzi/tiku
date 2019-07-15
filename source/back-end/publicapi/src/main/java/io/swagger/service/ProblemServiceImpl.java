@@ -21,7 +21,7 @@ import java.util.List;
 @Service
 public class ProblemServiceImpl implements ProblemService {
 
-    public class ProblemServiceException extends Exception{
+    public class ProblemServiceException extends Exception {
         public ProblemServiceException(String message) {
             super(message);
         }
@@ -33,18 +33,19 @@ public class ProblemServiceImpl implements ProblemService {
     private WebProblemService webProblemService;
     @Autowired
     private ProblemDataService problemDataService;
+
     @Override
     public QuerryResult queryProblem(QuerryInfo querryInfo) throws ParserErrorException {
         List<Long> longs = parser.getAllProblemsByExpression(querryInfo);
 
         Boolean random = querryInfo.isRandom();
-        if(random!=null && random){
+        if (random != null && random) {
             Collections.shuffle(longs);
         }
 
         Pagination resPagin = new Pagination();
         @Valid Pagination pagination = querryInfo.getPagination();
-        if(pagination!=null){
+        if (pagination != null) {
             int page = pagination.getPage().intValue();
             int size = pagination.getSize().intValue();
             resPagin.setPage(BigDecimal.valueOf(-1));
@@ -53,15 +54,15 @@ public class ProblemServiceImpl implements ProblemService {
             // total = 24 page=3 size=7 => 21-23
             //                = 4       error
             //                =4     =6 error
-            if(page*size<longs.size()){
-                int to=(page+1)*size;
-                if(to>(longs.size()-1)){
-                    to=longs.size()-1;
+            if (page * size < longs.size()) {
+                int to = (page + 1) * size;
+                if (to > (longs.size() - 1)) {
+                    to = longs.size() - 1;
                 }
-                longs=longs.subList(page*size,to);
+                longs = longs.subList(page * size, to);
                 resPagin.setPage(BigDecimal.valueOf(page));
-            }else {
-                longs=new ArrayList<>();
+            } else {
+                longs = new ArrayList<>();
             }
         }
 
@@ -79,30 +80,33 @@ public class ProblemServiceImpl implements ProblemService {
         return querryResult;
     }
 
-    private @NotNull String getRequireStringField(HashMap<String,Object> map, String fieldName) throws ProblemServiceException {
+    private @NotNull String getRequireStringField(HashMap<String, Object> map, String fieldName) throws ProblemServiceException {
         Object text = map.getOrDefault(fieldName, null);
-        if(text==null){
-            throw new ProblemServiceException("域["+fieldName+"]不能为空");
+        if (text == null) {
+            throw new ProblemServiceException("域[" + fieldName + "]不能为空");
         }
-        if(!(text instanceof String)){
-            throw new ProblemServiceException("域["+fieldName+"]必须是字符串");
+        if (!(text instanceof String)) {
+            throw new ProblemServiceException("域[" + fieldName + "]必须是字符串");
         }
         return (String) text;
 
     }
-    /**反序列化
-     * @see io.swagger.pojo.ProblemFullData#toMap()
+
+    /**
+     * 反序列化
+     *
      * @param problemInfo
      * @return
      * @throws ProblemServiceException
+     * @see io.swagger.pojo.ProblemFullData#toMap()
      */
     public List<ProblemFullData> problemInfoToProblemFullDatas(ProblemInfo problemInfo) throws ProblemServiceException {
         ArrayList<ProblemFullData> problemFullDatas = new ArrayList<>();
 
-        @Valid List<HashMap<String,Object>> problems = problemInfo.getProblems();
+        @Valid List<HashMap<String, Object>> problems = problemInfo.getProblems();
 
-        if(problems==null && problems.size()==0){
-            throw  new ProblemServiceException("必须传递题目具体信息");
+        if (problems == null && problems.size() == 0) {
+            throw new ProblemServiceException("必须传递题目具体信息");
         }
 
         for (HashMap<String, Object> p : problems) {
@@ -119,30 +123,30 @@ public class ProblemServiceImpl implements ProblemService {
             problemFullData.setAnswer(answer);
 
             Object tags = p.getOrDefault("tags", null);
-            if(tags !=null){
-                if(!(tags instanceof List)){
+            if (tags != null) {
+                if (!(tags instanceof List)) {
                     throw new ProblemServiceException("tags必须为字符串数组");
                 }
                 List tagList = (List) tags;
                 ArrayList<Tag> tagPojos = new ArrayList<>();
-                for(Object o:tagList){
-                    if(o instanceof String){
+                for (Object o : tagList) {
+                    if (o instanceof String) {
                         Tag tag = new Tag();
                         tag.setValue((String) o);
                         tagPojos.add(tag);
-                    }else {
+                    } else {
                         throw new ProblemServiceException("tags数组的元素必须是字符串");
                     }
                 }
                 problemFullData.setTags(tagPojos);
             }
             HashMap<String, String> extData = new HashMap<>();
-            p.forEach((k,v)->{
-                if(!ProblemFullData.FIELDNAME.contains(k)){
-                    extData.put(k,v.toString());
+            p.forEach((k, v) -> {
+                if (!ProblemFullData.FIELDNAME.contains(k)) {
+                    extData.put(k, v.toString());
                 }
             });
-            if(extData.size()>0){
+            if (extData.size() > 0) {
                 problemFullData.setExtData(extData);
             }
             problemFullDatas.add(problemFullData);
@@ -150,8 +154,9 @@ public class ProblemServiceImpl implements ProblemService {
 
         return problemFullDatas;
     }
+
     @Override
-    public ArrayList<Long> addProblemByProblemInfo(ProblemInfo problemInfo) throws ProblemServiceException,Exception {
+    public ArrayList<Long> addProblemByProblemInfo(ProblemInfo problemInfo) throws ProblemServiceException, Exception {
         List<ProblemFullData> problemFullData = problemInfoToProblemFullDatas(problemInfo);
         ArrayList<Long> res = new ArrayList<>();
         for (ProblemFullData p : problemFullData) {

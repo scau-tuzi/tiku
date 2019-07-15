@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-07-12T09:08:16.977Z[GMT]")
 @Controller
 public class CollectionApiController implements CollectionApi {
@@ -31,9 +32,11 @@ public class CollectionApiController implements CollectionApi {
         this.objectMapper = objectMapper;
         this.request = request;
     }
+
     @Autowired
     private CollectionService collectionService;
-    public ResponseEntity<CollectionIdResult> collectionPost(@ApiParam(value = ""  )  @Valid @RequestBody CollectionInfo body) {
+
+    public ResponseEntity<CollectionIdResult> collectionPost(@ApiParam(value = "") @Valid @RequestBody CollectionInfo body) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             CollectionIdResult collectionIdResult = new CollectionIdResult();
@@ -47,7 +50,7 @@ public class CollectionApiController implements CollectionApi {
                 collectionIdResult.setStatus(StatusCode.ERROR);
                 collectionIdResult.setResults(e.getMessage());
                 e.printStackTrace();
-                return new ResponseEntity<>(collectionIdResult,HttpStatus.INTERNAL_SERVER_ERROR);
+                return new ResponseEntity<>(collectionIdResult, HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
 

@@ -1,19 +1,16 @@
 package io.swagger.model;
 
-import java.util.HashMap;
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.model.AnyValue;
-import io.swagger.model.Pagination;
-import io.swagger.model.StatusCode;
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.validation.annotation.Validated;
+
 import javax.validation.Valid;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * 查询结果
@@ -21,7 +18,7 @@ import javax.validation.constraints.*;
 @ApiModel(description = "查询结果")
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-07-15T16:29:15.800Z[GMT]")
-public class QuerryResult   {
+public class QuerryResult {
     @JsonProperty("status")
     private StatusCode status = null;
 
@@ -39,6 +36,7 @@ public class QuerryResult   {
 
     /**
      * Get status
+     *
      * @return status
      **/
     @ApiModelProperty(required = true, value = "")
@@ -65,6 +63,7 @@ public class QuerryResult   {
 
     /**
      * Get results
+     *
      * @return results
      **/
     @ApiModelProperty(required = true, value = "")
@@ -85,6 +84,7 @@ public class QuerryResult   {
 
     /**
      * Get pagination
+     *
      * @return pagination
      **/
     @ApiModelProperty(value = "")

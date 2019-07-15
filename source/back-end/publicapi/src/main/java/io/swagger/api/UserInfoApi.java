@@ -5,9 +5,9 @@
  */
 package io.swagger.api;
 
+import io.swagger.annotations.*;
 import io.swagger.model.BasicResponse;
 import io.swagger.model.UserInfo;
-import io.swagger.annotations.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,14 +19,14 @@ import javax.validation.Valid;
 @Api(value = "userInfo", description = "the userInfo API")
 public interface UserInfoApi {
 
-    @ApiOperation(value = "增加用户信息", nickname = "userInfoPost", notes = "", response = BasicResponse.class, tags={  })
-    @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "成功", response = BasicResponse.class),
-        @ApiResponse(code = 401, message = "参数错误") })
+    @ApiOperation(value = "增加用户信息", nickname = "userInfoPost", notes = "", response = BasicResponse.class, tags = {})
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "成功", response = BasicResponse.class),
+            @ApiResponse(code = 401, message = "参数错误")})
     @RequestMapping(value = "/userInfo",
-        produces = { "application/json" }, 
-        consumes = { "application/json" },
-        method = RequestMethod.POST)
-    ResponseEntity<io.swagger.pojo.dto.BasicResponse> userInfoPost(@ApiParam(value = ""  )  @Valid @RequestBody UserInfo body);
+            produces = {"application/json"},
+            consumes = {"application/json"},
+            method = RequestMethod.POST)
+    ResponseEntity<io.swagger.pojo.dto.BasicResponse> userInfoPost(@ApiParam(value = "") @Valid @RequestBody UserInfo body);
 
 }

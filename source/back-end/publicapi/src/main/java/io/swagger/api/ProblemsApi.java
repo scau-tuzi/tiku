@@ -5,42 +5,38 @@
  */
 package io.swagger.api;
 
+import io.swagger.annotations.*;
 import io.swagger.model.BasicResponse;
 import io.swagger.model.ProblemInfo;
-import java.util.UUID;
-import io.swagger.annotations.*;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotNull;
+import java.util.UUID;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-07-15T03:10:29.413Z[GMT]")
 @Api(value = "problems", description = "the problems API")
 public interface ProblemsApi {
 
-    @ApiOperation(value = "增加题目", nickname = "addProblems", notes = "增加一道题目到题库 ", response = BasicResponse.class, tags={  })
-    @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "项目被创建", response = BasicResponse.class),
-        @ApiResponse(code = 401, message = "参数错误") })
+    @ApiOperation(value = "增加题目", nickname = "addProblems", notes = "增加一道题目到题库 ", response = BasicResponse.class, tags = {})
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "项目被创建", response = BasicResponse.class),
+            @ApiResponse(code = 401, message = "参数错误")})
     @RequestMapping(value = "/problems",
-        produces = { "application/json" }, 
-        consumes = { "application/json" },
-        method = RequestMethod.POST)
-    ResponseEntity<io.swagger.pojo.dto.BasicResponse> addProblems(@ApiParam(value = ""  )  @Valid @RequestBody ProblemInfo body);
+            produces = {"application/json"},
+            consumes = {"application/json"},
+            method = RequestMethod.POST)
+    ResponseEntity<io.swagger.pojo.dto.BasicResponse> addProblems(@ApiParam(value = "") @Valid @RequestBody ProblemInfo body);
 
 
-    @ApiOperation(value = "删除题目", nickname = "problemsDelete", notes = "删除题目，swagger的del不能有请求体，只能写在参数里面了", response = BasicResponse.class, tags={  })
-    @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "成功", response = BasicResponse.class),
-        @ApiResponse(code = 401, message = "参数错误") })
+    @ApiOperation(value = "删除题目", nickname = "problemsDelete", notes = "删除题目，swagger的del不能有请求体，只能写在参数里面了", response = BasicResponse.class, tags = {})
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "成功", response = BasicResponse.class),
+            @ApiResponse(code = 401, message = "参数错误")})
     @RequestMapping(value = "/problems",
-        produces = { "application/json" }, 
-        method = RequestMethod.DELETE)
-    ResponseEntity<io.swagger.pojo.dto.BasicResponse> problemsDelete(@ApiParam(value = "题库id" ,required=true) @RequestHeader(value="X-tiku-poolId", required=true) UUID xTikuPoolId,@ApiParam(value = "授权码" ,required=true) @RequestHeader(value="X-tiku-token", required=true) UUID xTikuToken,@NotNull @ApiParam(value = "待删除的问题", required = true) @Valid @RequestParam(value = "problemId", required = true) String problemId);
+            produces = {"application/json"},
+            method = RequestMethod.DELETE)
+    ResponseEntity<io.swagger.pojo.dto.BasicResponse> problemsDelete(@ApiParam(value = "题库id", required = true) @RequestHeader(value = "X-tiku-poolId", required = true) UUID xTikuPoolId, @ApiParam(value = "授权码", required = true) @RequestHeader(value = "X-tiku-token", required = true) UUID xTikuToken, @NotNull @ApiParam(value = "待删除的问题", required = true) @Valid @RequestParam(value = "problemId", required = true) String problemId);
 
 }

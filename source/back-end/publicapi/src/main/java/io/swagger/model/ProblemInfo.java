@@ -22,7 +22,7 @@ public class ProblemInfo {
 
     @JsonProperty("problems")
     @Valid
-    private List<HashMap<String,Object>> problems = null;
+    private List<HashMap<String, Object>> problems = null;
 
     public ProblemInfo poolId(UUID poolId) {
         this.poolId = poolId;
@@ -68,14 +68,14 @@ public class ProblemInfo {
         this.token = token;
     }
 
-    public ProblemInfo problems(List<HashMap<String,Object>> problems) {
+    public ProblemInfo problems(List<HashMap<String, Object>> problems) {
         this.problems = problems;
         return this;
     }
 
-    public ProblemInfo addProblemsItem(HashMap<String,Object> problemsItem) {
+    public ProblemInfo addProblemsItem(HashMap<String, Object> problemsItem) {
         if (this.problems == null) {
-            this.problems = new ArrayList<HashMap<String,Object>>();
+            this.problems = new ArrayList<HashMap<String, Object>>();
         }
         this.problems.add(problemsItem);
         return this;
@@ -88,11 +88,11 @@ public class ProblemInfo {
      **/
     @ApiModelProperty(value = "")
     @Valid
-    public List<HashMap<String,Object>> getProblems() {
+    public List<HashMap<String, Object>> getProblems() {
         return problems;
     }
 
-    public void setProblems(List<HashMap<String,Object>> problems) {
+    public void setProblems(List<HashMap<String, Object>> problems) {
         this.problems = problems;
     }
 

@@ -36,7 +36,8 @@ public class UserInfoApiController implements UserInfoApi {
 
     @Autowired
     private UserInfoService userInfoService;
-    public ResponseEntity<BasicResponse> userInfoPost(@ApiParam(value = ""  )  @Valid @RequestBody UserInfo body) {
+
+    public ResponseEntity<BasicResponse> userInfoPost(@ApiParam(value = "") @Valid @RequestBody UserInfo body) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try {
@@ -47,10 +48,10 @@ public class UserInfoApiController implements UserInfoApi {
                 BasicResponse basicResponse = new BasicResponse();
                 basicResponse.setCode("error");
                 HashMap<String, Object> stringObjectHashMap = new HashMap<>();
-                stringObjectHashMap.put("message",e.getMessage());
+                stringObjectHashMap.put("message", e.getMessage());
                 basicResponse.setData(stringObjectHashMap);
                 e.printStackTrace();
-                return new ResponseEntity<>(basicResponse,HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(basicResponse, HttpStatus.BAD_REQUEST);
             }
         }
         return new ResponseEntity<BasicResponse>(HttpStatus.NOT_IMPLEMENTED);

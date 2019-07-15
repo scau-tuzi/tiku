@@ -6,7 +6,6 @@ import io.swagger.model.QuerryInfo;
 import io.swagger.model.QuerryResult;
 import io.swagger.model.StatusCode;
 import io.swagger.pojo.PaperFullData;
-import io.swagger.pojo.ProblemFullData;
 import io.swagger.service.CollectionService;
 import io.swagger.utils.ParserErrorException;
 import lombok.extern.slf4j.Slf4j;
@@ -50,12 +49,12 @@ public class QueryCollectionApiController implements QueryCollectionApi {
         // 查询
         List<PaperFullData> paperFullDatas;
         try {
-            boolean isDeep =false;
+            boolean isDeep = false;
             Boolean deep = body.isDeep();
-            if(deep !=null && deep ==true){
-                isDeep=true;
+            if (deep != null && deep == true) {
+                isDeep = true;
             }
-            paperFullDatas = collectionService.queryCollection(body.getQuerry(),isDeep);
+            paperFullDatas = collectionService.queryCollection(body.getQuerry(), isDeep);
         } catch (ParserErrorException e) {
             // todo 表达异常
             e.printStackTrace();

@@ -3,7 +3,6 @@ package io.swagger.utils;
 import io.swagger.model.Expression;
 import io.swagger.model.QuerryInfo;
 import io.swagger.pojo.PaperFullData;
-import io.swagger.pojo.ProblemFullData;
 import io.swagger.pojo.dao.*;
 import io.swagger.pojo.dao.repos.*;
 import io.swagger.service.PaperDataService;
@@ -45,10 +44,10 @@ public class Parser {
      * @param expression
      * @return
      */
-    public List<PaperFullData> getAllPapersByExpression(Expression expression,boolean isDeep) throws ParserErrorException {
+    public List<PaperFullData> getAllPapersByExpression(Expression expression, boolean isDeep) throws ParserErrorException {
         List<Long> longs = executeExpression(expression, true);
 
-        return paperDataService.getFullDataByIds(longs,isDeep);
+        return paperDataService.getFullDataByIds(longs, isDeep);
     }
 
 
@@ -148,7 +147,7 @@ public class Parser {
 
             switch (fieldName) {
                 case "paperId":
-                case "collectionId":{
+                case "collectionId": {
                     //todo 捕获数字解析错误
                     Optional<Paper> byId = paperRepository.findById(Long.valueOf(value));
                     byId.ifPresent(problem -> res.add(problem.getId()));
@@ -159,7 +158,7 @@ public class Parser {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            throw new ParserErrorException("未知错误:" + e.getClass()+":"+e.getMessage());
+            throw new ParserErrorException("未知错误:" + e.getClass() + ":" + e.getMessage());
         }
         return res;
     }

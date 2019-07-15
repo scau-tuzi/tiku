@@ -5,7 +5,6 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.model.QuerryInfo;
 import io.swagger.model.QuerryResult;
 import io.swagger.model.StatusCode;
-import io.swagger.pojo.ProblemFullData;
 import io.swagger.service.ProblemService;
 import io.swagger.utils.ParserErrorException;
 import org.slf4j.Logger;
@@ -18,9 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 @javax.annotation.Generated(value = "io.io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-07-07T02:38:17.975Z[GMT]")
 @Controller
@@ -45,10 +42,9 @@ public class QueryProblemsApiController implements QueryProblemsApi {
         String accept = request.getHeader("Accept");
 
 
-
-        QuerryResult querryResult=new QuerryResult();
+        QuerryResult querryResult = new QuerryResult();
         try {
-            querryResult= problemService.queryProblem(body);
+            querryResult = problemService.queryProblem(body);
         } catch (ParserErrorException e) {
             // todo 表达异常
             e.printStackTrace();
