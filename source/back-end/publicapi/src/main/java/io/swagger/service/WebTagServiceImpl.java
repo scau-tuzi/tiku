@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class WebTagServiceImpl extends BasicService<Tag> implements WebTagService {
@@ -89,6 +90,24 @@ public class WebTagServiceImpl extends BasicService<Tag> implements WebTagServic
     @Override
     public int deleteBasicInfo(Long id) {
         return tagRepository.updateIsDelById(id, Boolean.TRUE);
+    }
+
+    @Override
+    public List<Tag> getTagsByValueList(List<String> values) {
+        //todo
+        return values.stream().map((v)->{
+            Tag res;
+            List<Tag> byValueEquals = tagRepository.findByValueEquals(v);
+            if(byValueEquals==null || byValueEquals.size()==0){
+                Tag tag = new Tag();
+                tag.setValue(v);
+                res=tagRepository.save(tag);
+            }else{
+                res=byValueEquals.get(0);
+            }
+            return res;
+        }).collect(Collectors.toList());
+
     }
 
     /**

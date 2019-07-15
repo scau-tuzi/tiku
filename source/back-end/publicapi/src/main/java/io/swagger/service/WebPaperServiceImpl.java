@@ -2,7 +2,6 @@ package io.swagger.service;
 
 import io.swagger.model.Pagination;
 import io.swagger.pojo.PaperFullData;
-import io.swagger.pojo.ProblemFullData;
 import io.swagger.pojo.dao.*;
 import io.swagger.pojo.dao.repos.PaperItemRepository;
 import io.swagger.pojo.dao.repos.PaperRepository;
@@ -70,7 +69,7 @@ public class WebPaperServiceImpl extends BasicService<Paper> implements WebPaper
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void add(PaperFullData paperFullData, Long createBy) throws Exception {
+    public Long add(PaperFullData paperFullData, Long createBy) throws Exception {
 
         Paper paper = paperFullData.getPaper();
         List<Tag> tagList = paperFullData.getTags();
@@ -115,6 +114,7 @@ public class WebPaperServiceImpl extends BasicService<Paper> implements WebPaper
             }
             webPaperTagService.addAll(paperTagList, createBy);
         }
+        return paper.getId();
     }
 
     @Override

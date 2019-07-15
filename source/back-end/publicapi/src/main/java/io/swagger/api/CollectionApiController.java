@@ -1,27 +1,21 @@
 package io.swagger.api;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.annotations.ApiParam;
 import io.swagger.model.CollectionIdResult;
 import io.swagger.model.CollectionInfo;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.swagger.annotations.*;
+import io.swagger.model.StatusCode;
+import io.swagger.service.CollectionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.*;
-import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
+import javax.validation.Valid;
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-07-12T09:08:16.977Z[GMT]")
 @Controller
 public class CollectionApiController implements CollectionApi {
@@ -37,18 +31,23 @@ public class CollectionApiController implements CollectionApi {
         this.objectMapper = objectMapper;
         this.request = request;
     }
-
+    @Autowired
+    private CollectionService collectionService;
     public ResponseEntity<CollectionIdResult> collectionPost(@ApiParam(value = ""  )  @Valid @RequestBody CollectionInfo body) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
+            CollectionIdResult collectionIdResult = new CollectionIdResult();
+
             try {
-                return new ResponseEntity<CollectionIdResult>(objectMapper.readValue("{\n" +
-                        "  \"results\" : \"963258\",\n" +
-                        "  \"status\" : \"ok\"\n" +
-                        "}", CollectionIdResult.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<CollectionIdResult>(HttpStatus.INTERNAL_SERVER_ERROR);
+                Long aLong = collectionService.addPaperByCollectionInfo(body);
+                collectionIdResult.setStatus(StatusCode.OK);
+                collectionIdResult.setResults(aLong.toString());
+                return new ResponseEntity<CollectionIdResult>(collectionIdResult, HttpStatus.OK);
+            } catch (Exception e) {
+                collectionIdResult.setStatus(StatusCode.ERROR);
+                collectionIdResult.setResults(e.getMessage());
+                e.printStackTrace();
+                return new ResponseEntity<>(collectionIdResult,HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
 
