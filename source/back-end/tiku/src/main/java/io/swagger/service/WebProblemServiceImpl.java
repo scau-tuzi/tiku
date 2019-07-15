@@ -44,6 +44,9 @@ public class WebProblemServiceImpl extends BasicService<Problem> implements WebP
     private WebProblemTagServiceImpl webProblemTagServiceImpl;
 
     @Autowired
+    private WebPaperItemServiceImpl webPaperItemServiceImpl;
+
+    @Autowired
     private ProblemTagRepository problemTagRepository;
 
     @Autowired
@@ -124,13 +127,7 @@ public class WebProblemServiceImpl extends BasicService<Problem> implements WebP
             List<ProblemTag> problemTagList = new ArrayList<>();
             for (Tag tag : tagList) {
                 ProblemTag problemTag = new ProblemTag();
-                // 这里假定只上传了标签的值，没有上传标签的id
-                List<Tag> tagss = tagRepository.findByValueEquals(tag.getValue());
-                if(tagss==null || tagss.size()==0){
-                    // todo 如果标签不存在就新增标签
-                    throw new Exception("所选标签不在数据库中");
-                }
-                problemTag.setTagId(tagss.get(0).getId());
+                problemTag.setTagId(tag.getId());
                 problemTag.setProblemId(problem.getId());
                 problemTagList.add(problemTag);
             }
@@ -189,6 +186,11 @@ public class WebProblemServiceImpl extends BasicService<Problem> implements WebP
          * 删除问题扩展属性
          */
         webExtDataServiceImpl.deleteByProblemId(id);
+
+        /**
+         * 删除试卷包含的问题
+         */
+        webPaperItemServiceImpl.deleteByProblemId(id);
 
     }
 

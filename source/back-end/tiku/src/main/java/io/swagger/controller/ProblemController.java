@@ -83,7 +83,7 @@ public class ProblemController {
 
 
     /**
-     * 删除题目
+     * 删除题目 (暂时未处理：题目删除后，更改试卷包含的题目的序列)
      *
      * @param id 题目id
      * @return
