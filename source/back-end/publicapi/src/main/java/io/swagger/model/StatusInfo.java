@@ -33,7 +33,7 @@ public class StatusInfo   {
   private String status = null;
 
   @JsonProperty("date")
-  private String date = null;
+  private Long date = null;
 
   public StatusInfo poolId(UUID poolId) {
     this.poolId = poolId;
@@ -137,7 +137,7 @@ public class StatusInfo   {
     this.status = status;
   }
 
-  public StatusInfo date(String date) {
+  public StatusInfo date(Long date) {
     this.date = date;
     return this;
   }
@@ -148,11 +148,11 @@ public class StatusInfo   {
   **/
   @ApiModelProperty(example = "2019-08-18", value = "状态时间")
 
-  public String getDate() {
+  public Long getDate() {
     return date;
   }
 
-  public void setDate(String date) {
+  public void setDate(Long date) {
     this.date = date;
   }
 
