@@ -1,6 +1,5 @@
 package io.swagger.service;
 
-import io.swagger.pojo.dao.Paper;
 import io.swagger.pojo.dao.PaperTag;
 import io.swagger.pojo.dao.repos.PaperTagRepository;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -4,7 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class MainPageController {
+public class WebMainPageController {
 
     @GetMapping("/web/**")
     public String getMainPage(){

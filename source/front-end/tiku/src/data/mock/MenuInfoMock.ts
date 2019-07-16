@@ -29,12 +29,12 @@ let mockData:MenuInfo={
         {
           title:"试卷列表",
           // component:InputTiku,
-          path:"/InputTiku",
+          path:"/PaperList",
         },
         {
           title:"新增试卷",
           // component:Home,
-          path:"/PaperTable",
+          path:"/CreatePaper",
         }
       ]
     },
@@ -44,7 +44,7 @@ let mockData:MenuInfo={
         {
           title:"查看标签",
           // component:InputTiku,
-          path:"/ViewTags",
+          path:"/InputTiku",
         }
       ]
     },

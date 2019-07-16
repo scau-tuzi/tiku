@@ -1,11 +1,19 @@
 package io.swagger.service;
 
-import io.swagger.model.Expression;
-import io.swagger.pojo.ProblemFullData;
+import io.swagger.model.ProblemInfo;
+import io.swagger.model.QuerryInfo;
+import io.swagger.model.QuerryResult;
 import io.swagger.utils.ParserErrorException;
 
-import java.util.List;
+import java.util.ArrayList;
 
+/**
+ * 外部api的问题服务
+ */
 public interface ProblemService {
-    List<ProblemFullData> queryProblem(Expression expressione) throws ParserErrorException;
+    QuerryResult queryProblem(QuerryInfo querryInfo) throws ParserErrorException;
+
+    ArrayList<Long> addProblemByProblemInfo(ProblemInfo problemInfo) throws Exception;
+
+    void deleteById(String id);
 }
