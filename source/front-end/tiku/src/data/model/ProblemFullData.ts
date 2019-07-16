@@ -20,7 +20,7 @@ interface ProblemFullData {
     /**
     * @answer 问题的答案
     *  @id 答案的id (非必须)
-    *  @answer 案的内容 
+    *  @answerText 答案的内容 
     *  @answerImg 答案的图片 (有的答案是以图片的形式存在的,数据库存储的是图片在服务器中的 URL )(非必须)
     */
     answer: {

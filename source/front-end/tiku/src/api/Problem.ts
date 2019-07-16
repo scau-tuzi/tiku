@@ -191,32 +191,51 @@ function findProblemsVaguely(stringInfo: string, callback: (p: ProblemFullData[]
 
 // }
 function changeProblem(problem: ProblemFullData, callback: (b: BasicResponse) => void) {
-    for(var i =0;i<problemTemp.length;i++){
-        if(problemTemp[i].problem.id ==problem.problem.id){
-            if(problem.problem.problemText!==null||problem.problem.problemText!==undefined){
+
+
+
+    console.log("yaoxiugai");
+    
+    console.log(problem);
+
+    for (var i = 0; i < problemTemp.length; i++) {
+        console.log(i)
+        if (problemTemp[i].problem.id === problem.problem.id) {
+            console.log(problemTemp[i]);
+            
+            if (problem.problem.problemText !== "") {
                 problemTemp[i].problem.problemText = problem.problem.problemText
             }
-            if(problem.problem.answerId!==null||problem.problem.answerId!==undefined){
+            if (problem.problem.answerId !== undefined) {
                 problemTemp[i].problem.answerId = problem.problem.answerId
             }
-            if(problem.problem.parentId!==null||problem.problem.parentId!==undefined){
+            if (problem.problem.parentId !== undefined) {
                 problemTemp[i].problem.parentId = problem.problem.parentId
             }
 
-            if(problem.answer.id!==null||problem.answer.id!==undefined){
+            if (problem.answer.id !== undefined) {
                 problemTemp[i].answer.id = problem.answer.id;
             }
-            if(problem.answer.answerImg!==null||problem.answer.answerImg!==undefined){
+            if (problem.answer.answerImg !== undefined) {
                 problemTemp[i].answer.answerImg = problem.answer.answerImg;
             }
-            if(problem.answer.answerText!==null||problem.answer.answerText!==undefined){
+            if (problem.answer.answerText !== "") {
                 problemTemp[i].answer.answerText = problem.answer.answerText;
             }
 
-            // if(problem.tags !==undefined||problem)
-
+            if (problem.tags.length !== 0) {
+                problemTemp[i].tags = problem.tags;
+            }
+            if (problem.extData !== undefined) {
+                problemTemp[i].extData = problem.extData;
+            }
+            break;
         }
+        
     }
+    console.log(problemTemp);
+    callback({ code: "ok" });
+
 }
 
 

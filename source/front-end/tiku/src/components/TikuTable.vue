@@ -108,10 +108,18 @@
 </template>
 
 <script>
-import { getProblems, addProblem, findProbLemsByTags, findProblemsVaguely, delProblem } from "../api/Problem";
+import {
+  getProblems,
+  addProblem,
+  findProbLemsByTags,
+  findProblemsVaguely,
+  delProblem,
+  changeProblem
+} from "../api/Problem";
 import ProblemFullData from "../data/model/ProblemFullData";
 import { getTagsList, addTags, delTag } from "../api/Tag";
 import { AllFieldInfo } from "../data/mock/FiledInfoMock";
+import { changePaper } from "../api/Paper";
 export default {
   name: "TikuTable",
   datas: [],
@@ -201,17 +209,42 @@ export default {
     },
     findProblemDataByVaguely: function() {
       //模糊查询题目方法测试
-      let temp ="没";
-      let callback = p =>{};
-      findProblemsVaguely(temp,callback)
+      let temp = "没";
+      let callback = p => {};
+      findProblemsVaguely(temp, callback);
     },
     delProblemData: function() {
       //删除题目方法测试
-      let temp = [1,2];
-      let callback = p=>{};
-      delProblem(temp,callback)
+      let temp = [1, 2];
+      let callback = p => {};
+      delProblem(temp, callback);
     },
-
+    changeProblemData: function() {
+      //修改题目方法测试
+      /**
+       * src 为初始原型 ( ProblemFullData 类型),
+       */
+      let src = {
+        problem: {
+          id: -1,
+          problemText: ""
+        },
+        answer: {
+          answerText: ""
+        },
+        tags: [],
+        status: 1
+      };
+      src.problem.parentId=1;
+      src.problem.id = 3;
+      src.problem.problemText = "1+1=?";
+      src.answer.answerText = "2";
+      
+      // src.tags.push({ value: "生活" });
+      console.log(src);
+      let callback = p => {};
+      changeProblem(src,callback);
+    },
     /** */
 
     /**
@@ -325,10 +358,12 @@ export default {
     this.addProblemData();
     this.getData(0);
     this.addTagsdata();
-    this.delTagData()
+    this.delTagData();
     this.findProblemDataByTags();
     this.findProblemDataByVaguely();
-    this.delProblemData();
+    // this.delProblemData();
+    this.changeProblemData();
+
     var all = [];
     Object.keys(AllFieldInfo).forEach(key => {
       all.push({
