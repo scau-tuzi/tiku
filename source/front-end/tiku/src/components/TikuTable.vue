@@ -1,7 +1,7 @@
 <template>
   <el-container style="border: 1px solid #eee">
     <el-main>
-      <el-row gutter="0">
+      <el-row>
         <el-col span=20>
           <el-button class="el-button" align="left" plain @click="jumpInput">录入题目</el-button>
           <!-- <el-button type="primary" plain>全选</el-button> -->
@@ -14,6 +14,9 @@
                     placeholder="请输入搜索内容">
           </el-input>
         </el-col>
+      </el-row>
+      <el-row>
+        <GeneralTable v-bind:table-info="tikuTableInfo" v-on:handleButton="handleButton"></GeneralTable>
       </el-row>
       <el-row><el-col span=24><div></div></el-col></el-row>
       <el-row>
@@ -76,55 +79,60 @@
                 @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
               <el-button
                 size="mini"
-                @click="centerDialogVisible = true">修改标签</el-button>
+                @click="centerDialogVisible = true" v-on:click="showTags(scope.row,scope.column, scope.$index)">修改标签</el-button>
               <el-button
                 size="mini"
                 type="danger"
                 @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+              <el-dialog
+                title="修改标签"
+                :visible.sync="centerDialogVisible"
+                width="30%"
+                center
+              :append-to-body="true">
+                <el-tag
+                  v-for="(tagsrc,index) in scope.row.tag"
+                  v-bind:key="index"
+                  closable
+                  :disable-transitions="false"
+                  @close="handleClose(tag)"
+                  style="margin-right: 10px; margin-bottom: 10px">
+                  {{tagsrc}}
+                </el-tag>
+                <el-input
+                  class="input-new-tag"
+                  v-if="inputVisible"
+                  v-model="inputValue"
+                  ref="saveTagInput"
+                  size="small"
+                  @keyup.enter.native="handleInputConfirm"
+                  @blur="handleInputConfirm"
+                >
+                </el-input>
+                <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
+                <span slot="footer" class="dialog-footer">
+    <el-button @click="centerDialogVisible = false">取 消</el-button>
+    <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
+  </span>
+              </el-dialog>
             </template>
           </el-table-column>
         </el-table>
       </el-row>
+
     </el-main>
     <el-footer align="center">
+
       <el-pagination
         background
         layout="prev, pager, next"
         :total="100"
-
         @current-change="this.handlerchange">
       </el-pagination>
     </el-footer>
-    <el-dialog
-      title="修改标签"
-      :visible.sync="centerDialogVisible"
-      width="30%"
-      center>
-      <el-tag
-        :key="tag"
-        v-for="tag in dynamicTags"
-        closable
-        :disable-transitions="false"
-        @close="handleClose(tag)"
-        style="margin-right: 10px; margin-bottom: 10px">
-        {{tag}}
-      </el-tag>
-      <el-input
-        class="input-new-tag"
-        v-if="inputVisible"
-        v-model="inputValue"
-        ref="saveTagInput"
-        size="small"
-        @keyup.enter.native="handleInputConfirm"
-        @blur="handleInputConfirm"
-      >
-      </el-input>
-      <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
-      <span slot="footer" class="dialog-footer">
-    <el-button @click="centerDialogVisible = false">取 消</el-button>
-    <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
-  </span>
-    </el-dialog>
+
+
+
   </el-container>
 </template>
 
@@ -133,10 +141,24 @@
   import ProblemFullData from "../data/model/ProblemFullData";
   import { getTagsList } from "../api/Tag";
   import AllFieldInfo from "../data/mock/FiledInfoMock";
+  import GeneralTable from "./GeneralTable";
+  import tikuTableInfo from "../data/mock/TikuTableInfoMock";
   export default {
     name: 'TikuTable',
+    components: {GeneralTable},
     datas:[],
     methods: {
+      //监听子组件
+      handleButton(val){
+        if(val.method==='handleEdit'){
+          this.handleEdit(val.index,val.row)
+        }else if(val.method==='showTags'){
+          val.centerDialogVisible=true;
+          this.showTags(val.row,val.col,val.index)
+        }else{
+          this.handleDelete(val.index,val.row)
+        }
+      },
       //编辑操作
       handleEdit (index, row) {
         console.log(index, row),
@@ -240,6 +262,13 @@
         };
         getProblems(currentPage,callback);
       },
+      showTags:function(row,col,index){//在修改标签窗口显示已有标签
+        let dynamicTags_tmp=[];
+        for(let i=0;i<this.$store.state.allProblem[0].tags.length;i++){
+          dynamicTags_tmp.push(this.$store.state.allProblem[index].tags[i].value);//获取store的标签
+        }
+        this.dynamicTags=dynamicTags_tmp;
+      }
     },
     mounted: function() {
       this.getTagsdata;
@@ -256,6 +285,7 @@
     },
     data () {
       return {
+        tikuTableInfo,
         search: '',
         dynamicTags: ['标签一', '标签二', '标签三'],
         inputVisible: false,
@@ -263,6 +293,30 @@
         centerDialogVisible: false,
         tableData:[],
         fieldInfo:[],
+        operWidth: '200',
+        tableData: [{
+          problem: 'How are you?',
+          answer: 'I am fine. Thank you',
+          pictures: '',
+          sound: 'VOA.mp3',
+          tag: '英语',
+          status: '已通过'
+        }, {
+          problem: 'How old are you?',
+          answer: '12',
+          pictures: '',
+          sound: 'VOA.mp3',
+          tag: '英语',
+          status: '已通过'
+        }, {
+          problem: 'Have a nice day !',
+          answer: 'Thank you ! I hope so !',
+          pictures: '',
+          sound: 'VOA.mp3',
+          tag: '英语',
+          status: '已通过'
+        }]
+
       }
     },
     // 搜索操作
@@ -282,6 +336,7 @@
       }
     }
   }
+
 </script>
 
 <style scoped>

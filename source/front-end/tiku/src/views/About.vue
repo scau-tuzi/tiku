@@ -1,6 +1,6 @@
 <template>
   <div class="about">
-    <ModifyProblem></ModifyProblem>
+    <PaperTable></PaperTable>
     <h1>This is an about page</h1>
   </div>
 </template>
@@ -11,8 +11,9 @@
   import VerifyTable from "../components/VerifyTable";
   import ViewProblem from "../components/ViewProblem";
   import ModifyProblem from "../components/ModifyProblem";
+  import PaperTable from "../components/CreatePaper";
   export default {
-    components: {ModifyProblem, ViewProblem, VerifyTable, InputTiku, TikuTable}
+    components: {PaperTable, ModifyProblem, ViewProblem, VerifyTable, InputTiku, TikuTable}
   }
 </script>
 
