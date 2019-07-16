@@ -103,6 +103,14 @@ export default new Router({
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import(/* webpackChunkName: "about" */ './components/CreatePaper.vue')
+    },
+    {
+      path: '/ViewPaper',
+      name: 'ViewPaper',
+      // route level code-splitting
+      // this generates a separate chunk (about.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import(/* webpackChunkName: "about" */ './views/ViewPaper.vue')
     }
   ]
 })

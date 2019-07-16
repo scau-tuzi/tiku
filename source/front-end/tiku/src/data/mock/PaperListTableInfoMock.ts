@@ -50,7 +50,7 @@ let paperListTable:GeneralTable={
       label: "编辑",
       size: "mini",
       type: "plain",
-      method: "EditPaper"
+      method: "editPaper"
     },
     {
       label: "删除",
