@@ -16,7 +16,7 @@ import javax.persistence.*;
 @Accessors(chain = true)
 @Table(name = "problem_tag")
 @IdClass(ProblemTagPK.class)
-public class ProblemTag extends BasicEntity{
+public class ProblemTag extends BasicEntity {
 
     /**
      * 问题id

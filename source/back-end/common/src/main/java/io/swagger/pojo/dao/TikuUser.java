@@ -39,7 +39,7 @@ public class TikuUser extends BasicEntity {
     /**
      * 用户唯一id
      */
-    @Column(name="user_uuid")
+    @Column(name = "user_uuid")
     private String userUuid;
 
     /**

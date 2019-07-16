@@ -12,22 +12,22 @@ var problemTemp: ProblemFullData[] = porblemsList;
  * @param page 
  * @param callback 
  */
-function getProblems(page: number, callback: (Problems: ProblemFullData[]) => void) {
-    //线上
-    axios
-        .get("/api/problem/list?pageNumber=" + page + "&pageSize=10")//服务器网址
-        .then(res => {
-            let lists: ProblemFullData[] = res.data.data.problemFullDataList;
-            callback(lists);
-        })
-}
 // function getProblems(page: number, callback: (Problems: ProblemFullData[]) => void) {
-//     //获得题目列表方法--本地数据测试
-//     let lists: ProblemFullData[] = problemTemp;
-//     console.log("获取到的数据");
-//     console.log(lists);
-//     callback(lists);
+//     //线上
+//     axios
+//         .get("/api/problem/list?pageNumber=" + page + "&pageSize=10")//服务器网址
+//         .then(res => {
+//             let lists: ProblemFullData[] = res.data.data.problemFullDataList;
+//             callback(lists);
+//         })
 // }
+function getProblems(page: number, callback: (Problems: ProblemFullData[]) => void) {
+    //获得题目列表方法--本地数据测试
+    let lists: ProblemFullData[] = problemTemp;
+    console.log("获取到的数据");
+    console.log(lists);
+    callback(lists);
+}
 
 /**
  * 增加题目方法
@@ -81,7 +81,7 @@ function delProblem(idLsit: number[], callback: (b: BasicResponse) => void) {
         }
     }
     console.log(problemTemp);
-    let response: BasicResponse = { code: "OK" };
+    let response: BasicResponse = { code: "ok" };
     console.log(response);
     callback(response);
 

@@ -15,7 +15,7 @@ import java.util.List;
  * @时间:2019-07-09
  */
 @Repository
-public interface AnswerRepository extends JpaRepository<Answer, Long>{
+public interface AnswerRepository extends JpaRepository<Answer, Long> {
 
     List<Answer> findAllByIdIn(List<Long> idList);
 

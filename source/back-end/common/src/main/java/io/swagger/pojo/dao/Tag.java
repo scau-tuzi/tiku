@@ -15,13 +15,13 @@ import javax.persistence.*;
 @Data
 @Table(name = "tag")
 @Entity
-public class Tag extends BasicEntity{
+public class Tag extends BasicEntity {
 
     /**
      * 标签id
      */
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 

@@ -9,14 +9,18 @@
           <el-button type="info" plain>导入Excel</el-button>
           <el-button type="warning" plain>标签批量修改</el-button>
         </el-col>
-        <el-col span=4>
-          <el-input v-model="search" style="display: inline-block;width: 180px"
-                    placeholder="请输入搜索内容">
-          </el-input>
+        <el-col span="4">
+          <el-input
+            v-model="search"
+            style="display: inline-block;width: 180px"
+            placeholder="请输入搜索内容"
+          ></el-input>
         </el-col>
       </el-row>
       <el-row>
-        <GeneralTable v-bind:table-info="tikuTableInfo" v-on:handleButton="handleButton"></GeneralTable>
+        <el-col span="24">
+          <div></div>
+        </el-col>
       </el-row>
       <el-row><el-col span=24><div></div></el-col></el-row>
       <el-row>
@@ -25,53 +29,37 @@
           border
           stripe
           style="width: 100%"
-          @selection-change="handleSelectionChange">
-          <el-table-column
-            type="selection"
-            width="55">
-          </el-table-column>
-          <el-table-column
-            fixed="left"
-            prop="problem"
-            label="问题"
-            width="300">
-          </el-table-column>
-          <el-table-column
-            prop="answer"
-            label="答案"
-            width="300">
-          </el-table-column>
-          <el-table-column
-            prop="sound"
-            label="语音"
-            width="100">
-          </el-table-column>
-          <el-table-column
-            prop="pictures"
-            label="多图片"
-            width="100">
-          </el-table-column>
+          @selection-change="handleSelectionChange"
+        >
+          <el-table-column type="selection" width="55"></el-table-column>
+          <el-table-column fixed="left" prop="problem" label="问题" width="300"></el-table-column>
+          <el-table-column prop="answer" label="答案" width="300"></el-table-column>
+          <el-table-column prop="sound" label="语音" width="100"></el-table-column>
+          <el-table-column prop="pictures" label="多图片" width="100"></el-table-column>
           <el-table-column label="选项">
-            <el-table-column v-for="f in fieldInfo" v-bind:key="f" :prop="f.keyname" :label="f.title">
-            </el-table-column>
+            <el-table-column
+              v-for="f in fieldInfo"
+              v-bind:key="f"
+              :prop="f.keyname"
+              :label="f.title"
+            ></el-table-column>
           </el-table-column>
           <el-table-column
             prop="tag"
             label="标签"
             width="220"
             :filter-method="filterTag"
-            filter-placement="bottom-end">
+            filter-placement="bottom-end"
+          >
             <template slot-scope="scope">
-              <el-tag v-for="(tagsrc,index) in scope.row.tag" v-bind:key="index"
-                      :type="scope.row.tag === '英语' ? 'primary' : 'success'"
-                      disable-transitions>{{tagsrc}}</el-tag>
+              <el-tag
+                v-for="(tagsrc,index) in scope.row.tag"
+                v-bind:key="index"
+                disable-transitions
+              >{{tagsrc}}</el-tag>
             </template>
           </el-table-column>
-          <el-table-column
-            fixed="right"
-            label="操作"
-            width="250"
-          >
+          <el-table-column fixed="right" label="操作" width="250">
             <template slot-scope="scope">
               <el-button
                 size="mini"
@@ -82,7 +70,7 @@
               <el-button
                 size="mini"
                 type="danger"
-                @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                @click="handleDelete(scope.$index)">删除</el-button>
               <el-dialog
                 title="修改标签"
                 :visible.sync="centerDialogVisible"
@@ -131,7 +119,6 @@
     </el-footer>
 
 
-
   </el-container>
 </template>
 
@@ -148,24 +135,10 @@ import ProblemFullData from "../data/model/ProblemFullData";
 import { getTagsList, addTags, delTag } from "../api/Tag";
 import { AllFieldInfo } from "../data/mock/FiledInfoMock";
 import { changePaper } from "../api/Paper";
-import GeneralTable from "./GeneralTable"
-import tikuTableInfo from "../data/mock/TikuTableInfoMock";
 export default {
   name: "TikuTable",
-  components: {GeneralTable},
   datas: [],
-  component: {GeneralTable},
   methods: {
-    //监听子组件
-    handleButton(val) {
-      if (val.method === 'handleEdit') {
-        this.handleEdit(val.index, val.row)
-      } else if (val.method === 'showTags') {
-        this.showTags(val.row, val.col, val.index)
-      } else {
-        this.handleDelete(val.index, val.row)
-      }
-    },
     //编辑操作
     handleEdit(index, row) {
       console.log(index, row),
@@ -197,7 +170,7 @@ export default {
     jumpInput() {
       //this.$router.push("/cart")
       //传递的参数用{{ $route.query.goodsId }}获取
-      this.$router.push({path: "/InputTiku"});
+      this.$router.push({ path: "/InputTiku" });
       //this.$router.go(-2)
       //后退两步
     },
@@ -224,7 +197,7 @@ export default {
     /**
      * problem题目接口测试:测试结果可在 console 观察
      */
-    addProblemData: function () {
+    addProblemData: function() {
       //增加题目方法测试
       let temp = {
         problem: {
@@ -236,36 +209,32 @@ export default {
         tags: [],
         status: 1
       };
-      let callback = p => {
-      };
+      let callback = p => {};
       addProblem(temp, callback);
     },
-    findProblemDataByTags: function () {
+    findProblemDataByTags: function() {
       //标签查找题目方法测试
       let temp = [
         {
           value: "幼儿园"
         }
       ];
-      let callback = p => {
-      };
+      let callback = p => {};
       findProbLemsByTags(temp, callback);
     },
-    findProblemDataByVaguely: function () {
+    findProblemDataByVaguely: function() {
       //模糊查询题目方法测试
       let temp = "没";
-      let callback = p => {
-      };
+      let callback = p => {};
       findProblemsVaguely(temp, callback);
     },
-    delProblemData: function () {
+    delProblemData: function() {
       //删除题目方法测试
       let temp = [1, 2];
-      let callback = p => {
-      };
+      let callback = p => {};
       delProblem(temp, callback);
     },
-    changeProblemData: function () {
+    changeProblemData: function() {
       //修改题目方法测试
       /**
        * src 为初始原型 ( ProblemFullData 类型),
@@ -289,8 +258,7 @@ export default {
       // src.tags.push({ value: "生活" });
       console.log("cs")
       console.log(src);
-      let callback = p => {
-      };
+      let callback = p => {};
       changeProblem(src, callback);
     },
     /** */
@@ -298,7 +266,7 @@ export default {
     /**
      * tag标签接口测试: 可以在 console 查看是否有tag输出
      */
-    getTagsdata: function () {
+    getTagsdata: function() {
       //标签接口_获得标签列表方法本地测试
       let callback = tag => {
         // console.log("get tags data");
@@ -306,10 +274,9 @@ export default {
       };
       getTagsList(callback);
     },
-    addTagsdata: function () {
+    addTagsdata: function() {
       //标签接口_增加标签方法本地测试
-      let callback = tag => {
-      };
+      let callback = tag => {};
       let temp = [
         //因为在 js 语言中无类型模式,所以需要根据函数参数类型的具体结构传递参数
         {
@@ -343,19 +310,18 @@ export default {
 
       addTags(temp, callback);
     },
-    delTagData: function () {
+    delTagData: function() {
       //标签接口_删除标签方法本地测试
-      let callback = tag => {
-      };
+      let callback = tag => {};
       let delId = [15, 14];
       delTag(delId, callback);
     },
     /** */
-    handlerchange: function (currentPage) {
+    handlerchange: function(currentPage) {
       //获取题目
       this.getData(currentPage);
     },
-    getData: function (currentPage) {
+    getData: function(currentPage) {
       // console.log("change")
       var _this = this;
       let callback = pd => {
@@ -394,7 +360,7 @@ export default {
       };
       getProblems(currentPage, callback);
     },
-    showTags: function (row, col, index) {
+    showTags: function(row, col, index) {
       //在修改标签窗口显示已有标签
       let dynamicTags_tmp = [];
       for (let i = 0; i < this.$store.state.allProblem[0].tags.length; i++) {
@@ -403,7 +369,7 @@ export default {
       this.dynamicTags = dynamicTags_tmp;
     }
   },
-  mounted: function () {
+  mounted: function() {
     // this.getTagsdata();
     // this.addProblemData();
     this.getData(0);
@@ -426,7 +392,6 @@ export default {
   },
   data() {
     return {
-      tikuTableInfo,
       search: "",
       dynamicTags: [],
       inputVisible: false,
@@ -453,19 +418,20 @@ export default {
           });
         });
       }
+      return this.tableData;
     }
   }
-}
+};
 </script>
 
 <style scoped>
-  .el-row {
-    margin-bottom: 10px;
+.el-row {
+  margin-bottom: 10px;
   &:last-child {
-     margin-bottom: 0;
-   }
+    margin-bottom: 0;
   }
-  .el-col {
-    border-radius: 4px;
-  }
+}
+.el-col {
+  border-radius: 4px;
+}
 </style>

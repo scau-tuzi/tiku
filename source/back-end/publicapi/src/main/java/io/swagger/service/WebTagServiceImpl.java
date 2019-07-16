@@ -75,7 +75,7 @@ public class WebTagServiceImpl extends BasicService<Tag> implements WebTagServic
     /**
      * 删除标签
      */
-    @Transactional(rollbackFor = Exception.class)
+
     public void delete(Long id) throws Exception {
 
         //删除标签本身
@@ -86,6 +86,14 @@ public class WebTagServiceImpl extends BasicService<Tag> implements WebTagServic
 
         //删除标签和试卷的关联
         webPaperTagServiceImpl.deleteByTagId(id);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void deleteAll(List<Long> idList) throws Exception {
+        for (Long id : idList) {
+            this.delete(id);
+        }
     }
 
     @Override

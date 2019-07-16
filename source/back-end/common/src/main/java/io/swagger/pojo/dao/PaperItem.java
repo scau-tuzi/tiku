@@ -16,7 +16,7 @@ import javax.persistence.*;
 @Accessors(chain = true)
 @Table(name = "paper_item")
 @IdClass(PaperItemPK.class)
-public class PaperItem extends BasicEntity{
+public class PaperItem extends BasicEntity {
 
     /**
      * 问题id
