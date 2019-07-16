@@ -15,7 +15,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @SpringBootTest(classes = TikuApplication.class)
 @ContextConfiguration(classes = TikuApplication.class)
 @WebAppConfiguration
-public class ProblemControllerTest {
+public class WebProblemControllerTest {
 
     @Before
     public void setUp() throws Exception {
@@ -26,7 +26,7 @@ public class ProblemControllerTest {
     }
 
     @Autowired
-    private ProblemController problemController;
+    private WebProblemController webProblemController;
     @Test
     public void test1() {
     }

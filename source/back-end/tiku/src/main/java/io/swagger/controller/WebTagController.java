@@ -2,6 +2,7 @@ package io.swagger.controller;
 
 import io.swagger.pojo.dao.Tag;
 import io.swagger.pojo.dto.BasicResponse;
+import io.swagger.service.WebTagService;
 import io.swagger.service.WebTagServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +15,10 @@ import java.util.Map;
 @Slf4j
 @RequestMapping("/api/tag")
 @RestController
-public class TagController {
+public class WebTagController {
 
     @Autowired
-    private WebTagServiceImpl tagService;
+    private WebTagService tagService;
 
 
     /**
