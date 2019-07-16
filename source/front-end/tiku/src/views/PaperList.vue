@@ -42,7 +42,7 @@
           }else if(val.method==='showTags'){
             this.showTags(val.row,val.col,val.index)
           }else if(val.method==='EditPaper'){
-
+            1+1-2;
           }else {
             this.handleDelete(val.index,val.row)
           }

@@ -199,7 +199,7 @@ function changeProblem(problem: ProblemFullData, callback: (b: BasicResponse) =>
     console.log(problem);
 
     for (var i = 0; i < problemTemp.length; i++) {
-        console.log(i)
+        console.log(i);
         if (problemTemp[i].problem.id === problem.problem.id) {
             console.log(problemTemp[i]);
             

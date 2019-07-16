@@ -69,7 +69,7 @@
   import {createPaperInfoMock, createPaperOrderMock} from "../data/mock/CreatePaperInfoMock";
   export default {
         name: "CreatPaper",
-    components: {GeneralTable,draggable,Sortable},
+    components: {GeneralTable,draggable},
     data(){
           return{
             tikuTableInfo,
