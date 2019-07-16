@@ -3,7 +3,7 @@
             row-key="id"
             class="newTable"
             border
-            fit=true
+            fit
             stripe
             align="left"
             style="width: 100%"
@@ -80,6 +80,7 @@
 
 <script>
   import  GeneralTable from  "../data/model/GeneralTable"
+  import {getProblems} from "../api/Problem";
     export default {
         name: "GeneralTable",
       props: {
@@ -87,7 +88,8 @@
       },
       data(){
         return{
-          centerDialogVisible: false
+          centerDialogVisible: false,
+          tableData
         }
       },
       methods: {
@@ -122,8 +124,51 @@
           }
           this.inputVisible = false;
           this.inputValue = '';
-        }
+        },
+        handlerchange:function(currentPage){//获取题目
+          this.getData(currentPage);
+        },
+        getData:function (currentPage){
+          console.log("change")
+          var _this=this;
+          let callback=(pd)=>{
+            var res=[];
+            console.log("get it")
+            console.log(pd)
+            this.$store.commit("setNewProblems",pd);
+            pd.filter(v=>{
+              let ts = [];
+              if(v.tags!==null){
+                for(let i =0; i<v.tags.length; i++){
+                  ts.push(v.tags[i].value)
+                }
+              }
+              if(v.answer===null){
+                v.answer={
+                  answerText:""
+                }
+              }
+              let ress={
+                problemId:v.problem.id,
+                problem:v.problem.problemText,
+                answer:v.answer.answerText,
+                pictures:'',
+                sound:'',
+                status:(!v.status?'未通过':'通过'),
+                tag:ts
+              };
+              res.push(ress)
+            });
+            console.log(res);
+            _this.tableData=res;
+          };
+          getProblems(currentPage,callback);
+        },
+      },
+      mounted: function () {
+        this.getData(0);
       }
+
     }
 </script>
 

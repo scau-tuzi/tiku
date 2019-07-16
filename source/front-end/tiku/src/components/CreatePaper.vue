@@ -23,29 +23,22 @@
         </el-col>
       </el-row>
       <el-row>
-          <draggable
-            :list="createPaperInfoMock.tableData"
-            :options="dragOptions1">
-<!--            :move="rowDrop">-->
+<!--          <draggable-->
+<!--            :list="createPaperInfoMock.tableData"-->
+<!--            :options="dragOptions1">-->
             <div>
               <el-col span=12.5 style="margin-right: 10px">
                 <GeneralTable v-bind:table-info="createPaperInfoMock"></GeneralTable>
               </el-col>
             </div>
-<!--            <div v-model="createPaperOrderMock.tableData" :move="rowDrop">-->
-<!--              <el-col span=11>-->
-<!--                <GeneralTable v-bind:table-info="createPaperOrderMock"></GeneralTable>-->
-<!--              </el-col>-->
-<!--            </div>-->
-          </draggable>
-          <draggable
-            :list="createPaperOrderMock.tableData"
-            :options="dragOptions2">
-<!--            :move="rowDrop">-->
+<!--          </draggable>-->
+<!--          <draggable-->
+<!--            :list="createPaperOrderMock.tableData"-->
+<!--            :options="dragOptions2">-->
             <el-col span=11>
               <GeneralTable v-bind:table-info="createPaperOrderMock"></GeneralTable>
             </el-col>
-          </draggable>
+<!--          </draggable>-->
       </el-row>
       <el-row>
         <pre style="text-align: left">
@@ -68,7 +61,7 @@
   import tikuTableInfo from "../data/mock/TikuTableInfoMock";
   import {createPaperInfoMock, createPaperOrderMock} from "../data/mock/CreatePaperInfoMock";
   export default {
-        name: "CreatPaper",
+        name: "CreatePaper",
     components: {GeneralTable,draggable},
     data(){
           return{
@@ -105,9 +98,9 @@
             }
           }
       },
-    // mounted() {
-    //     this.rowDrop();
-    // },
+    mounted() {
+        this.rowDrop();
+    },
     computed:{
       dragOptions1() {
         return {
@@ -116,7 +109,7 @@
             name: "shared",
           },
           ghostClass: "ghost",
-          // draggable: ".el-table__body-wrapper tbody"
+          //draggable: ".el-table__body-wrapper tbody"
         };
       },
       dragOptions2(){
@@ -124,9 +117,8 @@
           animation: 0,
           group: {
             name:"shared",
-
           },
-          // draggable: ".el-table__body-wrapper tbody"
+          //draggable: ".el-table__body-wrapper tbody"
         };
       }
     },
@@ -135,12 +127,19 @@
       rowDrop() {
         const tbody = document.querySelectorAll('.el-table__body-wrapper tbody')
         const _this = this
-        for(var i=0;i<tbody.length;i++){
-          Sortable.create(tbody, {
-            onEnd({ newIndex, oldIndex }) {
-              const currRow = _this.tableData.splice(oldIndex, 1)[0]
-              _this.tableData.splice(newIndex, 0, currRow)
-            }
+        for(let i=0;i<tbody.length;i++){
+          new Sortable(tbody[i], {
+            group: "shared",
+            //multiDrag: true, // Enable multi-drag
+            //selectedClass: 'selected', // The class applied to the selected items
+            onEnd:function(evt) {
+              const currRow = _this.tableData.splice(evt.oldIndex, 1)[0]
+              _this.tableData.splice(evt.newIndex, 0, currRow)
+            },
+            // Element is dropped into the list from another list
+            onAdd: function (/**Event*/evt) {
+              // same properties as onEnd
+            },
           })
         }
 
