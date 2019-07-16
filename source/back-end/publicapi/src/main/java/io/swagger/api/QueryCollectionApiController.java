@@ -55,7 +55,7 @@ public class QueryCollectionApiController implements QueryCollectionApi {
                 isDeep = true;
             }
             paperFullDatas = collectionService.queryCollection(body.getQuerry(), isDeep);
-        } catch (ParserErrorException e) {
+        } catch (Exception e) {
             // todo 表达异常
             e.printStackTrace();
             log.error(e.getMessage());

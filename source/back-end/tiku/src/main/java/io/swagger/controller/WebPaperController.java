@@ -12,7 +12,7 @@ import java.util.Map;
 @RequestMapping("/api/paper")
 @RestController
 @Slf4j
-public class PaperController {
+public class WebPaperController {
 
     @Autowired
     private WebPaperService webPaperService;

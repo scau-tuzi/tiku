@@ -15,13 +15,12 @@ import java.util.Map;
 @RequestMapping("/api/problem")
 @RestController
 @Slf4j
-public class ProblemController {
+public class WebProblemController {
 
     @Autowired
     private WebProblemService webProblemService;
 
-    @Autowired
-    private WebProblemServiceImpl webProblemServiceImpl;
+
 
     // todo 不知道这样写swagger能不能自动生成正确的接口
 
@@ -71,7 +70,7 @@ public class ProblemController {
 
         Long createBy = 1L;
         try {
-            webProblemServiceImpl.add(problemFullData, createBy);
+            webProblemService.add(problemFullData, createBy);
             basicResponse.setData("问题添加成功");
         } catch (Exception e) {
             basicResponse.setCode(BasicResponse.ERRORCODE);
@@ -93,7 +92,7 @@ public class ProblemController {
         BasicResponse basicResponse = new BasicResponse();
 
         try {
-            webProblemServiceImpl.delete(id);
+            webProblemService.delete(id);
             basicResponse.setData("问题删除成功");
         } catch (Exception e) {
             basicResponse.setCode(BasicResponse.ERRORCODE);
@@ -116,7 +115,7 @@ public class ProblemController {
 
         Long updateBy = 1L;
         try {
-            webProblemServiceImpl.update(problemFullData, updateBy);
+            webProblemService.update(problemFullData, updateBy);
             basicResponse.setData("问题修改成功");
         } catch (Exception e) {
             basicResponse.setCode(BasicResponse.ERRORCODE);
