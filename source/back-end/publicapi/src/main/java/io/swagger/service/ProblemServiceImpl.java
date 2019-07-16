@@ -51,6 +51,7 @@ public class ProblemServiceImpl implements ProblemService {
             resPagin.setPage(BigDecimal.valueOf(-1));
             resPagin.setSize(BigDecimal.valueOf(size));
             resPagin.setTotal(BigDecimal.valueOf(longs.size()));
+            // todo !!!!!!! 分页错误
             // total = 24 page=3 size=7 => 21-23
             //                = 4       error
             //                =4     =6 error
@@ -72,9 +73,9 @@ public class ProblemServiceImpl implements ProblemService {
         QuerryResult querryResult = new QuerryResult();
         querryResult.setStatus(StatusCode.OK);
         // 拼装返回数据
-        problemFullData.stream().forEach((e) -> {
+        for (ProblemFullData e : problemFullData) {
             res.add(e.toMap());
-        });
+        }
         querryResult.setResults(res);
         querryResult.setPagination(resPagin);
         return querryResult;

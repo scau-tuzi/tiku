@@ -6,6 +6,7 @@ import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -20,6 +21,7 @@ import java.util.Arrays;
 @Component
 @Slf4j
 @Aspect
+@Order(60000)
 public class ApiLogAspect {
     @Pointcut("execution(public * io.swagger.api..*.*(..))")
     public void apiLog(){}
