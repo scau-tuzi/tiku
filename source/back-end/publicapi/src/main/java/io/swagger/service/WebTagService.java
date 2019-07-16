@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface WebTagService {
-    void add(Tag tag, Long createBy) throws Exception;
+    Tag add(Tag tag, Long createBy) throws Exception;
 
     Integer findIfUsed(@RequestBody Tag tag);
 
@@ -20,4 +20,6 @@ public interface WebTagService {
     void update(Tag tag, Long updateBy) throws Exception;
 
     int deleteBasicInfo(Long id);
+
+    List<Tag> getTagsByValueList(List<String> values);
 }

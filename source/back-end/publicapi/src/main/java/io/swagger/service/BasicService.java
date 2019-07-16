@@ -22,6 +22,7 @@ public class BasicService<T extends BasicEntity> {
      * @param createBy 创建人id
      */
     public void beforeAdd(T entity, Long createBy) {
+        entity.setIsDel(Boolean.FALSE);
         entity.setCreateBy(createBy);
         entity.setCreateAt(new Date());
         entity.setUpdateBy(entity.getCreateBy());

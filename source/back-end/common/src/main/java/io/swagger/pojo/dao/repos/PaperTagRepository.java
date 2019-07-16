@@ -1,6 +1,7 @@
 package io.swagger.pojo.dao.repos;
 
 import io.swagger.pojo.dao.PaperTag;
+import io.swagger.pojo.dao.ProblemTag;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -18,12 +19,19 @@ import java.util.List;
 public interface PaperTagRepository extends JpaRepository<PaperTag, Long> {
     List<PaperTag> findAllByTagIdEquals(Long id);
 
-    List<PaperTag> findAllByPaperIdIn(List<Long> paperIds);
+    List<PaperTag> findAllByIsDelAndPaperIdIn(Boolean isDel, List<Long> paperIds);
 
     void deleteAllByPaperIdIn(List<Long> paperIds);
+
+    void deleteAllByPaperIdEquals(Long paperId);
 
     @Modifying
     @Query(nativeQuery = true,
             value = "update paper_tag set is_del=?2 where tag_id=?1")
     int updateIsDelByTagId(Long tagId, Boolean isDel);
+
+    @Modifying
+    @Query(nativeQuery = true,
+            value = "update paper_tag set is_del=?2 where paper_id=?1")
+    int updateIsDelByPaperId(Long paperId, Boolean isDel);
 }

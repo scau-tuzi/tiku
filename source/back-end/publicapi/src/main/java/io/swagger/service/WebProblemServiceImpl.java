@@ -3,17 +3,11 @@ package io.swagger.service;
 import io.swagger.model.Pagination;
 import io.swagger.pojo.ProblemFullData;
 import io.swagger.pojo.dao.*;
-import io.swagger.pojo.dao.repos.ExtDataRepository;
-import io.swagger.pojo.dao.repos.ProblemRepository;
-import io.swagger.pojo.dao.repos.ProblemTagRepository;
-import io.swagger.pojo.dao.repos.StatusRepository;
-import io.swagger.pojo.dao.repos.TagRepository;
-import org.springframework.beans.BeanUtils;
+import io.swagger.pojo.dao.repos.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.test.web.servlet.result.StatusResultMatchersExtensionsKt;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -43,6 +37,11 @@ public class WebProblemServiceImpl extends BasicService<Problem> implements WebP
     @Autowired
     private WebProblemTagServiceImpl webProblemTagServiceImpl;
 
+    @Autowired
+    private WebPaperItemServiceImpl webPaperItemServiceImpl;
+
+    @Autowired
+    private WebTagService webTagService;
     @Autowired
     private ProblemTagRepository problemTagRepository;
 
@@ -86,7 +85,7 @@ public class WebProblemServiceImpl extends BasicService<Problem> implements WebP
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void add(ProblemFullData problemFullData, Long createBy) throws Exception {
+    public Long add(ProblemFullData problemFullData, Long createBy) throws Exception {
 
         Answer answer = problemFullData.getAnswer();
         List<Tag> tagList = problemFullData.getTags();
@@ -124,13 +123,17 @@ public class WebProblemServiceImpl extends BasicService<Problem> implements WebP
             List<ProblemTag> problemTagList = new ArrayList<>();
             for (Tag tag : tagList) {
                 ProblemTag problemTag = new ProblemTag();
-                // 这里假定只上传了标签的值，没有上传标签的id
-                List<Tag> tagss = tagRepository.findByValueEquals(tag.getValue());
-                if(tagss==null || tagss.size()==0){
-                    // todo 如果标签不存在就新增标签
-                    throw new Exception("所选标签不在数据库中");
+                //todo 标签不存在 这些代码好像在某个地方出现过一次了....
+                if (tag.getId() == null) {
+                    String value = tag.getValue();
+                    List<Tag> byValueEquals = tagRepository.findByValueEquals(value);
+                    if (byValueEquals == null || byValueEquals.size() == 0) {
+                        tag = webTagService.add(tag, createBy);
+                    } else {
+                        tag = byValueEquals.get(0);
+                    }
                 }
-                problemTag.setTagId(tagss.get(0).getId());
+                problemTag.setTagId(tag.getId());
                 problemTag.setProblemId(problem.getId());
                 problemTagList.add(problemTag);
             }
@@ -152,6 +155,7 @@ public class WebProblemServiceImpl extends BasicService<Problem> implements WebP
             }
             webExtDataServiceImpl.addAll(extDataList, createBy);
         }
+        return problem.getId();
     }
 
     @Override
@@ -189,6 +193,11 @@ public class WebProblemServiceImpl extends BasicService<Problem> implements WebP
          * 删除问题扩展属性
          */
         webExtDataServiceImpl.deleteByProblemId(id);
+
+        /**
+         * 删除试卷包含的问题
+         */
+        webPaperItemServiceImpl.deleteByProblemId(id);
 
     }
 

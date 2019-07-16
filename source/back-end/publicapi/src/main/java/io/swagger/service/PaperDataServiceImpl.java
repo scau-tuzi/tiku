@@ -116,9 +116,9 @@ public class PaperDataServiceImpl implements PaperDataService {
      */
     public Map<Long, List<Tag>> getPaperIdTagMap(List<Long> paperIds) {
         //所有试卷标签
-        List<PaperTag> paperTagList = paperTagRepository.findAllByPaperIdIn(paperIds);
+        List<PaperTag> paperTagList = paperTagRepository.findAllByIsDelAndPaperIdIn(Boolean.FALSE, paperIds);
         //所有标签id(用来查询所有标签)
-        List<Long> tagIdList = new ArrayList<>();
+        Set<Long> tagIdSet = new HashSet<>();
         //试卷id和标签id的map
         Map<Long, List<Long>> paperIdTagIdMap = new HashMap<>();
         //试卷id和标签的map
@@ -126,7 +126,7 @@ public class PaperDataServiceImpl implements PaperDataService {
 
         for (PaperTag paperTag : paperTagList) {
             //循环获取所有标签id
-            tagIdList.add(paperTag.getTagId());
+            tagIdSet.add(paperTag.getTagId());
 
             //设置试卷id和标签id的map
             if (paperIdTagIdMap.containsKey(paperTag.getPaperId())) {
@@ -141,7 +141,7 @@ public class PaperDataServiceImpl implements PaperDataService {
         }
 
         //根据所有标签id查询所有标签
-        List<Tag> tagList = tagRepository.findAllByIdIn(tagIdList);
+        List<Tag> tagList = tagRepository.findAllByIdIn(new ArrayList<>(tagIdSet));
         //设置标签id和标签的map
         Map<Long, Tag> tagIdTagMap = new HashMap<>();
         for (Tag tag : tagList) {
@@ -179,7 +179,7 @@ public class PaperDataServiceImpl implements PaperDataService {
      * @return 试卷id和问题id(包括序列)的map
      */
     public Map<Long, Map<Integer, Long>> getPaperIdSerialProblemIdMap(List<Long> paperIds) {
-        List<PaperItem> paperItemList = paperItemRepository.findAllByPaperIdIn(paperIds);
+        List<PaperItem> paperItemList = paperItemRepository.findAllByIsDelAndPaperIdIn(Boolean.FALSE, paperIds);
         Map<Long, Map<Integer, Long>> paperIdSerialProblemIdMap = new HashMap<>();
 
         for (PaperItem paperItem : paperItemList) {

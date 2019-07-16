@@ -1,17 +1,20 @@
-interface Tag{
+/**
+ * 标签模型对象
+ */
+interface TagInfo {
     /**
-     * id: 标签的id
+     * @id 标签的id
      */
-    id:number,
+    id?: number,
 
     /**
-     * value: 标签的内容
+     * @value 标签的内容
      */
     value: string,
 
     /**
-     *parentId: 父标签的id
+     * @parentId 父标签的id
      */
-    parentId: number
+    parentId?: number
 }
-export default Tag;
+export default TagInfo;

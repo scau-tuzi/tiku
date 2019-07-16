@@ -11,7 +11,7 @@
           <el-table
             :data="tables"
             border
-            stripe="true"
+            stripe=true
             style="width: 100%"
             @selection-change="handleSelectionChange">
             <el-table-column
@@ -43,6 +43,17 @@
               width="150">
             </el-table-column>
             <el-table-column
+              prop="tag"
+              label="标签"
+              width="220"
+              :filter-method="filterTag"
+              filter-placement="bottom-end">
+              <template slot-scope="scope">
+                <el-tag v-for="(tagsrc,index) in scope.row.tag" v-bind:key="index"
+                        disable-transitions>{{tagsrc}}</el-tag>
+              </template>
+            </el-table-column>            
+            <el-table-column
               prop="status"
               label="审核状态"
               width="220">
@@ -61,6 +72,10 @@
             </el-table-column>
           </el-table>
         </el-row>
+        <el-row>
+          <GeneralTable v-bind:table-info="verifyTableInfo" v-on:handleButton="handleButton">
+          </GeneralTable>
+        </el-row>
       </el-main>
       <el-footer align="center">
         <el-pagination
@@ -77,19 +92,29 @@
 <script>
   import {getProblems} from "../api/Problem";
   import ProblemFullData from "../data/model/ProblemFullData";
+  import GeneralTable from "./GeneralTable";
+  import verifyTableInfo from  "../data/mock/VerifyTableInfoMock";
   export default {
     name: "VerifyTable",
+    components: {GeneralTable},
     datas:[],
     methods: {
+      handleButton(val){
+        if(val.method==='handleView'){
+          this.handleView(val.index,val.row)
+        }
+      },
       //查看操作
       handleView(index, row) {
         console.log(index, row),
           // alert(index+row.problem+row.answer),
-          //转到ViewProblem页面
+          //转到ViewProblem页面        
           this.$router.push({path: '/ViewProblem',
             //query对象获取参数
             query: {
-              problemId:row.problemId
+              viewQues:row.problem,
+              viewAnsw:row.answer,
+              viewTags:row.tag
             }
           })
       },
@@ -103,15 +128,29 @@
           var res=[];
           console.log("get it")
           console.log(pd)
+          this.$store.commit("setNewProblems",pd);
           pd.filter(v=>{
-            res.push({
+            let ts = [];
+            if(v.tags!==null){
+              for(let i =0; i<v.tags.length; i++){
+                ts.push(v.tags[i].value)
+              }
+            }
+            if(v.answer===null){
+              v.answer={
+                answerText:""
+              }
+            }            
+            let ress={
               problemId:v.problem.id,
               problem:v.problem.problemText,
               answer:v.answer.answerText,
               pictures:'',
               sound:'',
-              status:(!v.status?'未通过':'通过')
-            })
+              status:(!v.status?'未通过':'通过'),
+              tag:ts
+            };              
+            res.push(ress)
           });
           console.log(res);
           _this.tableData=res;
@@ -122,31 +161,53 @@
     mounted: function () {
       this.getData(0);
     },
-    data () {
+    data :function() {
       return {
+        verifyTableInfo,
+        col: [
+          {
+            fixed: 'left',
+            label: '问题ID',
+            prop: 'problemId',
+            width: '0'
+          },
+          {
+            fixed: 'left',
+            label: '问题',
+            prop: 'problem',
+            width: '300'
+          },
+          {
+            label: '答案',
+            prop: 'answer',
+            width: '300'
+          },
+          {
+            label: '语音',
+            prop: 'sound',
+            width: '100'
+          },
+          {
+            label: '多图片',
+            prop: 'pictures',
+            width: '100'
+          },
+          {
+            label: '审核状态',
+            prop: 'status',
+            width: '220'
+          }
+        ],
+        oper: [
+          {
+            label: '查看',
+            size: 'mini',
+            type: 'text',
+            methods: ''
+          }
+        ],
         search: '',
-        tableData: [{
-          problem: 'How are you?',
-          answer: 'I am fine. Thank you',
-          pictures: '',
-          sound: 'VOA.mp3',
-          tag: '英语',
-          status: '已通过'
-        }, {
-          problem: 'How old are you?',
-          answer: '12',
-          pictures: '',
-          sound: 'VOA.mp3',
-          tag: '英语',
-          status: '已通过'
-        }, {
-          problem: 'Have a nice day !',
-          answer: 'Thank you ! I hope so !',
-          pictures: '',
-          sound: 'VOA.mp3',
-          tag: '英语',
-          status: '已通过'
-        }]
+        tableData: []
       }
     },
     // 搜索操作

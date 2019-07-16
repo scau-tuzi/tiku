@@ -18,7 +18,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Slf4j
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = "cn.czfshine.tiku")
+
 public class StaticFileConfig implements WebMvcConfigurer {
 
     /**
