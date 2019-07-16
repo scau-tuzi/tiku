@@ -13,6 +13,8 @@ public interface WebTagService {
 
     void delete(Long id) throws Exception;
 
+    void deleteAll(List<Long> idList) throws Exception;
+
     Map<String, Object> list(Integer pageNumber, Integer pageSize);
 
     void update(Tag tag, Long updateBy) throws Exception;
