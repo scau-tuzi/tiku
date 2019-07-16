@@ -18,7 +18,7 @@ import javax.persistence.Table;
 @Table(name = "role")
 @Data
 @Accessors(chain = true)
-public class Role extends BasicEntity{
+public class Role extends BasicEntity {
 
     /**
      * 角色id

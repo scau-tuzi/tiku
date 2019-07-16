@@ -6,11 +6,14 @@ import lombok.experimental.Accessors;
 import javax.persistence.*;
 import java.util.Date;
 
+/**
+ * 项目授权id表
+ */
 @Entity
 @Data
 @Accessors(chain = true)
-@Table(name = "user_problem_status")
-public class UserProblemStatus extends BasicEntity {
+@Table(name = "project_token")
+public class ProjectToken {
 
     /**
      * id
@@ -21,26 +24,19 @@ public class UserProblemStatus extends BasicEntity {
     private Long id;
 
     /**
-     * 问题id
+     * 项目授权码
      */
-    @Column(name = "problem_id")
-    private Long problemId;
+    @Column(name = "token")
+    private String token;
     /**
-     * 用户唯一id
+     * 失效时间
      */
-    @Column(name = "user_uuid")
-    private String userUuid;
+    @Column(name = "expire_time")
+    private Date expireTime;
 
     /**
-     * 问题状态
+     * 失效状态，1为失效
      */
     @Column(name = "status")
-    private String status;
-
-    /**
-     * 传进来的时间
-     */
-    @Column(name = "date")
-    private Date date;
-
+    private Boolean status;
 }

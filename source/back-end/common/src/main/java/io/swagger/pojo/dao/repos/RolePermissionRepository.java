@@ -6,10 +6,11 @@ import org.springframework.stereotype.Repository;
 
 /**
  * 功能描述：角色权限实体Jpa操作类
+ *
  * @作者：黄宽波
  * @时间:2019-07-09
  */
 @Repository
-public interface RolePermissionRepository extends JpaRepository<RolePermission, Long>{
+public interface RolePermissionRepository extends JpaRepository<RolePermission, Long> {
 
 }

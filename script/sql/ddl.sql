@@ -158,7 +158,6 @@ CREATE TABLE `user`  (
   `password_salt_md5` varchar(32) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT '密码加盐后的md5',
   `salt` varchar(32) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT '盐值',
   `image` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT '头像url',
-  `role_id` int(64) NULL DEFAULT NULL COMMENT '所属角色',
   `is_del` bit(1) NULL DEFAULT NULL COMMENT '是否删除',
   `create_at` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `create_by` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
@@ -167,6 +166,17 @@ CREATE TABLE `user`  (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COMMENT = '用户表' ROW_FORMAT = Dynamic;
 
+create table `user_role`(
+   `id` int(64) NOT NULL AUTO_INCREMENT COMMENT '标识',
+   `role_id` int(64) NULL DEFAULT NULL COMMENT '角色',
+  `user_id` bigint(20) NULL DEFAULT NULL COMMENT '用户',
+  `is_del` bit(1) NULL DEFAULT NULL COMMENT '是否删除',
+  `create_at` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `create_by` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+  `update_at` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  `update_by` bigint(20) NULL DEFAULT NULL COMMENT '更新人',
+   PRIMARY KEY (`id`) USING BTREE
+)ENGINE = InnoDB CHARACTER SET = utf8mb4 COMMENT = '用户角色表' ROW_FORMAT = Dynamic;
 -- 一个用户某道题目的状态
 -- 比如用户A题目100001状态为“错题”
 CREATE TABLE `user_problem_status`  (
@@ -202,3 +212,52 @@ CREATE TABLE `tiku_user`  (
   `update_by` bigint(20) NULL DEFAULT NULL COMMENT '更新人',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COMMENT = '题库用户' ROW_FORMAT = Dynamic;
+
+create TABLE `project` (
+  `id` int(64) NOT NULL AUTO_INCREMENT COMMENT '标识',
+  `project_name` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT '项目名',
+  `project_uuid` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT '项目uuid',
+  `is_del` bit(1) NULL DEFAULT NULL COMMENT '是否删除',
+  `create_at` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `create_by` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+  `update_at` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  `update_by` bigint(20) NULL DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`id`) USING BTREE
+)ENGINE = InnoDB CHARACTER SET = utf8mb4 COMMENT = '项目表' ROW_FORMAT = Dynamic;
+
+create Table `project_token`(
+  `id` int(64) NOT NULL AUTO_INCREMENT COMMENT '标识',
+  `token` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT 'token值',
+  `expire_time`  datetime(0) NULL DEFAULT NULL COMMENT '失效时间',
+  `status` int(1) NULL DEFAULT NULL COMMENT '失效状态1为失效',
+  `is_del` bit(1) NULL DEFAULT NULL COMMENT '是否删除',
+  `create_at` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `create_by` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+  `update_at` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  `update_by` bigint(20) NULL DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`id`) USING BTREE
+)ENGINE = InnoDB CHARACTER SET = utf8mb4 COMMENT = '应用授权id' ROW_FORMAT = Dynamic;
+create table `user_project`(
+`id` int(64) NOT NULL AUTO_INCREMENT COMMENT '标识',
+`project_id` int(64) NULL DEFAULT NULL COMMENT '项目id',
+`user_id` bigint(20) NULL DEFAULT NULL COMMENT '用户id',
+
+  `is_del` bit(1) NULL DEFAULT NULL COMMENT '是否删除',
+  `create_at` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `create_by` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+  `update_at` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  `update_by` bigint(20) NULL DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`id`) USING BTREE
+)ENGINE = InnoDB CHARACTER SET = utf8mb4 COMMENT = '项目用户' ROW_FORMAT = Dynamic;
+
+create table `pool` (
+  `id` int(64) NOT NULL AUTO_INCREMENT COMMENT '标识',
+  `pool_name` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT '题库名',
+  `pool_uuid` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT '题库uuid',
+  `is_del` bit(1) NULL DEFAULT NULL COMMENT '是否删除',
+  `create_at` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `create_by` bigint(20) NULL DEFAULT NULL COMMENT '创建人',
+  `update_at` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  `update_by` bigint(20) NULL DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`id`) USING BTREE
+)ENGINE = InnoDB CHARACTER SET = utf8mb4 COMMENT = '题库信息' ROW_FORMAT = Dynamic;

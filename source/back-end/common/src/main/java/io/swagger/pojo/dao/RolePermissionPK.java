@@ -1,12 +1,7 @@
 package io.swagger.pojo.dao;
 
 import lombok.Data;
-import lombok.experimental.Accessors;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import java.io.Serializable;
 
 /**
