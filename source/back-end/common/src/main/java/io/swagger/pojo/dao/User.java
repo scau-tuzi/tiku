@@ -2,10 +2,7 @@ package io.swagger.pojo.dao;
 
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * 功能描述：用户实体类
@@ -22,6 +19,7 @@ public class User extends BasicEntity {
      * 用户id
      */
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
