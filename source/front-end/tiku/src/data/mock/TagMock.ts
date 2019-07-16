@@ -1,4 +1,4 @@
-import Tag from "../model/TAg";
+import Tag from "../model/Tag";
 /**
  * 本地标签实例
  */
