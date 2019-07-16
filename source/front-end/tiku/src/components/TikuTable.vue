@@ -186,34 +186,34 @@ export default {
       //标签接口_增加标签方法本地测试
       let callback = tag => {};
       let temp = [
-        //因为在 js 语言中无类型模式,所以需要根据函数参数类型的具体结构传递参数
-        {
-          value: "语文",
-          parentId: 6
-        },
-        {
-          value: "数学",
-          parentId: 7
-        },
-        {
-          value: "英语",
-          parentId: 8
-        },
-        {
-          value: "历史"
-        },
-        {
-          value: "化学"
-        },
-        {
-          value: "生物"
-        },
-        {
-          value: "政治"
-        },
-        {
-          value: "地理"
-        }
+      //   //因为在 js 语言中无类型模式,所以需要根据函数参数类型的具体结构传递参数
+      //   {
+      //     value: "语文",
+      //     parentId: 6
+      //   },
+      //   {
+      //     value: "数学",
+      //     parentId: 7
+      //   },
+      //   {
+      //     value: "英语",
+      //     parentId: 8
+      //   },
+      //   {
+      //     value: "历史"
+      //   },
+      //   {
+      //     value: "化学"
+      //   },
+      //   {
+      //     value: "生物"
+      //   },
+      //   {
+      //     value: "政治"
+      //   },
+      //   {
+      //     value: "地理"
+      //   }
       ];
 
       addTags(temp, callback);

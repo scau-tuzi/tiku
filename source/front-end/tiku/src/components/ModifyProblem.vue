@@ -61,18 +61,42 @@
               :value="item.value">
             </el-option>
           </el-select>
-          <div style="margin: 100px 0;"></div>
         </el-form-item>
+        <el-form-item label="额外信息">
+          <el-input-number v-model="OptionNum" @change="OptionHandleChange" :min="0" :max="10" label="描述文字"></el-input-number>
+          <div v-for="index in OptionNum" :key="index">
+           <el-form ref="form" :model="form" label-width="0px" @input="addOption">
+             <el-row>
+               <el-col :span=6>
+                 <el-form-item label="" >
+                   <label>key值：</label>
+                   <el-input v-model="form.option[index]" placeholder="请输入选项"></el-input>
+                 </el-form-item>
+               </el-col>
+               <el-col :span= 6 >
+                 <el-form-item label="">
+                   <label>value值：</label>
+                   <el-input v-model="form.text[index]" placeholder="请输入内容"></el-input>
+                 </el-form-item>
+               </el-col>
+             </el-row>
+           </el-form>
+          </div>
+        </el-form-item>        
       </el-form>
     </el-main>
   </el-container>
 </template>
 
 <script>
+    import ProblemFullData from "../data/model/ProblemFullData";
+    import {addProblem} from "../api/Problem";
+    import {getTagsList} from "../api/Tag";
     export default {
         name: "ModifyProblem",
       data(){
         return {
+          OptionNum: '1',
           dialogImageUrl: '',
           dialogVisible: false,
           disabled: false,
@@ -83,6 +107,10 @@
             sound: '',
             tags: ''
           },
+          form: {
+            option: ['','choice_A','choice_B','choice_C','choice_D'],
+            text: {},
+          },          
           rules: {
             problem: [
               { required: true, message: '请输入题目', trigger: 'blur' }
@@ -92,16 +120,18 @@
             ]
 
           },
-          options: [{
-            value: 'FirstGrade',
-            label: '一年级'
-          }, {
-            value: 'SecondGrade',
-            label: '二年级'
-          }, {
-            value: 'ThirdGrade',
-            label: '三年级'
-          }],
+          options: [
+          //  {
+          //   value: 'FirstGrade',
+          //   label: '一年级'
+          // }, {
+          //   value: 'SecondGrade',
+          //   label: '二年级'
+          // }, {
+          //   value: 'ThirdGrade',
+          //   label: '三年级'
+          // }
+          ],
           value: []
 
         };
@@ -110,10 +140,35 @@
       created(){
         this.getParams()
       },
+      mounted: function() {
+        this.getTags();
+      },      
       methods: {
         back(){
           this.$router.push({path: '/TikuTable'})
         },
+        getTags(){
+            console.log("getTag!")
+            var _this=this;
+            let callback=(pd)=>{
+            console.log("get it");
+            console.log(pd);
+            this.$store.commit("setNewCommits",pd);
+            console.log("aha");
+            // console.log(this.$store.state.commits);
+            // console.log(this.$store.state.commits[0].id);
+            pd.filter(v=>{
+                let ress={
+                value:v.value,
+                label:v.value
+                };
+                this.options.push(ress)
+            });
+            };
+            getTagsList(callback);
+            console.log('ahahahah-----');
+            console.log(this.options);
+          },        
         submitForm(formName) {
           this.$refs[formName].validate((valid) => {
             if (valid) {

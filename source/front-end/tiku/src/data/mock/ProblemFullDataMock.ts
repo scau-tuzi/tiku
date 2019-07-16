@@ -25,8 +25,10 @@ let porblemsList: ProblemFullData[] = [
             parentId: -1
         }],
         extData: {
-            A:"有",
-            B:"没有"
+            choice_A:"有",
+            choice_B:"没有",
+            choice_C:"你猜",
+            choice_D:"想得美"            
         },
         status: 0
     }, {
@@ -53,8 +55,10 @@ let porblemsList: ProblemFullData[] = [
             }
         ],
         extData: {
-            A:"有",
-            B:"没有"
+            choice_A:"24",
+            choice_B:"12",
+            choice_C:"10",
+            choice_D:"36" 
         },
         status: 0
     },{
@@ -81,8 +85,10 @@ let porblemsList: ProblemFullData[] = [
             }
         ],
         extData: {
-            A:"有",
-            B:"没有"
+            choice_A:"晴天",
+            choice_B:"雨天",
+            choice_C:"阴天",
+            choice_D:"大风天" 
         },
         status: 0
     } 
