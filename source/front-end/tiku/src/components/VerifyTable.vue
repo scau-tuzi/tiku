@@ -52,7 +52,7 @@
                 <el-tag v-for="(tagsrc,index) in scope.row.tag" v-bind:key="index"
                         disable-transitions>{{tagsrc}}</el-tag>
               </template>
-            </el-table-column>            
+            </el-table-column>
             <el-table-column
               prop="status"
               label="审核状态"
@@ -93,6 +93,7 @@
   import {getProblems} from "../api/Problem";
   import ProblemFullData from "../data/model/ProblemFullData";
   import GeneralTable from "./GeneralTable";
+  import verifyTableInfo from  "../data/mock/VerifyTableInfoMock";
   export default {
     name: "VerifyTable",
     components: {GeneralTable},
@@ -107,7 +108,7 @@
       handleView(index, row) {
         console.log(index, row),
           // alert(index+row.problem+row.answer),
-          //转到ViewProblem页面        
+          //转到ViewProblem页面
           this.$router.push({path: '/ViewProblem',
             //query对象获取参数
             query: {
@@ -139,7 +140,7 @@
               v.answer={
                 answerText:""
               }
-            }            
+            }
             let ress={
               problemId:v.problem.id,
               problem:v.problem.problemText,
@@ -148,7 +149,7 @@
               sound:'',
               status:(!v.status?'未通过':'通过'),
               tag:ts
-            };              
+            };
             res.push(ress)
           });
           console.log(res);
@@ -162,6 +163,7 @@
     },
     data :function() {
       return {
+        verifyTableInfo,
         search: '',
         tableData: []
       }

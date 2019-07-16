@@ -24,7 +24,7 @@ let createPaperInfoMock:GeneralTable={
   ],
   col: [
     {
-      fixed: "left",
+      fixed: "",
       label: "",
       prop: "",
       width: "0",
@@ -70,19 +70,19 @@ let createPaperOrderMock:GeneralTable={
   fieldInfo: [],
   tableData: [
     {
-      id: "1",
+      id: "4",
       problem: "333",
       answer: "222",
       tag: "22"
     },
     {
-      id: "2",
+      id: "5",
       problem: "333",
       answer: "222",
       tag: "22"
     },
     {
-      id: "",
+      id: "6",
       problem: "444",
       answer: "222",
       tag: "55"
@@ -90,7 +90,15 @@ let createPaperOrderMock:GeneralTable={
   ],
   col: [
     {
-      fixed: "left",
+      fixed: "",
+      label: "",
+      prop: "",
+      width: "0",
+      type: "selection",
+      specialType: ""
+    },
+    {
+      fixed: "",
       label: "题目",
       prop: "problem",
       width: "200",

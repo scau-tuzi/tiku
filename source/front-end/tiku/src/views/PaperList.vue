@@ -16,7 +16,7 @@
           </el-col>
         </el-row>
         <el-row>
-          <GeneralTable v-bind:table-info="paperListTable"></GeneralTable>
+          <GeneralTable v-bind:table-info="paperListTable" v-on:handleButton="handleButton"></GeneralTable>
         </el-row>
       </el-main>
     </el-container>
@@ -41,8 +41,8 @@
             this.handleEdit(val.index,val.row)
           }else if(val.method==='showTags'){
             this.showTags(val.row,val.col,val.index)
-          }else if(val.method==='EditPaper'){
-            1+1-2;
+          }else if(val.method==='editPaper'){
+            this.editPaper();
           }else {
             this.handleDelete(val.index,val.row)
           }
@@ -59,7 +59,7 @@
           console.log(index, row),
             // alert(index+row.problem+row.answer),
             //转到ModifyProblem页面
-            this.$router.push({path: '/ModifyProblem',
+            this.$router.push({path: '/ViewPaper',
               //query对象获取问题和答案
               query: {
                 modifyQues:row.problem,
@@ -75,8 +75,12 @@
             type: 'success'
           })
           console.log(index, row)
+        },
+        //编辑试卷按钮
+        editPaper(){
+          this.$router.push({path: '/CreatePaper'})
         }
-      }
+        }
     }
 </script>
 
