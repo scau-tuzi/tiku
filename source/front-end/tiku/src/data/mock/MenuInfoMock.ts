@@ -44,7 +44,7 @@ let mockData:MenuInfo={
         {
           title:"查看标签",
           // component:InputTiku,
-          path:"/InputTiku",
+          path:"/ViewTags",
         }
       ]
     },

@@ -93,7 +93,6 @@
   import {getProblems} from "../api/Problem";
   import ProblemFullData from "../data/model/ProblemFullData";
   import GeneralTable from "./GeneralTable";
-  import verifyTableInfo from  "../data/mock/VerifyTableInfoMock";
   export default {
     name: "VerifyTable",
     components: {GeneralTable},
@@ -163,49 +162,6 @@
     },
     data :function() {
       return {
-        verifyTableInfo,
-        col: [
-          {
-            fixed: 'left',
-            label: '问题ID',
-            prop: 'problemId',
-            width: '0'
-          },
-          {
-            fixed: 'left',
-            label: '问题',
-            prop: 'problem',
-            width: '300'
-          },
-          {
-            label: '答案',
-            prop: 'answer',
-            width: '300'
-          },
-          {
-            label: '语音',
-            prop: 'sound',
-            width: '100'
-          },
-          {
-            label: '多图片',
-            prop: 'pictures',
-            width: '100'
-          },
-          {
-            label: '审核状态',
-            prop: 'status',
-            width: '220'
-          }
-        ],
-        oper: [
-          {
-            label: '查看',
-            size: 'mini',
-            type: 'text',
-            methods: ''
-          }
-        ],
         search: '',
         tableData: []
       }
