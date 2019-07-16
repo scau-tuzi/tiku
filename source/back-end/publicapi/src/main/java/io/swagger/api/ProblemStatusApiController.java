@@ -3,8 +3,10 @@ package io.swagger.api;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.ApiParam;
 import io.swagger.model.ProblemIdList;
+import io.swagger.model.StatusCode;
 import io.swagger.model.StatusInfo;
 import io.swagger.model.StatusInfoList;
+import io.swagger.pojo.dao.UserProblemStatus;
 import io.swagger.pojo.dto.BasicResponse;
 import io.swagger.service.ProblemStatusService;
 import io.swagger.service.ProblemStatusServiceImpl;
@@ -18,7 +20,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.io.IOException;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-07-12T09:08:16.977Z[GMT]")
 @Controller
 public class ProblemStatusApiController implements ProblemStatusApi {
@@ -35,34 +40,41 @@ public class ProblemStatusApiController implements ProblemStatusApi {
         this.request = request;
     }
 
-    public ResponseEntity<StatusInfoList> getProblemStatus(@ApiParam(value = ""  )  @Valid @RequestBody ProblemIdList body) {
+    public ResponseEntity<StatusInfoList> getProblemStatus(@ApiParam(value = "") @Valid @RequestBody ProblemIdList body) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try {
-                return new ResponseEntity<StatusInfoList>(objectMapper.readValue("{\n" +
-                        "  \"results\" : [ {\n" +
-                        "    \"date\" : \"2019-08-18\",\n" +
-                        "    \"unionid\" : \"xxxxxxxxxxx\",\n" +
-                        "    \"poolId\" : \"4468c74d-759e-4d78-8c43-e1c5405f193b\",\n" +
-                        "    \"problemId\" : \"123456\",\n" +
-                        "    \"token\" : \"06e599f3-78db-4c71-b4fa-2b496beab1f6\",\n" +
-                        "    \"status\" : \"错题+已解决\"\n" +
-                        "  }, {\n" +
-                        "    \"date\" : \"2019-08-18\",\n" +
-                        "    \"unionid\" : \"xxxxxxxxxxx\",\n" +
-                        "    \"poolId\" : \"4468c74d-759e-4d78-8c43-e1c5405f193b\",\n" +
-                        "    \"problemId\" : \"123456\",\n" +
-                        "    \"token\" : \"06e599f3-78db-4c71-b4fa-2b496beab1f6\",\n" +
-                        "    \"status\" : \"错题+已解决\"\n" +
-                        "  } ],\n" +
-                        "  \"status\" : \"ok\"\n" +
-                        "}", StatusInfoList.class), HttpStatus.NOT_IMPLEMENTED);
-            } catch (IOException e) {
+
+                List<UserProblemStatus> problemStatus = problemStatusService.getProblemStatus(body);
+
+                List<StatusInfo> collect = problemStatus.stream().map((u) -> {
+                    StatusInfo statusInfo = new StatusInfo();
+                    Date date = u.getDate();
+                    if (date == null) {
+                        log.warn("查询结果{}的date为null", u);
+                        date = new Date();
+                    }
+                    statusInfo.setDate(date.getTime());
+                    statusInfo.setProblemId(String.valueOf(u.getProblemId()));
+                    statusInfo.setStatus(u.getStatus());
+                    statusInfo.setUnionid(u.getUserUuid());
+                    return statusInfo;
+                }).collect(Collectors.toList());
+                StatusInfoList statusInfoList = new StatusInfoList();
+                statusInfoList.setResults(collect);
+                statusInfoList.setStatus(StatusCode.OK);
+
+                return new ResponseEntity<StatusInfoList>(statusInfoList, HttpStatus.OK);
+            } catch (Exception e) {
                 log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<StatusInfoList>(HttpStatus.INTERNAL_SERVER_ERROR);
+                StatusInfoList statusInfoList = new StatusInfoList();
+                statusInfoList.setStatus(StatusCode.ERROR);
+                StatusInfo statusInfo = new StatusInfo();
+                statusInfo.setStatus(e.getMessage());
+                statusInfoList.addResultsItem(statusInfo);
+                return new ResponseEntity<StatusInfoList>(statusInfoList, HttpStatus.BAD_REQUEST);
             }
         }
-
         return new ResponseEntity<StatusInfoList>(HttpStatus.NOT_IMPLEMENTED);
     }
 
@@ -70,7 +82,7 @@ public class ProblemStatusApiController implements ProblemStatusApi {
     private ProblemStatusService problemStatusService;
 
     //put
-    public ResponseEntity<BasicResponse> problemStatus(@ApiParam(value = ""  )  @Valid @RequestBody StatusInfo body) {
+    public ResponseEntity<BasicResponse> problemStatus(@ApiParam(value = "") @Valid @RequestBody StatusInfo body) {
         String accept = request.getHeader("Accept");
 
         if (accept != null && accept.contains("application/json")) {

@@ -1,10 +1,8 @@
 package io.swagger.controller;
 
 import io.swagger.pojo.PaperFullData;
-import io.swagger.pojo.dao.Status;
 import io.swagger.pojo.dto.BasicResponse;
 import io.swagger.service.WebPaperService;
-import io.swagger.service.WebProblemService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

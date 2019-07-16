@@ -5,36 +5,28 @@
  */
 package io.swagger.api;
 
+import io.swagger.annotations.*;
 import io.swagger.model.UserId;
 import io.swagger.model.UserInfo;
-import io.swagger.annotations.*;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import javax.validation.constraints.*;
-import java.util.List;
-import java.util.Map;
+
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-07-15T03:10:29.413Z[GMT]")
 @Api(value = "getUserInfo", description = "the getUserInfo API")
 public interface GetUserInfoApi {
 
-    @ApiOperation(value = "获取用户信息", nickname = "getUserInfoPost", notes = "", response = UserInfo.class, tags={  })
-    @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "成功", response = UserInfo.class),
-        @ApiResponse(code = 401, message = "参数错误") })
+    @ApiOperation(value = "获取用户信息", nickname = "getUserInfoPost", notes = "", response = UserInfo.class, tags = {})
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "成功", response = UserInfo.class),
+            @ApiResponse(code = 401, message = "参数错误")})
     @RequestMapping(value = "/getUserInfo",
-        produces = { "application/json" }, 
-        consumes = { "application/json" },
-        method = RequestMethod.POST)
-    ResponseEntity<UserInfo> getUserInfoPost(@ApiParam(value = ""  )  @Valid @RequestBody UserId body);
+            produces = {"application/json"},
+            consumes = {"application/json"},
+            method = RequestMethod.POST)
+    ResponseEntity<UserInfo> getUserInfoPost(@ApiParam(value = "") @Valid @RequestBody UserId body);
 
 }

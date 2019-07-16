@@ -16,29 +16,30 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.validation.Valid;
+
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-07-12T09:08:16.977Z[GMT]")
 @Api(value = "problemStatus", description = "the problemStatus API")
 public interface ProblemStatusApi {
 
-    @ApiOperation(value = "获取题目状态", nickname = "getProblemStatus", notes = "获取错题状态", response = StatusInfoList.class, tags={  })
-    @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "获取状态成功", response = StatusInfoList.class),
-        @ApiResponse(code = 401, message = "参数格式错误") })
+    @ApiOperation(value = "获取题目状态", nickname = "getProblemStatus", notes = "获取错题状态", response = StatusInfoList.class, tags = {})
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "获取状态成功", response = StatusInfoList.class),
+            @ApiResponse(code = 401, message = "参数格式错误")})
     @RequestMapping(value = "/problemStatus",
-        produces = { "application/json" }, 
-        consumes = { "application/json" },
-        method = RequestMethod.POST)
-    ResponseEntity<StatusInfoList> getProblemStatus(@ApiParam(value = ""  )  @Valid @RequestBody ProblemIdList body);
+            produces = {"application/json"},
+            consumes = {"application/json"},
+            method = RequestMethod.POST)
+    ResponseEntity<StatusInfoList> getProblemStatus(@ApiParam(value = "") @Valid @RequestBody ProblemIdList body);
 
 
-    @ApiOperation(value = "更新题目状态", nickname = "problemStatus", notes = "更新错题状态", response = BasicResponse.class, tags={  })
-    @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "更新状态成功", response = BasicResponse.class),
-        @ApiResponse(code = 401, message = "参数格式错误") })
+    @ApiOperation(value = "更新题目状态", nickname = "problemStatus", notes = "更新错题状态", response = BasicResponse.class, tags = {})
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "更新状态成功", response = BasicResponse.class),
+            @ApiResponse(code = 401, message = "参数格式错误")})
     @RequestMapping(value = "/problemStatus",
-        produces = { "application/json" }, 
-        consumes = { "application/json" },
-        method = RequestMethod.PUT)
-    ResponseEntity<BasicResponse> problemStatus(@ApiParam(value = ""  )  @Valid @RequestBody StatusInfo body);
+            produces = {"application/json"},
+            consumes = {"application/json"},
+            method = RequestMethod.PUT)
+    ResponseEntity<BasicResponse> problemStatus(@ApiParam(value = "") @Valid @RequestBody StatusInfo body);
 
 }

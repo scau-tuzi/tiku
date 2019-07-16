@@ -17,7 +17,7 @@ import java.util.Objects;
  */
 @ApiModel(description = "查询结果")
 @Validated
-@javax.annotation.Generated(value = "io.io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-07-07T02:38:17.975Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-07-15T16:29:15.800Z[GMT]")
 public class QuerryResult {
     @JsonProperty("status")
     private StatusCode status = null;
@@ -25,6 +25,9 @@ public class QuerryResult {
     @JsonProperty("results")
     @Valid
     private List<HashMap<String, Object>> results = new ArrayList<HashMap<String, Object>>();
+
+    @JsonProperty("pagination")
+    private Pagination pagination = null;
 
     public QuerryResult status(StatusCode status) {
         this.status = status;
@@ -74,6 +77,27 @@ public class QuerryResult {
         this.results = results;
     }
 
+    public QuerryResult pagination(Pagination pagination) {
+        this.pagination = pagination;
+        return this;
+    }
+
+    /**
+     * Get pagination
+     *
+     * @return pagination
+     **/
+    @ApiModelProperty(value = "")
+
+    @Valid
+    public Pagination getPagination() {
+        return pagination;
+    }
+
+    public void setPagination(Pagination pagination) {
+        this.pagination = pagination;
+    }
+
 
     @Override
     public boolean equals(java.lang.Object o) {
@@ -85,12 +109,13 @@ public class QuerryResult {
         }
         QuerryResult querryResult = (QuerryResult) o;
         return Objects.equals(this.status, querryResult.status) &&
-                Objects.equals(this.results, querryResult.results);
+                Objects.equals(this.results, querryResult.results) &&
+                Objects.equals(this.pagination, querryResult.pagination);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(status, results);
+        return Objects.hash(status, results, pagination);
     }
 
     @Override
@@ -100,6 +125,7 @@ public class QuerryResult {
 
         sb.append("    status: ").append(toIndentedString(status)).append("\n");
         sb.append("    results: ").append(toIndentedString(results)).append("\n");
+        sb.append("    pagination: ").append(toIndentedString(pagination)).append("\n");
         sb.append("}");
         return sb.toString();
     }
