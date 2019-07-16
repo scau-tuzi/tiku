@@ -8,7 +8,7 @@ let porblemsList: ProblemFullData[] = [
             id: 4564987916,
             problemText: "小明是小学生,正常情况有没有暑假",
             parentId: -1,
-            answerId: 1
+            answerId: 345645654
         },
         answer: {
             id: 345645654,
@@ -36,7 +36,7 @@ let porblemsList: ProblemFullData[] = [
             id: 798566,
             problemText: "一天有几个小时",
             parentId: 0,
-            answerId: 2
+            answerId: 2323432894623876
         },
         answer: {
             id: 2323432894623876,
@@ -66,7 +66,7 @@ let porblemsList: ProblemFullData[] = [
             id: 789445515,
             problemText: "今天下雨,是晴天还是雨天",
             parentId: 0,
-            answerId: 3
+            answerId: 2334556567
         },
         answer:{
             id: 2334556567,

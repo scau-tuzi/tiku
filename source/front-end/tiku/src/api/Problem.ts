@@ -81,7 +81,7 @@ function delProblem(idLsit: number[], callback: (b: BasicResponse) => void) {
         }
     }
     console.log(problemTemp);
-    let response: BasicResponse = { code: "OK" };
+    let response: BasicResponse = { code: "ok" };
     console.log(response);
     callback(response);
 

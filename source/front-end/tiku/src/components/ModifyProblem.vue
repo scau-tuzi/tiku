@@ -1,9 +1,9 @@
-<template>
+<template slot-scope="scope">
   <el-container>
     <el-main>
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
         <el-form-item>
-          <el-button type="primary" @click="submitForm('ruleForm')">保存</el-button>
+          <el-button type="primary" @click="submitForm(ruleForm)">保存</el-button>
           <el-button @click="back">返回</el-button>
         </el-form-item>
         <el-form-item label="题目" prop="ti">
@@ -65,7 +65,7 @@
         <el-form-item label="额外信息">
           <el-input-number v-model="OptionNum" @change="OptionHandleChange" :min="0" :max="10" label="描述文字"></el-input-number>
           <div v-for="index in OptionNum" :key="index">
-           <el-form ref="form" :model="form" label-width="0px" @input="addOption">
+           <el-form :model="form" label-width="0px" @input="addOption">
              <el-row>
                <el-col :span=6>
                  <el-form-item label="" >
@@ -90,13 +90,13 @@
 
 <script>
     import ProblemFullData from "../data/model/ProblemFullData";
-    import {addProblem} from "../api/Problem";
+    import {changeProblem} from "../api/Problem";
     import {getTagsList} from "../api/Tag";
     export default {
         name: "ModifyProblem",
       data(){
         return {
-          OptionNum: '1',
+          OptionNum: 0,
           dialogImageUrl: '',
           dialogVisible: false,
           disabled: false,
@@ -147,6 +147,7 @@
         back(){
           this.$router.push({path: '/TikuTable'})
         },
+        //获取标签列表
         getTags(){
             console.log("getTag!")
             var _this=this;
@@ -154,7 +155,6 @@
             console.log("get it");
             console.log(pd);
             this.$store.commit("setNewCommits",pd);
-            console.log("aha");
             // console.log(this.$store.state.commits);
             // console.log(this.$store.state.commits[0].id);
             pd.filter(v=>{
@@ -166,18 +166,45 @@
             });
             };
             getTagsList(callback);
-            console.log('ahahahah-----');
             console.log(this.options);
-          },        
+          },   
+
+          //保存修改     
         submitForm(formName) {
-          this.$refs[formName].validate((valid) => {
-            if (valid) {
-              alert('submit!');
-            } else {
-              console.log('error submit!!');
-              return false;
-            }
+          const problemIndex = this.$route.query.modifyIndex    
+          let selectedProblem=this.$store.state.allProblem[problemIndex];
+          console.log('test change1!--');
+          console.log(selectedProblem);
+          selectedProblem.answer.answerText=formName.answer;//重新赋修改后的值
+          selectedProblem.problem.problemText=formName.problem;
+          console.log('test change2!--');
+          console.log(selectedProblem);
+
+          selectedProblem.tags=[];
+          this.value.forEach((v)=>{
+            selectedProblem.tags.push({
+              value:v,
+            })
           });
+          selectedProblem.extData={};
+          var me=this;
+          Object.keys(this.form.text).forEach(function(key){//重新赋额外信息值
+            console.log('view key--');
+            console.log(key);
+            let keyname=me.form.option[key];
+            let value=me.form.text[key];
+            console.log('view value--');
+            console.log(value);
+            selectedProblem.extData[keyname]=value;
+          });          
+              changeProblem(selectedProblem,(b)=>{
+                if(b.code==="ok"){
+                  alert("修改成功");
+                  // todo 返回上一页
+                }else{
+                  alert("修改失败"+b.data)
+                }
+              });         
         },
         resetForm(formName) {
           this.$refs[formName].resetFields();
@@ -204,21 +231,31 @@
         },
         getParams(){
           // 取到路由带过来的参数
-          const problemId = this.$route.query.problemId
+          const problemIndex = this.$route.query.modifyIndex
           const routerQues = this.$route.query.modifyQues
           const routerAnsw = this.$route.query.modifyAnsw
+    
+          let selectedProblem=this.$store.state.allProblem[problemIndex];
+          console.log('show selected problem---');
+          console.log(this.$store.state.allProblem[problemIndex]);
+
           // 将问题和答案放在当前组件的数据内
-          this.ruleForm.problem = routerQues
-          this.ruleForm.answer = routerAnsw
-
-          let problems=this.$store.state.problem
-          problems.forEach((v)=>{
-            if(v.problem.id === problemId){
-              this.ruleForm.problem=v.problem.problemText;
-              this.ruleForm.answer=v.answer.answerText;
-
-            }
-          })
+          this.ruleForm.problem = selectedProblem.problem.problemText;
+          this.ruleForm.answer = selectedProblem.answer.answerText;
+          for(var i=0;i<selectedProblem.tags.length;i++){
+            this.value.push(selectedProblem.tags[i].value);
+          }
+          var i=1;
+          for(let data in selectedProblem.extData){
+            console.log('show data');
+            console.log(data);
+            this.OptionNum++;
+            this.form.text[i++]=selectedProblem.extData[data];
+            console.log(this.form.text[i]);
+          }
+          console.log('show this.form');
+          console.log(this.form);
+          
         }
       },
       //监听路由变化

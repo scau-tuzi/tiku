@@ -97,7 +97,7 @@
         name: "InputTiku",
       data(){
         return {
-          OptionNum: '1',
+          OptionNum: 0,
           dialogImageUrl: '',
           dialogVisible: false,
           disabled: false,
@@ -146,7 +146,6 @@
             console.log("get it");
             console.log(pd);
             this.$store.commit("setNewCommits",pd);
-            console.log("aha");
             // console.log(this.$store.state.commits);
             // console.log(this.$store.state.commits[0].id);
             pd.filter(v=>{
@@ -158,7 +157,6 @@
             });
             };
             getTagsList(callback);
-            console.log('ahahahah-----');
             console.log(this.options);
           },
 
@@ -177,8 +175,8 @@
           pd.extData={}
           var me=this;
           Object.keys(this.form.text).forEach(function(key){
-            let keyname=me.form.text[key];
-            let value=me.form.option[key];
+            let keyname=me.form.option[key];
+            let value=me.form.text[key];
             pd.extData[keyname]=value;
           });
           console.log(pd)
