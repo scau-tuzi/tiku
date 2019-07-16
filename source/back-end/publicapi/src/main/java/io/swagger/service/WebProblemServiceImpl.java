@@ -1,18 +1,18 @@
 package io.swagger.service;
 
+import io.swagger.model.Pagination;
 import io.swagger.pojo.ProblemFullData;
 import io.swagger.pojo.dao.*;
-import io.swagger.pojo.dao.repos.ExtDataRepository;
-import io.swagger.pojo.dao.repos.ProblemRepository;
-import io.swagger.pojo.dao.repos.ProblemTagRepository;
-import io.swagger.pojo.dao.repos.TagRepository;
-import org.springframework.beans.BeanUtils;
+import io.swagger.pojo.dao.repos.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -38,6 +38,11 @@ public class WebProblemServiceImpl extends BasicService<Problem> implements WebP
     private WebProblemTagServiceImpl webProblemTagServiceImpl;
 
     @Autowired
+    private WebPaperItemServiceImpl webPaperItemServiceImpl;
+
+    @Autowired
+    private WebTagService webTagService;
+    @Autowired
     private ProblemTagRepository problemTagRepository;
 
     @Autowired
@@ -46,17 +51,41 @@ public class WebProblemServiceImpl extends BasicService<Problem> implements WebP
     @Autowired
     private ExtDataRepository extDataRepository;
 
+    @Autowired
+    private StatusRepository statusRepository;
+
     @Override
-    public List<ProblemFullData> getAll(Integer pageNumber, Integer pageSize) {
+    public Map<String, Object> getAll(Integer pageNumber, Integer pageSize, Integer verifyStatus, Boolean isDel) {
 
-        List<Long> problemIdList = problemRepository.findIdList(PageRequest.of(pageNumber, pageSize));
+        Map<String, Object> resultMap = new HashMap<>();
 
-        return problemDataService.getFullDataByIds(problemIdList);
+        //查找符合条件的问题id
+        Page<Object> page = statusRepository.findProblemIdList(PageRequest.of(pageNumber, pageSize), verifyStatus, isDel);
+
+        //分页信息
+        Pagination pagination = new Pagination();
+        pagination.setPage(BigDecimal.valueOf(page.getNumber()));
+        pagination.setSize(BigDecimal.valueOf(page.getSize()));
+        pagination.setTotal(BigDecimal.valueOf(page.getTotalPages()));
+
+        //将id存储进id列表
+        List<Long> problemIdList = new ArrayList<>();
+        for (Object id : page.getContent()) {
+            problemIdList.add(Long.parseLong(id.toString()));
+        }
+
+        //问题具体信息
+        List<ProblemFullData> problemFullDataList = problemDataService.getFullDataByIds(problemIdList);
+
+        resultMap.put("pagination", pagination);
+        resultMap.put("problemFullDataList", problemFullDataList);
+
+        return resultMap;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void add(ProblemFullData problemFullData, Long createBy) throws Exception {
+    public Long add(ProblemFullData problemFullData, Long createBy) throws Exception {
 
         Answer answer = problemFullData.getAnswer();
         List<Tag> tagList = problemFullData.getTags();
@@ -94,13 +123,17 @@ public class WebProblemServiceImpl extends BasicService<Problem> implements WebP
             List<ProblemTag> problemTagList = new ArrayList<>();
             for (Tag tag : tagList) {
                 ProblemTag problemTag = new ProblemTag();
-                // 这里假定只上传了标签的值，没有上传标签的id
-                List<Tag> tagss = tagRepository.findByValueEquals(tag.getValue());
-                if(tagss==null || tagss.size()==0){
-                    // todo 如果标签不存在就新增标签
-                    throw new Exception("所选标签不在数据库中");
+                //todo 标签不存在 这些代码好像在某个地方出现过一次了....
+                if (tag.getId() == null) {
+                    String value = tag.getValue();
+                    List<Tag> byValueEquals = tagRepository.findByValueEquals(value);
+                    if (byValueEquals == null || byValueEquals.size() == 0) {
+                        tag = webTagService.add(tag, createBy);
+                    } else {
+                        tag = byValueEquals.get(0);
+                    }
                 }
-                problemTag.setTagId(tagss.get(0).getId());
+                problemTag.setTagId(tag.getId());
                 problemTag.setProblemId(problem.getId());
                 problemTagList.add(problemTag);
             }
@@ -122,6 +155,7 @@ public class WebProblemServiceImpl extends BasicService<Problem> implements WebP
             }
             webExtDataServiceImpl.addAll(extDataList, createBy);
         }
+        return problem.getId();
     }
 
     @Override
@@ -159,6 +193,11 @@ public class WebProblemServiceImpl extends BasicService<Problem> implements WebP
          * 删除问题扩展属性
          */
         webExtDataServiceImpl.deleteByProblemId(id);
+
+        /**
+         * 删除试卷包含的问题
+         */
+        webPaperItemServiceImpl.deleteByProblemId(id);
 
     }
 

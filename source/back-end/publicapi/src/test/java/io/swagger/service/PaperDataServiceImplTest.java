@@ -1,11 +1,9 @@
 package io.swagger.service;
 
 import io.swagger.BaseTest;
-import io.swagger.Swagger2SpringBoot;
 import io.swagger.pojo.PaperFullData;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.List;

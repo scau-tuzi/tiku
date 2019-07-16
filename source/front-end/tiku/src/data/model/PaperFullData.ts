@@ -1,42 +1,41 @@
 import ProblemFullData from './ProblemFullData';
 import { __values } from 'tslib';
+import TagInfo from './Tag';
 
-
+/**
+ * 试卷模型对象 ( 包含试卷的所有的信息,除了题目 id,不包含题目的具体内容 )
+ */
 interface PaperFullData {
     /**
-     * paper: 试卷; 
-     *  id:试卷id; 
-     *  title: 试卷标题; 
+     * @paper 试卷; 
+     *  @id 试卷id; 
+     *  @title 试卷标题; 
      */
     paper: {
-        id: number,
+        id?: number,
         title: string
     },
-    /**
-    * tag: 试卷的标签; 
-    *  id: 标签的id; 
-    *  value: 标签的内容; 
-    *  parentId: 父标签的id; 
-    */
-    tags: {
-        id: number,
-        value: string,
-        parentId: number
-    }[],
 
     /**
-     * problemId: 题目id;
+     * @tags 包括试卷多拥有的所有标签 信息
      */
-    problemId: number[],
+    tags?: TagInfo[],
 
     /**
-     * problems: 问题的所有信息，请参考 problemFullData;
+     * @serialProblemIdMap 包含试卷所有的题目 id ;
      */
-    problems: ProblemFullData[],
+    serialProblemIdMap: {
+        [serialId: number]: number
+    }
 
     /**
-     * deep: 问题是否需要具体化（不是就只需要获取它的问题 id ）;
+     * @problems 问题的所有信息，请参考 problemFullData (非必须)
      */
-    deep: boolean
+    problems?: ProblemFullData[],
+
+    /**
+     * @deep 问题是否需要具体化（不是就只需要获取它的问题 id ）;
+     */
+    deep?: boolean
 }
 export default PaperFullData;

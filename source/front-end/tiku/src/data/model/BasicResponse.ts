@@ -1,5 +1,5 @@
 interface BasicResponse {
     code: string;
-    data: undefined | any;
+    data?: any;
 }
 export default BasicResponse;

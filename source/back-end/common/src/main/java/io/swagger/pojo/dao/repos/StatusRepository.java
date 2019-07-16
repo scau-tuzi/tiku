@@ -1,6 +1,7 @@
 package io.swagger.pojo.dao.repos;
 
 import io.swagger.pojo.dao.Status;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -25,4 +26,8 @@ public interface StatusRepository extends JpaRepository<Status, Long> {
     int updateIsDelByProblemId(Long problemId, Boolean isDel);
 
     Status findByProblemId(Long problemId);
+
+    @Query(nativeQuery = true, value = "select problem_id from status where verify_status = ?1 and is_del=?2",
+            countQuery = "select count(*) from status where verify_status = ?1 and is_del=?2")
+    Page<Object> findProblemIdList(org.springframework.data.domain.Pageable pageable, Integer verifyStatus, Boolean isDel);
 }

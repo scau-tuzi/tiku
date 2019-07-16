@@ -1,9 +1,7 @@
 package io.swagger.service;
 
-import com.sun.org.glassfish.external.statistics.Stats;
 import io.swagger.pojo.dao.Status;
 import io.swagger.pojo.dao.repos.StatusRepository;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

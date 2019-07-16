@@ -5,7 +5,7 @@ servers:
     url: http://203.195.239.100:10086/tiku/api/v1/
 info:
   description: 题库系统供其他应用调用的接口
-  version: "1.1.0"
+  version: "1.3.0"
   title: 题库外部接口
   contact:
     email: czfshine@outlook.com
@@ -170,11 +170,7 @@ paths:
         content:
            application/json:
             schema:
-              type: object
-              properties: 
-                token: 
-                  type: string
-                  format: uuid
+              $ref: '#/components/schemas/RevokeInfo'
       responses:
         '200':
           description: 成功
@@ -199,15 +195,45 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status: 
-                    type: string
-                  token:
-                    type: string
-                    format: uuid
+                $ref: "#/components/schemas/GrantResult"
         '401':
           description: 参数错误
+  /getUserInfo:
+    post:
+      summary: 获取用户信息
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserId"
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserInfo"
+        '401':
+          description: 参数错误
+  /userInfo:
+    post:
+      summary: 增加用户信息
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserInfo"
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BasicResponse"
+        '401':
+          description: 参数错误
+
+            
 components:
   schemas:
     AnyValue:
@@ -277,6 +303,8 @@ components:
       properties:
         status:
           $ref: '#/components/schemas/StatusCode'
+        data:
+          type: object
     Expression:
       type: object
       description: |
@@ -350,6 +378,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AnyValue'
+        pagination:
+          $ref:  '#/components/schemas/Pagination'
           
     StatusCode:
       type: string
@@ -392,9 +422,9 @@ components:
           example: "错题+已解决"
           description: 用户对应的问题状态信息，具体格式看上传者的定义
         date:
-          type: string
-          example: "2019-08-18"
-          description: 状态时间
+          type: number
+          example: 123456789
+          description: 状态时间戳
           
     ProblemIdList:
       description: 待获取的状态查询信息列表，下面三个是and的关系
@@ -420,6 +450,12 @@ components:
           example: ["123456"]
           items:
             type: string
+        tags:
+          description: 包含的标签列表
+          type: array
+          items: 
+            type: string
+          example: ["数学"]
         unionids:
           description: 用户id列表
           type: array
@@ -432,6 +468,14 @@ components:
           example: ["错题"]
           items:
             type: string
+        startTime:
+          type: number
+          example: 123456789000
+          description: 开始时间
+        endTime:
+          type: number
+          example: 987654321000
+          description: 结束时间，左闭右开
     StatusInfoList:
       type: object
       description: 查询结果
@@ -490,6 +534,20 @@ components:
         results:
           type: string
           example: "963258"
+    RevokeInfo:
+      type: object
+      properties: 
+        token: 
+          type: string
+          format: uuid
+    GrantResult:
+      type: object
+      properties:
+        status: 
+          type: string
+        token:
+          type: string
+          format: uuid
     GrantInfo:
       type: object
       required:
@@ -511,3 +569,53 @@ components:
           type: string
           description: 时效，默认300s
           example: "300"
+          
+    UserId:
+      type: object
+      required:
+        - poolId
+        - token
+        - unionid
+      properties:
+        poolId:
+          type: string
+          format: uuid
+          example: 4468c74d-759e-4d78-8c43-e1c5405f193b
+          description: 题库对应的id，从管理平台获取 
+        token:
+          type: string
+          format: uuid
+          example: 06e599f3-78db-4c71-b4fa-2b496beab1f6
+          description: 验证用户权限的OAuth令牌，从管理平台申请，暂时无用
+        unionid:
+          type: string
+          example: xxxxxxxxxxx
+          description: 微信用户唯一id
+    UserInfo:
+      type: object
+      required:
+        - unionid
+        - grade
+      properties:
+        unionid:
+          type: string
+          example: xxxxxxxxxxx
+          description: 微信用户唯一id
+        grade:
+          type: string
+          example: "一年级"
+        poolId:
+          type: string
+          format: uuid
+          example: 4468c74d-759e-4d78-8c43-e1c5405f193b
+          description: 题库对应的id，从管理平台获取 
+        token:
+          type: string
+          format: uuid
+          example: 06e599f3-78db-4c71-b4fa-2b496beab1f6
+          description: 验证用户权限的OAuth令牌，从管理平台申请，暂时无用
+        hasTags:
+          type: array
+          items:
+            type: string
+          example: ["语文","数学"]

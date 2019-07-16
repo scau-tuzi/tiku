@@ -5,7 +5,6 @@ import io.swagger.pojo.dao.repos.ProblemTagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -25,5 +24,10 @@ public class WebProblemTagServiceImpl extends BasicService<ProblemTag> implement
     @Override
     public int deleteByProblemId(Long problemId) {
         return problemTagRepository.updateIsDelByProblemId(problemId, Boolean.TRUE);
+    }
+
+    @Override
+    public int deleteByTagId(Long tagId) {
+        return problemTagRepository.updateIsDelByTagId(tagId, Boolean.TRUE);
     }
 }

@@ -1,8 +1,8 @@
 package io.swagger.utils;
 
 import io.swagger.model.Expression;
+import io.swagger.model.QuerryInfo;
 import io.swagger.pojo.PaperFullData;
-import io.swagger.pojo.ProblemFullData;
 import io.swagger.pojo.dao.*;
 import io.swagger.pojo.dao.repos.*;
 import io.swagger.service.PaperDataService;
@@ -31,9 +31,10 @@ public class Parser {
      * @param expression
      * @return
      */
-    public List<ProblemFullData> getAllProblemsByExpression(Expression expression) throws ParserErrorException {
-        List<Long> longs = executeExpression(expression, false);
-        return problemDataService.getFullDataByIds(longs);
+    public List<Long> getAllProblemsByExpression(QuerryInfo expression) throws ParserErrorException {
+        List<Long> longs = executeExpression(expression.getQuerry(), false);
+
+        return longs;
     }
 
 
@@ -43,10 +44,10 @@ public class Parser {
      * @param expression
      * @return
      */
-    public List<PaperFullData> getAllPapersByExpression(Expression expression,boolean isDeep) throws ParserErrorException {
+    public List<PaperFullData> getAllPapersByExpression(Expression expression, boolean isDeep) throws ParserErrorException {
         List<Long> longs = executeExpression(expression, true);
 
-        return paperDataService.getFullDataByIds(longs,isDeep);
+        return paperDataService.getFullDataByIds(longs, isDeep);
     }
 
 
@@ -145,18 +146,19 @@ public class Parser {
         try {
 
             switch (fieldName) {
-                case "paperId": {
+                case "paperId":
+                case "collectionId": {
                     //todo 捕获数字解析错误
                     Optional<Paper> byId = paperRepository.findById(Long.valueOf(value));
                     byId.ifPresent(problem -> res.add(problem.getId()));
                     break;
                 }
                 default:
-                    throw new ParserErrorException("域[" + fieldName + "]不支持[==]操作");
+                    throw new ParserErrorException("域[" + fieldName + "]不支持[==]操作,或者域未定义在规范里面");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            throw new ParserErrorException("未知错误:" + e.getClass());
+            throw new ParserErrorException("未知错误:" + e.getClass() + ":" + e.getMessage());
         }
         return res;
     }
@@ -174,7 +176,7 @@ public class Parser {
                 return paperContainsTags(strings);
             }
             default:
-                throw new ParserErrorException("域[" + fieldName + "]不支持[contains]操作");
+                throw new ParserErrorException("域[" + fieldName + "]不支持[contains]操作 ");
         }
     }
 

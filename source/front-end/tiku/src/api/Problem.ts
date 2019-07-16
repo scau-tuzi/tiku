@@ -5,22 +5,33 @@ import porblemsList from '@/data/mock/ProblemFullDataMock'
 import BasicResponse from '@/data/model/BasicResponse';
 
 
+/**
+ * 获取题目列表方法
+ * @param page 
+ * @param callback 
+ */
 function getProblems(page: number, callback: (Problems: ProblemFullData[]) => void) {
     /**
      * 查看题目列表
      */
-    axios
-        .get("/api/problem/list?pageNumber=" + page + "&pageSize=10")//服务器网址
-        .then(res => {
-            let lists: ProblemFullData[] = res.data.data;
+    // axios
+    //     .get("/api/problem/list?pageNumber=" + page + "&pageSize=10")//服务器网址
+    //     .then(res => {
+    //         let lists: ProblemFullData[] = res.data.data;
+    //         callback(lists);
+    //     })
 
-    // let lists: ProblemFullData[] = porblemsList;
-    // console.log("获取到的数据");
-    // console.log(lists);
+    let lists: ProblemFullData[] = porblemsList;
+    console.log("获取到的数据");
+    console.log(lists);
     callback(lists);
-    })
 }
 
+/**
+ * 增加题目方法
+ * @param problem 是一个有关于 problemFullData 的一个对象实例
+ * @param callback  回调函数
+ */
 function addProblem(problem: ProblemFullData, callback: (b: BasicResponse) => void) {
     axios
         .post("/api/problem/add", problem)
@@ -38,27 +49,28 @@ function addProblem(problem: ProblemFullData, callback: (b: BasicResponse) => vo
     // callback(response);
 }
 
-// function delProblem(id: number, callback: (b: BasicResponse) => void) {
-//     //删除题目
-//     axios
-//         .post("", {
-//             id,
-//         })
-//         .then(res => {
-//             let response: BasicResponse = res.data;
-//             callback(response);
-//         })
-// }
-
-function findProblems(tags: string[], callback: (p: ProblemFullData[]) => void) {
-    //查找题目
-    /**
-     * 暂时仅支持通过标签查找
-     */
+/**
+ * 删除题目方法
+ * @param id 要删除的题目的 id, (可能是一个或者多个题目的id数组)
+ * @param callback 回调函数
+ */
+function delProblem(id: number[], callback: (b: BasicResponse) => void) {
     axios
-        .post("", {
-            tags
+        .post("/api/problem/delete", id)
+        .then(res => {
+            let response: BasicResponse = res.data;
+            callback(response);
         })
+}
+
+/**
+ * 查找题目方法 (暂时只有通过标签来查询 | 没有模糊查询)
+ * @param tags 标签列表( 里面是所有标签内容组成的数组 )
+ * @param callback 回调函数
+ */
+function findProblems(tags: string[], callback: (p: ProblemFullData[]) => void) {
+    axios
+        .post("/api/problem/findproblem", tags)
         .then(res => {
             let response: ProblemFullData[] = res.data;
 
@@ -66,17 +78,14 @@ function findProblems(tags: string[], callback: (p: ProblemFullData[]) => void) 
         })
 }
 
+/**
+ * 修改题目方法
+ * @param problem 一个problemFullData 对象实例
+ * @param callback 回调函数
+ */
 function changeProblem(problem: ProblemFullData, callback: (b: BasicResponse) => void) {
-    //修改题目
     axios
-        .post("", {
-            /**
-             * 传递要修改的题目参数
-             *      同时传递修改内容
-             */
-
-            problem,
-        })
+        .post("/api/problem/update", problem)
         .then(res => {
             //获取修改结果
             let response: BasicResponse = res.data;
@@ -90,7 +99,7 @@ function changeProblem(problem: ProblemFullData, callback: (b: BasicResponse) =>
 export {
     getProblems,
     addProblem,
-    // delProblem,
+    delProblem,
     findProblems,
     changeProblem
 }      

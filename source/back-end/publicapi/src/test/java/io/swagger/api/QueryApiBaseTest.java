@@ -4,7 +4,6 @@ import io.swagger.Swagger2SpringBoot;
 import io.swagger.pojo.dao.*;
 import io.swagger.pojo.dao.repos.*;
 import org.junit.Before;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
@@ -47,8 +46,10 @@ public class QueryApiBaseTest {
         DefaultMockMvcBuilder builder = MockMvcBuilders.webAppContextSetup(this.wac);
         this.mockMvc = builder.build();
         // 测试数据，仅本接口使用，勿改，不然下面的测试都得变
-        //todo 提取到别处
 
+        //与initer的区别：
+        // 数据量较小
+        // 完整性强
         long tid = 10000;
         tagRepository.save(new Tag(tid++, "一年级", null));
         tagRepository.save(new Tag(tid++, "二年级", null));
@@ -144,9 +145,5 @@ public class QueryApiBaseTest {
                 problemTagRepository.save(problemTag2);
             }
         }
-    }
-    @Test
-    public void test(){
-
     }
 }

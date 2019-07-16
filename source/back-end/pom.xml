@@ -17,8 +17,8 @@
     <modules>
         <module>common</module>
         <module>publicapi</module>
-        <module>tiku</module>
         <module>initer</module>
+        <module>tiku</module>
     </modules>
     <properties>
         <java.version>1.8</java.version>

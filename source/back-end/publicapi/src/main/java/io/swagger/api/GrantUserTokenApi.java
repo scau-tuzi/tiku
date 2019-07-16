@@ -5,36 +5,28 @@
  */
 package io.swagger.api;
 
+import io.swagger.annotations.*;
 import io.swagger.model.GrantInfo;
 import io.swagger.model.InlineResponse200;
-import io.swagger.annotations.*;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import javax.validation.constraints.*;
-import java.util.List;
-import java.util.Map;
+
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2019-07-12T09:08:16.977Z[GMT]")
 @Api(value = "grantUserToken", description = "the grantUserToken API")
 public interface GrantUserTokenApi {
 
-    @ApiOperation(value = "授权", nickname = "grantUserTokenPost", notes = "", response = InlineResponse200.class, tags={  })
-    @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "成功", response = InlineResponse200.class),
-        @ApiResponse(code = 401, message = "参数错误") })
+    @ApiOperation(value = "授权", nickname = "grantUserTokenPost", notes = "", response = InlineResponse200.class, tags = {})
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "成功", response = InlineResponse200.class),
+            @ApiResponse(code = 401, message = "参数错误")})
     @RequestMapping(value = "/grantUserToken",
-        produces = { "application/json" }, 
-        consumes = { "application/json" },
-        method = RequestMethod.POST)
-    ResponseEntity<InlineResponse200> grantUserTokenPost(@ApiParam(value = ""  )  @Valid @RequestBody GrantInfo body);
+            produces = {"application/json"},
+            consumes = {"application/json"},
+            method = RequestMethod.POST)
+    ResponseEntity<InlineResponse200> grantUserTokenPost(@ApiParam(value = "") @Valid @RequestBody GrantInfo body);
 
 }

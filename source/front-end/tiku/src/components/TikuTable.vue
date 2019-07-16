@@ -1,7 +1,7 @@
 <template>
   <el-container style="border: 1px solid #eee">
     <el-main>
-      <el-row>
+      <el-row gutter="0">
         <el-col span=20>
           <el-button class="el-button" align="left" plain @click="jumpInput">录入题目</el-button>
           <!-- <el-button type="primary" plain>全选</el-button> -->
@@ -279,6 +279,187 @@
           keyname:key,
           title:AllFieldInfo[key].title,
         })
+<script>
+import { getProblems } from "../api/Problem";
+import ProblemFullData from "../data/model/ProblemFullData";
+import { getTagsList, addTags, delTag } from "../api/Tag";
+import { AllFieldInfo } from "../data/mock/FiledInfoMock";
+export default {
+  name: "TikuTable",
+  datas: [],
+  methods: {
+    //编辑操作
+    handleEdit(index, row) {
+      console.log(index, row),
+        // alert(index+row.problem+row.answer),
+        //转到ModifyProblem页面
+        this.$router.push({
+          path: "/ModifyProblem",
+          //query对象获取问题和答案
+          query: {
+            modifyQues: row.problem,
+            modifyAnsw: row.answer
+          }
+        });
+    },
+    handleDelete(index, row) {
+      this.tableData.splice(index, 1); //删除该行
+      this.$message({
+        message: "操作成功！",
+        type: "success"
+      });
+      console.log(index, row);
+    },
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+    },
+    filterTag(value, row) {
+      return row.tag === value;
+    },
+    jumpInput() {
+      //this.$router.push("/cart")
+      //传递的参数用{{ $route.query.goodsId }}获取
+      this.$router.push({ path: "/InputTiku" });
+      //this.$router.go(-2)
+      //后退两步
+    },
+    handleClose(tag) {
+      //标签上的叉
+      this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
+    },
+    showInput() {
+      //添加新标签的框
+      this.inputVisible = true;
+      this.$nextTick(_ => {
+        this.$refs.saveTagInput.$refs.input.focus();
+      });
+    },
+    handleInputConfirm() {
+      //添加完标签之后的确定
+      let inputValue = this.inputValue;
+      if (inputValue) {
+        this.dynamicTags.push(inputValue);
+      }
+      this.inputVisible = false;
+      this.inputValue = "";
+    },
+    /**
+     * tag标签接口测试: 可以在 console 查看是否有tag输出
+     */
+    getTagsdata: function() {
+      //标签接口_获得标签列表方法本地测试
+      let callback = tag => {
+        // console.log("get tags data");
+        // console.log(tag);
+      };
+      getTagsList(callback);
+    },
+    addTagsdata: function() {
+      //标签接口_增加标签方法本地测试
+      let callback = tag => {};
+      let temp = [
+        //因为在 js 语言中无类型模式,所以需要根据函数参数类型的具体结构传递参数
+        {
+          value: "语文",
+          parentId: 6
+        },
+        {
+          value: "数学",
+          parentId: 7
+        },
+        {
+          value: "英语",
+          parentId: 8
+        },
+        {
+          value: "历史"
+        },
+        {
+          value: "化学"
+        },
+        {
+          value: "生物"
+        },
+        {
+          value: "政治"
+        },
+        {
+          value: "地理"
+        }
+      ];
+
+      addTags(temp, callback);
+    },
+    delTagData: function() {
+      //标签接口_删除标签方法本地测试
+      let callback = tag => {};
+      let delId = [15, 14];
+      delTag(delId, callback);
+    },
+    /** */
+    handlerchange: function(currentPage) {
+      //获取题目
+      this.getData(currentPage);
+    },
+    getData: function(currentPage) {
+      // console.log("change")
+      var _this = this;
+      let callback = pd => {
+        var res = [];
+        // console.log("get it");
+        // console.log(pd);
+        this.$store.commit("setNewProblems", pd);
+        pd.filter(v => {
+          let ts = [];
+          if (v.tags !== null) {
+            for (let i = 0; i < v.tags.length; i++) {
+              ts.push(v.tags[i].value);
+            }
+          }
+          if (v.answer === null) {
+            v.answer = {
+              answerText: ""
+            };
+          }
+          let ress = {
+            problem: v.problem.problemText,
+            answer: v.answer.answerText,
+            pictures: "",
+            sound: "",
+            tag: ts
+          };
+          if (v.extData !== null) {
+            Object.keys(v.extData).forEach(key => {
+              ress[key] = v.extData[key];
+            });
+          }
+          res.push(ress);
+        });
+        console.log(res);
+        _this.tableData = res;
+      };
+      getProblems(currentPage, callback);
+    },
+    showTags: function(row, col, index) {
+      //在修改标签窗口显示已有标签
+      let dynamicTags_tmp = [];
+      for (let i = 0; i < this.$store.state.allProblem[0].tags.length; i++) {
+        dynamicTags_tmp.push(this.$store.state.allProblem[index].tags[i].value); //获取store的标签
+      }
+      this.dynamicTags = dynamicTags_tmp;
+    }
+  },
+  mounted: function() {
+    this.getTagsdata();
+    this.getData(0);
+    this.addTagsdata();
+    this.delTagData();
+
+    var all = [];
+    Object.keys(AllFieldInfo).forEach(key => {
+      all.push({
+        keyname: key,
+        title: AllFieldInfo[key].title
       });
 
       this.fieldInfo=all;
@@ -336,7 +517,6 @@
       }
     }
   }
-
 </script>
 
 <style scoped>

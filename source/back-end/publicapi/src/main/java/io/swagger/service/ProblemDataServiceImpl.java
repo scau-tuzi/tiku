@@ -5,10 +5,7 @@ import io.swagger.pojo.dao.*;
 import io.swagger.pojo.dao.repos.*;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class ProblemDataServiceImpl implements ProblemDataService {
@@ -150,9 +147,9 @@ public class ProblemDataServiceImpl implements ProblemDataService {
      */
     public Map<Long, List<Tag>> getProblemIdTagMap(List<Long> problemIds) {
         // 所有问题标签
-        List<ProblemTag> problemTagList = problemTagRepository.findAllByProblemIdIn(problemIds);
+        List<ProblemTag> problemTagList = problemTagRepository.findAllByIsDelAndProblemIdIn(Boolean.FALSE, problemIds);
         // 所有标签id(用来查询所有标签)
-        List<Long> tagIdList = new ArrayList<>();
+        Set<Long> tagIdSet = new HashSet<>();
         // 问题id和标签id的map
         Map<Long, List<Long>> problemIdTagIdMap = new HashMap<>();
         // 问题id和标签的map
@@ -160,7 +157,7 @@ public class ProblemDataServiceImpl implements ProblemDataService {
 
         for (ProblemTag problemTag : problemTagList) {
             // 循环获取所有标签id
-            tagIdList.add(problemTag.getTagId());
+            tagIdSet.add(problemTag.getTagId());
 
             // 设置问题id和标签id的map
             if (problemIdTagIdMap.containsKey(problemTag.getProblemId())) {
@@ -175,7 +172,7 @@ public class ProblemDataServiceImpl implements ProblemDataService {
         }
 
         // 根据所有标签id查询所有标签
-        List<Tag> tagList = tagRepository.findAllByIdIn(tagIdList);
+        List<Tag> tagList = tagRepository.findAllByIdIn(new ArrayList<>(tagIdSet));
         // 设置标签id和标签的map
         Map<Long, Tag> tagIdTagMap = new HashMap<>();
         for (Tag tag : tagList) {

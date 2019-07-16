@@ -7,9 +7,6 @@
         <h1 class="mainTitle">Test title</h1>
         <el-breadcrumb separator-class="el-icon-arrow-right">
           <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-          <el-breadcrumb-item :to="{ path: '/about' }">题目列表</el-breadcrumb-item>
-          <el-breadcrumb-item>活动列表</el-breadcrumb-item>
-          <el-breadcrumb-item>活动详情</el-breadcrumb-item>
         </el-breadcrumb>
       </div>
 
@@ -88,12 +85,6 @@
   .mainTitle{
     margin-top: 5px;
     margin-bottom: 5px;
-  }
-
-
-  .el-main {
-    /*background-color: #E9EEF3;*/
-    /*color: #333;*/
   }
   .el-menu-vertical-demo{
     min-height: 100%;
