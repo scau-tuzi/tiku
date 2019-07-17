@@ -75,7 +75,7 @@
       <el-pagination
         background
         layout="prev, pager, next"
-        :total="1000"
+        :total=this.listSize
         @current-change="this.handlerchange"
       ></el-pagination>
     </el-footer>
@@ -299,10 +299,9 @@ function handlechange(currentPage) {
 function getData(currentPage) {
   // console.log("change")
   var _this = this;
-  let callback = pd => {
+  let callback = (pd,size) => {
+    this.listSize = size*10;
     var res = [];
-    // console.log("get it");
-    // console.log(pd);
     this.$store.commit("setNewProblems", pd);
     pd.filter(v => {
       let ts = [];
@@ -430,6 +429,7 @@ export default {
   },
   data() {
     return {
+      listSize: 0,
       tableChecked: [], //被选中的记录数据
       search: "",
       inputVisible: false,

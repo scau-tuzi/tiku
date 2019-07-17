@@ -6,7 +6,6 @@ import BasicResponse from '@/data/model/BasicResponse';
 import TagInfo from '@/data/model/Tag';
 
 var problemTemp: ProblemFullData[] = porblemsList;
-
 /**
  * 获取题目列表方法
  * @param page 
@@ -21,16 +20,18 @@ var problemTemp: ProblemFullData[] = porblemsList;
 //             callback(lists);
 //         })
 // }
-function getProblems(pageNumber: number, callback: (Problems: ProblemFullData[]) => void,isCheck?: number) {
+function getProblems(pageNumber: number, callback: (Problems: ProblemFullData[], ProblemListSize: number) => void, isCheck?: number) {
     //线上
     axios
-        .get("/api/problem/list?pageNumber=" + pageNumber + "&pageSize=10"+"&isCheck="+isCheck)//服务器网址
+        .get("/api/problem/list?pageNumber=" + pageNumber + "&pageSize=10" + "&isCheck=" + isCheck)//服务器网址
         .then(res => {
             let lists: ProblemFullData[] = res.data.data.problemFullDataList;
+            let size: number = res.data.data.pagination.total;
             // console.log(lists);
-            callback(lists);
+            callback(lists, size);
         })
 }
+
 
 /**
  * 增加题目方法
@@ -223,14 +224,14 @@ function changeProblem(problem: ProblemFullData, callback: (b: BasicResponse) =>
 
 
     console.log("yaoxiugai");
-    
+
     console.log(problem);
 
     for (var i = 0; i < problemTemp.length; i++) {
         console.log(i);
         if (problemTemp[i].problem.id === problem.problem.id) {
             console.log(problemTemp[i]);
-            
+
             if (problem.problem.problemText !== "") {
                 problemTemp[i].problem.problemText = problem.problem.problemText
             }
@@ -259,7 +260,7 @@ function changeProblem(problem: ProblemFullData, callback: (b: BasicResponse) =>
             }
             break;
         }
-        
+
     }
     console.log(problemTemp);
     callback({ code: "ok" });

@@ -9,22 +9,23 @@ var tagsTemp: TagInfo[] = tagslistData;
  * 获得标签列表方法
  * @param callback 回调函数
  */
-// function getTagsList(callback: (t: TagInfo[]) => void) {
-//     //线上
-//     axios
-//         .post("/api/tag/list")//服务器地址
-//         .then(res => {
-//             let lists: TagInfo[] = res.data;
-//             callback(lists)
-//         })
-// }
-function getTagsList(callback: (t: TagInfo[]) => void) {
-    //本地获取数据
-    let lists: TagInfo[] = tagsTemp;
-    // console.log("get tags list");
-    // console.log(lists);
-    callback(lists)
+function getTagsList(pageNumber: number, pageSize: number, callback: (t: TagInfo[], tagsListSize: number) => void) {
+    //线上
+    axios
+        .get("/api/tag/list?pageNumber=" + pageNumber + "&pageSize=" + pageSize)//服务器地址
+        .then(res => {
+            let lists: TagInfo[] = res.data.data.tagList;
+            let size: number = res.data.data.pagination.total;
+            callback(lists, size)
+        })
 }
+// function getTagsList(callback: (t: TagInfo[]) => void) {
+//     //本地获取数据
+//     let lists: TagInfo[] = tagsTemp;
+//     // console.log("get tags list");
+//     // console.log(lists);
+//     callback(lists)
+// }
 
 /**
  * 增加标签方法
@@ -72,7 +73,7 @@ function addTags(tags: TagInfo[], callback: (b: BasicResponse) => void) {
 function delTag(tagId: number[], callback: (b: BasicResponse) => void) {
     //线上
     axios
-        .delete("/api/tag/delete?"+"tagId="+tagId)
+        .delete("/api/tag/delete?" + "tagId=" + tagId)
         .then(res => {
             let response: BasicResponse = res.data;
             callback(response)

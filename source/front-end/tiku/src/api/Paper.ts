@@ -6,9 +6,9 @@ import TagInfo from '@/data/model/Tag';
  * 拿到试卷列表方法
  * @param callback 回调函数
  */
-function getPapers(callback: (p: PaperFullData[]) => void) {
+function getPapers(pageNumber:number, callback: (p: PaperFullData[]) => void, isDeep?: number) {
     axios
-        .post("/api/paper/list")//服务器地址
+        .get("/api/paper/list?pageNumber="+pageNumber+"&isDeep="+isDeep)//服务器地址
         .then(res => {
             let lists: PaperFullData[] = res.data;
             callback(lists)
@@ -37,9 +37,9 @@ function addPaper(paper: PaperFullData, callback: (b: BasicResponse) => void) {
  * @param paperId 试卷id
  * @param callback 回调函数
  */
-function delPaper(paperId: number, callback: (b: BasicResponse) => void) {
+function delPaper(idList: number[], callback: (b: BasicResponse) => void) {
     axios
-        .delete("/api/paper/delete?"+"paperId="+paperId)
+        .post("/api/paper/delete?" + "paperId=" + idList)
         .then(res => {
             let response: BasicResponse = res.data;
             callback(response)
@@ -47,7 +47,7 @@ function delPaper(paperId: number, callback: (b: BasicResponse) => void) {
 }
 
 /**
- * 查找方法 ( 通过标题 ) (模糊查询)
+ * 查找方法 ( 通过标题 ) (模糊查询) ( 后台方法未完成 )
  * @param paperTitle 试卷标题模糊查询
  * @param callback 回调函数
  */

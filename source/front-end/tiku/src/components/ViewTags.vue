@@ -43,7 +43,7 @@
       <el-pagination
         background
         layout="prev, pager, next"
-        :total="1000"
+        :total="this.listSize"
         @current-change="this.handlerchange"
       ></el-pagination>
     </el-footer>
@@ -58,6 +58,7 @@ import { delTag } from "../api/Tag";
 export default {
   data() {
     return {
+      listSize: 0,
       tableChecked: [], //被选中的记录数据
       search: "",
       tableData: []
@@ -85,16 +86,19 @@ export default {
   },
   methods: {
     //获取标签列表
-    handlerchange: function() {
-      this.getData();
+    handlerchange: function(currentpage) {
+      this.getData(currentpage-1);
     },
-    getData: function() {
-      console.log("change");
+    getData: function(currentpage) {
+      // console.log("change");
       var _this = this;
-      let callback = pd => {
+      let callback = (pd, size) => {
+        this.listSize = size*10;
         var res = [];
         console.log("get it");
         console.log(pd);
+        console.log("finish!");
+        
         this.$store.commit("setNewCommits", pd);
         console.log("aha");
         // console.log(this.$store.state.commits);
@@ -108,7 +112,7 @@ export default {
         console.log(res);
         _this.tableData = res;
       };
-      getTagsList(callback);
+      getTagsList(currentpage, 3, callback);
     },
 
     //多选触发
