@@ -46,7 +46,7 @@ function getProblems(page: number, callback: (Problems: ProblemFullData[]) => vo
 //             callback(response);
 //         })
 // }
-function addProblem(problem: ProblemFullData, callback: (b: BasicResponse) => void) {
+function addProblem(problem: ProblemFullData, callback: (b: BasicResponse) => void, isCheck?: number) {
     //增加问题方法--本地数据测试
     if (problem.problem.id === undefined) {
         problem.problem.id = Number(problemTemp[problemTemp.length - 1].problem.id) + 1;
@@ -195,14 +195,14 @@ function changeProblem(problem: ProblemFullData, callback: (b: BasicResponse) =>
 
 
     console.log("yaoxiugai");
-    
+
     console.log(problem);
 
     for (var i = 0; i < problemTemp.length; i++) {
         console.log(i);
         if (problemTemp[i].problem.id === problem.problem.id) {
             console.log(problemTemp[i]);
-            
+
             if (problem.problem.problemText !== "") {
                 problemTemp[i].problem.problemText = problem.problem.problemText
             }
@@ -231,7 +231,7 @@ function changeProblem(problem: ProblemFullData, callback: (b: BasicResponse) =>
             }
             break;
         }
-        
+
     }
     console.log(problemTemp);
     callback({ code: "ok" });

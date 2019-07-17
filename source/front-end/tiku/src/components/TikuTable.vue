@@ -6,7 +6,7 @@
           <el-button class="el-button" align="left" plain @click="jumpInput">录入题目</el-button>
           <!-- <el-button type="primary" plain>全选</el-button> -->
           <el-button type="success" plain @click="batchDelete(tableChecked)">批量删除</el-button>
-          <el-button type="warning" plain>标签批量修改</el-button>
+          <el-button type="warning" plain @click="batchModifyTags(tableChecked);centerDialogVisible = true">标签批量修改</el-button>
         </el-col>
         <el-col span="4">
           <el-input
@@ -136,7 +136,49 @@ function handleDelete(index, row) {
   console.log(index, row);
 }
 function handleSelectionChange(val) {
-  this.multipleSelection = val;
+  this.tableChecked = val;
+}
+function batchDelete(rows){
+  console.log("batchDelete--", rows);
+  let delId = [];
+  // console.log("batchDelete--",rows);
+  for (var i = 0; i < this.tableData.length; i++) {
+    //获取选中项id
+    for (var j = 0; j < rows.length; j++) {
+      if (this.tableData[i].problem === rows[j].problem) {//获取选中的问题id
+        // delIndex.push(i);
+        delId.push(this.$store.state.allProblem[i].problem.id);
+      }
+    }
+  }
+  // console.log("4--",delId);
+  this.$confirm("确定批量删除问题?", "提示", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning"
+  })
+    .then(() => {
+      //alert('submit!');
+      delProblem(delId, b => {
+        if (b.code === "ok") {
+          alert("删除成功");
+        }
+        // this.$router.go(0); //页面刷新（要加上）
+      });
+    })
+    .catch(() => {
+      this.$message({
+        type: "info",
+        message: "已取消删除"
+      });
+    });
+}
+function batchModifyTags(rows){
+  console.log("batchDeleteTags--",rows);
+  // for(var i=0;i<){
+  //   for(var j=0)
+  // }
+
 }
 function filterTag(value, row) {
   return row.tag === value;
@@ -395,6 +437,8 @@ export default {
     handleEdit,
     handleDelete,
     handleSelectionChange,
+    batchDelete,
+    batchModifyTags,
     filterTag,
     jumpInput,
     handleClose,
