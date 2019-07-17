@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class WebProblemServiceImpl extends BasicService<Problem> implements WebProblemService {
@@ -289,14 +290,17 @@ public class WebProblemServiceImpl extends BasicService<Problem> implements WebP
         /**
          * 修改问题标签
          */
+
+        // 传过来可能只有字符串，没有id
         if (tagList != null && tagList.size() > 0) {
             //先删除已关联的标签关系
             problemTagRepository.deleteAllByProblemIdEquals(problem.getId());
 
             //再添加重新关联的标签关系
             List<ProblemTag> problemTagList = new ArrayList<>();
-
-            for (Tag tag : tagList) {
+            List<String> values = tagList.stream().map((t) -> t.getValue()).collect(Collectors.toList());
+            List<Tag> ts = webTagService.getTagsByValueList(values);
+            for (Tag tag : ts) {
                 ProblemTag problemTag = new ProblemTag();
                 problemTag.setProblemId(problem.getId());
                 problemTag.setTagId(tag.getId());
