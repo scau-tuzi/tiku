@@ -19,8 +19,6 @@ function getProblems(page: number, callback: (Problems: ProblemFullData[]) => vo
         .get("/api/problem/list?pageNumber=" + page + "&pageSize=10")//服务器网址
         .then(res => {
             let lists: ProblemFullData[] = res.data.data.problemFullDataList;
-            // console.log(res);
-            // console.log(lists);
             callback(lists);
         })
 }

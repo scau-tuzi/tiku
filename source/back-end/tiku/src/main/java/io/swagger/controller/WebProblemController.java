@@ -119,7 +119,7 @@ public class WebProblemController {
      * @param idList 题目id列表
      * @return
      */
-    @DeleteMapping("/delete")
+    @PostMapping("/delete")
     public BasicResponse delete(@RequestBody List<Long> idList) {
         BasicResponse basicResponse = new BasicResponse();
 
