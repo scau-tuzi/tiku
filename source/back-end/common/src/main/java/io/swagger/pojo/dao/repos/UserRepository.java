@@ -18,6 +18,9 @@ import org.springframework.stereotype.Repository;
 public interface UserRepository extends JpaRepository<User, Long> {
     User findByUsername(String username);
 
+    User findByIdEquals(Long id);
+
+
     @Modifying
     @Query(nativeQuery = true,
             value = "update user set is_del=?2 where id=?1")

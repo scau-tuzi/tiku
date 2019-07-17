@@ -22,19 +22,8 @@ public class WebUserServiceImpl extends BasicService<User> implements WebUserSer
     @Autowired
     private UserRepository userRepository;
 
-//
-//    @Autowired
-//    private WebRoleServiceImpl webRoleService;
-
-//    /**
-//     * 返回角色名角色ID映射表
-//     *
-//     * @return
-//     */
-//    public Map<Long, String> listRole() {
-//        return webRoleService.selectRole();
-//
-//    }
+    @Autowired
+    private RoleRepository roleRepository;
 
     /**
      * 密码加密
@@ -54,8 +43,8 @@ public class WebUserServiceImpl extends BasicService<User> implements WebUserSer
         //判断用户名是否为空
         if (userDto.getUsername() == null || userDto.getUsername().isEmpty()) {
             throw new Exception("用户名不可为空！");
-        } else if (userDto.getRoleId() == null ) {
-            throw new Exception("角色名不可为空！");
+        } else if (userDto.getRoleId() == null) {
+            throw new Exception("角色不可为空！");
         } else if (userDto.getPassword() == null || userDto.getPassword().isEmpty()) {
             throw new Exception("密码不可为空！");
         }
@@ -73,29 +62,44 @@ public class WebUserServiceImpl extends BasicService<User> implements WebUserSer
 
     }
 
+    public void test() {
+        User user = userRepository.findByIdEquals(200L);
+        User user2 = userRepository.findByIdEquals(300L);
+        System.out.println("666");
+        System.out.println("777");
+    }
+
+    /**
+     * 批量删除用户
+     *
+     * @param idList
+     * @throws Exception
+     */
     @Override
-    public int deleteBasicInfo(Long id) {
-        return userRepository.updateIsDelById(id, Boolean.TRUE);
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteAll(List<Long> idList) throws Exception {
+        for (Long id : idList) {
+            this.delete(id);
+        }
     }
 
     /**
      * 删除一个用户
      */
+    @Override
     public void delete(Long id) throws Exception {
         //判断id是否正确
-        if (userRepository.findById(id).get().equals(null)|| userRepository.findById(id) == null)
-            throw new Exception("该用户id不存在！");
+        User user = userRepository.findByIdEquals(id);
+        if (user == null || user.getIsDel() == Boolean.TRUE)
+            throw new Exception("用户id不存在！");
         else {
             this.deleteBasicInfo(id);
         }
     }
 
-    @Transactional(rollbackFor = Exception.class)
     @Override
-    public void deleteAll(List<Long> idList) throws Exception{
-        for (Long id : idList) {
-            this.delete(id);
-        }
+    public int deleteBasicInfo(Long id) {
+        return userRepository.updateIsDelById(id, Boolean.TRUE);
     }
 
     /**
@@ -109,6 +113,8 @@ public class WebUserServiceImpl extends BasicService<User> implements WebUserSer
         for (User user : page.getContent()) {
             UserDto userDto = new UserDto();
             BeanUtils.copyProperties(user, userDto);
+            //todo 不传密码到前端
+            userDto.setPassword(null);
 
             userDtoList.add(userDto);
         }
@@ -133,30 +139,28 @@ public class WebUserServiceImpl extends BasicService<User> implements WebUserSer
      * @param updateBy
      * @throws Exception
      */
+    @Transactional(rollbackFor = Exception.class)
     public void update(UserDto userDto, Long updateBy) throws Exception {
 
         //判断传入参数的正确
-        if ( userRepository.findById(userDto.getId()).get()==null) {
-            throw new Exception("该用户id不存在！");
-        }
-//        else if(userRepository.findById(userDto.getId()).get().getUsername().equals(userDto.getUsername())){
-//            throw new Exception("用户名不可与更改前相同！");
-//        }
-        else if (userDto.getRoleId()==null ) {
-            throw new Exception("角色不可为空");
-        } else if (userDto.getPassword()==null) {
+        if (userDto.getPassword() == null || userDto.getPassword().isEmpty()) {
             throw new Exception("密码不可为空");
+        } else if (userDto.getRoleId() == null || roleRepository.findByIdEquals(userDto.getRoleId()) == null) {
+            throw new Exception("角色不可为空");
+        } else if (userDto.getId() == null || userRepository.findByIdEquals(userDto.getId()) == null) {
+            throw new Exception("用户id不存在！");
+        } else if (userDto.getUsername() == null || userRepository.findByUsername(userDto.getUsername()) == null) {
+            throw new Exception("用户名已存在！");
         } else {
             User user = userRepository.findById(userDto.getId()).get();
             beforeUpdate(user, updateBy);
             BeanUtils.copyProperties(userDto, user);
 
+            //todo MD5加密
             user.setPasswordSaltMd5(passwordMD5(userDto.getPassword()));
 
             userRepository.save(user);
         }
 
     }
-
-
 }

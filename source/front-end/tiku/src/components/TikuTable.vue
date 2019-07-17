@@ -63,7 +63,7 @@
               <el-button
                 size="mini"
                 @click="centerDialogVisible = true"
-                v-on:click="showTags(scope.row,scope.column, scope.$index)"
+                v-on:click="showTags(scope.$index)"
               >修改标签</el-button>
               <el-button size="mini" type="danger" @click="handleDelete(scope.$index)">删除</el-button>
             </template>
@@ -102,18 +102,6 @@
           <el-button type="primary" @click="centerDialogVisible = false;modifyTag()">确 定</el-button>
         </span>
       </template>
-      <!-- <el-tag
-        :key="tag"
-        v-for="tag in dynamicTags"
-        closable
-        :disable-transitions="false"
-        @close="handleClose(tag)"
-        style="margin-right: 10px; margin-bottom: 10px"
-      >{{tag}}</el-tag> -->
-      <!-- <span slot="footer" class="dialog-footer">
-        <el-button @click="centerDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="centerDialogVisible = false;modifyTag()">确 定</el-button>
-      </span> -->
     </el-dialog>
   </el-container>
 </template>
@@ -123,157 +111,248 @@ import { getProblems, delProblem,changeProblem } from "../api/Problem";
 import ProblemFullData from "../data/model/ProblemFullData";
 import { getTagsList, addTags, delTag } from "../api/Tag";
 import { AllFieldInfo } from "../data/mock/FiledInfoMock";
-export default {
-  name: "TikuTable",
-  datas: [],
-  methods: {
-    //编辑操作
-    handleEdit(index, row) {
-      console.log(index, row),
-        // alert(index+row.problem+row.answer),
-        //转到ModifyProblem页面
-        this.$router.push({
-          path: "/ModifyProblem",
-          //query对象获取问题和答案
-          query: {
-            modifyQues: row.problem,
-            modifyAnsw: row.answer,
-            modifyIndex: index
-          }
-        });
-    },
+import { changePaper } from "../api/Paper";
 
-    //删除单行问题
-    handleDelete(index) {
-      console.log('要删除的下标---');
-      console.log(index);
-      console.log(this.$store.state.allProblem[index]);
-      this.$confirm("确定删除该问题?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      })
-       .then(() => {
-      let delId=[];
-      delId.push(this.$store.state.allProblem[index].problem.id);//获取要删除的问题id
-      delProblem(delId, b => {
-            if (b.code === "ok") {
-              alert("删除成功");
-            }
-            // this.$router.go(0); //页面刷新（要加上）
-          });
-      })
-    },
+//编辑操作
+function handleEdit(index, row) {
+  console.log(index, row)
+  // alert(index+row.problem+row.answer),
+  //转到ModifyProblem页面
+  this.$router.push({
+    path: "/ModifyProblem",
+    //query对象获取问题和答案
 
-    //获取选中项数据
-    handleSelectionChange(val) {
-      console.log("handleSelectionChange--", val); //选中项
-      this.tableChecked = val;
+    query: {
+      modifyIndex:index
+    }
+  });
+}
+function handleDelete(index, row) {
+  this.tableData.splice(index, 1); //删除该行
+  this.$message({
+    message: "操作成功！",
+    type: "success"
+  });
+  console.log(index, row);
+}
+function handleSelectionChange(val) {
+  this.multipleSelection = val;
+}
+function filterTag(value, row) {
+  return row.tag === value;
+}
+function jumpInput() {
+  //this.$router.push("/cart")
+  //传递的参数用{{ $route.query.goodsId }}获取
+  this.$router.push({ path: "/InputTiku" });
+  //this.$router.go(-2)
+  //后退两步
+}
+function handleClose(tag) {
+  //标签上的叉
+  this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
+}
+function showInput() {
+  //添加新标签的框
+  this.inputVisible = true;
+  this.$nextTick(_ => {
+    this.$refs.saveTagInput.$refs.input.focus();
+  });
+}
+function handleInputConfirm() {
+  //添加完标签之后的确定
+  let inputValue = this.inputValue;
+  if (inputValue) {
+    this.dynamicTags.push(inputValue);
+  }
+  this.inputVisible = false;
+  this.inputValue = "";
+}
+/**
+ * problem题目接口测试:测试结果可在 console 观察
+ */
+function addProblemData() {
+  //增加题目方法测试
+  let temp = {
+    problem: {
+      problemText: "李小米的爸爸姓什么?"
     },
+    answer: {
+      answerText: "李"
+    },
+    tags: [],
+    status: 1
+  };
+  let callback = p => {};
+  addProblem(temp, callback);
+}
+function findProblemDataByTags() {
+  //标签查找题目方法测试
+  let temp = [
+    {
+      value: "幼儿园"
+    }
+  ];
+  let callback = p => {};
+  findProbLemsByTags(temp, callback);
+}
+function findProblemDataByVaguely() {
+  //模糊查询题目方法测试
+  let temp = "没";
+  let callback = p => {};
+  findProblemsVaguely(temp, callback);
+}
+function delProblemData() {
+  //删除题目方法测试
+  let temp = [1, 2];
+  let callback = p => {};
+  delProblem(temp, callback);
+}
+function changeProblemData() {
+  //修改题目方法测试
+  /**
+   * src 为初始原型 ( ProblemFullData 类型),
+   */
+  let src = {
+    problem: {
+      id: -1,
+      problemText: ""
+    },
+    answer: {
+      answerText: ""
+    },
+    tags: [],
+    extData:{
+      A:4,
+      B:5,
+      C:6,
+      D:7
+    },
+    status: {
+    verifyStatus: 1
+   }
+  };
+  src.problem.parentId = 1;
+  src.problem.id = 5;
+  src.problem.problemText = "2+2=?";
+  src.answer.answerText = "4";
 
-    //批量删除
-    batchDelete(rows){
-      let delId = [];
-      // console.log("batchDelete--",rows);
-      for (var i = 0; i < this.tableData.length; i++) {
-        //获取选中项id
-        for (var j = 0; j < rows.length; j++) {
-          if (this.tableData[i].problem === rows[j].problem) {//获取选中的问题id
-            // delIndex.push(i);
-            delId.push(this.$store.state.allProblem[i].problem.id);
-          }
+  // src.tags.push({ value: "生活" });
+  console.log("cs")
+  console.log(src);
+  let callback = p => {};
+  changeProblem(src, callback);
+}
+/** */
+
+/**
+ * tag标签接口测试: 可以在 console 查看是否有tag输出
+ */
+function getTagsdata(){
+  //标签接口_获得标签列表方法本地测试
+  let callback = tag => {
+    // console.log("get tags data");
+    // console.log(tag);
+  };
+  getTagsList(callback);
+}
+function addTagsdata() {
+  //标签接口_增加标签方法本地测试
+  let callback = tag => {};
+  let temp = [
+    //因为在 js 语言中无类型模式,所以需要根据函数参数类型的具体结构传递参数
+    {
+      value: "语文",
+      parentId: 6
+    },
+    {
+      value: "数学",
+      parentId: 7
+    },
+    {
+      value: "英语",
+      parentId: 8
+    },
+    {
+      value: "历史"
+    },
+    {
+      value: "化学"
+    },
+    {
+      value: "生物"
+    },
+    {
+      value: "政治"
+    },
+    {
+      value: "地理"
+    }
+  ];
+
+  addTags(temp, callback);
+}
+function delTagData() {
+  //标签接口_删除标签方法本地测试
+  let callback = tag => {};
+  let delId = [15, 14];
+  delTag(delId, callback);
+}
+/** */
+function handlechange(currentPage) {
+  //获取题目
+  this.getData(currentPage-1);
+}
+function getData(currentPage) {
+  // console.log("change")
+  var _this = this;
+  let callback = pd => {
+    var res = [];
+    // console.log("get it");
+    // console.log(pd);
+    this.$store.commit("setNewProblems", pd);
+    pd.filter(v => {
+      let ts = [];
+      if (v.tags !== null) {
+        for (let i = 0; i < v.tags.length; i++) {
+          ts.push(v.tags[i].value);
         }
       }
-      // console.log("4--",delId);
-      this.$confirm("确定批量删除问题?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      })
-        .then(() => {
-          //alert('submit!');
-          delProblem(delId, b => {
-            if (b.code === "ok") {
-              alert("删除成功");
-            }
-            // this.$router.go(0); //页面刷新（要加上）
-          });
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
-        });
-    },
-
-    filterTag(value, row) {
-      return row.tag === value;
-    },
-    jumpInput() {
-      //this.$router.push("/cart")
-      //传递的参数用{{ $route.query.goodsId }}获取
-      this.$router.push({ path: "/InputTiku" });
-      //this.$router.go(-2)
-      //后退两步
-    },
-
-    handlerchange: function(currentPage) {
-      //获取题目
-      this.getData(currentPage);
-    },
-    getData: function(currentPage) {
-      // console.log("change")
-      var _this = this;
-      let callback = pd => {
-        var res = [];
-        // console.log("get it");
-        // console.log(pd);
-        this.$store.commit("setNewProblems", pd);
-        pd.filter(v => {
-          let ts = [];
-          if (v.tags !== null) {
-            for (let i = 0; i < v.tags.length; i++) {
-              ts.push(v.tags[i].value);
-            }
-          }
-          if (v.answer === null) {
-            v.answer = {
-              answerText: ""
-            };
-          }
-          let ress = {
-            problem: v.problem.problemText,
-            answer: v.answer.answerText,
-            pictures: "",
-            sound: "",
-            tag: ts
-          };
-          if (v.extData !== null) {
-            Object.keys(v.extData).forEach(key => {
-              ress[key] = v.extData[key];
-            });
-          }
-          res.push(ress);
-        });
-        console.log(res);
-        _this.tableData = res;
+      if (v.answer === null) {
+        v.answer = {
+          answerText: ""
+        };
+      }
+      let ress = {
+        problem: v.problem.problemText,
+        answer: v.answer.answerText,
+        pictures: "",
+        sound: "",
+        tag: ts
       };
-      getProblems(currentPage, callback);
-    },
-
-    //在修改标签窗口显示已有标签
-    showTags: function(row, col, index) {     
+      if (v.extData !== undefined) {
+        Object.keys(v.extData).forEach(key => {
+          ress[key] = v.extData[key];
+        });
+      }
+      res.push(ress);
+    });
+    console.log(res);
+    _this.tableData = res;
+  };
+  getProblems(currentPage, callback);
+}
+//在修改标签窗口显示已有标签
+function showTags(index) {     
       let value_tmp = [];
       for (let i = 0; i < this.$store.state.allProblem[index].tags.length; i++) {
         value_tmp.push(this.$store.state.allProblem[index].tags[i].value); //获取store的标签
       }
       this.value = value_tmp;
       this.index_tmp=index;
-    },
-
-    //修改某一行问题的标签
-    modifyTag(){
+}
+//修改某一行问题的标签
+function modifyTag(){
       let selectedProblem=this.$store.state.allProblem[this.index_tmp];
       console.log('test change1!--');
       console.log(selectedProblem);
@@ -293,10 +372,9 @@ export default {
           alert("修改失败"+b.data)
         }
       });  
-    },
-
-    //获取全部标签（选择器下拉窗口里用）
-    getTags(){
+}
+//获取全部标签（选择器下拉窗口里用）
+function getTags(){
       console.log("getTag!")
       var _this=this;
       let callback=(pd)=>{
@@ -315,12 +393,40 @@ export default {
       };
       getTagsList(callback);
       console.log(this.options);
-    }, 
+}
+
+export default {
+  name: "TikuTable",
+  datas: [],
+  methods: {
+    handleEdit,
+    handleDelete,
+    handleSelectionChange,
+    filterTag,
+    jumpInput,
+    handleClose,
+    showInput,
+    handleInputConfirm,
+    addProblemData,
+    findProblemDataByTags,
+    findProblemDataByVaguely,
+    delProblemData,
+    changeProblemData,
+    getTagsdata,
+    addTagsdata,
+    delTagData,
+    handlechange,
+    getData,
+    showTags,
+    getTags,
+    modifyTag
   },
   mounted: function() {
     this.getData(0);
+    // this.changeProblemData();
     this.getTags();
-    var all = [];
+
+    let all = [];
     Object.keys(AllFieldInfo).forEach(key => {
       all.push({
         keyname: key,

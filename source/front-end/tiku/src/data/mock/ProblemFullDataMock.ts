@@ -30,7 +30,9 @@ let porblemsList: ProblemFullData[] = [
             choice_C:"你猜",
             choice_D:"想得美"            
         },
-        status: 0
+        status: {
+            verifyStatus: 1
+           }
     }, {
         problem: {
             id: 798566,
@@ -60,7 +62,9 @@ let porblemsList: ProblemFullData[] = [
             choice_C:"10",
             choice_D:"36" 
         },
-        status: 0
+        status: {
+            verifyStatus: 1
+           }
     },{
         problem:{
             id: 789445515,
@@ -90,7 +94,9 @@ let porblemsList: ProblemFullData[] = [
             choice_C:"阴天",
             choice_D:"大风天" 
         },
-        status: 0
+        status: {
+            verifyStatus: 1
+           }
     } 
 ]
 

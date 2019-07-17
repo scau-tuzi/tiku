@@ -1,5 +1,6 @@
 package io.swagger.controller;
 
+import io.swagger.pojo.dao.Status;
 import io.swagger.pojo.dao.Tag;
 import io.swagger.pojo.dto.BasicResponse;
 import io.swagger.service.WebTagService;
