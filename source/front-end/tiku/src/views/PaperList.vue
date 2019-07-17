@@ -1,5 +1,5 @@
 <template>
-    <el-container>
+    <el-container style="border: 1px solid #eee">
       <el-main>
         <el-row>
           <el-col span=20>
@@ -18,20 +18,86 @@
         <el-row>
           <GeneralTable v-bind:table-info="paperListTable" v-on:handleButton="handleButton"></GeneralTable>
         </el-row>
+<!--        <el-row>-->
+<!--          <el-button v-on:click="this.getData()">测试</el-button>-->
+<!--          <el-table :data="tableData">-->
+<!--            <el-table-column prop="paperId" label="ID"></el-table-column>-->
+<!--            <el-table-column prop="paperTitle" label="Title"></el-table-column>-->
+<!--            <el-table-column prop="tag" label="tag"></el-table-column>-->
+<!--            <el-table-column prop="map" label="map"></el-table-column>-->
+<!--          </el-table>-->
+<!--        </el-row>-->
       </el-main>
+      <el-footer align="center">
+        <el-row>
+          <el-pagination
+            background
+            layout="prev, pager, next"
+            :total="1000"
+            @current-change="this.handlerchange"
+          ></el-pagination>
+        </el-row>
+      </el-footer>
     </el-container>
 </template>
 
 <script>
     import GeneralTable from "../components/GeneralTable";
     import paperListTable from "../data/mock/PaperListTableInfoMock";
+    import {getPapers} from "../api/Paper";
+    //获取试卷
+   function getPaperData(){
+      console.log("change")
+      var _this=this;
+      let callback=(pd)=>{
+        var res=[];
+        console.log("get it")
+        console.log(pd)
+        //this.$store.commit("setNewProblems",pd);
+        pd.filter(v=>{
+          let ts = [];
+          let map ="";
+          if(v.tags!==null){
+            for(let i =0; i<v.tags.length; i++){
+              ts.push(v.tags[i].value)
+            }
+          }
+          console.log(v)
+          if(v.serialProblemIdMap!=null){
+            //Object.keys(v.serialProblemIdMap).length
+            for(let i =0;i<Object.keys(v.serialProblemIdMap).length;i++){
+             // map.push(v.serialProblemIdMap[0][i].serialNumber)
+              map=map+(v.serialProblemIdMap[i])+','
+            }
+          }
 
+          let ress={
+            paperId:v.paper.id,
+            title:v.paper.title,
+            tag:ts,
+            map:map
+          };
+          res.push(ress)
+        });
+        console.log(res);
+        paperListTable.tableData=res;
+      };
+      console.log("aaaaaa")
+      getPapers(callback);
+    }
     export default {
         name: "PaperList",
       components: {GeneralTable},
+      mounted: function(){
+        getPaperData.bind(this).call(this);
+      },
+      watch: {
+        '$route': 'data'
+      },
       data: function (){
           return{
-            paperListTable
+            paperListTable,
+            tableData:[]
           }
       },
       methods:{
@@ -42,7 +108,8 @@
           }else if(val.method==='showTags'){
             this.showTags(val.row,val.col,val.index)
           }else if(val.method==='editPaper'){
-            this.editPaper();
+            console.log("wwwww")
+            this.editPaper(val.index,val.row);
           }else {
             this.handleDelete(val.index,val.row)
           }
@@ -61,10 +128,10 @@
             //转到ModifyProblem页面
             this.$router.push({path: '/ViewPaper',
               //query对象获取问题和答案
-              query: {
-                modifyQues:row.problem,
-                modifyAnsw:row.answer
-              }
+              // query: {
+              //   modifyQues:row.problem,
+              //   modifyAnsw:row.answer
+              // }
             })
         },
         //删除操作
@@ -77,10 +144,16 @@
           console.log(index, row)
         },
         //编辑试卷按钮
-        editPaper(){
+        editPaper(index,row){
+          console.log(row)
+          this.$store.commit("setPaperEditData", row);
           this.$router.push({path: '/CreatePaper'})
         }
-        }
+        },
+      handlerchange:function(){//获取题目
+        this.getPaperData();
+      },
+      getPaperData
     }
 </script>
 

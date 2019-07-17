@@ -7,71 +7,71 @@
                   placeholder="请输入搜索内容">
         </el-input>
         <div style="margin: 20px 0;"></div>
-        <el-row>
-          <el-table
-            :data="tables"
-            border
-            stripe=true
-            style="width: 100%"
-            @selection-change="handleSelectionChange">
-            <el-table-column
-              fixed="left"
-              prop="problemId"
-              label="问题id"
-              width="0"
-            hidden>
-            </el-table-column>
-            <el-table-column
-                    fixed="left"
-                    prop="problem"
-                    label="问题"
-                    width="300">
-            </el-table-column>
-            <el-table-column
-              prop="answer"
-              label="答案"
-              width="300">
-            </el-table-column>
-            <el-table-column
-              prop="sound"
-              label="语音"
-              width="150">
-            </el-table-column>
-            <el-table-column
-              prop="pictures"
-              label="多图片"
-              width="150">
-            </el-table-column>
-            <el-table-column
-              prop="tag"
-              label="标签"
-              width="220"
-              :filter-method="filterTag"
-              filter-placement="bottom-end">
-              <template slot-scope="scope">
-                <el-tag v-for="(tagsrc,index) in scope.row.tag" v-bind:key="index"
-                        disable-transitions>{{tagsrc}}</el-tag>
-              </template>
-            </el-table-column>
-            <el-table-column
-              prop="status"
-              label="审核状态"
-              width="220">
-            </el-table-column>
-            <el-table-column
-              fixed="right"
-              label="操作"
-              width="150"
-            >
-              <template slot-scope="scope">
-                <el-button
-                  size="mini"
-                  type="text"
-                  @click="handleView(scope.$index, scope.row)">查看</el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-        </el-row>
+<!--        <el-row>-->
+<!--          <el-table-->
+<!--            :data="tables"-->
+<!--            border-->
+<!--            stripe=true-->
+<!--            style="width: 100%"-->
+<!--            @selection-change="handleSelectionChange">-->
+<!--            <el-table-column-->
+<!--              fixed="left"-->
+<!--              prop="problemId"-->
+<!--              label="问题id"-->
+<!--              width="0"-->
+<!--            hidden>-->
+<!--            </el-table-column>-->
+<!--            <el-table-column-->
+<!--                    fixed="left"-->
+<!--                    prop="problem"-->
+<!--                    label="问题"-->
+<!--                    width="300">-->
+<!--            </el-table-column>-->
+<!--            <el-table-column-->
+<!--              prop="answer"-->
+<!--              label="答案"-->
+<!--              width="300">-->
+<!--            </el-table-column>-->
+<!--            <el-table-column-->
+<!--              prop="sound"-->
+<!--              label="语音"-->
+<!--              width="150">-->
+<!--            </el-table-column>-->
+<!--            <el-table-column-->
+<!--              prop="pictures"-->
+<!--              label="多图片"-->
+<!--              width="150">-->
+<!--            </el-table-column>-->
+<!--            <el-table-column-->
+<!--              prop="tag"-->
+<!--              label="标签"-->
+<!--              width="220"-->
+<!--              :filter-method="filterTag"-->
+<!--              filter-placement="bottom-end">-->
+<!--              <template slot-scope="scope">-->
+<!--                <el-tag v-for="(tagsrc,index) in scope.row.tag" v-bind:key="index"-->
+<!--                        disable-transitions>{{tagsrc}}</el-tag>-->
+<!--              </template>-->
+<!--            </el-table-column>-->
+<!--            <el-table-column-->
+<!--              prop="status"-->
+<!--              label="审核状态"-->
+<!--              width="220">-->
+<!--            </el-table-column>-->
+<!--            <el-table-column-->
+<!--              fixed="right"-->
+<!--              label="操作"-->
+<!--              width="150"-->
+<!--            >-->
+<!--              <template slot-scope="scope">-->
+<!--                <el-button-->
+<!--                  size="mini"-->
+<!--                  type="text"-->
+<!--                  @click="handleView(scope.$index, scope.row)">查看</el-button>-->
+<!--              </template>-->
+<!--            </el-table-column>-->
+<!--          </el-table>-->
+<!--        </el-row>-->
         <el-row>
           <GeneralTable v-bind:table-info="verifyTableInfo" v-on:handleButton="handleButton">
           </GeneralTable>
@@ -94,6 +94,42 @@
   import ProblemFullData from "../data/model/ProblemFullData";
   import GeneralTable from "./GeneralTable";
   import verifyTableInfo from  "../data/mock/VerifyTableInfoMock";
+  function getData(currentPage){
+    console.log("change")
+    var _this=this;
+    let callback=(pd)=>{
+      var res=[];
+      console.log("get it")
+      console.log(pd)
+      //this.$store.commit("setNewProblems",pd);
+      pd.filter(v=>{
+        let ts = [];
+        if(v.tags!==null){
+          for(let i =0; i<v.tags.length; i++){
+            ts.push(v.tags[i].value)
+          }
+        }
+        if(v.answer===null){
+          v.answer={
+            answerText:""
+          }
+        }
+        let ress={
+          problemId:v.problem.id,
+          problem:v.problem.problemText,
+          answer:v.answer.answerText,
+          pictures:'',
+          sound:'',
+          status:(!v.status?'未通过':'通过'),
+          tag:ts
+        };
+        res.push(ress)
+      });
+      console.log(res);
+      verifyTableInfo.tableData=res;
+    };
+    getProblems(currentPage,callback);
+  }
   export default {
     name: "VerifyTable",
     components: {GeneralTable},
@@ -121,45 +157,10 @@
       handlerchange:function(currentPage){//获取题目
         this.getData(currentPage);
       },
-      getData:function (currentPage){
-        console.log("change")
-        var _this=this;
-        let callback=(pd)=>{
-          var res=[];
-          console.log("get it")
-          console.log(pd)
-          this.$store.commit("setNewProblems",pd);
-          pd.filter(v=>{
-            let ts = [];
-            if(v.tags!==null){
-              for(let i =0; i<v.tags.length; i++){
-                ts.push(v.tags[i].value)
-              }
-            }
-            if(v.answer===null){
-              v.answer={
-                answerText:""
-              }
-            }
-            let ress={
-              problemId:v.problem.id,
-              problem:v.problem.problemText,
-              answer:v.answer.answerText,
-              pictures:'',
-              sound:'',
-              status:(!v.status?'未通过':'通过'),
-              tag:ts
-            };
-            res.push(ress)
-          });
-          console.log(res);
-          _this.tableData=res;
-        };
-        getProblems(currentPage,callback);
-      },
+
     },
     mounted: function () {
-      this.getData(0);
+      getData(0).bind(this).call(this);
     },
     data :function() {
       return {

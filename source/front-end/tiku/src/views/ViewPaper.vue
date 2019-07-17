@@ -1,15 +1,22 @@
 <template>
-  <el-card class="box-card">
-    <div slot="header" class="clearfix">
-      <span>试卷名称</span>
-    </div>
-    <div v-for="o in 4" :key="o" class="text item">
-      {{o + "、题目\n" }}
-    </div>
-    <el-checkbox v-for="f in AllFieldInfo">
-      {{f.title}}
-    </el-checkbox>
-  </el-card>
+  <el-container style="border: 1px solid #eee">
+    <el-main>
+      <el-button type="primary">返回</el-button>
+      <div style="margin: 20px 0;"></div>
+      <el-card class="box-card">
+        <div slot="header" class="clearfix">
+          <span>试卷名称</span>
+        </div>
+        <div v-for="o in 4" :key="o" class="text item">
+          {{o + "、题目\n" }}
+        </div>
+        <el-checkbox v-for="f in AllFieldInfo">
+          {{f.title}}
+        </el-checkbox>
+      </el-card>
+    </el-main>
+  </el-container>
+
 </template>
 
 <script>
