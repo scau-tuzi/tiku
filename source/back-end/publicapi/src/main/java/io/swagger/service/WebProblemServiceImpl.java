@@ -10,11 +10,11 @@ import io.swagger.pojo.dao.repos.StatusRepository;
 import io.swagger.pojo.dao.repos.TagRepository;
 import net.bytebuddy.asm.Advice;
 import org.springframework.beans.BeanUtils;
+import io.swagger.pojo.dao.repos.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.test.web.servlet.result.StatusResultMatchersExtensionsKt;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -47,6 +47,8 @@ public class WebProblemServiceImpl extends BasicService<Problem> implements WebP
     @Autowired
     private WebPaperItemServiceImpl webPaperItemServiceImpl;
 
+    @Autowired
+    private WebTagService webTagService;
     @Autowired
     private ProblemTagRepository problemTagRepository;
 
@@ -120,7 +122,7 @@ public class WebProblemServiceImpl extends BasicService<Problem> implements WebP
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void add(ProblemFullData problemFullData, Long createBy) throws Exception {
+    public Long add(ProblemFullData problemFullData, Long createBy) throws Exception {
 
         Answer answer = problemFullData.getAnswer();
         List<Tag> tagList = problemFullData.getTags();
@@ -158,6 +160,16 @@ public class WebProblemServiceImpl extends BasicService<Problem> implements WebP
             List<ProblemTag> problemTagList = new ArrayList<>();
             for (Tag tag : tagList) {
                 ProblemTag problemTag = new ProblemTag();
+                //todo 标签不存在 这些代码好像在某个地方出现过一次了....
+                if (tag.getId() == null) {
+                    String value = tag.getValue();
+                    List<Tag> byValueEquals = tagRepository.findByValueEquals(value);
+                    if (byValueEquals == null || byValueEquals.size() == 0) {
+                        tag = webTagService.add(tag, createBy);
+                    } else {
+                        tag = byValueEquals.get(0);
+                    }
+                }
                 problemTag.setTagId(tag.getId());
                 problemTag.setProblemId(problem.getId());
                 problemTagList.add(problemTag);
@@ -180,6 +192,7 @@ public class WebProblemServiceImpl extends BasicService<Problem> implements WebP
             }
             webExtDataServiceImpl.addAll(extDataList, createBy);
         }
+        return problem.getId();
     }
 
     @Override

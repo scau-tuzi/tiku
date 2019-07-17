@@ -17,7 +17,7 @@ import java.util.List;
  * @时间:2019-07-09
  */
 @Repository
-public interface TagRepository extends JpaRepository<Tag, Long>{
+public interface TagRepository extends JpaRepository<Tag, Long> {
     List<Tag> findByValueEquals(String value);
 
     List<Tag> findAllByIdIn(List<Long> id);

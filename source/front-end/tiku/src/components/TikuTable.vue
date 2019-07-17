@@ -2,7 +2,7 @@
   <el-container style="border: 1px solid #eee">
     <el-main>
       <el-row gutter="0">
-        <el-col span="20">
+        <el-col span=20>
           <el-button class="el-button" align="left" plain @click="jumpInput">录入题目</el-button>
           <!-- <el-button type="primary" plain>全选</el-button> -->
           <el-button type="success" plain>批量删除</el-button>
@@ -22,6 +22,7 @@
           <div></div>
         </el-col>
       </el-row>
+      <el-row><el-col span=24><div></div></el-col></el-row>
       <el-row>
         <el-table
           :data="tables"
@@ -60,58 +61,80 @@
           </el-table-column>
           <el-table-column fixed="right" label="操作" width="250">
             <template slot-scope="scope">
-              <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
               <el-button
                 size="mini"
-                @click="centerDialogVisible = true"
-                v-on:click="showTags(scope.row,scope.column, scope.$index)"
-              >修改标签</el-button>
-              <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+              <el-button
+                size="mini"
+                @click="centerDialogVisible = true" v-on:click="showTags(scope.row,scope.column, scope.$index)">修改标签</el-button>
+              <el-button
+                size="mini"
+                type="danger"
+                @click="handleDelete(scope.$index)">删除</el-button>
+              <el-dialog
+                title="修改标签"
+                :visible.sync="centerDialogVisible"
+                width="30%"
+                center
+              :append-to-body="true">
+                <el-tag
+                  v-for="(tagsrc,index) in scope.row.tag"
+                  v-bind:key="index"
+                  closable
+                  :disable-transitions="false"
+                  @close="handleClose(tag)"
+                  style="margin-right: 10px; margin-bottom: 10px">
+                  {{tagsrc}}
+                </el-tag>
+                <el-input
+                  class="input-new-tag"
+                  v-if="inputVisible"
+                  v-model="inputValue"
+                  ref="saveTagInput"
+                  size="small"
+                  @keyup.enter.native="handleInputConfirm"
+                  @blur="handleInputConfirm"
+                >
+                </el-input>
+                <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
+                <span slot="footer" class="dialog-footer">
+    <el-button @click="centerDialogVisible = false">取 消</el-button>
+    <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
+  </span>
+              </el-dialog>
             </template>
           </el-table-column>
         </el-table>
       </el-row>
+
     </el-main>
     <el-footer align="center">
+
       <el-pagination
         background
         layout="prev, pager, next"
-        :total="1000"
-        @current-change="this.handlerchange"
-      ></el-pagination>
+        :total="100"
+        @current-change="this.handlerchange">
+      </el-pagination>
     </el-footer>
-    <el-dialog title="修改标签" :visible.sync="centerDialogVisible" width="30%" center>
-      <el-tag
-        :key="tag"
-        v-for="tag in dynamicTags"
-        closable
-        :disable-transitions="false"
-        @close="handleClose(tag)"
-        style="margin-right: 10px; margin-bottom: 10px"
-      >{{tag}}</el-tag>
-      <el-input
-        class="input-new-tag"
-        v-if="inputVisible"
-        v-model="inputValue"
-        ref="saveTagInput"
-        size="small"
-        @keyup.enter.native="handleInputConfirm"
-        @blur="handleInputConfirm"
-      ></el-input>
-      <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="centerDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
-      </span>
-    </el-dialog>
+
+
   </el-container>
 </template>
 
 <script>
-import { getProblems } from "../api/Problem";
+import {
+  getProblems,
+  addProblem,
+  findProbLemsByTags,
+  findProblemsVaguely,
+  delProblem,
+  changeProblem
+} from "../api/Problem";
 import ProblemFullData from "../data/model/ProblemFullData";
 import { getTagsList, addTags, delTag } from "../api/Tag";
 import { AllFieldInfo } from "../data/mock/FiledInfoMock";
+import { changePaper } from "../api/Paper";
 export default {
   name: "TikuTable",
   datas: [],
@@ -171,6 +194,75 @@ export default {
       this.inputVisible = false;
       this.inputValue = "";
     },
+    /**
+     * problem题目接口测试:测试结果可在 console 观察
+     */
+    addProblemData: function() {
+      //增加题目方法测试
+      let temp = {
+        problem: {
+          problemText: "李小米的爸爸姓什么?"
+        },
+        answer: {
+          answerText: "李"
+        },
+        tags: [],
+        status: 1
+      };
+      let callback = p => {};
+      addProblem(temp, callback);
+    },
+    findProblemDataByTags: function() {
+      //标签查找题目方法测试
+      let temp = [
+        {
+          value: "幼儿园"
+        }
+      ];
+      let callback = p => {};
+      findProbLemsByTags(temp, callback);
+    },
+    findProblemDataByVaguely: function() {
+      //模糊查询题目方法测试
+      let temp = "没";
+      let callback = p => {};
+      findProblemsVaguely(temp, callback);
+    },
+    delProblemData: function() {
+      //删除题目方法测试
+      let temp = [1, 2];
+      let callback = p => {};
+      delProblem(temp, callback);
+    },
+    changeProblemData: function() {
+      //修改题目方法测试
+      /**
+       * src 为初始原型 ( ProblemFullData 类型),
+       */
+      let src = {
+        problem: {
+          id: -1,
+          problemText: ""
+        },
+        answer: {
+          answerText: ""
+        },
+        tags: [],
+        status: 1
+      };
+      src.problem.parentId = 1;
+      src.problem.id = 4564987916;
+      src.problem.problemText = "1+1=?";
+      src.answer.answerText = "2";
+
+      // src.tags.push({ value: "生活" });
+      console.log("cs")
+      console.log(src);
+      let callback = p => {};
+      changeProblem(src, callback);
+    },
+    /** */
+
     /**
      * tag标签接口测试: 可以在 console 查看是否有tag输出
      */
@@ -256,7 +348,7 @@ export default {
             sound: "",
             tag: ts
           };
-          if (v.extData !== null) {
+          if (v.extData !== undefined) {
             Object.keys(v.extData).forEach(key => {
               ress[key] = v.extData[key];
             });
@@ -278,10 +370,15 @@ export default {
     }
   },
   mounted: function() {
-    this.getTagsdata();
+    // this.getTagsdata();
+    // this.addProblemData();
     this.getData(0);
-    this.addTagsdata();
-    this.delTagData();
+    // this.addTagsdata();
+    // this.delTagData();
+    // this.findProblemDataByTags();
+    // this.findProblemDataByVaguely();
+    // this.delProblemData();
+    this.changeProblemData();
 
     var all = [];
     Object.keys(AllFieldInfo).forEach(key => {

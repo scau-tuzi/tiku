@@ -11,7 +11,7 @@
           <el-table
             :data="tables"
             border
-            stripe="true"
+            stripe=true
             style="width: 100%"
             @selection-change="handleSelectionChange">
             <el-table-column
@@ -52,7 +52,7 @@
                 <el-tag v-for="(tagsrc,index) in scope.row.tag" v-bind:key="index"
                         disable-transitions>{{tagsrc}}</el-tag>
               </template>
-            </el-table-column>            
+            </el-table-column>
             <el-table-column
               prop="status"
               label="审核状态"
@@ -72,6 +72,10 @@
             </el-table-column>
           </el-table>
         </el-row>
+        <el-row>
+          <GeneralTable v-bind:table-info="verifyTableInfo" v-on:handleButton="handleButton">
+          </GeneralTable>
+        </el-row>
       </el-main>
       <el-footer align="center">
         <el-pagination
@@ -88,15 +92,23 @@
 <script>
   import {getProblems} from "../api/Problem";
   import ProblemFullData from "../data/model/ProblemFullData";
+  import GeneralTable from "./GeneralTable";
+  import verifyTableInfo from  "../data/mock/VerifyTableInfoMock";
   export default {
     name: "VerifyTable",
+    components: {GeneralTable},
     datas:[],
     methods: {
+      handleButton(val){
+        if(val.method==='handleView'){
+          this.handleView(val.index,val.row)
+        }
+      },
       //查看操作
       handleView(index, row) {
         console.log(index, row),
           // alert(index+row.problem+row.answer),
-          //转到ViewProblem页面        
+          //转到ViewProblem页面
           this.$router.push({path: '/ViewProblem',
             //query对象获取参数
             query: {
@@ -128,7 +140,7 @@
               v.answer={
                 answerText:""
               }
-            }            
+            }
             let ress={
               problemId:v.problem.id,
               problem:v.problem.problemText,
@@ -137,7 +149,7 @@
               sound:'',
               status:(!v.status?'未通过':'通过'),
               tag:ts
-            };              
+            };
             res.push(ress)
           });
           console.log(res);
@@ -149,8 +161,9 @@
     mounted: function () {
       this.getData(0);
     },
-    data () {
+    data :function() {
       return {
+        verifyTableInfo,
         search: '',
         tableData: []
       }

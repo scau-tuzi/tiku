@@ -12,7 +12,7 @@ public interface WebProblemService {
 
     Map<String, Object> getAllByTagIdList(List<Long> tagIdList, Integer pageNumber, Integer pageSize, Integer verifyStatus);
 
-    void add(ProblemFullData problemFullData, Long createBy) throws Exception;
+    Long add(ProblemFullData problemFullData, Long createBy) throws Exception;
 
     Problem addBasicInfo(Problem problem, Long createBy);
 

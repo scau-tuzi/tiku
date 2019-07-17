@@ -49,7 +49,7 @@ function addTags(tags: TagInfo[], callback: (b: BasicResponse) => void) {
     // tagsTemp.push({ id: 8, value: "语文", parentId: -1 });
     for (var i = 0; i < tags.length; i++) {
         if (tags[i].id === undefined) {
-            tags[i].id = Number(tagsTemp[tagsTemp.length - 1].id) + 1;
+            tags[i].id = Math.floor(Math.random()*1000);
         }
         if (tags[i].parentId === undefined) {
             tags[i].parentId = -1
@@ -57,7 +57,7 @@ function addTags(tags: TagInfo[], callback: (b: BasicResponse) => void) {
         tagsTemp.push(tags[i])
     }
     let lists: TagInfo[] = tagsTemp;
-    let response: BasicResponse = { code: "Ok" };
+    let response: BasicResponse = { code: "ok" };
     console.log("get this tags");
     console.log(lists);
     console.log(response);
@@ -88,7 +88,7 @@ function delTag(tagId: number[], callback: (b: BasicResponse) => void) {
             }
         }
     }
-    let response: BasicResponse = { code: "OK" };
+    let response: BasicResponse = { code: "ok" };
     console.log(tagsTemp);
     console.log(response);
     callback(response)

@@ -133,7 +133,7 @@ public class BaseTest {
     }
 
     @Test
-    public void test(){
+    public void test() {
 
     }
 }

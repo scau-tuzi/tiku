@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface TikuUserRepository extends JpaRepository<TikuUser,Long> {
+public interface TikuUserRepository extends JpaRepository<TikuUser, Long> {
     Optional<TikuUser> findByUserUuidEquals(String userUuid);
 }

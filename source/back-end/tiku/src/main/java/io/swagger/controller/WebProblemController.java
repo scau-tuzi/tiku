@@ -17,13 +17,12 @@ import java.util.Map;
 @RequestMapping("/api/problem")
 @RestController
 @Slf4j
-public class ProblemController {
+public class WebProblemController {
 
     @Autowired
     private WebProblemService webProblemService;
 
-    @Autowired
-    private WebProblemServiceImpl webProblemServiceImpl;
+
 
     // todo 不知道这样写swagger能不能自动生成正确的接口
 
@@ -36,17 +35,13 @@ public class ProblemController {
      * @return
      */
     @GetMapping("/list")
-    public BasicResponse list(@RequestParam Integer pageNumber, Integer pageSize, Integer isCheck) {
+    public BasicResponse list(@RequestParam Integer pageNumber, @RequestParam Integer pageSize, Integer isCheck) {
 
         BasicResponse basicResponse = new BasicResponse();
 
         pageNumber = (pageNumber < 0 ? 0 : pageNumber);
         pageSize = (pageSize < 1 || pageSize > 100 ? 100 : pageSize);
         isCheck = (isCheck == null ? Status.CHECK : isCheck);
-
-        /**
-         * 定义一个页对象?
-         */
 
         try {
             Map<String, Object> resultMap = webProblemService.getAll(pageNumber, pageSize, isCheck, Boolean.FALSE);
@@ -109,7 +104,7 @@ public class ProblemController {
 
         Long createBy = 1L;
         try {
-            webProblemServiceImpl.add(problemFullData, createBy);
+            webProblemService.add(problemFullData, createBy);
             basicResponse.setData("问题添加成功");
         } catch (Exception e) {
             basicResponse.setCode(BasicResponse.ERRORCODE);
@@ -131,7 +126,7 @@ public class ProblemController {
         BasicResponse basicResponse = new BasicResponse();
 
         try {
-            webProblemServiceImpl.deleteAll(idList);
+            webProblemService.deleteAll(idList);
             basicResponse.setData("问题删除成功");
         } catch (Exception e) {
             basicResponse.setCode(BasicResponse.ERRORCODE);
@@ -154,7 +149,7 @@ public class ProblemController {
 
         Long updateBy = 1L;
         try {
-            webProblemServiceImpl.update(problemFullData, updateBy);
+            webProblemService.update(problemFullData, updateBy);
             basicResponse.setData("问题修改成功");
         } catch (Exception e) {
             basicResponse.setCode(BasicResponse.ERRORCODE);

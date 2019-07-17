@@ -7,10 +7,7 @@ import io.swagger.pojo.dao.Tag;
 import lombok.Data;
 import org.hibernate.mapping.Collection;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -30,6 +27,12 @@ public class ProblemFullData {
     private Map<String,String> extData;
     //状态表
     private Status status;
+
+    public static List<String> FIELDNAME= Arrays.asList(
+            "text", // 题目文本
+            "answer", //答案文本
+            "tags", //标签列表
+            "status");//状态
     /**转换成map，主要是用来返回给前台，返回的map只会（也只能）被框架解析成json对象
      * 对象的key约束和意义见开发文档
      * @return

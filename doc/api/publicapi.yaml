@@ -5,7 +5,7 @@ servers:
     url: http://203.195.239.100:10086/tiku/api/v1/
 info:
   description: 题库系统供其他应用调用的接口
-  version: "1.2.0"
+  version: "1.3.0"
   title: 题库外部接口
   contact:
     email: czfshine@outlook.com
@@ -303,6 +303,8 @@ components:
       properties:
         status:
           $ref: '#/components/schemas/StatusCode'
+        data:
+          type: object
     Expression:
       type: object
       description: |
@@ -376,6 +378,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AnyValue'
+        pagination:
+          $ref:  '#/components/schemas/Pagination'
           
     StatusCode:
       type: string
@@ -418,9 +422,9 @@ components:
           example: "错题+已解决"
           description: 用户对应的问题状态信息，具体格式看上传者的定义
         date:
-          type: string
-          example: "2019-08-18"
-          description: 状态时间
+          type: number
+          example: 123456789
+          description: 状态时间戳
           
     ProblemIdList:
       description: 待获取的状态查询信息列表，下面三个是and的关系
@@ -468,7 +472,7 @@ components:
           type: number
           example: 123456789000
           description: 开始时间
-        endTIme:
+        endTime:
           type: number
           example: 987654321000
           description: 结束时间，左闭右开
@@ -615,9 +619,3 @@ components:
           items:
             type: string
           example: ["语文","数学"]
-          
-          
-          
-          
-          
-          

@@ -19,7 +19,7 @@ import java.util.Date;
 @Slf4j
 @Data
 @MappedSuperclass
-public abstract class BasicEntity implements Serializable{
+public abstract class BasicEntity implements Serializable {
 
     /**
      * 创建时间

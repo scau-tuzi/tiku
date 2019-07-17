@@ -23,62 +23,94 @@ export default new Router({
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
-    },{
+    },
+    {
       path: '/InputTiku',
       name: 'InputTiku',
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import(/* webpackChunkName: "about" */ './components/InputTiku.vue')
-    },{
+    },
+    {
       path: '/TikuTable',
       name: 'TikuTable',
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import(/* webpackChunkName: "about" */ './components/TikuTable.vue')
-    },{
+    },
+    {
       path: '/VerifyTable',
       name: 'VerifyTable',
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import(/* webpackChunkName: "about" */ './components/VerifyTable.vue')
-    },{
+    },
+    {
       path: '/ViewProblem',
       name: 'ViewProblem',
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import(/* webpackChunkName: "about" */ './components/ViewProblem.vue')
-    },{
+    },
+    {
       path: '/ModifyProblem',
       name: 'ModifyProblem',
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import(/* webpackChunkName: "about" */ './components/ModifyProblem.vue')
-    },{
-      path: '/PaperTable',
-      name: 'PaperTable',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './components/PaperTable.vue')
-    },{
+    },
+    // {
+    //   path: '/PaperTable',
+    //   name: 'PaperTable',
+    //   // route level code-splitting
+    //   // this generates a separate chunk (about.[hash].js) for this route
+    //   // which is lazy-loaded when the route is visited.
+    //   component: () => import(/* webpackChunkName: "about" */ './components/PaperTable.vue')
+    // },
+    {
       path: '/BasicTable',
       name: 'BasicTable',
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import(/* webpackChunkName: "about" */ './components/BasicTable.vue')
-    },{
+    },
+    {
       path: '/ViewTags',
       name: 'ViewTags',
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import(/* webpackChunkName: "about" */ './components/ViewTags.vue')
+    },
+    {
+      path: '/PaperList',
+      name: 'PaperList',
+      // route level code-splitting
+      // this generates a separate chunk (about.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import(/* webpackChunkName: "about" */ './views/PaperList.vue')
+    },
+    {
+      path: '/CreatePaper',
+      name: 'CreatePaper',
+      // route level code-splitting
+      // this generates a separate chunk (about.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import(/* webpackChunkName: "about" */ './components/CreatePaper.vue')
+    },
+    {
+      path: '/ViewPaper',
+      name: 'ViewPaper',
+      // route level code-splitting
+      // this generates a separate chunk (about.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import(/* webpackChunkName: "about" */ './views/ViewPaper.vue')
     }
   ]
 })

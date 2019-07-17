@@ -1,10 +1,9 @@
 package io.swagger.controller;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import io.swagger.pojo.PaperFullData;
-import io.swagger.pojo.dao.Status;
 import io.swagger.pojo.dto.BasicResponse;
 import io.swagger.service.WebPaperService;
-import io.swagger.service.WebProblemService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +14,7 @@ import java.util.Map;
 @RequestMapping("/api/paper")
 @RestController
 @Slf4j
-public class PaperController {
+public class WebPaperController {
 
     @Autowired
     private WebPaperService webPaperService;
@@ -34,6 +33,7 @@ public class PaperController {
 
         pageNumber = (pageNumber < 0 ? 0 : pageNumber);
         pageSize = (pageSize < 1 || pageSize > 100 ? 100 : pageSize);
+        isDeep = (isDeep == null) ? Boolean.FALSE : Boolean.TRUE;
 
         try {
             Map<String, Object> resultMap = webPaperService.getAll(pageNumber, pageSize, isDeep, Boolean.FALSE);
