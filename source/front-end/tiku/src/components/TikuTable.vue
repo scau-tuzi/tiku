@@ -152,13 +152,6 @@ function handleClose(tag) {
   //标签上的叉
   this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
 }
-function showInput() {
-  //添加新标签的框
-  this.inputVisible = true;
-  this.$nextTick(_ => {
-    this.$refs.saveTagInput.$refs.input.focus();
-  });
-}
 function handleInputConfirm() {
   //添加完标签之后的确定
   let inputValue = this.inputValue;
@@ -405,7 +398,6 @@ export default {
     filterTag,
     jumpInput,
     handleClose,
-    showInput,
     handleInputConfirm,
     addProblemData,
     findProblemDataByTags,
