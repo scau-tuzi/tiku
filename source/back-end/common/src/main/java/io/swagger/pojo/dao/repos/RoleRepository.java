@@ -46,4 +46,6 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
             countQuery = "select count(*) from role where is_del=?1")
     Page<Role> findAllByIsDel(Pageable pageable, Boolean isDel);
 
+
+
 }

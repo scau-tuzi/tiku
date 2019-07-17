@@ -23,6 +23,11 @@
         </el-col>
       </el-row>
       <el-row>
+        <el-col span="24">
+          <div></div>
+        </el-col>
+      </el-row>
+      <el-row>
         <el-table
           :data="tables"
           border
@@ -66,7 +71,37 @@
                 @click="centerDialogVisible = true"
                 v-on:click="showTags(scope.row,scope.column, scope.$index)"
               >修改标签</el-button>
-              <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+              <el-button size="mini" type="danger" @click="handleDelete(scope.$index)">删除</el-button>
+              <el-dialog
+                title="修改标签"
+                :visible.sync="centerDialogVisible"
+                width="30%"
+                center
+                :append-to-body="true"
+              >
+                <el-tag
+                  v-for="(tagsrc,index) in scope.row.tag"
+                  v-bind:key="index"
+                  closable
+                  :disable-transitions="false"
+                  @close="handleClose(tag)"
+                  style="margin-right: 10px; margin-bottom: 10px"
+                >{{tagsrc}}</el-tag>
+                <el-input
+                  class="input-new-tag"
+                  v-if="inputVisible"
+                  v-model="inputValue"
+                  ref="saveTagInput"
+                  size="small"
+                  @keyup.enter.native="handleInputConfirm"
+                  @blur="handleInputConfirm"
+                ></el-input>
+                <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
+                <span slot="footer" class="dialog-footer">
+                  <el-button @click="centerDialogVisible = false">取 消</el-button>
+                  <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
+                </span>
+              </el-dialog>
             </template>
           </el-table-column>
         </el-table>
@@ -76,34 +111,10 @@
       <el-pagination
         background
         layout="prev, pager, next"
-        :total="1000"
-        @current-change="this.handlerchange"
-      ></el-pagination>
+        :total="100"
+        @current-change="this.handlechange">
+      </el-pagination>
     </el-footer>
-    <el-dialog title="修改标签" :visible.sync="centerDialogVisible" width="30%" center>
-      <el-tag
-        :key="tag"
-        v-for="tag in dynamicTags"
-        closable
-        :disable-transitions="false"
-        @close="handleClose(tag)"
-        style="margin-right: 10px; margin-bottom: 10px"
-      >{{tag}}</el-tag>
-      <el-input
-        class="input-new-tag"
-        v-if="inputVisible"
-        v-model="inputValue"
-        ref="saveTagInput"
-        size="small"
-        @keyup.enter.native="handleInputConfirm"
-        @blur="handleInputConfirm"
-      ></el-input>
-      <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="centerDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
-      </span>
-    </el-dialog>
   </el-container>
 </template>
 
@@ -120,252 +131,274 @@ import ProblemFullData from "../data/model/ProblemFullData";
 import { getTagsList, addTags, delTag } from "../api/Tag";
 import { AllFieldInfo } from "../data/mock/FiledInfoMock";
 import { changePaper } from "../api/Paper";
+
+//编辑操作
+function handleEdit(index, row) {
+  console.log(index, row)
+  // alert(index+row.problem+row.answer),
+  //转到ModifyProblem页面
+  this.$router.push({
+    path: "/ModifyProblem",
+    //query对象获取问题和答案
+
+    query: {
+      modifyIndex:index
+    }
+  });
+}
+function handleDelete(index, row) {
+  this.tableData.splice(index, 1); //删除该行
+  this.$message({
+    message: "操作成功！",
+    type: "success"
+  });
+  console.log(index, row);
+}
+function handleSelectionChange(val) {
+  this.multipleSelection = val;
+}
+function filterTag(value, row) {
+  return row.tag === value;
+}
+function jumpInput() {
+  //this.$router.push("/cart")
+  //传递的参数用{{ $route.query.goodsId }}获取
+  this.$router.push({ path: "/InputTiku" });
+  //this.$router.go(-2)
+  //后退两步
+}
+function handleClose(tag) {
+  //标签上的叉
+  this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
+}
+function showInput() {
+  //添加新标签的框
+  this.inputVisible = true;
+  this.$nextTick(_ => {
+    this.$refs.saveTagInput.$refs.input.focus();
+  });
+}
+function handleInputConfirm() {
+  //添加完标签之后的确定
+  let inputValue = this.inputValue;
+  if (inputValue) {
+    this.dynamicTags.push(inputValue);
+  }
+  this.inputVisible = false;
+  this.inputValue = "";
+}
+/**
+ * problem题目接口测试:测试结果可在 console 观察
+ */
+function addProblemData() {
+  //增加题目方法测试
+  let temp = {
+    problem: {
+      problemText: "李小米的爸爸姓什么?"
+    },
+    answer: {
+      answerText: "李"
+    },
+    tags: [],
+    status: 1
+  };
+  let callback = p => {};
+  addProblem(temp, callback);
+}
+function findProblemDataByTags() {
+  //标签查找题目方法测试
+  let temp = [
+    {
+      value: "幼儿园"
+    }
+  ];
+  let callback = p => {};
+  findProbLemsByTags(temp, callback);
+}
+function findProblemDataByVaguely() {
+  //模糊查询题目方法测试
+  let temp = "没";
+  let callback = p => {};
+  findProblemsVaguely(temp, callback);
+}
+function delProblemData() {
+  //删除题目方法测试
+  let temp = [1, 2];
+  let callback = p => {};
+  delProblem(temp, callback);
+}
+function changeProblemData() {
+  //修改题目方法测试
+  /**
+   * src 为初始原型 ( ProblemFullData 类型),
+   */
+  let src = {
+    problem: {
+      id: -1,
+      problemText: ""
+    },
+    answer: {
+      answerText: ""
+    },
+    tags: [],
+    extData:{
+      A:4,
+      B:5,
+      C:6,
+      D:7
+    },
+    status: {
+    verifyStatus: 1
+   }
+  };
+  src.problem.parentId = 1;
+  src.problem.id = 5;
+  src.problem.problemText = "2+2=?";
+  src.answer.answerText = "4";
+
+  // src.tags.push({ value: "生活" });
+  console.log("cs")
+  console.log(src);
+  let callback = p => {};
+  changeProblem(src, callback);
+}
+/** */
+
+/**
+ * tag标签接口测试: 可以在 console 查看是否有tag输出
+ */
+function getTagsdata(){
+  //标签接口_获得标签列表方法本地测试
+  let callback = tag => {
+    // console.log("get tags data");
+    // console.log(tag);
+  };
+  getTagsList(callback);
+}
+function addTagsdata() {
+  //标签接口_增加标签方法本地测试
+  let callback = tag => {};
+  let temp = [
+    //因为在 js 语言中无类型模式,所以需要根据函数参数类型的具体结构传递参数
+    {
+      value: "语文",
+      parentId: 6
+    },
+    {
+      value: "数学",
+      parentId: 7
+    },
+    {
+      value: "英语",
+      parentId: 8
+    },
+    {
+      value: "历史"
+    },
+    {
+      value: "化学"
+    },
+    {
+      value: "生物"
+    },
+    {
+      value: "政治"
+    },
+    {
+      value: "地理"
+    }
+  ];
+
+  addTags(temp, callback);
+}
+function delTagData() {
+  //标签接口_删除标签方法本地测试
+  let callback = tag => {};
+  let delId = [15, 14];
+  delTag(delId, callback);
+}
+/** */
+function handlechange(currentPage) {
+  //获取题目
+  this.getData(currentPage-1);
+}
+function getData(currentPage) {
+  // console.log("change")
+  var _this = this;
+  let callback = pd => {
+    var res = [];
+    // console.log("get it");
+    // console.log(pd);
+    this.$store.commit("setNewProblems", pd);
+    pd.filter(v => {
+      let ts = [];
+      if (v.tags !== null) {
+        for (let i = 0; i < v.tags.length; i++) {
+          ts.push(v.tags[i].value);
+        }
+      }
+      if (v.answer === null) {
+        v.answer = {
+          answerText: ""
+        };
+      }
+      let ress = {
+        problem: v.problem.problemText,
+        answer: v.answer.answerText,
+        pictures: "",
+        sound: "",
+        tag: ts
+      };
+      if (v.extData !== undefined) {
+        Object.keys(v.extData).forEach(key => {
+          ress[key] = v.extData[key];
+        });
+      }
+      res.push(ress);
+    });
+    console.log(res);
+    _this.tableData = res;
+  };
+  getProblems(currentPage, callback);
+}
+function showTags(row, col, index) {
+  //在修改标签窗口显示已有标签
+  let dynamicTags_tmp = [];
+  for (let i = 0; i < this.$store.state.allProblem[0].tags.length; i++) {
+    dynamicTags_tmp.push(this.$store.state.allProblem[index].tags[i].value); //获取store的标签
+  }
+  this.dynamicTags = dynamicTags_tmp;
+}
+
 export default {
   name: "TikuTable",
   datas: [],
   methods: {
-    //编辑操作
-    handleEdit(index, row) {
-      console.log(index, row),
-        // alert(index+row.problem+row.answer),
-        //转到ModifyProblem页面
-        this.$router.push({
-          path: "/ModifyProblem",
-          //query对象获取问题和答案
-          query: {
-            modifyQues: row.problem,
-            modifyAnsw: row.answer
-          }
-        });
-    },
-    handleDelete(index, row) {
-      this.tableData.splice(index, 1); //删除该行
-      this.$message({
-        message: "操作成功！",
-        type: "success"
-      });
-      console.log(index, row);
-    },
-    handleSelectionChange(val) {
-      this.multipleSelection = val;
-    },
-    filterTag(value, row) {
-      return row.tag === value;
-    },
-    jumpInput() {
-      //this.$router.push("/cart")
-      //传递的参数用{{ $route.query.goodsId }}获取
-      this.$router.push({ path: "/InputTiku" });
-      //this.$router.go(-2)
-      //后退两步
-    },
-    handleClose(tag) {
-      //标签上的叉
-      this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
-    },
-    showInput() {
-      //添加新标签的框
-      this.inputVisible = true;
-      this.$nextTick(_ => {
-        this.$refs.saveTagInput.$refs.input.focus();
-      });
-    },
-    handleInputConfirm() {
-      //添加完标签之后的确定
-      let inputValue = this.inputValue;
-      if (inputValue) {
-        this.dynamicTags.push(inputValue);
-      }
-      this.inputVisible = false;
-      this.inputValue = "";
-    },
-    /**
-     * problem题目接口测试:测试结果可在 console 观察
-     */
-    addProblemData: function() {
-      //增加题目方法测试
-      let temp = {
-        problem: {
-          problemText: "李小米的爸爸姓什么?"
-        },
-        answer: {
-          answerText: "李"
-        },
-        tags: [],
-        status: 1
-      };
-      let callback = p => {};
-      addProblem(temp, callback);
-    },
-    findProblemDataByTags: function() {
-      //标签查找题目方法测试
-      let temp = [
-        {
-          value: "幼儿园"
-        }
-      ];
-      let callback = p => {};
-      findProbLemsByTags(temp, callback);
-    },
-    findProblemDataByVaguely: function() {
-      //模糊查询题目方法测试
-      let temp = "没";
-      let callback = p => {};
-      findProblemsVaguely(temp, callback);
-    },
-    delProblemData: function() {
-      //删除题目方法测试
-      let temp = [1, 2];
-      let callback = p => {};
-      delProblem(temp, callback);
-    },
-    changeProblemData: function() {
-      //修改题目方法测试
-      /**
-       * src 为初始原型 ( ProblemFullData 类型),
-       */
-      let src = {
-        problem: {
-          id: -1,
-          problemText: ""
-        },
-        answer: {
-          answerText: ""
-        },
-        tags: [],
-        status: 1
-      };
-      src.problem.parentId = 1;
-      src.problem.id = 4564987916;
-      src.problem.problemText = "1+1=?";
-      src.answer.answerText = "2";
-
-      // src.tags.push({ value: "生活" });
-      console.log("cs")
-      console.log(src);
-      let callback = p => {};
-      changeProblem(src, callback);
-    },
-    /** */
-
-    /**
-     * tag标签接口测试: 可以在 console 查看是否有tag输出
-     */
-    getTagsdata: function() {
-      //标签接口_获得标签列表方法本地测试
-      let callback = tag => {
-        // console.log("get tags data");
-        // console.log(tag);
-      };
-      getTagsList(callback);
-    },
-    addTagsdata: function() {
-      //标签接口_增加标签方法本地测试
-      let callback = tag => {};
-      let temp = [
-        //因为在 js 语言中无类型模式,所以需要根据函数参数类型的具体结构传递参数
-        {
-          value: "语文",
-          parentId: 6
-        },
-        {
-          value: "数学",
-          parentId: 7
-        },
-        {
-          value: "英语",
-          parentId: 8
-        },
-        {
-          value: "历史"
-        },
-        {
-          value: "化学"
-        },
-        {
-          value: "生物"
-        },
-        {
-          value: "政治"
-        },
-        {
-          value: "地理"
-        }
-      ];
-
-      addTags(temp, callback);
-    },
-    delTagData: function() {
-      //标签接口_删除标签方法本地测试
-      let callback = tag => {};
-      let delId = [15, 14];
-      delTag(delId, callback);
-    },
-    /** */
-    handlerchange: function(currentPage) {
-      //获取题目
-      this.getData(currentPage);
-    },
-    getData: function(currentPage) {
-      // console.log("change")
-      var _this = this;
-      let callback = pd => {
-        var res = [];
-        // console.log("get it");
-        // console.log(pd);
-        this.$store.commit("setNewProblems", pd);
-        pd.filter(v => {
-          let ts = [];
-          if (v.tags !== null) {
-            for (let i = 0; i < v.tags.length; i++) {
-              ts.push(v.tags[i].value);
-            }
-          }
-          if (v.answer === null) {
-            v.answer = {
-              answerText: ""
-            };
-          }
-          let ress = {
-            problem: v.problem.problemText,
-            answer: v.answer.answerText,
-            pictures: "",
-            sound: "",
-            tag: ts
-          };
-          if (v.extData !== undefined) {
-            Object.keys(v.extData).forEach(key => {
-              ress[key] = v.extData[key];
-            });
-          }
-          res.push(ress);
-        });
-        console.log(res);
-        _this.tableData = res;
-      };
-      getProblems(currentPage, callback);
-    },
-    showTags: function(row, col, index) {
-      //在修改标签窗口显示已有标签
-      let dynamicTags_tmp = [];
-      for (let i = 0; i < this.$store.state.allProblem[0].tags.length; i++) {
-        dynamicTags_tmp.push(this.$store.state.allProblem[index].tags[i].value); //获取store的标签
-      }
-      this.dynamicTags = dynamicTags_tmp;
-    }
+    handleEdit,
+    handleDelete,
+    handleSelectionChange,
+    filterTag,
+    jumpInput,
+    handleClose,
+    showInput,
+    handleInputConfirm,
+    addProblemData,
+    findProblemDataByTags,
+    findProblemDataByVaguely,
+    delProblemData,
+    changeProblemData,
+    getTagsdata,
+    addTagsdata,
+    delTagData,
+    handlechange,
+    getData,
+    showTags
   },
   mounted: function() {
-    // this.getTagsdata();
-    // this.addProblemData();
     this.getData(0);
-    // this.addTagsdata();
-    // this.delTagData();
-    // this.findProblemDataByTags();
-    // this.findProblemDataByVaguely();
-    // this.delProblemData();
-    this.changeProblemData();
+    // this.changeProblemData();
 
-    var all = [];
+    let all = [];
     Object.keys(AllFieldInfo).forEach(key => {
       all.push({
         keyname: key,

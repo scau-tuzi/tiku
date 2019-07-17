@@ -52,7 +52,7 @@
                 <el-tag v-for="(tagsrc,index) in scope.row.tag" v-bind:key="index"
                         disable-transitions>{{tagsrc}}</el-tag>
               </template>
-            </el-table-column>            
+            </el-table-column>
             <el-table-column
               prop="status"
               label="审核状态"
@@ -108,7 +108,7 @@
       handleView(index, row) {
         console.log(index, row),
           // alert(index+row.problem+row.answer),
-          //转到ViewProblem页面        
+          //转到ViewProblem页面
           this.$router.push({path: '/ViewProblem',
             //query对象获取参数
             query: {
@@ -140,7 +140,7 @@
               v.answer={
                 answerText:""
               }
-            }            
+            }
             let ress={
               problemId:v.problem.id,
               problem:v.problem.problemText,
@@ -149,7 +149,7 @@
               sound:'',
               status:(!v.status?'未通过':'通过'),
               tag:ts
-            };              
+            };
             res.push(ress)
           });
           console.log(res);
@@ -164,48 +164,6 @@
     data :function() {
       return {
         verifyTableInfo,
-        col: [
-          {
-            fixed: 'left',
-            label: '问题ID',
-            prop: 'problemId',
-            width: '0'
-          },
-          {
-            fixed: 'left',
-            label: '问题',
-            prop: 'problem',
-            width: '300'
-          },
-          {
-            label: '答案',
-            prop: 'answer',
-            width: '300'
-          },
-          {
-            label: '语音',
-            prop: 'sound',
-            width: '100'
-          },
-          {
-            label: '多图片',
-            prop: 'pictures',
-            width: '100'
-          },
-          {
-            label: '审核状态',
-            prop: 'status',
-            width: '220'
-          }
-        ],
-        oper: [
-          {
-            label: '查看',
-            size: 'mini',
-            type: 'text',
-            methods: ''
-          }
-        ],
         search: '',
         tableData: []
       }

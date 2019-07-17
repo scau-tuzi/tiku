@@ -166,7 +166,7 @@ export default {
           console.log(this.$store.state.commits[index].id);
           //alert('submit!');
           let tagId = [];
-          tagId[0] = this.$store.state.commits[index].id;
+          tagId.push(this.$store.state.commits[index].id);
           delTag(tagId, b => {
             if (b.code === "ok") {
               alert("删除成功");

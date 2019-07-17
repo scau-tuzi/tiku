@@ -6,28 +6,28 @@ import lombok.experimental.Accessors;
 import javax.persistence.*;
 
 /**
- * 功能描述：试卷实体类
- *
- * @作者：黄宽波
- * @时间:2019-07-09
+ * 题库
  */
 @Entity
-@Table(name = "paper")
 @Data
 @Accessors(chain = true)
-public class Paper extends BasicEntity {
-
+@Table(name = "pool")
+public class Pool {
     /**
-     * 试卷id
+     * id
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-
     /**
-     * 试卷标题
+     * 题库名
      */
-    @Column(name = "title")
-    private String title;
+    @Column(name = "pool_name")
+    private String poolName;
+    /**
+     * 题库标识
+     */
+    @Column(name = "pool_uuid")
+    private String poolUuid;
 }

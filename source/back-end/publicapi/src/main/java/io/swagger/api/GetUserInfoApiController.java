@@ -44,7 +44,9 @@ public class GetUserInfoApiController implements GetUserInfoApi {
                 return new ResponseEntity<UserInfo>(userInfo, HttpStatus.OK);
             } catch (UserInfoServiceImpl.UserInfoServiceException e) {
                 ResponseEntity<UserInfo> objectResponseEntity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-                objectResponseEntity.getHeaders().add("X-tiku-error-message", e.getMessage());
+                e.printStackTrace();
+                // todo
+                //objectResponseEntity.getHeaders().add("X-tiku-error-message", e.getClass().getName());
                 return objectResponseEntity;
             }
         }

@@ -39,7 +39,7 @@ function addPaper(paper: PaperFullData, callback: (b: BasicResponse) => void) {
  */
 function delPaper(paperId: number, callback: (b: BasicResponse) => void) {
     axios
-        .post("/api/paper/delete", paperId)
+        .delete("/api/paper/delete?"+"paperId="+paperId)
         .then(res => {
             let response: BasicResponse = res.data;
             callback(response)

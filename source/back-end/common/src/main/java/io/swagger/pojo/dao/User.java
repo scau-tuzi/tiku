@@ -47,9 +47,4 @@ public class User extends BasicEntity {
     @Column(name = "image")
     private String image;
 
-    /**
-     * 角色id
-     */
-    @Column(name = "role_id")
-    private Long roleId;
 }

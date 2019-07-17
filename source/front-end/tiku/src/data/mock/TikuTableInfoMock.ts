@@ -1,33 +1,9 @@
 import GeneralTable from "@/data/model/GeneralTable";
 import  tableData from  "@/components/TikuTable.vue"
-import  FieldInfoMock from  "@/data/mock/FiledInfoMock"
+import {AllFieldInfo} from "@/data/mock/FiledInfoMock"
 let tikuTableInfo:GeneralTable={
-  fieldInfo :FieldInfoMock,
-  tableData: [{
-    id: "1",
-  problem: 'How are you?',
-  answer: 'I am fine. Thank you',
-  pictures: '',
-  sound: 'VOA.mp3',
-  tag: '英语',
-  status: '已通过'
-}, {
-    id: "2",
-  problem: 'How old are you?',
-  answer: '12',
-  pictures: '',
-  sound: 'VOA.mp3',
-  tag: '英语',
-  status: '已通过'
-}, {
-    id:"3",
-  problem: 'Have a nice day !',
-  answer: 'Thank you ! I hope so !',
-  pictures: '',
-  sound: 'VOA.mp3',
-  tag: '英语',
-  status: '已通过'
-}],
+  fieldInfo : AllFieldInfo,
+  tableData: [],
   col: [
     {
       fixed: "",

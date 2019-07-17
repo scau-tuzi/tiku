@@ -16,7 +16,7 @@ import javax.persistence.*;
 @Data
 @Accessors(chain = true)
 @Table(name = "paper_tag")
-public class PaperTag extends BasicEntity{
+public class PaperTag extends BasicEntity {
 
     /**
      * 试卷id
