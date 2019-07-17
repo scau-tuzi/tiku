@@ -28,4 +28,6 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
             value = "SELECT rolename from role  where role_id=?1")
     String selectRolenameByRoleId(Long role_id);
 
+    Role findByIdEquals(Long id);
+
 }

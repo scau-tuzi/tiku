@@ -2,6 +2,7 @@ package io.swagger.controller;
 
 import io.swagger.pojo.dto.BasicResponse;
 import io.swagger.pojo.dto.UserDto;
+import io.swagger.service.WebUserService;
 import io.swagger.service.WebUserServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +15,13 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("/api/user")
-public class UserController {
+public class WebUserController {
 
     @Autowired
-    private WebUserServiceImpl webUserService;
+    private WebUserService webUserService;
+
+    @Autowired
+    private WebUserServiceImpl webUserServiceImpl;
 
 
     /**
@@ -26,8 +30,9 @@ public class UserController {
      * @param userDto
      * @return
      */
-    @RequestMapping("/add")
+    @PostMapping("/add")
     public BasicResponse add(@RequestBody UserDto userDto) {
+
         BasicResponse basicResponse = new BasicResponse();
 
         Long createBy = 1L;
@@ -41,20 +46,26 @@ public class UserController {
         return basicResponse;
     }
 
+    @GetMapping("/test")
+    public void test() {
+        webUserServiceImpl.test();
+    }
+
+
     /**
      * 删除用户
      *
      * @param idList
      * @return
      */
-    @RequestMapping("/delete")
+    @DeleteMapping("/delete")
     public BasicResponse delete(@RequestBody List<Long> idList) {
         BasicResponse basicResponse = new BasicResponse();
         try {
             webUserService.deleteAll(idList);
             basicResponse.setData("用户删除成功");
         } catch (Exception e) {
-            basicResponse.setData("用户删除失败:"+e.getMessage());
+            basicResponse.setData("用户删除失败:" + e.getMessage());
             basicResponse.setCode(BasicResponse.ERRORCODE);
         }
         return basicResponse;
@@ -71,14 +82,15 @@ public class UserController {
     public BasicResponse list(@RequestParam Integer pageNumber, @RequestParam Integer pageSize) {
         BasicResponse basicResponse = new BasicResponse();
 
-        pageNumber = (pageNumber < 0 ? 0 : pageNumber);
         pageSize = (pageSize < 1 || pageSize > 100 ? 100 : pageSize);
+        pageNumber = (pageNumber < 0 ? 0 : pageNumber);
+
         try {
             Map<String, Object> resultMap = webUserService.list(pageNumber, pageSize);
             basicResponse.setData(resultMap);
         } catch (Exception e) {
-            basicResponse.setCode(BasicResponse.ERRORCODE);
             basicResponse.setData("query error : " + e.getMessage());
+            basicResponse.setCode(BasicResponse.ERRORCODE);
         }
         return basicResponse;
     }
