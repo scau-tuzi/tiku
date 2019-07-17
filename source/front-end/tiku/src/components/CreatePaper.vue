@@ -3,7 +3,7 @@
     <el-main>
       <el-row>
         <el-col span=3>
-          <el-button class="el-button" align="left" plain @click="jumpInput">完成</el-button>
+          <el-button  align="left" plain @click="complete">完成</el-button>
           <el-button type="primary" plain>全选</el-button>
         </el-col>
         <el-col span=17>
@@ -26,18 +26,16 @@
 <!--          <draggable-->
 <!--            :list="createPaperInfoMock.tableData"-->
 <!--            :options="dragOptions1">-->
-            <div>
               <el-col span=12.5 style="margin-right: 10px">
                 <GeneralTable v-bind:table-info="createPaperInfoMock"></GeneralTable>
               </el-col>
-            </div>
 <!--          </draggable>-->
 <!--          <draggable-->
 <!--            :list="createPaperOrderMock.tableData"-->
 <!--            :options="dragOptions2">-->
-            <el-col span=11>
-              <GeneralTable v-bind:table-info="createPaperOrderMock"></GeneralTable>
-            </el-col>
+             <el-col span=11>
+               <GeneralTable v-bind:table-info="createPaperOrderMock"></GeneralTable>
+             </el-col>
 <!--          </draggable>-->
       </el-row>
       <el-row>
@@ -68,26 +66,6 @@
             tikuTableInfo,
             createPaperInfoMock,
             createPaperOrderMock,
-            tableData: [{
-              id: '1',
-              problem: '2016-05-02',
-              answer: '王小虎',
-              sound: '上海市普陀区金沙江路 1518 弄',
-              tag: '一年级'
-            },{
-              id: '2',
-              problem: '2016-05-02',
-              answer: '王小虎',
-              sound: '上海市普陀区金沙江路 1518 弄',
-              tag: '英语'
-            },
-              {
-                id: '3',
-                problem: '2016-05',
-                answer: '王小虎',
-                sound: '上海市普陀区金沙江路 1518 弄',
-                tag: '英语'
-              }],
             ruleForm: {
               name: ''
             },
@@ -100,53 +78,98 @@
       },
     mounted() {
         this.rowDrop();
+        this.editPaper();
     },
     computed:{
       dragOptions1() {
         return {
           animation: 0,
           group: {
-            name: "shared",
+            name: 'shared',
           },
-          ghostClass: "ghost",
-          //draggable: ".el-table__body-wrapper tbody"
+          ghostClass: 'ghost',
+          // onEnd:function(evt) {
+          //   const currRow = _this.tableData.splice(evt.oldIndex, 1)[0]
+          //   _this.tableData.splice(evt.newIndex, 0, currRow)
+          // },
+          // draggable: ".el-table__row"
         };
       },
       dragOptions2(){
         return {
           animation: 0,
           group: {
-            name:"shared",
+            name:'shared',
           },
-          //draggable: ".el-table__body-wrapper tbody"
+          // draggable: ".el-table__row"
+          // onEnd:function(evt) {
+          //   const currRow = _this.tableData.splice(evt.oldIndex, 1)[0]
+          //   _this.tableData.splice(evt.newIndex, 0, currRow)
+          // }
         };
       }
     },
     methods: {
+      editPaper(){
+        console.log(this.$store.state.paperEditData)
+      },
+      complete(){
+        //this.$router.push("/cart")
+        //传递的参数用{{ $route.query.goodsId }}获取
+        this.$router.push({path: '/PaperList'})
+        //this.$router.go(-2)
+        //后退两步
+      },
       //行拖拽
       rowDrop() {
         const tbody = document.querySelectorAll('.el-table__body-wrapper tbody')
         const _this = this
-        for(let i=0;i<tbody.length;i++){
-          new Sortable(tbody[i], {
-            group: "shared",
+        // for(let i=0;i<tbody.length;i++){
+        new Sortable(tbody[0], {
+          group: 'shared',
+          //multiDrag: true, // Enable multi-drag
+          //selectedClass: 'selected', // The class applied to the selected items
+          onEnd:function(evt) {
+            if(tbody[0]===evt.from&&tbody[0]===evt.to){
+              const currRow = _this.createPaperInfoMock.tableData.splice(evt.oldIndex, 1)[0]
+              _this.createPaperInfoMock.tableData.splice(evt.newIndex, 0, currRow)
+              // evt.from.splice(currRow)
+              console.log(evt.from)
+            }
+            if(tbody[0]===evt.from&&tbody[1]===evt.to){
+              const currRow = _this.createPaperInfoMock.tableData.splice(evt.oldIndex, 1)[0]
+              _this.createPaperOrderMock.tableData.splice(evt.newIndex, 0, currRow)
+              // evt.from.splice(currRow)
+              console.log(evt.from)
+            }
+
+          },
+
+        })
+          new Sortable(tbody[1], {
+            group: 'shared',
             //multiDrag: true, // Enable multi-drag
             //selectedClass: 'selected', // The class applied to the selected items
             onEnd:function(evt) {
-              const currRow = _this.tableData.splice(evt.oldIndex, 1)[0]
-              _this.tableData.splice(evt.newIndex, 0, currRow)
-            },
-            // Element is dropped into the list from another list
-            onAdd: function (/**Event*/evt) {
-              // same properties as onEnd
+              if(tbody[1]===evt.from&&tbody[1]===evt.to){
+                const currRow = _this.createPaperOrderMock.tableData.splice(evt.oldIndex, 1)[0]
+                _this.createPaperOrderMock.tableData.splice(evt.newIndex, 0, currRow)
+                // evt.from.splice(currRow)
+                console.log(evt.from)
+              }
+              if(tbody[1]===evt.from&&tbody[0]===evt.to){
+                const currRow = _this.createPaperOrderMock.tableData.splice(evt.oldIndex, 1)[0]
+                _this.createPaperInfoMock.tableData.splice(evt.newIndex, 0, currRow)
+                // evt.from.splice(currRow)
+                console.log(evt.from)
+              }
             },
           })
         }
 
       }
 
-
-    }
+    // }
     }
 </script>
 

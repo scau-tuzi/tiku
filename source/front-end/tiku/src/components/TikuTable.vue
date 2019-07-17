@@ -6,7 +6,7 @@
           <el-button class="el-button" align="left" plain @click="jumpInput">录入题目</el-button>
           <!-- <el-button type="primary" plain>全选</el-button> -->
           <el-button type="success" plain @click="batchDelete(tableChecked)">批量删除</el-button>
-          <el-button type="warning" plain>标签批量修改</el-button>
+          <el-button type="warning" plain @click="centerDialogVisible_batch = true">标签批量修改</el-button>
         </el-col>
         <el-col span="4">
           <el-input
@@ -62,7 +62,7 @@
               <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
               <el-button
                 size="mini"
-                @click="centerDialogVisible = true"
+                @click="centerDialogVisible_single = true"
                 v-on:click="showTags(scope.$index)"
               >修改标签</el-button>
               <el-button size="mini" type="danger" @click="handleDelete(scope.$index)">删除</el-button>
@@ -79,7 +79,7 @@
         @current-change="this.handlerchange"
       ></el-pagination>
     </el-footer>
-    <el-dialog title="修改标签" :visible.sync="centerDialogVisible" width="30%" center>
+    <el-dialog title="修改标签" :visible.sync="centerDialogVisible_single" width="30%" center>
       <template>
         <el-select
             v-model="value"
@@ -98,8 +98,32 @@
           </el-option>
         </el-select>
         <span slot="footer" class="dialog-footer">
-          <el-button @click="centerDialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="centerDialogVisible = false;modifyTag()">确 定</el-button>
+          <el-button @click="centerDialogVisible_single = false">取 消</el-button>
+          <el-button type="primary" @click="centerDialogVisible_single = false;modifyTag()">确 定</el-button>
+        </span>
+      </template>
+    </el-dialog>
+    <el-dialog title="批量修改标签" :visible.sync="centerDialogVisible_batch" width="30%" center>
+      <template>
+        <el-select
+            v-model="value_batch"
+            multiple
+            filterable
+            allow-create
+            default-first-option
+            size="medium"
+            placeholder="请选择题目标签">
+            <!-- @change="modifyTag" -->
+          <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+          </el-option>
+        </el-select>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="centerDialogVisible_batch = false">取 消</el-button>
+          <el-button type="primary" @click="centerDialogVisible_batch = false;modifyBatchTags()">确 定</el-button>
         </span>
       </template>
     </el-dialog>
@@ -127,16 +151,94 @@ function handleEdit(index, row) {
     }
   });
 }
-function handleDelete(index, row) {
-  this.tableData.splice(index, 1); //删除该行
-  this.$message({
-    message: "操作成功！",
-    type: "success"
-  });
-  console.log(index, row);
-}
+//删除单行问题
+function handleDelete(index) {
+      console.log('要删除的下标---');
+      console.log(index);
+      console.log(this.$store.state.allProblem[index]);
+      this.$confirm("确定删除该问题?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+       .then(() => {
+      let delId=[];
+      delId.push(this.$store.state.allProblem[index].problem.id);//获取要删除的问题id
+      delProblem(delId, b => {
+            if (b.code === "ok") {
+              alert("删除成功");
+            }
+            // this.$router.go(0); //页面刷新（要加上）
+          });
+      })
+    }
 function handleSelectionChange(val) {
-  this.multipleSelection = val;
+  this.tableChecked = val;
+}
+function batchDelete(rows){
+  console.log("batchDelete--", rows);
+  let delId = [];
+  // console.log("batchDelete--",rows);
+  for (var i = 0; i < this.tableData.length; i++) {
+    //获取选中项id
+    for (var j = 0; j < rows.length; j++) {
+      if (this.tableData[i].problem === rows[j].problem) {//获取选中的问题id
+        // delIndex.push(i);
+        delId.push(this.$store.state.allProblem[i].problem.id);
+      }
+    }
+  }
+  // console.log("4--",delId);
+  this.$confirm("确定批量删除问题?", "提示", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning"
+  })
+    .then(() => {
+      //alert('submit!');
+      delProblem(delId, b => {
+        if (b.code === "ok") {
+          alert("删除成功");
+        }
+        // this.$router.go(0); //页面刷新（要加上）
+      });
+    })
+    .catch(() => {
+      this.$message({
+        type: "info",
+        message: "已取消删除"
+      });
+    });
+}
+//批量修改标签
+function modifyBatchTags(){
+  let rows=this.tableChecked;
+  let modifyProblems = [];
+  // console.log("batchDelete--",rows);
+  for (var i = 0; i < this.tableData.length; i++) {
+    //获取选中项id
+    for (var j = 0; j < rows.length; j++) {
+      if (this.tableData[i].problem === rows[j].problem) {//获取选中的问题id
+        // delIndex.push(i);
+        this.$store.state.allProblem[i].tags=[];
+        this.value_batch.forEach((v)=>{
+        this.$store.state.allProblem[i].tags.push({
+          value:v,
+        })
+      });
+        modifyProblems.push(this.$store.state.allProblem[i]);
+      }
+    }
+  }
+  for(var k=0;k<modifyProblems.length;k++){
+    changeProblem(modifyProblems[k],(b)=>{
+        if(b.code!=="ok"){
+          alert("修改失败"+b.data);
+        }
+      });  
+  }
+  // this.$router.go(0); //页面刷新（要加上）
+  
 }
 function filterTag(value, row) {
   return row.tag === value;
@@ -395,6 +497,8 @@ export default {
     handleEdit,
     handleDelete,
     handleSelectionChange,
+    batchDelete,
+    modifyBatchTags,
     filterTag,
     jumpInput,
     handleClose,
@@ -434,12 +538,14 @@ export default {
       search: "",
       inputVisible: false,
       inputValue: "",
-      centerDialogVisible: false,
+      centerDialogVisible_single: false,
+      centerDialogVisible_batch: false,
       tableData: [],
       fieldInfo: [],
       options: [],//修改标签窗口选择器下拉的标签列表
       value: [],//修改标签窗口选择器里面的已选标签
-      index_tmp:''//选中修改标签的行index     
+      index_tmp:'',//选中修改标签的行index    
+      value_batch:[]//批量修改标签窗口选择器里面的已选标签
 
     };
   },

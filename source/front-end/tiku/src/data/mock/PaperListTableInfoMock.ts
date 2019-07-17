@@ -1,10 +1,7 @@
 import GeneralTable from "@/data/model/GeneralTable";
 
 let paperListTable:GeneralTable={
-  tableData:[{
-    title:'123',
-    tag: '1'
-  }],
+  tableData: [],
   fieldInfo: {},
   col: [
     {
