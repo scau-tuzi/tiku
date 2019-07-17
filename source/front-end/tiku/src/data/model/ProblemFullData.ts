@@ -42,6 +42,8 @@ interface ProblemFullData {
     /**
     * @status 问题的状态
     */
-   status: any
+   status: {
+    verifyStatus: 1
+   }
 }
 export default ProblemFullData;
