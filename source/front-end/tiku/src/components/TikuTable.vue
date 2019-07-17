@@ -114,7 +114,7 @@
         background
         layout="prev, pager, next"
         :total="100"
-        @current-change="this.handlerchange">
+        @current-change="this.handlechange">
       </el-pagination>
     </el-footer>
 
@@ -317,9 +317,9 @@ export default {
       delTag(delId, callback);
     },
     /** */
-    handlerchange: function(currentPage) {
+    handlechange: function(currentPage) {
       //获取题目
-      this.getData(currentPage);
+      this.getData(currentPage-1);
     },
     getData: function(currentPage) {
       // console.log("change")
