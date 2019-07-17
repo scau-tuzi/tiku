@@ -21,10 +21,10 @@ var problemTemp: ProblemFullData[] = porblemsList;
 //             callback(lists);
 //         })
 // }
-function getProblems(page: number, callback: (Problems: ProblemFullData[]) => void) {
+function getProblems(pageNumber: number, callback: (Problems: ProblemFullData[]) => void,isCheck?: number) {
     //线上
     axios
-        .get("/api/problem/list?pageNumber=" + page + "&pageSize=10")//服务器网址
+        .get("/api/problem/list?pageNumber=" + pageNumber + "&pageSize=10"+"&isCheck="+isCheck)//服务器网址
         .then(res => {
             let lists: ProblemFullData[] = res.data.data.problemFullDataList;
             // console.log(lists);
