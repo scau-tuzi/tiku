@@ -70,22 +70,16 @@ let createPaperOrderMock:GeneralTable={
   fieldInfo: [],
   tableData: [
     {
-      id: "4",
-      problem: "333",
-      answer: "222",
-      tag: "22"
+      id:"1",
+      problem:"222",
+      answer:"333",
+      tag: "11"
     },
     {
-      id: "5",
-      problem: "333",
-      answer: "222",
-      tag: "22"
-    },
-    {
-      id: "6",
-      problem: "444",
-      answer: "222",
-      tag: "55"
+      id:"2",
+      problem:"222",
+      answer:"333",
+      tag: "11"
     }
   ],
   col: [

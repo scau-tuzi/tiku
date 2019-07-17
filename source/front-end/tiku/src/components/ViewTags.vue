@@ -112,7 +112,7 @@ export default {
         console.log(res);
         _this.tableData = res;
       };
-      getTagsList(currentpage, 3, callback);
+      getTagsList(currentpage, callback);
     },
 
     //多选触发
@@ -261,7 +261,7 @@ export default {
     }
   },
   mounted: function() {
-    this.getData();
+    this.getData(0);
   }
 };
 </script>

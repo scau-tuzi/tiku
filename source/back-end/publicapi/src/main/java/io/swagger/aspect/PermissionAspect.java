@@ -106,11 +106,12 @@ public class PermissionAspect {
                 }
             }
 
+            //todo 从别的地方拿
+
             //到这里就拿到token了
             //做校验
-            //todo 从别的地方拿
-            String t="06e599f3-78db-4c71-b4fa-2b496beab1f6";
 
+            String t="06e599f3-78db-4c71-b4fa-2b496beab1f6";
             if(!t.equals(token)){
                 throw new NotPermissionException("没有权限");
             }

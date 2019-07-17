@@ -10,7 +10,8 @@ function getPapers(pageNumber:number, callback: (p: PaperFullData[]) => void, is
     axios
         .get("/api/paper/list?pageNumber="+pageNumber+"&isDeep="+isDeep)//服务器地址
         .then(res => {
-            let lists: PaperFullData[] = res.data;
+          //console.log(res)
+            let lists: PaperFullData[] = res.data.data.paperFullDataList;
             callback(lists)
         })
 }
@@ -18,7 +19,7 @@ function getPapers(pageNumber:number, callback: (p: PaperFullData[]) => void, is
 /**
  * 增加试卷方法
  * @param paper 需要增加的试卷 ( PaperFullData 类型)
- * @param callback 
+ * @param callback
  */
 function addPaper(paper: PaperFullData, callback: (b: BasicResponse) => void) {
 
@@ -77,7 +78,7 @@ function findPaperBytags(tags: TagInfo[], callback: (p: PaperFullData[]) => void
 /**
  * 修改试卷方法
  * @param paperId 要修改试卷的id
- * @param callback 
+ * @param callback
  */
 function changePaper(paperId: number, callback: (b: BasicResponse) => void) {
     axios

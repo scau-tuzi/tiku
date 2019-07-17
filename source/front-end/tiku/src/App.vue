@@ -1,8 +1,6 @@
 '
 <template>
-  <Framework v-bind:menu-info="mockData">
-    <router-view></router-view>
-  </Framework>
+  <router-view></router-view>
 </template>
 
 <script>
@@ -15,10 +13,8 @@ export default {
     return {
       mockData
     };
-  },
-  components: {
-    Framework,
   }
+
 }
 </script>
 
