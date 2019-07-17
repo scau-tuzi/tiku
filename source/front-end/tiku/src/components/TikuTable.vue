@@ -241,12 +241,20 @@ function changeProblemData() {
       answerText: ""
     },
     tags: [],
-    status: 1
+    extData:{
+      A:4,
+      B:5,
+      C:6,
+      D:7
+    },
+    status: {
+    verifyStatus: 1
+   }
   };
   src.problem.parentId = 1;
-  src.problem.id = 4564987916;
-  src.problem.problemText = "1+1=?";
-  src.answer.answerText = "2";
+  src.problem.id = 5;
+  src.problem.problemText = "2+2=?";
+  src.answer.answerText = "4";
 
   // src.tags.push({ value: "生活" });
   console.log("cs")
@@ -388,7 +396,8 @@ export default {
   },
   mounted: function() {
     this.getData(0);
-    this.changeProblemData();
+    // this.changeProblemData();
+
     let all = [];
     Object.keys(AllFieldInfo).forEach(key => {
       all.push({
