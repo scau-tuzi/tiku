@@ -276,7 +276,6 @@
             beforeRemove,
             beforeUpload,
             getParams
-
         },
         //监听路由变化
         watch: {

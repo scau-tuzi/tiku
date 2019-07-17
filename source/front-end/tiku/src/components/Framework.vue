@@ -37,7 +37,6 @@
         </el-row>
       </el-aside>
       <el-main>
-
         <slot></slot>
       </el-main>
     </el-container>
