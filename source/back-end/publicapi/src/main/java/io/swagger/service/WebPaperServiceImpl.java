@@ -196,6 +196,13 @@ public class WebPaperServiceImpl extends BasicService<Paper> implements WebPaper
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    public void deleteAll(List<Long> idList) {
+        for (Long id : idList) {
+            this.delete(id);
+        }
+    }
+
+    @Override
     public void delete(Long id) {
         /**
          * 删除试卷基本信息

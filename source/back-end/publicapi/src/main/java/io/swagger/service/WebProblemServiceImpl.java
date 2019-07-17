@@ -3,6 +3,13 @@ package io.swagger.service;
 import io.swagger.model.Pagination;
 import io.swagger.pojo.ProblemFullData;
 import io.swagger.pojo.dao.*;
+import io.swagger.pojo.dao.repos.ExtDataRepository;
+import io.swagger.pojo.dao.repos.ProblemRepository;
+import io.swagger.pojo.dao.repos.ProblemTagRepository;
+import io.swagger.pojo.dao.repos.StatusRepository;
+import io.swagger.pojo.dao.repos.TagRepository;
+import net.bytebuddy.asm.Advice;
+import org.springframework.beans.BeanUtils;
 import io.swagger.pojo.dao.repos.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -82,6 +89,36 @@ public class WebProblemServiceImpl extends BasicService<Problem> implements WebP
 
         return resultMap;
     }
+
+    @Override
+    public Map<String, Object> getAllByTagIdList(List<Long> tagIdList, Integer pageNumber, Integer pageSize, Integer verifyStatus) {
+        Map<String, Object> resultMap = new HashMap<>();
+
+        //查找含有指定标签的问题id
+        Page<Object> page = problemTagRepository.findProblemIdListByTagIdList(
+                PageRequest.of(pageNumber, pageSize), tagIdList, Boolean.FALSE, tagIdList.size(), verifyStatus);
+
+        //将id存储进id列表
+        List<Long> problemIdList = new ArrayList<>();
+        for (Object id : page.getContent()) {
+            problemIdList.add(Long.parseLong(id.toString()));
+        }
+
+        //分页信息
+        Pagination pagination = new Pagination();
+        pagination.setPage(BigDecimal.valueOf(page.getNumber()));
+        pagination.setSize(BigDecimal.valueOf(page.getSize()));
+        pagination.setTotal(BigDecimal.valueOf(page.getTotalPages()));
+
+        //问题具体信息
+        List<ProblemFullData> problemFullDataList = problemDataService.getFullDataByIds(problemIdList);
+
+        resultMap.put("pagination", pagination);
+        resultMap.put("problemFullDataList", problemFullDataList);
+
+        return resultMap;
+    }
+
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -166,6 +203,13 @@ public class WebProblemServiceImpl extends BasicService<Problem> implements WebP
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    public void deleteAll(List<Long> idList) {
+        for (Long id : idList) {
+            this.delete(id);
+        }
+    }
+
+    @Override
     public void delete(Long id) {
 
         /**
@@ -236,10 +280,11 @@ public class WebProblemServiceImpl extends BasicService<Problem> implements WebP
         /**
          * 修改问题状态
          */
-        if (status != null) {
-            status.setProblemId(problem.getId());
-            webStatusServiceImpl.update(status, updateBy);
-        }
+        status = (status == null ? new Status() : status);
+        // todo 修改问题则问题状态变为未审核
+        status.setVerifyStatus(Status.UNCHECK);
+        status.setProblemId(problem.getId());
+        webStatusServiceImpl.update(status, updateBy);
 
         /**
          * 修改问题标签
@@ -287,5 +332,11 @@ public class WebProblemServiceImpl extends BasicService<Problem> implements WebP
         dbProblem.setParentId(problem.getParentId());
         super.beforeUpdate(dbProblem, updateBy);
         return problemRepository.save(dbProblem);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void check(Long id, Integer checkStatus, Long updateBy) {
+        webStatusServiceImpl.updateVerifyStatus(id, checkStatus, updateBy);
     }
 }
