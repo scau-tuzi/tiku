@@ -12,15 +12,6 @@ var problemTemp: ProblemFullData[] = porblemsList;
  * @param page 
  * @param callback 
  */
-// function getProblems(page: number, callback: (Problems: ProblemFullData[]) => void) {
-//     //线上
-//     axios
-//         .get("/api/problem/list?pageNumber=" + page + "&pageSize=10")//服务器网址
-//         .then(res => {
-//             let lists: ProblemFullData[] = res.data.data.problemFullDataList;
-//             callback(lists);
-//         })
-// }
 function getProblems(page: number, callback: (Problems: ProblemFullData[]) => void) {
     //获得题目列表方法--本地数据测试
     let lists: ProblemFullData[] = problemTemp;
@@ -28,6 +19,16 @@ function getProblems(page: number, callback: (Problems: ProblemFullData[]) => vo
     console.log(lists);
     callback(lists);
 }
+// function getProblems(pageNumber: number, callback: (Problems: ProblemFullData[]) => void,isCheck?: number) {
+//     //线上
+//     axios
+//         .get("/api/problem/list?pageNumber=" + pageNumber + "&pageSize=10"+"&isCheck="+isCheck)//服务器网址
+//         .then(res => {
+//             let lists: ProblemFullData[] = res.data.data.problemFullDataList;
+//             // console.log(lists);
+//             callback(lists);
+//         })
+// }
 
 /**
  * 增加题目方法
@@ -57,6 +58,17 @@ function addProblem(problem: ProblemFullData, callback: (b: BasicResponse) => vo
     let response: BasicResponse = { code: 'ok' };
     callback(response);
 }
+// function addProblem(problem: ProblemFullData, callback: (b: BasicResponse) => void) {
+//     //增加问题方法--本地数据测试
+//     if (problem.problem.id === undefined) {
+//         problem.problem.id = Number(problemTemp[problemTemp.length - 1].problem.id) + 1;
+//     }
+//     problemTemp.push(problem);
+//     console.log("增加了题目");
+//     console.log(problemTemp);
+//     let response: BasicResponse = { code: 'ok' };
+//     callback(response);
+// }
 
 /**
  * 删除题目方法
@@ -86,6 +98,20 @@ function delProblem(idLsit: number[], callback: (b: BasicResponse) => void) {
     callback(response);
 
 }
+// function delProblem(idLsit: number[], callback: (b: BasicResponse) => void) {
+//     //删除题目方法--本地数据测试
+//     for (var i = 0; i < idLsit.length; i++) {
+//         for (var j = 0; j < problemTemp.length; j++) {
+//             if (idLsit[i] === problemTemp[j].problem.id) {
+//                 problemTemp.splice(j, 1)
+//             }
+//         }
+//     }
+//     console.log(problemTemp);
+//     let response: BasicResponse = { code: "OK" };
+//     console.log(response);
+//     callback(response);
+// }
 
 
 /**
@@ -179,64 +205,101 @@ function findProblemsVaguely(stringInfo: string, callback: (p: ProblemFullData[]
  * @param problem 一个problemFullData 对象实例
  * @param callback 回调函数
  */
-// function changeProblem(problem: ProblemFullData, callback: (b: BasicResponse) => void) {
-//     axios
-//         .post("/api/problem/update", problem)
-//         .then(res => {
-//             //获取修改结果
-//             let response: BasicResponse = res.data;
-
-//             callback(response);
-//         })
-
-// }
 function changeProblem(problem: ProblemFullData, callback: (b: BasicResponse) => void) {
+    axios
+        .post("/api/problem/update", problem)
+        .then(res => {
+            //获取修改结果
+            let response: BasicResponse = res.data;
 
-
-
-    console.log("yaoxiugai");
-
-    console.log(problem);
-
-    for (var i = 0; i < problemTemp.length; i++) {
-        console.log(i);
-        if (problemTemp[i].problem.id === problem.problem.id) {
-            console.log(problemTemp[i]);
-
-            if (problem.problem.problemText !== "") {
-                problemTemp[i].problem.problemText = problem.problem.problemText
-            }
-            if (problem.problem.answerId !== undefined) {
-                problemTemp[i].problem.answerId = problem.problem.answerId
-            }
-            if (problem.problem.parentId !== undefined) {
-                problemTemp[i].problem.parentId = problem.problem.parentId
-            }
-
-            if (problem.answer.id !== undefined) {
-                problemTemp[i].answer.id = problem.answer.id;
-            }
-            if (problem.answer.answerImg !== undefined) {
-                problemTemp[i].answer.answerImg = problem.answer.answerImg;
-            }
-            if (problem.answer.answerText !== "") {
-                problemTemp[i].answer.answerText = problem.answer.answerText;
-            }
-
-            if (problem.tags.length !== 0) {
-                problemTemp[i].tags = problem.tags;
-            }
-            if (problem.extData !== undefined) {
-                problemTemp[i].extData = problem.extData;
-            }
-            break;
-        }
-
-    }
-    console.log(problemTemp);
-    callback({ code: "ok" });
+            callback(response);
+        })
 
 }
+// function changeProblem(problem: ProblemFullData, callback: (b: BasicResponse) => void) {
+
+
+
+//     console.log("yaoxiugai");
+
+//     console.log(problem);
+
+//     for (var i = 0; i < problemTemp.length; i++) {
+//         console.log(i);
+//         if (problemTemp[i].problem.id === problem.problem.id) {
+//             console.log(problemTemp[i]);
+
+//             if (problem.problem.problemText !== "") {
+//                 problemTemp[i].problem.problemText = problem.problem.problemText
+//             }
+//             if (problem.problem.answerId !== undefined) {
+//                 problemTemp[i].problem.answerId = problem.problem.answerId
+//             }
+//             if (problem.problem.parentId !== undefined) {
+//                 problemTemp[i].problem.parentId = problem.problem.parentId
+//             }
+
+//             if (problem.answer.id !== undefined) {
+//                 problemTemp[i].answer.id = problem.answer.id;
+//             }
+//             if (problem.answer.answerImg !== undefined) {
+//                 problemTemp[i].answer.answerImg = problem.answer.answerImg;
+//             }
+//             if (problem.answer.answerText !== "") {
+//                 problemTemp[i].answer.answerText = problem.answer.answerText;
+//             }
+
+//             if (problem.tags.length !== 0) {
+//                 problemTemp[i].tags = problem.tags;
+//             }
+//             if (problem.extData !== undefined) {
+//                 problemTemp[i].extData = problem.extData;
+//             }
+//             break;
+//         }
+
+//     }
+//     console.log(problemTemp);
+//     callback({ code: "ok" });
+
+// }
+// function changeProblem(problem: ProblemFullData, callback: (b: BasicResponse) => void) {
+//     console.log("yaoxiugai");
+//     console.log(problem);
+//     for (var i = 0; i < problemTemp.length; i++) {
+//         console.log(i);
+//         if (problemTemp[i].problem.id === problem.problem.id) {
+//             console.log(problemTemp[i]);
+//             if (problem.problem.problemText !== "") {
+//                 problemTemp[i].problem.problemText = problem.problem.problemText
+//             }
+//             if (problem.problem.answerId !== undefined) {
+//                 problemTemp[i].problem.answerId = problem.problem.answerId
+//             }
+//             if (problem.problem.parentId !== undefined) {
+//                 problemTemp[i].problem.parentId = problem.problem.parentId
+//             }
+//             if (problem.answer.id !== undefined) {
+//                 problemTemp[i].answer.id = problem.answer.id;
+//             }
+//             if (problem.answer.answerImg !== undefined) {
+//                 problemTemp[i].answer.answerImg = problem.answer.answerImg;
+//             }
+//             if (problem.answer.answerText !== "") {
+//                 problemTemp[i].answer.answerText = problem.answer.answerText;
+//             }
+//             if (problem.tags.length !== 0) {
+//                 problemTemp[i].tags = problem.tags;
+//             }
+//             if (problem.extData !== undefined) {
+//                 problemTemp[i].extData = problem.extData;
+//             }
+//             break;
+//         }
+//     }
+//     console.log(problemTemp);
+//     callback({ code: "ok" });
+// }
 
 
 
