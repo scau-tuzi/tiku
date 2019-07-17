@@ -144,9 +144,9 @@ function handleEdit(index, row) {
   this.$router.push({
     path: "/ModifyProblem",
     //query对象获取问题和答案
+
     query: {
-      modifyQues: row.problem,
-      modifyAnsw: row.answer
+      modifyIndex:index
     }
   });
 }

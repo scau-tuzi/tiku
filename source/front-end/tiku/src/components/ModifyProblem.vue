@@ -231,9 +231,7 @@
         },
         getParams(){
           // 取到路由带过来的参数
-          const problemIndex = this.$route.query.modifyIndex
-          const routerQues = this.$route.query.modifyQues
-          const routerAnsw = this.$route.query.modifyAnsw
+          const problemIndex = this.$route.query.modifyIndex;
     
           let selectedProblem=this.$store.state.allProblem[problemIndex];
           console.log('show selected problem---');
