@@ -18,7 +18,6 @@ function getProblems(page: number, callback: (Problems: ProblemFullData[]) => vo
         .get("/api/problem/list?pageNumber=" + page + "&pageSize=10")//服务器网址
         .then(res => {
             let lists: ProblemFullData[] = res.data.data.problemFullDataList;
-            console.log(lists);
             callback(lists);
         })
 }
@@ -180,20 +179,28 @@ function findProblemsVaguely(stringInfo: string, callback: (p: ProblemFullData[]
  */
 function changeProblem(problem: ProblemFullData, callback: (b: BasicResponse) => void) {
     axios
-        .post("/api/problem/update", problem)
+        .put("/api/problem/update", problem)
         .then(res => {
             //获取修改结果
             let response: BasicResponse = res.data;
+            console.log("res" + res.data)
             callback(response);
         })
 }
+// }
 // function changeProblem(problem: ProblemFullData, callback: (b: BasicResponse) => void) {
+//
+//
+//
 //     console.log("yaoxiugai");
+//
 //     console.log(problem);
+//
 //     for (var i = 0; i < problemTemp.length; i++) {
 //         console.log(i);
 //         if (problemTemp[i].problem.id === problem.problem.id) {
-//             console.log(problemTemp[i]);   
+//             console.log(problemTemp[i]);
+//
 //             if (problem.problem.problemText !== "") {
 //                 problemTemp[i].problem.problemText = problem.problem.problemText
 //             }
@@ -203,6 +210,7 @@ function changeProblem(problem: ProblemFullData, callback: (b: BasicResponse) =>
 //             if (problem.problem.parentId !== undefined) {
 //                 problemTemp[i].problem.parentId = problem.problem.parentId
 //             }
+//
 //             if (problem.answer.id !== undefined) {
 //                 problemTemp[i].answer.id = problem.answer.id;
 //             }
@@ -212,6 +220,7 @@ function changeProblem(problem: ProblemFullData, callback: (b: BasicResponse) =>
 //             if (problem.answer.answerText !== "") {
 //                 problemTemp[i].answer.answerText = problem.answer.answerText;
 //             }
+//
 //             if (problem.tags.length !== 0) {
 //                 problemTemp[i].tags = problem.tags;
 //             }
@@ -220,9 +229,11 @@ function changeProblem(problem: ProblemFullData, callback: (b: BasicResponse) =>
 //             }
 //             break;
 //         }
+//
 //     }
 //     console.log(problemTemp);
 //     callback({ code: "ok" });
+//
 // }
 
 
