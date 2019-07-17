@@ -6,9 +6,9 @@ import TagInfo from '@/data/model/Tag';
  * 拿到试卷列表方法
  * @param callback 回调函数
  */
-function getPapers(callback: (p: PaperFullData[]) => void) {
+function getPapers(page:number,size:number,isDeep:boolean ,callback: (p: PaperFullData[]) => void) {
     axios
-        .get("/api/paper/list?pageNumber=0&pageSize=10")//服务器地址
+        .get("/api/paper/list?pageNumber="+page+"&pageSize="+size+"&isDeep="+(isDeep?1:0))//服务器地址
         .then(res => {
           //console.log(res)
             let lists: PaperFullData[] = res.data.data.paperFullDataList;
