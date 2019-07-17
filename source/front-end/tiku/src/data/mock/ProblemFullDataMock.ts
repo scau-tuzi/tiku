@@ -28,7 +28,9 @@ let porblemsList: ProblemFullData[] = [
             A:"有",
             B:"没有"
         },
-        status: 0
+        status:{
+            verifyStatus:1
+        } 
     }, {
         problem: {
             id: 798566,
@@ -56,7 +58,9 @@ let porblemsList: ProblemFullData[] = [
             A:"有",
             B:"没有"
         },
-        status: 0
+        status:{
+            verifyStatus:1
+        } 
     },{
         problem:{
             id: 789445515,
@@ -84,7 +88,9 @@ let porblemsList: ProblemFullData[] = [
             A:"有",
             B:"没有"
         },
-        status: 0
+        status:{
+            verifyStatus:1
+        }
     } 
 ]
 

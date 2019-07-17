@@ -192,7 +192,9 @@ export default {
           answerText: "李"
         },
         tags: [],
-        status: 1
+        status:{
+            verifyStatus:1
+        } 
       };
       let callback = p => {};
       addProblem(temp, callback);
@@ -233,16 +235,18 @@ export default {
           answerText: ""
         },
         tags: [],
-        status: 1
+        status:{
+            verifyStatus:1
+        } 
       };
       src.problem.parentId = 1;
-      src.problem.id = 4564987916;
+      src.problem.id = 3;
       src.problem.problemText = "1+1=?";
       src.answer.answerText = "2";
 
       // src.tags.push({ value: "生活" });
-      console.log("cs")
-      console.log(src);
+      // console.log("cs")
+      // console.log(src);
       let callback = p => {};
       changeProblem(src, callback);
     },
@@ -340,7 +344,7 @@ export default {
           }
           res.push(ress);
         });
-        console.log(res);
+        // console.log(res);
         _this.tableData = res;
       };
       getProblems(currentPage, callback);
