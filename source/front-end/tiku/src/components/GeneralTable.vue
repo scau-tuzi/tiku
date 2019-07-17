@@ -124,7 +124,7 @@
     }
 
     function handlerchange(currentPage) {//获取题目
-        this.getData(currentPage);
+        this.getData(currentPage-1);
     }
 
     function getData(currentPage) {
@@ -176,6 +176,7 @@
             }
         },
         methods: {
+            handleButton,
             handleView,
             handleClose,
             showInput,
