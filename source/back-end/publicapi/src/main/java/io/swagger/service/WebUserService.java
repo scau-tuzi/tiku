@@ -1,5 +1,6 @@
 package io.swagger.service;
 
+
 import io.swagger.pojo.dto.UserDto;
 
 import java.util.List;
@@ -21,4 +22,3 @@ public interface WebUserService {
 
     void update(UserDto userDto, Long updateBy) throws Exception;
 }
-

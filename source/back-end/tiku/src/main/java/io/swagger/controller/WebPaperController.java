@@ -33,7 +33,7 @@ public class WebPaperController {
 
         pageNumber = (pageNumber < 0 ? 0 : pageNumber);
         pageSize = (pageSize < 1 || pageSize > 100 ? 100 : pageSize);
-        isDeep = (isDeep == null) ? Boolean.FALSE : Boolean.TRUE;
+        isDeep = (isDeep == null) ? Boolean.FALSE : isDeep;
 
         try {
             Map<String, Object> resultMap = webPaperService.getAll(pageNumber, pageSize, isDeep, Boolean.FALSE);

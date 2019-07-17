@@ -13,17 +13,34 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class WebUserServiceImpl extends BasicService<User> implements WebUserService {
-
-
     @Autowired
     private UserRepository userRepository;
 
+
+    //
+    //    @Autowired
+    //    private WebRoleServiceImpl webRoleService;
+
+    //    /**
+    //     * 返回角色名角色ID映射表
+    //     *
+    //     * @return
+    //     */
+    //    public Map<Long, String> listRole() {
+    //        return webRoleService.selectRole();
+    //
+    //    }
+
     @Autowired
     private RoleRepository roleRepository;
+
 
     /**
      * 密码加密
@@ -143,24 +160,42 @@ public class WebUserServiceImpl extends BasicService<User> implements WebUserSer
     public void update(UserDto userDto, Long updateBy) throws Exception {
 
         //判断传入参数的正确
-        if (userDto.getPassword() == null || userDto.getPassword().isEmpty()) {
-            throw new Exception("密码不可为空");
-        } else if (userDto.getRoleId() == null || roleRepository.findByIdEquals(userDto.getRoleId()) == null) {
-            throw new Exception("角色不可为空");
-        } else if (userDto.getId() == null || userRepository.findByIdEquals(userDto.getId()) == null) {
-            throw new Exception("用户id不存在！");
-        } else if (userDto.getUsername() == null || userRepository.findByUsername(userDto.getUsername()) == null) {
-            throw new Exception("用户名已存在！");
-        } else {
-            User user = userRepository.findById(userDto.getId()).get();
-            beforeUpdate(user, updateBy);
-            BeanUtils.copyProperties(userDto, user);
 
-            //todo MD5加密
-            user.setPasswordSaltMd5(passwordMD5(userDto.getPassword()));
-
-            userRepository.save(user);
+        if (userRepository.findById(userDto.getId()).get() == null) {
+            throw new Exception("该用户id不存在！");
         }
+        //        else if(userRepository.findById(userDto.getId()).get().getUsername().equals(userDto.getUsername())){
+        //            throw new Exception("用户名不可与更改前相同！");
+        //        }
+        else if (userDto.getRoleId() == null) {
+            throw new Exception("角色不可为空");
+        } else if (userDto.getPassword() == null) {
+
+            if (userDto.getPassword() == null || userDto.getPassword().isEmpty()) {
+
+                throw new Exception("密码不可为空");
+            } else if (userDto.getRoleId() == null || roleRepository.findByIdEquals(userDto.getRoleId()) == null) {
+                throw new Exception("角色不可为空");
+            } else if (userDto.getId() == null || userRepository.findByIdEquals(userDto.getId()) == null) {
+                throw new Exception("用户id不存在！");
+            } else if (userDto.getUsername() == null || userRepository.findByUsername(userDto.getUsername()) == null) {
+                throw new Exception("用户名已存在！");
+            } else {
+                User user = userRepository.findById(userDto.getId()).get();
+
+
+                BeanUtils.copyProperties(userDto, user);
+                beforeUpdate(user, updateBy);
+
+                //todo MD5加密
+
+                user.setPasswordSaltMd5(passwordMD5(userDto.getPassword()));
+
+                userRepository.save(user);
+            }
+
+        }
+
 
     }
 }
