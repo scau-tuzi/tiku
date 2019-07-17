@@ -9,22 +9,22 @@ var tagsTemp: TagInfo[] = tagslistData;
  * 获得标签列表方法
  * @param callback 回调函数
  */
-function getTagsList(callback: (t: TagInfo[]) => void) {
-    //线上
-    axios
-        .post("/api/tag/list")//服务器地址
-        .then(res => {
-            let lists: TagInfo[] = res.data;
-            callback(lists)
-        })
-}
 // function getTagsList(callback: (t: TagInfo[]) => void) {
-//     //本地获取数据
-//     let lists: TagInfo[] = tagsTemp;
-//     // console.log("get tags list");
-//     // console.log(lists);
-//     callback(lists)
+//     //线上
+//     axios
+//         .post("/api/tag/list")//服务器地址
+//         .then(res => {
+//             let lists: TagInfo[] = res.data;
+//             callback(lists)
+//         })
 // }
+function getTagsList(callback: (t: TagInfo[]) => void) {
+    //本地获取数据
+    let lists: TagInfo[] = tagsTemp;
+    // console.log("get tags list");
+    // console.log(lists);
+    callback(lists)
+}
 
 /**
  * 增加标签方法
