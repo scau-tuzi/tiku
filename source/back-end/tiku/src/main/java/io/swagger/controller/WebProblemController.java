@@ -23,7 +23,6 @@ public class WebProblemController {
     private WebProblemService webProblemService;
 
 
-
     // todo 不知道这样写swagger能不能自动生成正确的接口
 
     /**
@@ -57,26 +56,25 @@ public class WebProblemController {
 
     /**
      * 根据标签进行搜索：分页返回问题的具体信息列表
-     * 待补充：暂时只能返回所有符合条件的问题，无法过滤是否审核
      *
      * @return
      */
     @PostMapping("/query")
     public BasicResponse query(@RequestBody Map<String, Object> paramMap) {
 
-        String type = (String) paramMap.get("type");
-        Integer pageNumber = (Integer) paramMap.get("pageNumber");
-        Integer pageSize = (Integer) paramMap.get("pageSize");
-        Integer isCheck = (Integer) paramMap.get("isCheck");
-        List<Long> tagIdList = (List<Long>) paramMap.get("tagIdList");
-
-        pageNumber = (pageNumber < 0 ? 0 : pageNumber);
-        pageSize = (pageSize < 1 || pageSize > 100 ? 100 : pageSize);
-        isCheck = (isCheck == null ? Status.CHECK : isCheck);
-
         BasicResponse basicResponse = new BasicResponse();
 
         try {
+            String type = (String) paramMap.get("type");
+            Integer pageNumber = (Integer) paramMap.get("pageNumber");
+            Integer pageSize = (Integer) paramMap.get("pageSize");
+            Integer isCheck = (Integer) paramMap.get("isCheck");
+            List<Long> tagIdList = (List<Long>) paramMap.get("tagIdList");
+
+            pageNumber = (pageNumber < 0 ? 0 : pageNumber);
+            pageSize = (pageSize < 1 || pageSize > 100 ? 100 : pageSize);
+            isCheck = (isCheck == null ? Status.CHECK : isCheck);
+
             if (type.equals("tag")) {
                 Map<String, Object> resultMap = webProblemService.getAllByTagIdList(tagIdList, pageNumber, pageSize, isCheck);
                 basicResponse.setData(resultMap);
