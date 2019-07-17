@@ -3,6 +3,7 @@ package io.swagger.service;
 import io.swagger.pojo.PaperFullData;
 import io.swagger.pojo.dao.Paper;
 
+import java.util.List;
 import java.util.Map;
 
 public interface WebPaperService {
@@ -17,7 +18,11 @@ public interface WebPaperService {
 
     Paper updateBasicInfo(Paper paper, Long updateBy);
 
+    void deleteAll(List<Long> idList);
+
     void delete(Long id);
 
     int deleteBasicInfo(Long id);
+
+    Map<String, Object> getAllByTagIdList(List<Long> tagIdList, Integer pageNumber, Integer pageSize, Boolean isDeep);
 }

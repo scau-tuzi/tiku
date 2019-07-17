@@ -120,7 +120,7 @@
           answer:v.answer.answerText,
           pictures:'',
           sound:'',
-          status:(!v.status?'未通过':'通过'),
+          status:(!v.status.verifyStatus ?'未通过':'通过'),
           tag:ts
         };
         res.push(ress)

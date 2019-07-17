@@ -29,4 +29,13 @@ public class WebStatusServiceImpl extends BasicService<Status> implements WebSta
         super.beforeUpdate(dbStatus, updateBy);
         return statusRepository.save(status);
     }
+
+    @Override
+    public Status updateVerifyStatus(Long problemId, Integer verifyStatus, Long updateBy) {
+        Status dbStatus = statusRepository.findByProblemId(problemId);
+        dbStatus.setVerifyStatus(verifyStatus);
+        super.beforeUpdate(dbStatus, updateBy);
+
+        return statusRepository.save(dbStatus);
+    }
 }

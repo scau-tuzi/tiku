@@ -1,6 +1,8 @@
 package io.swagger.pojo.dao.repos;
 
 import io.swagger.pojo.dao.ProblemTag;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -20,6 +22,16 @@ public interface ProblemTagRepository extends JpaRepository<ProblemTag, Long> {
     List<ProblemTag> findAllByIsDelAndProblemIdIn(Boolean isDel, List<Long> problemIdList);
 
     List<ProblemTag> findAllByTagIdEquals(Long tagId);
+
+    @Query(nativeQuery = true, value =
+            "select problem_id from status where verify_status=?4 and problem_id in( " +
+                    "select problem_id from problem_tag where tag_id in ?1 and is_del=?2 " +
+                    "group by problem_id having count(problem_id)=?3)",
+            countQuery = "select count(problem_id) from status where verify_status=?4 and problem_id in( " +
+                    "select problem_id from problem_tag where tag_id in ?1 and is_del=?2 " +
+                    "group by problem_id having count(problem_id)=?3)")
+    Page<Object> findProblemIdListByTagIdList(
+            Pageable pageable, List<Long> tagIdList, Boolean isDel, Integer tagNumber, Integer verifyStatus);
 
     void deleteAllByProblemIdIn(List<Long> problemIdList);
 
