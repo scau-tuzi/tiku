@@ -47,6 +47,41 @@ public class WebPaperController {
     }
 
     /**
+     * 根据标签进行搜索：分页返回试卷的具体信息列表
+     *
+     * @return
+     */
+    @PostMapping("/query")
+    public BasicResponse query(@RequestBody Map<String, Object> paramMap) {
+
+        BasicResponse basicResponse = new BasicResponse();
+
+        try {
+            String type = (String) paramMap.get("type");
+            Integer pageNumber = (Integer) paramMap.get("pageNumber");
+            Integer pageSize = (Integer) paramMap.get("pageSize");
+            Boolean isDeep = (Boolean) paramMap.get("isDeep");
+            List<Long> tagIdList = (List<Long>) paramMap.get("tagIdList");
+
+            pageNumber = (pageNumber < 0 ? 0 : pageNumber);
+            pageSize = (pageSize < 1 || pageSize > 100 ? 100 : pageSize);
+            isDeep = (isDeep == null ? Boolean.FALSE : isDeep);
+
+            if (type.equals("tag")) {
+                Map<String, Object> resultMap = webPaperService.getAllByTagIdList(tagIdList, pageNumber, pageSize, isDeep);
+                basicResponse.setData(resultMap);
+            } else {
+                basicResponse.setData("error query : type no found !");
+                basicResponse.setCode(BasicResponse.ERRORCODE);
+            }
+        } catch (Exception e) {
+            basicResponse.setCode(BasicResponse.ERRORCODE);
+            basicResponse.setData("error query : " + e.getMessage());
+        }
+        return basicResponse;
+    }
+
+    /**
      * 新增试卷
      *
      * @param paperFullData
@@ -96,7 +131,7 @@ public class WebPaperController {
      * @param idList
      * @return
      */
-    @DeleteMapping("/delete")
+    @PostMapping("/delete")
     public BasicResponse delete(@RequestBody List<Long> idList) {
         BasicResponse basicResponse = new BasicResponse();
 

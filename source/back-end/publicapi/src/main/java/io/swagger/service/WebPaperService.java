@@ -23,4 +23,6 @@ public interface WebPaperService {
     void delete(Long id);
 
     int deleteBasicInfo(Long id);
+
+    Map<String, Object> getAllByTagIdList(List<Long> tagIdList, Integer pageNumber, Integer pageSize, Boolean isDeep);
 }
