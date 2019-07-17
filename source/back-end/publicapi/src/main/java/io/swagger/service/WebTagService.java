@@ -1,8 +1,13 @@
 package io.swagger.service;
 
+import io.swagger.pojo.dao.Role;
 import io.swagger.pojo.dao.Tag;
+import io.swagger.pojo.dao.repos.RoleRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,4 +27,8 @@ public interface WebTagService {
     int deleteBasicInfo(Long id);
 
     List<Tag> getTagsByValueList(List<String> values);
+
+
+
+
 }

@@ -2,7 +2,6 @@ package io.swagger.service;
 
 import io.swagger.model.Pagination;
 import io.swagger.pojo.dao.User;
-import io.swagger.pojo.dao.repos.RoleRepository;
 import io.swagger.pojo.dao.repos.UserRepository;
 import io.swagger.pojo.dto.UserDto;
 import org.springframework.beans.BeanUtils;
@@ -13,28 +12,29 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
-public class WebUserServiceImpl extends BasicService<User> implements WebUserService {
-
-
+public class WebUserServiceImpl extends BasicService<User> implements WebUserService{
     @Autowired
     private UserRepository userRepository;
 
-//
-//    @Autowired
-//    private WebRoleServiceImpl webRoleService;
+    //
+    //    @Autowired
+    //    private WebRoleServiceImpl webRoleService;
 
-//    /**
-//     * 返回角色名角色ID映射表
-//     *
-//     * @return
-//     */
-//    public Map<Long, String> listRole() {
-//        return webRoleService.selectRole();
-//
-//    }
+    //    /**
+    //     * 返回角色名角色ID映射表
+    //     *
+    //     * @return
+    //     */
+    //    public Map<Long, String> listRole() {
+    //        return webRoleService.selectRole();
+    //
+    //    }
 
     /**
      * 密码加密
@@ -139,24 +139,25 @@ public class WebUserServiceImpl extends BasicService<User> implements WebUserSer
         if ( userRepository.findById(userDto.getId()).get()==null) {
             throw new Exception("该用户id不存在！");
         }
-//        else if(userRepository.findById(userDto.getId()).get().getUsername().equals(userDto.getUsername())){
-//            throw new Exception("用户名不可与更改前相同！");
-//        }
+        //        else if(userRepository.findById(userDto.getId()).get().getUsername().equals(userDto.getUsername())){
+        //            throw new Exception("用户名不可与更改前相同！");
+        //        }
         else if (userDto.getRoleId()==null ) {
             throw new Exception("角色不可为空");
         } else if (userDto.getPassword()==null) {
             throw new Exception("密码不可为空");
         } else {
             User user = userRepository.findById(userDto.getId()).get();
-            beforeUpdate(user, updateBy);
-            BeanUtils.copyProperties(userDto, user);
 
+            BeanUtils.copyProperties(userDto, user);
+            beforeUpdate(user, updateBy);
             user.setPasswordSaltMd5(passwordMD5(userDto.getPassword()));
 
             userRepository.save(user);
         }
 
     }
+
 
 
 }

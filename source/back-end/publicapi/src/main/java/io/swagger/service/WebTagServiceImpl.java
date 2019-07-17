@@ -5,6 +5,7 @@ import io.swagger.pojo.dao.Tag;
 import io.swagger.pojo.dao.repos.PaperTagRepository;
 import io.swagger.pojo.dao.repos.ProblemTagRepository;
 import io.swagger.pojo.dao.repos.TagRepository;
+import io.swagger.pojo.dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -155,7 +156,7 @@ public class WebTagServiceImpl extends BasicService<Tag> implements WebTagServic
 
         //判断传入参数是否正确
         if (tagRepository.findByValueEquals(tag.getValue()).size() > 0) {
-            throw new Exception("新标签值与更改前的标签值相同！");
+            throw new Exception("新标签值已存在！");
         }
 
         Tag dbTag = tagRepository.findTagById(tag.getId());
@@ -164,4 +165,5 @@ public class WebTagServiceImpl extends BasicService<Tag> implements WebTagServic
         beforeUpdate(dbTag, updateBy);
         tagRepository.save(dbTag);
     }
+
 }
