@@ -31,3 +31,9 @@ public interface StatusRepository extends JpaRepository<Status, Long> {
             countQuery = "select count(*) from status where verify_status = ?1 and is_del=?2")
     Page<Object> findProblemIdList(org.springframework.data.domain.Pageable pageable, Integer verifyStatus, Boolean isDel);
 }
+
+
+
+
+
+
