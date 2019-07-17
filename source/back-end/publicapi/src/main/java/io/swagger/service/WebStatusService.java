@@ -9,4 +9,6 @@ public interface WebStatusService {
     int deleteByProblemId(Long problemId);
 
     Status update(Status status, Long updateBy);
+
+    Status updateVerifyStatus(Long problemId, Integer verifyStatus, Long updateBy);
 }

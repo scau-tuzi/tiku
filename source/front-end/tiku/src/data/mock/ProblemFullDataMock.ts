@@ -8,7 +8,7 @@ let porblemsList: ProblemFullData[] = [
             id: 4564987916,
             problemText: "小明是小学生,正常情况有没有暑假",
             parentId: -1,
-            answerId: 1
+            answerId: 345645654
         },
         answer: {
             id: 345645654,
@@ -25,18 +25,20 @@ let porblemsList: ProblemFullData[] = [
             parentId: -1
         }],
         extData: {
-            A:"有",
-            B:"没有"
+            choice_A:"有",
+            choice_B:"没有",
+            choice_C:"你猜",
+            choice_D:"想得美"            
         },
-        status:{
-            verifyStatus:1
-        } 
+        status: {
+            verifyStatus: 1
+           }
     }, {
         problem: {
             id: 798566,
             problemText: "一天有几个小时",
             parentId: 0,
-            answerId: 2
+            answerId: 2323432894623876
         },
         answer: {
             id: 2323432894623876,
@@ -55,18 +57,20 @@ let porblemsList: ProblemFullData[] = [
             }
         ],
         extData: {
-            A:"有",
-            B:"没有"
+            choice_A:"24",
+            choice_B:"12",
+            choice_C:"10",
+            choice_D:"36" 
         },
-        status:{
-            verifyStatus:1
-        } 
+        status: {
+            verifyStatus: 1
+           }
     },{
         problem:{
             id: 789445515,
             problemText: "今天下雨,是晴天还是雨天",
             parentId: 0,
-            answerId: 3
+            answerId: 2334556567
         },
         answer:{
             id: 2334556567,
@@ -85,12 +89,14 @@ let porblemsList: ProblemFullData[] = [
             }
         ],
         extData: {
-            A:"有",
-            B:"没有"
+            choice_A:"晴天",
+            choice_B:"雨天",
+            choice_C:"阴天",
+            choice_D:"大风天" 
         },
-        status:{
-            verifyStatus:1
-        }
+        status: {
+            verifyStatus: 1
+           }
     } 
 ]
 

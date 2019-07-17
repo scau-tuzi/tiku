@@ -3,8 +3,8 @@
     <el-main>
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
 
-        <el-form-item label="题目" prop="ti">
-          <el-input type="textarea" :rows="5" v-model="ruleForm.ti"></el-input>
+        <el-form-item label="题目" prop="question">
+          <el-input type="textarea" :rows="5" v-model="ruleForm.question"></el-input>
         </el-form-item>
         <el-form-item label="答案" prop="answer">
           <el-input type="textarea" :rows="5" v-model="ruleForm.answer"></el-input>
@@ -91,29 +91,30 @@
 <script >
     import ProblemFullData from "../data/model/ProblemFullData";
     import {addProblem} from "../api/Problem";
+    import {getTagsList} from "../api/Tag";
 
     export default {
         name: "InputTiku",
       data(){
         return {
-          OptionNum: '1',
+          OptionNum: 0,
           dialogImageUrl: '',
           dialogVisible: false,
           disabled: false,
           fileList:[],
           ruleForm: {
-            ti: '',
+            question: '',
             answer: '',
             pics: '',
             sound: '',
             tags: ''
           },
           form: {
-            option: {},
+            option: ['','choice_A','choice_B','choice_C','choice_D'],
             text: {},
           },
           rules: {
-            ti: [
+            question: [
               { required: true, message: '请输入题目', trigger: 'blur' }
             ],
             answer: [
@@ -121,26 +122,49 @@
             ]
 
           },
-          options: [{
-            value: '一年级',
-            label: '一年级'
-          }, {
-            value: '二年级',
-            label: '二年级'
-          }, {
-            value: '三年级',
-            label: '三年级'
-          }],
+          options: [
+          //   {
+          //   value: '一年级',
+          //   label: '一年级'
+          // }, {
+          //   value: '二年级',
+          //   label: '二年级'
+          // }, {
+          //   value: '三年级',
+          //   label: '三年级'
+          // }
+          ],
           value: []
 
       };
       },
       methods: {
+        getTags(){
+            console.log("getTag!")
+            var _this=this;
+            let callback=(pd)=>{
+            console.log("get it");
+            console.log(pd);
+            this.$store.commit("setNewCommits",pd);
+            // console.log(this.$store.state.commits);
+            // console.log(this.$store.state.commits[0].id);
+            pd.filter(v=>{
+                let ress={
+                value:v.value,
+                label:v.value
+                };
+                this.options.push(ress)
+            });
+            };
+            getTagsList(callback);
+            console.log(this.options);
+          },
+
         submitForm(formName) {
           console.log("提交数据");
           console.log(this.form);
           let pd={problem:{},answer:{}};
-          pd.problem.problemText=this.ruleForm.ti;
+          pd.problem.problemText=this.ruleForm.question;
           pd.answer.answerText=this.ruleForm.answer;
           pd.tags=[];
           this.value.forEach((v)=>{
@@ -151,8 +175,8 @@
           pd.extData={}
           var me=this;
           Object.keys(this.form.text).forEach(function(key){
-            let keyname=me.form.text[key];
-            let value=me.form.option[key];
+            let keyname=me.form.option[key];
+            let value=me.form.text[key];
             pd.extData[keyname]=value;
           });
           console.log(pd)
@@ -203,6 +227,9 @@
 
         }
 
+      },
+      mounted: function() {
+        this.getTags();
       }
 
     }

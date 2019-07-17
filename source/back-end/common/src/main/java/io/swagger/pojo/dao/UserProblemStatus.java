@@ -28,19 +28,19 @@ public class UserProblemStatus extends BasicEntity {
     /**
      * 用户唯一id
      */
-    @Column(name="user_uuid")
+    @Column(name = "user_uuid")
     private String userUuid;
 
     /**
      * 问题状态
      */
-    @Column(name="status")
+    @Column(name = "status")
     private String status;
 
     /**
      * 传进来的时间
      */
-    @Column(name="date")
+    @Column(name = "date")
     private Date date;
 
 }

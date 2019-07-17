@@ -17,9 +17,9 @@ let problemData: ProblemFullData = {
     },
     tags: [],
     extData: null,
-    status:{
-        verifyStatus:1
-    } 
+    status: {
+        verifyStatus: 1
+    }
 }
 
 export default problemData

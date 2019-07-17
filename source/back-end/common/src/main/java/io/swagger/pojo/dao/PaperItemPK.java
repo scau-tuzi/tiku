@@ -1,12 +1,7 @@
 package io.swagger.pojo.dao;
 
 import lombok.Data;
-import lombok.experimental.Accessors;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import java.io.Serializable;
 
 /**
@@ -16,7 +11,7 @@ import java.io.Serializable;
  * @时间:2019-07-09
  */
 @Data
-public class PaperItemPK implements Serializable{
+public class PaperItemPK implements Serializable {
 
     /**
      * 问题id

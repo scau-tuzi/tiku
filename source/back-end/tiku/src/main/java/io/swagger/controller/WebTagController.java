@@ -1,5 +1,6 @@
 package io.swagger.controller;
 
+import io.swagger.pojo.dao.Status;
 import io.swagger.pojo.dao.Tag;
 import io.swagger.pojo.dto.BasicResponse;
 import io.swagger.service.WebTagService;
@@ -31,7 +32,7 @@ public class WebTagController {
         Long createBy = 1L;
         try {
             tagService.add(tag, createBy);
-            basicResponse.setData("标签添加成功");
+
         } catch (Exception e) {
             basicResponse.setCode(BasicResponse.ERRORCODE);
             basicResponse.setData("标签添加失败: " + e.getMessage());
@@ -41,14 +42,14 @@ public class WebTagController {
     }
 
     /**
-     * 删除一个标签
+     * 删除标签
      */
     @DeleteMapping("/delete")
-    public BasicResponse delete(@RequestParam Long id) {
+    public BasicResponse deleteAll(@RequestBody List<Long> idList) {
         BasicResponse basicResponse = new BasicResponse();
 
         try {
-            tagService.delete(id);
+            tagService.deleteAll(idList);
             basicResponse.setData("标签删除成功");
         } catch (Exception e) {
             basicResponse.setData("标签删除失败");
