@@ -2,6 +2,7 @@ package io.swagger.service;
 
 import io.swagger.model.Pagination;
 import io.swagger.pojo.PaperFullData;
+import io.swagger.pojo.ProblemFullData;
 import io.swagger.pojo.dao.Paper;
 import io.swagger.pojo.dao.PaperItem;
 import io.swagger.pojo.dao.PaperTag;
@@ -223,6 +224,35 @@ public class WebPaperServiceImpl extends BasicService<Paper> implements WebPaper
     @Override
     public int deleteBasicInfo(Long id) {
         return paperRepository.updateIsDelById(id, Boolean.TRUE);
+    }
+
+    @Override
+    public Map<String, Object> getAllByTagIdList(List<Long> tagIdList, Integer pageNumber, Integer pageSize, Boolean isDeep) {
+        Map<String, Object> resultMap = new HashMap<>();
+
+        //查找含有指定标签的问题id
+        Page<Object> page = paperTagRepository.findPaperIdListByTagIdList(
+                PageRequest.of(pageNumber, pageSize), tagIdList, Boolean.FALSE, tagIdList.size());
+
+        //将id存储进id列表
+        List<Long> paperIdList = new ArrayList<>();
+        for (Object id : page.getContent()) {
+            paperIdList.add(Long.parseLong(id.toString()));
+        }
+
+        //分页信息
+        Pagination pagination = new Pagination();
+        pagination.setPage(BigDecimal.valueOf(page.getNumber()));
+        pagination.setSize(BigDecimal.valueOf(page.getSize()));
+        pagination.setTotal(BigDecimal.valueOf(page.getTotalPages()));
+
+        //问题具体信息
+        List<PaperFullData> paperFullDataList = paperDataService.getFullDataByIds(paperIdList, isDeep);
+
+        resultMap.put("pagination", pagination);
+        resultMap.put("paperFullDataList", paperFullDataList);
+
+        return resultMap;
     }
 
 }
