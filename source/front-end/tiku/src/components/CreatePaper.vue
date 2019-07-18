@@ -113,7 +113,31 @@
       editPaper(){
         console.log("paperEdit")
         console.log(this.$store.state.paperEditData)
-        createPaperOrderMock.tableData=this.$store.state.paperEditData.problem;
+        //createPaperOrderMock.tableData=this.$store.state.paperEditData.problems;
+        let p=this.$store.state.paperEditData.problems;
+        let res = [];
+        for(let i=0;i<this.$store.state.paperEditData.problems.length;i++){
+          let ts = [];
+          if (p[i].tags !== null) {
+            for (let i = 0; i < p[i].tags.length; i++) {
+              ts.push(p[i].tags[i].value);
+            }
+          }
+          if (p[i].answer === null) {
+            p[i].answer = {
+              answerText: ""
+            };
+          }
+          let ress = {
+            id: p[i].problem.id,
+            problem: p[i].problem.problemText,
+            answer: p[i].answer.answerText,
+            tag: ts
+          };
+          res.push(ress);
+        }
+        console.log("res");
+        createPaperOrderMock.tableData=res;
       },
       complete(){
         //this.$router.push("/cart")
