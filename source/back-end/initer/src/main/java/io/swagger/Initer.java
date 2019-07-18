@@ -123,7 +123,7 @@ public class Initer {
 
                         Answer answer = new Answer();
                         answer.setId(curid);
-                        answer.setAnswerText(String.valueOf('A'+(proNo%4)));
+                        answer.setAnswerText(Character.toString((char) ('A'+(proNo%4))));
                         Answer an = answerRepository.save(answer);
 
                         curid++;

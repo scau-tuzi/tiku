@@ -50,7 +50,8 @@
    function getPaperData(currentPage){
       console.log("change")
       var _this=this;
-      let callback=(pd)=>{
+      let callback=(pd,size)=>{
+        this.listSize = size;
         var res=[];
         console.log("get it")
         console.log(pd)
@@ -74,18 +75,19 @@
             }
           }
           if(v.deep){
-            for(let i =0;i<v.problems.length;i++){
-              problemDeep.push(v.problems[i].problem)
-              //problemDeep.push(v.problems[i].problem,v.problems[i].answer,v.problems[i].tags)
-              //answerDeep.push(v.problems[i].answer)
-            }
+            // for(let i =0;i<v.problems.length;i++){
+            //   problemDeep.push(v.problems[i].problem)
+            //   //problemDeep.push(v.problems[i].problem,v.problems[i].answer,v.problems[i].tags)
+            //   //answerDeep.push(v.problems[i].answer)
+            // }
+            //problemDeep.push(v.problems)
           }
           let ress={
             paperId:v.paper.id,
             title:v.paper.title,
             tag:ts,
             map:map,
-            problem:problemDeep,
+            problems:v.problems,
             //answer:answerDeep
           };
           res.push(ress)
@@ -108,6 +110,7 @@
       },
       data: function (){
           return{
+            listSize:0,
             paperListTable,
             tableData:[]
           }

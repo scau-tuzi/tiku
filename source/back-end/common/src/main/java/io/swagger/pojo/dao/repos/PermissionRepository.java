@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * 功能描述：权限实体Jpa操作类
  *
@@ -20,6 +22,10 @@ public interface PermissionRepository extends JpaRepository<Permission, Long> {
     Permission findByIdEquals(Long id);
 
     Permission findByName(String name);
+
+    @Query(nativeQuery = true,
+            value = "SELECT DISTINCT id from permission")
+    List<Long> selectPermissionId();
 
     @Modifying
     @Query(nativeQuery = true,

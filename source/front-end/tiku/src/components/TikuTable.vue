@@ -27,9 +27,9 @@
           border
           stripe
           style="width: 100%"
-          @selection-change="handleSelectionChange"
+          @selection-change="this.handleSelectionChange"
         >
-          <el-table-column type="selection" width="55"></el-table-column>
+          <el-table-column prop="id"  type="selection" width="55"></el-table-column>
           <el-table-column fixed="left" prop="problem" label="问题" width="300"></el-table-column>
           <el-table-column prop="answer" label="答案" width="300"></el-table-column>
           <el-table-column prop="sound" label="语音" width="100"></el-table-column>
@@ -76,7 +76,7 @@
         background
         layout="prev, pager, next"
         :total="this.listSize"
-        @current-change="this.handlerchange"
+        @current-change="this.handlechange"
       ></el-pagination>
     </el-footer>
     <el-dialog title="修改标签" :visible.sync="centerDialogVisible_single" width="30%" center>
@@ -169,27 +169,22 @@ function handleDelete(index) {
       if (b.code === "ok") {
         alert("删除成功");
       }
-      this.$router.go(0); //页面刷新（要加上）
+      // this.$router.go(0); //页面刷新（要加上）
+      this.getData(this.listPageNumber - this.del);
     });
   });
 }
 function handleSelectionChange(val) {
+console.log("??",val);
   this.tableChecked = val;
 }
 function batchDelete(rows) {
   console.log("batchDelete--", rows);
   let delId = [];
-  // console.log("batchDelete--",rows);
-  for (var i = 0; i < this.tableData.length; i++) {
-    //获取选中项id
-    for (var j = 0; j < rows.length; j++) {
-      if (this.tableData[i].problem === rows[j].problem) {
-        //获取选中的问题id
-        // delIndex.push(i);
-        delId.push(this.$store.state.allProblem[i].problem.id);
-      }
-    }
+  for(var i=0;i<rows.length;i++){
+    delId.push(rows[i].id)
   }
+  // console.log(delId)
   // console.log("4--",delId);
   this.$confirm("确定批量删除问题?", "提示", {
     confirmButtonText: "确定",
@@ -202,7 +197,10 @@ function batchDelete(rows) {
         if (b.code === "ok") {
           alert("删除成功");
         }
-        this.$router.go(0); //页面刷新（要加上）
+        // this.$router.go(0); //页面刷新（要加上）
+        this.del = delId.length === this.listLenght ? 1 : this.del;
+        // console.log(delId);
+        this.getData(this.listPageNumber - this.del);
       });
     })
     .catch(() => {
@@ -268,133 +266,11 @@ function handleInputConfirm() {
 /**
  * problem题目接口测试:测试结果可在 console 观察
  */
-function addProblemData() {
-  //增加题目方法测试
-  let temp = {
-    problem: {
-      problemText: "李小米的爸爸姓什么?"
-    },
-    answer: {
-      answerText: "李"
-    },
-    tags: [],
-    status: 1
-  };
-  let callback = p => {};
-  addProblem(temp, callback);
-}
-function findProblemDataByTags() {
-  //标签查找题目方法测试
-  let temp = [
-    {
-      value: "幼儿园"
-    }
-  ];
-  let callback = p => {};
-  findProbLemsByTags(temp, callback);
-}
-function findProblemDataByVaguely() {
-  //模糊查询题目方法测试
-  let temp = "没";
-  let callback = p => {};
-  findProblemsVaguely(temp, callback);
-}
-function delProblemData() {
-  //删除题目方法测试
-  let temp = [1, 2];
-  let callback = p => {};
-  delProblem(temp, callback);
-}
-function changeProblemData() {
-  //修改题目方法测试
-  /**
-   * src 为初始原型 ( ProblemFullData 类型),
-   */
-  let src = {
-    problem: {
-      id: -1,
-      problemText: ""
-    },
-    answer: {
-      answerText: ""
-    },
-    tags: [],
-    extData: {
-      A: 4,
-      B: 5,
-      C: 6,
-      D: 7
-    },
-    status: {
-      verifyStatus: 1
-    }
-  };
-  src.problem.parentId = 1;
-  src.problem.id = 5;
-  src.problem.problemText = "2+2=?";
-  src.answer.answerText = "4";
-
-  // src.tags.push({ value: "生活" });
-  console.log("cs");
-  console.log(src);
-  let callback = p => {};
-  changeProblem(src, callback);
-}
-/** */
 
 /**
  * tag标签接口测试: 可以在 console 查看是否有tag输出
  */
-function getTagsdata() {
-  //标签接口_获得标签列表方法本地测试
-  let callback = tag => {
-    // console.log("get tags data");
-    // console.log(tag);
-  };
-  getTagsList(callback);
-}
-function addTagsdata() {
-  //标签接口_增加标签方法本地测试
-  let callback = tag => {};
-  let temp = [
-    //因为在 js 语言中无类型模式,所以需要根据函数参数类型的具体结构传递参数
-    {
-      value: "语文",
-      parentId: 6
-    },
-    {
-      value: "数学",
-      parentId: 7
-    },
-    {
-      value: "英语",
-      parentId: 8
-    },
-    {
-      value: "历史"
-    },
-    {
-      value: "化学"
-    },
-    {
-      value: "生物"
-    },
-    {
-      value: "政治"
-    },
-    {
-      value: "地理"
-    }
-  ];
 
-  addTags(temp, callback);
-}
-function delTagData() {
-  //标签接口_删除标签方法本地测试
-  let callback = tag => {};
-  let delId = [15, 14];
-  delTag(delId, callback);
-}
 /** */
 function handlechange(currentPage) {
   //获取题目
@@ -404,6 +280,9 @@ function getData(currentPage) {
   // console.log("change")
   var _this = this;
   let callback = (pd, size) => {
+    this.listLenght = pd.length;
+    this.del = pd.length === 1 ? 1 : 0;
+    this.listPageNumber = currentPage;
     this.listSize = size * 10;
     var res = [];
     this.$store.commit("setNewProblems", pd);
@@ -420,6 +299,7 @@ function getData(currentPage) {
         };
       }
       let ress = {
+        id: v.problem.id,
         problem: v.problem.problemText,
         answer: v.answer.answerText,
         pictures: "",
@@ -474,11 +354,7 @@ function getTags() {
   console.log("getTag!");
   var _this = this;
   let callback = (pd, size) => {
-    // console.log("get it");
-    // console.log(pd);
     this.$store.commit("setNewCommits", pd);
-    // console.log(this.$store.state.commits);
-    // console.log(this.$store.state.commits[0].id);
     pd.filter(v => {
       let ress = {
         value: v.value,
@@ -504,14 +380,7 @@ export default {
     jumpInput,
     handleClose,
     handleInputConfirm,
-    addProblemData,
-    findProblemDataByTags,
-    findProblemDataByVaguely,
-    delProblemData,
-    changeProblemData,
-    getTagsdata,
-    addTagsdata,
-    delTagData,
+
     handlechange,
     getData,
     showTags,
@@ -520,7 +389,6 @@ export default {
   },
   mounted: function() {
     this.getData(0);
-    // this.changeProblemData();
     this.getTags();
 
     let all = [];
@@ -535,6 +403,9 @@ export default {
   },
   data() {
     return {
+      listLenght: 0,
+      del: 0,
+      listPageNumber: 0,
       listSize: 0,
       tableChecked: [], //被选中的记录数据
       search: "",

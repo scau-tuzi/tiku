@@ -22,6 +22,22 @@ public class WebPermissionServiceImpl extends BasicService implements WebPermiss
     @Autowired
     private PermissionRepository permissionRepository;
 
+
+    /**
+     * 列出权限id对应权限的名称
+     * @return
+     */
+    public Map<Long, String> selectPermission() {
+        List<Long> permissionIdList = permissionRepository.selectPermissionId();
+        Map<Long, String> permissionIdPermissionName= new HashMap<>();
+        for (Long id : permissionIdList) {
+            permissionIdPermissionName.put(id, permissionRepository.findByIdEquals(id).getName());
+        }
+        return permissionIdPermissionName;
+    }
+
+
+
     /**
      * 增加权限
      *

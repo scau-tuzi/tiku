@@ -10,7 +10,7 @@ function getPapers(pageNumber:number,callback: (p: PaperFullData[]) => void, isD
     axios
         .get("/api/paper/list?pageNumber="+pageNumber+"&isDeep="+isDeep+"&pageSize="+pageSize)//服务器地址
         .then(res => {
-          //console.log(res)
+            //console.log(res)
             let lists: PaperFullData[] = res.data.data.paperFullDataList;
             callback(lists)
         })
@@ -40,7 +40,7 @@ function addPaper(paper: PaperFullData, callback: (b: BasicResponse) => void) {
  */
 function delPaper(idList: number[], callback: (b: BasicResponse) => void) {
     axios
-        .post("/api/paper/delete?" + "paperId=" + idList)
+        .post("/api/paper/delete", idList)
         .then(res => {
             let response: BasicResponse = res.data;
             callback(response)

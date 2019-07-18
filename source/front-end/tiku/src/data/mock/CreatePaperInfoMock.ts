@@ -5,20 +5,20 @@ let createPaperInfoMock:GeneralTable={
   tableData: [
     {
       id: '100',
-      problemText: '2016-05-02',
-      answerText: '王小虎1',
+      problem: '2016-05-02',
+      answer: '王小虎1',
       tag: '22'
     },
     {
       id: '200',
-      problemText: '2016',
-      answerText: '王小虎2',
+      problem: '2016',
+      answer: '王小虎2',
       tag: '22'
     },
     {
       id: '300',
-      problemText: '2016-05',
-      answerText: '王小虎3',
+      problem: '2016-05',
+      answer: '王小虎3',
       tag: '22'
     }
   ],
@@ -34,7 +34,7 @@ let createPaperInfoMock:GeneralTable={
     {
       fixed: "",
       label: "题目",
-      prop: "problemText",
+      prop: "problem",
       width: "200",
       type: "",
       specialType: ""
@@ -42,7 +42,7 @@ let createPaperInfoMock:GeneralTable={
     {
       fixed: "",
       label: "答案",
-      prop: "answerText",
+      prop: "answer",
       width: "200",
       type: "",
       specialType: ""
@@ -81,7 +81,7 @@ let createPaperOrderMock:GeneralTable={
     {
       fixed: "",
       label: "题目",
-      prop: "problemText",
+      prop: "problem",
       width: "200",
       type: "",
       specialType: ""
@@ -89,7 +89,7 @@ let createPaperOrderMock:GeneralTable={
     {
       fixed: "",
       label: "答案",
-      prop: "answerText",
+      prop: "answer",
       width: "200",
       type: "",
       specialType: ""
