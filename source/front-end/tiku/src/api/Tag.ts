@@ -60,7 +60,7 @@ function delTag(idLsit: number[], callback: (b: BasicResponse) => void) {
 
 /**
  * 修改标签方法
- * @param tag 要删除的标签的 id 
+ * @param tag 要修改的标签
  * @param callback 回调函数
  */
 function changeTag(tag: TagInfo, callback: (b: BasicResponse) => void) {
