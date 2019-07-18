@@ -54,7 +54,7 @@ let mockData:MenuInfo={
         {
           title:"角色列表",
           // component:InputTiku,
-          path:"/InputTiku",
+          path:"/RoleTable",
         },
         {
           title:"用户列表",
