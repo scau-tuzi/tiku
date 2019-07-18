@@ -520,9 +520,6 @@ export default {
   },
   mounted: function() {
     this.getData(0);
-    // this.changeProblemData();
-    this.getTags();
-
     let all = [];
     Object.keys(AllFieldInfo).forEach(key => {
       all.push({

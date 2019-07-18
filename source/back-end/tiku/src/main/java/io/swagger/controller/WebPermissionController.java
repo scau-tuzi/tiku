@@ -1,10 +1,8 @@
 package io.swagger.controller;
 
-import io.swagger.pojo.dao.Status;
-import io.swagger.pojo.dao.Tag;
+import io.swagger.pojo.dao.Permission;
 import io.swagger.pojo.dto.BasicResponse;
-import io.swagger.service.WebTagService;
-import io.swagger.service.WebTagServiceImpl;
+import io.swagger.service.WebPermissionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -12,90 +10,93 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
-
-@Slf4j
-@RequestMapping("/api/tag")
 @RestController
-public class WebTagController {
+@Slf4j
+@RequestMapping("/api/permission")
+public class WebPermissionController {
 
     @Autowired
-    private WebTagService tagService;
-
+    private WebPermissionService webPermissionService;
 
     /**
-     * 增加标签
+     * 增加权限
+     * @param permission
+     * @return
      */
     @PostMapping("/add")
-    public BasicResponse add(@RequestBody Tag tag) {
+    public BasicResponse add(@RequestBody Permission permission) {
         BasicResponse basicResponse = new BasicResponse();
 
         Long createBy = 1L;
         try {
-            tagService.add(tag, createBy);
-
+            webPermissionService.add(permission, createBy);
+            basicResponse.setData("权限添加成功");
         } catch (Exception e) {
             basicResponse.setCode(BasicResponse.ERRORCODE);
-            basicResponse.setData("标签添加失败: " + e.getMessage());
+            basicResponse.setData("权限添加失败: " + e.getMessage());
         }
-
         return basicResponse;
     }
 
     /**
-     * 删除标签
+     * 删除权限
+     * @param idList
+     * @return
      */
-    @PostMapping("/delete")
-    public BasicResponse deleteAll(@RequestBody List<Long> idList) {
+    @DeleteMapping("/delete")
+    public BasicResponse delete(@RequestBody List<Long> idList) {
         BasicResponse basicResponse = new BasicResponse();
-
         try {
-            tagService.deleteAll(idList);
-            basicResponse.setData("标签删除成功");
+            webPermissionService.deleteAll(idList);
+            basicResponse.setData("权限删除成功");
         } catch (Exception e) {
-            basicResponse.setData("标签删除失败");
+            basicResponse.setData("权限删除失败:" + e.getMessage());
             basicResponse.setCode(BasicResponse.ERRORCODE);
         }
-
         return basicResponse;
     }
 
     /**
-     * 查找所有标签
+     * 查询权限列表
+     * @param pageNumber
+     * @param pageSize
+     * @return
      */
-    @GetMapping("/list")
+    @RequestMapping("/list")
     public BasicResponse list(@RequestParam Integer pageNumber, @RequestParam Integer pageSize) {
         BasicResponse basicResponse = new BasicResponse();
 
         pageNumber = (pageNumber < 0 ? 0 : pageNumber);
         pageSize = (pageSize < 1 || pageSize > 100 ? 100 : pageSize);
-
         try {
-            Map<String, Object> resultMap = tagService.list(pageNumber, pageSize);
+            Map<String, Object> resultMap = webPermissionService.list(pageNumber, pageSize);
             basicResponse.setData(resultMap);
         } catch (Exception e) {
             basicResponse.setCode(BasicResponse.ERRORCODE);
-            basicResponse.setData("query error : " + e.getMessage());
+            basicResponse.setData("权限列表查询失败: " + e.getMessage());
         }
-
         return basicResponse;
     }
 
     /**
-     * 更改标签值
+     * 更新权限
+     * @param permission
+     * @return
      */
     @PutMapping("/update")
-    public BasicResponse update(@RequestBody Tag tag) {
+    public BasicResponse update(@RequestBody Permission permission) {
         BasicResponse basicResponse = new BasicResponse();
 
+        Long updateBy = 1L;
         try {
-            Long updateBy = 1L;
-            tagService.update(tag, updateBy);
-            basicResponse.setData("更改标签成功");
+
+            webPermissionService.update(permission, updateBy);
+            basicResponse.setData("更改权限成功");
         } catch (Exception e) {
             basicResponse.setCode(BasicResponse.ERRORCODE);
-            basicResponse.setData("更改标签失败: " + e.getMessage());
+            basicResponse.setData("更改权限失败: " + e.getMessage());
         }
-
         return basicResponse;
+
     }
 }
