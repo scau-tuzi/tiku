@@ -33,8 +33,7 @@
           <el-pagination
             background
             layout="prev, pager, next"
-            :total="1000"
-            :current-page.sync="currentPage"
+            :total="this.listSize"
             @current-change="this.handlerchange"
           ></el-pagination>
         </el-row>
@@ -51,7 +50,7 @@
       console.log("change")
       var _this=this;
       let callback=(pd,size)=>{
-        this.listSize = size;
+        _this.listSize = size*10;
         var res=[];
         console.log("get it")
         console.log(pd)
@@ -93,7 +92,7 @@
           res.push(ress)
         });
         console.log(res);
-        paperListTable.tableData=res;
+        _this.paperListTable.tableData=res;
       };
 
       getPapers(currentPage,callback,1,10);
@@ -108,14 +107,19 @@
       watch: {
         '$route': 'data'
       },
-      data: function (){
+      data(){
           return{
-            listSize:0,
+            listSize:100,
             paperListTable,
             tableData:[]
           }
       },
       methods:{
+        handlerchange:function(currentPage){//获取题目
+          console.log("123");
+          this.getPaperData(currentPage-1);
+        },
+        getPaperData,
         //监听子组件
         handleButton(val){
           if(val.method==='ViewPaper'){
@@ -165,11 +169,7 @@
           this.$router.push({path: '/CreatePaper'})
         }
         },
-      handlerchange:function(currentPage){//获取题目
-          console.log("123");
-        this.getPaperData(currentPage-1);
-      },
-      getPaperData
+
     }
 </script>
 

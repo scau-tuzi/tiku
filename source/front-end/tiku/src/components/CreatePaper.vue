@@ -3,7 +3,7 @@
     <el-main>
       <el-row>
         <el-col span=3>
-          <el-button  align="left" plain @click="complete">完成</el-button>
+          <el-button align="left" plain @click="complete">完成</el-button>
           <el-button type="primary" plain>全选</el-button>
         </el-col>
         <el-col span=17>
@@ -15,20 +15,21 @@
         </el-col>
         <el-col span=4>
           <el-autocomplete
-            v-model="state"
-            :fetch-suggestions="querySearchAsync"
-            placeholder="搜索"
-            @select="handleSelect"
+                  v-model="state"
+                  :fetch-suggestions="querySearchAsync"
+                  placeholder="搜索"
+                  @select="handleSelect"
           ></el-autocomplete>
         </el-col>
       </el-row>
       <el-row>
         <el-col :span=12.5 style="margin-right: 10px">
-          <GeneralTable usePagination :handleChange="leftTablePageChange" :listSize="listSize" v-bind:table-info="leftTable"></GeneralTable>
+          <GeneralTable usePagination :handleChange="leftTablePageChange" :listSize="listSize"
+                        v-bind:table-info="leftTable"  v-on:handleButton="handleButton" ></GeneralTable>
         </el-col>
-       <el-col :span=11>
-         <GeneralTable :listSize="listSize" v-bind:table-info="createPaperOrderMock"></GeneralTable>
-       </el-col>
+        <el-col :span=11>
+          <GeneralTable :listSize="listSize" v-bind:table-info="createPaperOrderMock"  v-on:handleButton="handleButton"></GeneralTable>
+        </el-col>
       </el-row>
       <el-row>
         <pre style="text-align: left">
@@ -51,18 +52,19 @@
   import tikuTableInfo from "../data/mock/TikuTableInfoMock";
   import {createPaperInfoMock, createPaperOrderMock} from "../data/mock/CreatePaperInfoMock";
   import {getProblems} from "../api/Problem";
+  import {addPaper} from "../api/Paper";
 
   /**
    * 隐藏右边出现过的题目，检查有没有出现过
    * @param leftId
    */
-  function checkInRight(leftProblemId){
+  function checkInRight(leftProblemId) {
     let t = this.createPaperOrderMock.tableData;
-    if(t!==null && t.length>0){
+    if (t !== null && t.length > 0) {
       for (let i = 0; i < t.length; i++) {
-          if(leftProblemId===t[i].id){
-            return false;
-          }
+        if (leftProblemId === t[i].id) {
+          return false;
+        }
       }
     }
     return true;
@@ -85,7 +87,7 @@
       // },
 
       pd.filter(v => {
-        if(!checkInRight.bind(_this).call(_this,v.problem.id)){
+        if (!checkInRight.bind(_this).call(_this, v.problem.id)) {
           return;
         }
         let ts = [];
@@ -110,21 +112,21 @@
       });
       console.log(res);
       _this.leftTable.tableData = res;
-      _this.listSize=size;
+      _this.listSize = size;
 
     }; //callback
     getProblems(page, callback, 1);
   } //function
   export default {
-        name: "CreatePaper",
+    name: "CreatePaper",
     components: {GeneralTable},
-    data(){
-      return{
+    data() {
+      return {
         tikuTableInfo,
-        leftTable:createPaperInfoMock,
+        leftTable: createPaperInfoMock,
         createPaperOrderMock,
-        listSize:100,
-        curPage:0,
+        listSize: 100,
+        curPage: 0,
         ruleForm: {
           name: ''
         },
@@ -134,28 +136,48 @@
           ]
         }
       }
-      },
+    },
     mounted() {
-        this.loadDataToLeftTable(0);
-        this.rowDrop();
-        this.editPaper();
+      this.loadDataToLeftTable(0);
+      this.rowDrop();
+      this.editPaper();
 
     },
     methods: {
-      loadDataToLeftTable,
-      leftTablePageChange(newPage){
-        this.curPage=newPage-1;
-        this.loadDataToLeftTable(newPage-1);
+      handleSelect() {
+        //todo
       },
-      editPaper(){
-        console.log("paperEdit")
-        console.log(this.$store.state.paperEditData)
+      querySearchAsync() {
+        //todo
+      },
+      handleView(a,b,c){
+        console.log("view")
+        console.log(a,b,c)
+      },
+      handleDelete(i,r){
+        console.log("view")
+        console.log(i,r)
+      },
+      checkInRight,
+      loadDataToLeftTable,
+      leftTablePageChange(newPage) {
+        this.curPage = newPage - 1;
+        this.loadDataToLeftTable(newPage - 1);
+      },
+      handleButton(val){
+        if(val.method==='handleView'){
+          this.handleView(val.index,val.row)
+        }else if(val.method==='handleDelete'){
+          this.handleDelete(val.row,val.col,val.index)
+        }
+      },
+      editPaper() {
         //createPaperOrderMock.tableData=this.$store.state.paperEditData.problems;
-        let p=this.$store.state.paperEditData.problems;
-        if(p===undefined)
+        let p = this.$store.state.paperEditData.problems;
+        if (p === undefined)
           return;
         let res = [];
-        for(let i=0;i<this.$store.state.paperEditData.problems.length;i++){
+        for (let i = 0; i < this.$store.state.paperEditData.problems.length; i++) {
           let ts = [];
           if (p[i].tags !== null) {
             for (let i = 0; i < p[i].tags.length; i++) {
@@ -175,63 +197,80 @@
           };
           res.push(ress);
         }
-        console.log("res");
-        createPaperOrderMock.tableData=res;
+        createPaperOrderMock.tableData = res;
       },
-      complete(){
-        //this.$router.push("/cart")
-        //传递的参数用{{ $route.query.goodsId }}获取
-        this.$router.push({path: '/PaperList'})
-        //this.$router.go(-2)
-        //后退两步
+      complete() {
+        //todo 修改数据
+
+        //拼装 paperfulldata 对象
+        let pfd={
+          paper: {
+            title: this.ruleForm.name,
+          },
+          //todo tags?: TagInfo[],
+          serialProblemIdMap: {}
+        };
+        //装载serialProblemIdMap 数据
+
+        let tableData = this.createPaperOrderMock.tableData;
+
+        if(tableData.length===0){
+          alert("问题数为0");
+          return ; // todo
+        }
+        for (let i = 0; i <tableData.length; i++) {
+          pfd.serialProblemIdMap[i]=tableData[i].id;
+        }
+        // ok 了 发送
+        addPaper(pfd,(b)=>{
+          if(b.code==="ok"){
+            alert("提交成功");
+            this.$router.push({path: '/PaperList'})
+          }else{
+            alert("提交失败"+b.data);
+          }
+        })
+
       },
       //行拖拽
       rowDrop() {
-        const tbody = document.querySelectorAll('.el-table__body-wrapper tbody')
+        const tbody = document.querySelectorAll('.el-table__body-wrapper tbody');
         const _this = this
         new Sortable(tbody[0], {
           group: 'shared',
-          onEnd:function(evt) {
-            if(tbody[0]===evt.from&&tbody[0]===evt.to){
-              const currRow = _this.leftTable.tableData.splice(evt.oldIndex, 1)[0]
-              _this.leftTable.tableData.splice(evt.newIndex, 0, currRow)
-              console.log(evt.from)
+          onEnd: function (evt) {
+            if (tbody[0] === evt.from && tbody[0] === evt.to) {
+              const currRow = _this.leftTable.tableData.splice(evt.oldIndex, 1)[0];
+              _this.leftTable.tableData.splice(evt.newIndex, 0, currRow);
             }
-            if(tbody[0]===evt.from&&tbody[1]===evt.to){
-              const currRow = _this.leftTable.tableData.splice(evt.oldIndex, 1)[0]
-              _this.createPaperOrderMock.tableData.splice(evt.newIndex, 0, currRow)
-              console.log(evt.from)
+            if (tbody[0] === evt.from && tbody[1] === evt.to) {
+              const currRow = _this.leftTable.tableData.splice(evt.oldIndex, 1)[0];
+              _this.createPaperOrderMock.tableData.splice(evt.newIndex, 0, currRow);
             }
             _this.loadDataToLeftTable(_this.curPage);
 
           },
         });
-          new Sortable(tbody[1], {
-            group: 'shared',
-            onEnd:function(evt) {
-              if(tbody[1]===evt.from&&tbody[1]===evt.to){
-                const currRow = _this.createPaperOrderMock.tableData.splice(evt.oldIndex, 1)[0]
-                _this.createPaperOrderMock.tableData.splice(evt.newIndex, 0, currRow)
-              }
-              if(tbody[1]===evt.from&&tbody[0]===evt.to){
-                const currRow = _this.createPaperOrderMock.tableData.splice(evt.oldIndex, 1)[0]
-                _this.leftTable.tableData.splice(evt.newIndex, 0, currRow)
-              }
-              //重新加载左边题目列表
-              _this.loadDataToLeftTable(_this.curPage);
-            },
-          })
-        }
+        new Sortable(tbody[1], {
+          group: 'shared',
+          onEnd: function (evt) {
+            if (tbody[1] === evt.from && tbody[1] === evt.to) {
+              const currRow = _this.createPaperOrderMock.tableData.splice(evt.oldIndex, 1)[0];
+              _this.createPaperOrderMock.tableData.splice(evt.newIndex, 0, currRow);
+            }
+            if (tbody[1] === evt.from && tbody[0] === evt.to) {
+              const currRow = _this.createPaperOrderMock.tableData.splice(evt.oldIndex, 1)[0];
+              _this.leftTable.tableData.splice(evt.newIndex, 0, currRow);
+            }
+            //重新加载左边题目列表
+            _this.loadDataToLeftTable(_this.curPage);
+          },
+        })
+      }
 
-      },
-      handleSelect(){
-          //todo
-      },
-      querySearchAsync(){
-        //todo
-      },
-    checkInRight,
-    }
+    },
+
+  }
 </script>
 
 <style scoped>

@@ -95,6 +95,12 @@ let createPaperOrderMock:GeneralTable={
   operWidth: "100",
   oper: [
     {
+      label: "查看",
+      size: "mini",
+      type: "success",
+      method: "handleView"
+    },
+    {
       label: "删除",
       size: "mini",
       type: "danger",
