@@ -96,7 +96,7 @@ public class WebRoleServiceImpl extends BasicService<Role> implements WebRoleSer
      */
     @Override
     public void delete(Long id) throws Exception {
-        if (id == null || roleRepository.findByIdEquals(id) != null) {
+        if (id != null && roleRepository.findByIdEquals(id) != null) {
             deleteBasicInfo(id);
         } else {
             throw new Exception("该角色id不存在");

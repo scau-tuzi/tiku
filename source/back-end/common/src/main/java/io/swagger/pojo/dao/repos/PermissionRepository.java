@@ -1,7 +1,11 @@
 package io.swagger.pojo.dao.repos;
 
 import io.swagger.pojo.dao.Permission;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -13,4 +17,17 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PermissionRepository extends JpaRepository<Permission, Long> {
 
+    Permission findByIdEquals(Long id);
+
+    Permission findByName(String name);
+
+    @Modifying
+    @Query(nativeQuery = true,
+            value = "update permission set is_del=?2 where id=?1")
+    int updateIsDelById(Long id, Boolean isDel);
+
+
+    @Query(nativeQuery = true, value = "select * from permission where is_del=?1",
+            countQuery = "select count(*) from permission where is_del=?1")
+    Page<Permission> findAllByIsDel(Pageable pageable, Boolean isDel);
 }
