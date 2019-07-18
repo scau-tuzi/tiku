@@ -27,7 +27,7 @@ function getTagsList(pageNumber: number, callback: (t: TagInfo[], tagsListSize: 
  * @param tags 增加的标签数组 ( 一个或者多个 )
  * @param callback 回调函数
  */
-function addTags(tags: TagInfo[], callback: (b: BasicResponse) => void) {
+function addTags(tags: TagInfo, callback: (b: BasicResponse) => void) {
     //线上
     axios
         .post("/api/tag/add", tags)
@@ -48,7 +48,7 @@ function addTags(tags: TagInfo[], callback: (b: BasicResponse) => void) {
 function delTag(tagId: number[], callback: (b: BasicResponse) => void) {
     //线上
     axios
-        .delete("/api/tag/delete?" + "tagId=" + tagId)
+        .post("/api/tag/delete", tagId)
         .then(res => {
             let response: BasicResponse = res.data;
             callback(response)
