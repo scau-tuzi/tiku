@@ -6,12 +6,14 @@ import BasicResponse from '@/data/model/BasicResponse';
  *  user api 获取用户列表方法
  * @param callback 
  */
-function getUserList(callback: (u: UserInfo[]) => void) {
+function getUserList(pageNumber: number, callback: (u: UserInfo[], usersListSize: number) => void,pageSize?:number) {
+    pageSize = (pageSize === undefined ? 10 : pageSize)
     axios
-        .post("/api/user/list")
+        .post("/api/user/list?pageNumber=" + pageNumber+"&pageSize="+pageSize)
         .then(res => {
-            let lists: UserInfo[] = res.data;
-            callback(lists)
+            let lists: UserInfo[] = res.data.data.userList;
+            let size: number = res.data.data.pagination.total;
+            callback(lists,size)
         })
 }
 
@@ -20,7 +22,7 @@ function getUserList(callback: (u: UserInfo[]) => void) {
  * @param user 新增用户的信息 ( 参数为完整的 UseInfo 类型)
  * @param callback 
  */
-function adduUser(user: UserInfo, callback: (b: BasicResponse) => void) {
+function addUser(user: UserInfo, callback: (b: BasicResponse) => void) {
     axios
         .post("/api/user/add", user)
         .then(res => {
@@ -58,5 +60,5 @@ function changeUser(user: UserInfo, callback: (b: BasicResponse) => void) {
 }
 
 export {
-    getUserList, adduUser, delUser, changeUser
+    getUserList, addUser, delUser, changeUser
 }

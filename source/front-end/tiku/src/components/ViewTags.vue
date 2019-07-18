@@ -223,6 +223,7 @@ export default {
                 type: "success",
                 message: "修改后标签为: " + value
               });
+              this.$router.go(0); //页面刷新（要加上）
             }
           });
         })
