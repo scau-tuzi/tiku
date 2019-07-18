@@ -3,10 +3,7 @@ package io.swagger.pojo.dao;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * 功能描述：权限实体类
@@ -24,6 +21,7 @@ public class Permission extends BasicEntity {
      * 权限id
      */
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 

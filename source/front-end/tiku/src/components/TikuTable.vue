@@ -184,7 +184,7 @@ function batchDelete(rows) {
   for(var i=0;i<rows.length;i++){
     delId.push(rows[i].id)
   }
-  console.log(delId)
+  // console.log(delId)
   // console.log("4--",delId);
   this.$confirm("确定批量删除问题?", "提示", {
     confirmButtonText: "确定",
@@ -198,8 +198,8 @@ function batchDelete(rows) {
           alert("删除成功");
         }
         // this.$router.go(0); //页面刷新（要加上）
-        this.del = delId.length / 10 === this.listLenght ? 1 : this.del;
-        console.log(delId);
+        this.del = delId.length === this.listLenght ? 1 : this.del;
+        // console.log(delId);
         this.getData(this.listPageNumber - this.del);
       });
     })

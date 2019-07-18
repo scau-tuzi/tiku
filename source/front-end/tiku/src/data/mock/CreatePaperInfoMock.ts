@@ -4,19 +4,19 @@ let createPaperInfoMock:GeneralTable={
   fieldInfo: [],
   tableData: [
     {
-      id: '1',
+      id: '100',
       problem: '2016-05-02',
       answer: '王小虎1',
       tag: '22'
     },
     {
-      id: '2',
+      id: '200',
       problem: '2016',
       answer: '王小虎2',
       tag: '22'
     },
     {
-      id: '3',
+      id: '300',
       problem: '2016-05',
       answer: '王小虎3',
       tag: '22'
@@ -68,20 +68,7 @@ let createPaperInfoMock:GeneralTable={
 }
 let createPaperOrderMock:GeneralTable={
   fieldInfo: [],
-  tableData: [
-    {
-      id:"1",
-      problem:"222",
-      answer:"333",
-      tag: "11"
-    },
-    {
-      id:"2",
-      problem:"222",
-      answer:"333",
-      tag: "11"
-    }
-  ],
+  tableData: [],
   col: [
     {
       fixed: "",

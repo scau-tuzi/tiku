@@ -109,8 +109,8 @@ export default {
         console.log("finish!");
 
         this.$store.commit("setNewCommits", pd);
-        console.log("aha");
-        // console.log(this.$store.state.commits);
+        console.log("aha----");
+        console.log(this.$store.state.commits);
         // console.log(this.$store.state.commits[0].id);
         pd.filter(v => {
           let ress = {
@@ -156,7 +156,7 @@ export default {
             if (b.code === "ok") {
               alert("删除成功");
             }
-            // this.$router.go(0); //页面刷新（要加上）
+            this.$router.go(0); //页面刷新（要加上）
           });
         })
         .catch(() => {
@@ -176,7 +176,7 @@ export default {
       })
         .then(() => {
           console.log("删除标签");
-          console.log(this.$store.state.commits[index].id);
+          console.log(this.$store.state.commits);
           //alert('submit!');
           let tagId = [];
           tagId.push(this.$store.state.commits[index].id);
@@ -184,7 +184,7 @@ export default {
             if (b.code === "ok") {
               alert("删除成功");
             }
-            // this.$router.go(0); //页面刷新（要加上）
+            this.$router.go(0); //页面刷新（要加上）
           });
         })
         .catch(() => {
@@ -240,7 +240,7 @@ export default {
         confirmButtonText: "保存",
         cancelButtonText: "取消"
       })
-        .then(({ value }) => {
+        .then(( {value} ) => {
           console.log("提交标签");
           var res = {
             value: value

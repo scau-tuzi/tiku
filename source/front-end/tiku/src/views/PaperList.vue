@@ -33,7 +33,8 @@
           <el-pagination
             background
             layout="prev, pager, next"
-            :total=this.listSize
+            :total="1000"
+            :current-page.sync="currentPage"
             @current-change="this.handlerchange"
           ></el-pagination>
         </el-row>
@@ -46,7 +47,7 @@
     import paperListTable from "../data/mock/PaperListTableInfoMock";
     import {getPapers} from "../api/Paper";
     //获取试卷
-   function getPaperData(){
+   function getPaperData(currentPage){
       console.log("change")
       var _this=this;
       let callback=(pd,size)=>{
@@ -58,6 +59,8 @@
         pd.filter(v=>{
           let ts = [];
           let map ="";
+          let problemDeep=[];
+          let answerDeep=[];
           if(v.tags!==null){
             for(let i =0; i<v.tags.length; i++){
               ts.push(v.tags[i].value)
@@ -71,20 +74,30 @@
               map=map+(v.serialProblemIdMap[i])+','
             }
           }
-
+          if(v.deep){
+            // for(let i =0;i<v.problems.length;i++){
+            //   problemDeep.push(v.problems[i].problem)
+            //   //problemDeep.push(v.problems[i].problem,v.problems[i].answer,v.problems[i].tags)
+            //   //answerDeep.push(v.problems[i].answer)
+            // }
+            //problemDeep.push(v.problems)
+          }
           let ress={
             paperId:v.paper.id,
             title:v.paper.title,
             tag:ts,
-            map:map
+            map:map,
+            problems:v.problems,
+            //answer:answerDeep
           };
           res.push(ress)
         });
         console.log(res);
         paperListTable.tableData=res;
       };
+
+      getPapers(0,callback,1,10);
       console.log("aaaaaa")
-      getPapers(0,callback);
     }
     export default {
         name: "PaperList",
@@ -152,8 +165,8 @@
           this.$router.push({path: '/CreatePaper'})
         }
         },
-      handlerchange:function(){//获取题目
-        this.getPaperData();
+      handlerchange:function(currentPage){//获取题目
+        this.getPaperData(currentPage-1);
       },
       getPaperData
     }
