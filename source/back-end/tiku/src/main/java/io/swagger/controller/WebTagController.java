@@ -44,7 +44,7 @@ public class WebTagController {
     /**
      * 删除标签
      */
-    @DeleteMapping("/delete")
+    @PostMapping("/delete")
     public BasicResponse deleteAll(@RequestBody List<Long> idList) {
         BasicResponse basicResponse = new BasicResponse();
 

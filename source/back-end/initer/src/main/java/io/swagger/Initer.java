@@ -54,9 +54,10 @@ public class Initer {
     private void initData() {
         log.info("Preloading data ...");
 
-        long tid = 20000;
-        Tag one = tagRepository.save(new Tag(tid++, "一年级", null));
+        long tid =0;
+        Tag one = tagRepository.save(new Tag(null, "一年级", null));
         tid=one.getId();
+        log.debug("tid:{}",tid);
         {
 
             tagRepository.save(new Tag(tid++, "二年级", null));
@@ -83,103 +84,117 @@ public class Initer {
             tagRepository.save(new Tag(tid++, "编程", null));
             tagRepository.save(new Tag(tid++, "打码", null));
         }
+        tid-=24;
 
         long baseid = 2000000;
         long curid = baseid;
         long exid = 1;
         long maxpr=0;
-        for (int i = 1; i < 27; i++) {
-            for (int j = 0; j < 31; j++) {
-                String text = i + "+" + j + "=?";
-                String ans = i + j + "";
+        int kk=0;
+        // TAG1 12 * TAG2 12 * PAPAER 10 * PROBLEM 20 =48000 PROBLEMS
+        for (int i = (int) tid; i < tid+12;i++) {
+            log.info(String.valueOf(i));
+            for (int j = (int) (tid + 12); j < tid + 24; j++) {
+                log.info(String.valueOf(j));
+                for (long paperNo = 0; paperNo < 10; paperNo++) {
+                    // 生成试卷
+                    long papid=23456789;
+                    kk++;
+                    Paper paper = new Paper();
+                    paper.setId(papid+kk);
+                    paper.setTitle("第"+kk+"张试卷略略略");
+                    Paper pa = paperRepository.save(paper);
 
-                Answer answer = new Answer();
-                answer.setId(curid);
-                answer.setAnswerText("A");
-                Answer an = answerRepository.save(answer);
+                    PaperTag paperTag = new PaperTag();
+                    paperTag.setPaperId(pa.getId());
+                    paperTag.setTagId((long) i);
+                    paperTagRepository.save(paperTag);
 
-                curid++;
+                    PaperTag paperTag2 = new PaperTag();
+                    paperTag2.setPaperId(pa.getId());
+                    paperTag2.setTagId((long) j);
+                    paperTagRepository.save(paperTag2);
 
-                Problem problem = new Problem();
-                problem.setProblemText(text);
-                problem.setId(curid);
-                problem.setAnswerId(an.getId());
-                Problem pr = problemRepository.save(problem);
-                maxpr=pr.getId();
-                Status status = new Status();
-                status.setProblemId(pr.getId());
-                status.setVerifyStatus(0);
-                statusRepository.save(status);
-                {
-                    ExtData extData1 = new ExtData();
-                    extData1.setId(exid);
-                    extData1.setKeyname("choice_A");
-                    extData1.setValue(ans);
-                    extData1.setProblemId(pr.getId());
-                    extDataRepository.save(extData1);
-                    exid++;
-                    ExtData extData2 = new ExtData();
-                    extData2.setId(exid);
-                    extData2.setKeyname("choice_B");
-                    extData2.setValue(String.valueOf(i + j + 1));
-                    extData2.setProblemId(pr.getId());
-                    extDataRepository.save(extData2);
-                    exid++;
-                    ExtData extData3 = new ExtData();
-                    extData3.setId(exid);
-                    extData3.setKeyname("choice_C");
-                    extData3.setValue(String.valueOf(i + j + 2));
-                    extData3.setProblemId(pr.getId());
-                    extDataRepository.save(extData3);
-                    exid++;
-                    ExtData extData4 = new ExtData();
-                    extData4.setId(exid);
-                    extData4.setKeyname("choice_D");
-                    extData4.setValue(String.valueOf(i + j + 3));
-                    extData4.setProblemId(pr.getId());
-                    extDataRepository.save(extData4);
-                    exid++;
+                    for (int proNo = 0; proNo < 20; proNo++) {
+
+                        String text = i + "+" + j + "=?";
+                        String ans = i + j + "";
+
+
+                        Answer answer = new Answer();
+                        answer.setId(curid);
+                        answer.setAnswerText(String.valueOf('A'+(proNo%4)));
+                        Answer an = answerRepository.save(answer);
+
+                        curid++;
+
+                        Problem problem = new Problem();
+                        problem.setProblemText(text);
+                        problem.setId(curid);
+                        problem.setAnswerId(an.getId());
+                        Problem pr = problemRepository.save(problem);
+
+                        maxpr = pr.getId();
+                        Status status = new Status();
+                        status.setProblemId(pr.getId());
+                        status.setVerifyStatus(1);
+                        statusRepository.save(status);
+
+                        {
+                            ExtData extData1 = new ExtData();
+                            extData1.setId(exid);
+                            extData1.setKeyname("choice_A");
+                            extData1.setValue(ans);
+                            extData1.setProblemId(pr.getId());
+                            extDataRepository.save(extData1);
+
+                            exid++;
+                            ExtData extData2 = new ExtData();
+                            extData2.setId(exid);
+                            extData2.setKeyname("choice_B");
+                            extData2.setValue(String.valueOf(i + j + 1));
+                            extData2.setProblemId(pr.getId());
+                            extDataRepository.save(extData2);
+
+                            exid++;
+                            ExtData extData3 = new ExtData();
+                            extData3.setId(exid);
+                            extData3.setKeyname("choice_C");
+                            extData3.setValue(String.valueOf(i + j + 2));
+                            extData3.setProblemId(pr.getId());
+                            extDataRepository.save(extData3);
+
+                            exid++;
+                            ExtData extData4 = new ExtData();
+                            extData4.setId(exid);
+                            extData4.setKeyname("choice_D");
+                            extData4.setValue(String.valueOf(i + j + 3));
+                            extData4.setProblemId(pr.getId());
+                            extDataRepository.save(extData4);
+
+                            exid++;
+                        }
+                        ProblemTag problemTag = new ProblemTag();
+                        problemTag.setProblemId(pr.getId());
+                        problemTag.setTagId((long) i);
+                        problemTagRepository.save(problemTag);
+                        ProblemTag problemTag2 = new ProblemTag();
+                        problemTag2.setProblemId(pr.getId());
+                        problemTag2.setTagId((long) j);
+                        problemTagRepository.save(problemTag2);
+
+                        PaperItem paperItem = new PaperItem();
+                        paperItem.setPaperId(pa.getId());
+                        paperItem.setProblemId(pr.getId());
+                        paperItem.setSerial(proNo);
+                        paperItemRepository.save(paperItem);
+
+                    }
                 }
-                ProblemTag problemTag = new ProblemTag();
-                problemTag.setProblemId(pr.getId());
-                problemTag.setTagId(tid-(i%12));
-                problemTagRepository.save(problemTag);
-                ProblemTag problemTag2 = new ProblemTag();
-                problemTag2.setProblemId(pr.getId());
-                problemTag2.setTagId(tid-12-(j%12));
-                problemTagRepository.save(problemTag2);
             }
-        }
-
-        long papid=23456789;
-        for (int i = 0; i < 144; i++) {
-            long a= i/12+tid-24;
-            long b= i%12+tid-24;
-            Paper paper = new Paper();
-            paper.setId(papid+i);
-            paper.setTitle("第"+i+"张试卷略略略");
-            Paper pa = paperRepository.save(paper);
-            for (int j = 0; j < 20; j++) {
-                PaperItem paperItem = new PaperItem();
-                paperItem.setPaperId(pa.getId());
-                paperItem.setProblemId(maxpr-j*12-j);
-                paperItem.setSerial(j);
-                paperItemRepository.save(paperItem);
-            }
-
-            PaperTag paperTag = new PaperTag();
-            paperTag.setPaperId(pa.getId());
-            paperTag.setTagId(a);
-            paperTagRepository.save(paperTag);
-
-            PaperTag paperTag2 = new PaperTag();
-            paperTag2.setPaperId(pa.getId());
-            paperTag2.setTagId(b);
-            paperTagRepository.save(paperTag2);
         }
 
         //用户的
-
         TikuUser tikuUser = new TikuUser();
         tikuUser.setSalt("c80f4f74bb1b897252c5a8ff961ef504")
                 .setPasswordSaltMd5("17279512649567851aa2a174741e539c")
