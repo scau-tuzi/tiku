@@ -111,7 +111,9 @@
     },
     methods: {
       editPaper(){
+        console.log("paperEdit")
         console.log(this.$store.state.paperEditData)
+        createPaperOrderMock.tableData=this.$store.state.paperEditData.problem;
       },
       complete(){
         //this.$router.push("/cart")
