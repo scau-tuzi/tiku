@@ -36,7 +36,7 @@
             <el-table-column prop="status" label="审核状态" width="220"></el-table-column>
             <el-table-column fixed="right" label="操作" width="150">
               <template slot-scope="scope">
-                <el-button size="mini" type="text" @click="handleView(scope.$index, scope.row)">查看</el-button>
+                <el-button size="mini" type="text" @click="handleView(scope.$index)">查看</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -73,17 +73,15 @@ export default {
       }
     },
     //查看操作
-    handleView(index, row) {
-      console.log(index, row),
+    handleView(index) {
+      // console.log(index, row),
         // alert(index+row.problem+row.answer),
         //转到ViewProblem页面
         this.$router.push({
           path: "/ViewProblem",
           //query对象获取参数
           query: {
-            viewQues: row.problem,
-            viewAnsw: row.answer,
-            viewTags: row.tag
+            viewIndex:index
           }
         });
     },

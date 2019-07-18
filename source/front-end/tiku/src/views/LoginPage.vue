@@ -44,7 +44,7 @@
 </template>
 
 <script>
-
+  import {login} from "../api/Login"
   export default {
     name: 'LoginPage',
     data() {
@@ -120,17 +120,15 @@
       handleLogin() {
 
 
-      this.loading = true
-      this.$store.dispatch('user/login', this.loginForm)
-          .then(() => {
-            this.$router.push({path: this.redirect || '/', query: this.otherQuery})
-            this.loading = false
-          })
-          .catch(() => {
-            this.loading = false
-          })
+        this.loading = true;
+        let u=this.loginForm.username;
+        let p=this.loginForm.password;
 
+        let callback=(b)=>{
 
+        };
+
+        login(u,p,callback);
       },
       getOtherQuery(query) {
         return Object.keys(query).reduce((acc, cur) => {
