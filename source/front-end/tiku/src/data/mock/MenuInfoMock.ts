@@ -59,7 +59,7 @@ let mockData:MenuInfo={
         {
           title:"用户列表",
           // component:Home,
-          path:"/1",
+          path:"/UserTable",
         }
       ]
     },

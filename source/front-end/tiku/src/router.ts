@@ -88,6 +88,11 @@ export default new Router({
           path: 'RoleTable',
           name: 'RoleTable',
           component: () => import(/* webpackChunkName: "ViewPaper" */ './views/user/RoleTable.vue')
+        },
+        {
+          path: 'UserTable',
+          name: 'UserTable',
+          component: () => import(/* webpackChunkName: "ViewPaper" */ './views/user/UserTable.vue')
         }
       ]
     },

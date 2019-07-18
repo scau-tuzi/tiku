@@ -196,12 +196,10 @@ export default {
       })
         .then(({ value }) => {
           console.log("修改标签");
-          var pd = [];
-          let pd_tmp = {
+          let pd = {
             id: this.$store.state.commits[index].id,
             value: value
           };
-          pd.push(pd_tmp);
           // alert(pd);
           console.log(pd);
           //alert('submit!');
@@ -213,6 +211,7 @@ export default {
                 type: "success",
                 message: "修改后标签为: " + value
               });
+              this.$router.go(0); //页面刷新（要加上）
             }
           });
         })
