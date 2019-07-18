@@ -1,4 +1,5 @@
 <template>
+    <div>
     <el-table :data="tableInfo.tableData"
               row-key="id"
               class="newTable"
@@ -78,7 +79,17 @@
                 </el-dialog>
             </template>
         </el-table-column>
+
     </el-table>
+    <el-footer align="center">
+        <el-pagination v-if="usePagination===true"
+                background
+                layout="prev, pager, next"
+                :total="this.listSize"
+                @current-change="this.handleChange"
+        ></el-pagination>
+    </el-footer>
+    </div>
 </template>
 
 <script>
@@ -123,56 +134,58 @@
         this.inputValue = '';
     }
 
-    function handlerchange(currentPage) {//获取题目
-        this.getData(currentPage-1);
-    }
+    // function handlerchange(currentPage) {//获取题目
+    //     this.getData(currentPage-1);
+    // }
 
-    function getData(currentPage) {
-        console.log("change")
-        var _this = this;
-        let callback = (pd) => {
-            var res = [];
-            console.log("get it")
-            console.log(pd)
-            this.$store.commit("setNewProblems", pd);
-            pd.filter(v => {
-                let ts = [];
-                if (v.tags !== null) {
-                    for (let i = 0; i < v.tags.length; i++) {
-                        ts.push(v.tags[i].value)
-                    }
-                }
-                if (v.answer === null) {
-                    v.answer = {
-                        answerText: ""
-                    }
-                }
-                let ress = {
-                    problemId: v.problem.id,
-                    problem: v.problem.problemText,
-                    answer: v.answer.answerText,
-                    pictures: '',
-                    sound: '',
-                    status: (!v.status ? '未通过' : '通过'),
-                    tag: ts
-                };
-                res.push(ress)
-            });
-            console.log(res);
-            _this.tableData = res;
-        };
-        getProblems(currentPage, callback);
-    }
-
+    // function getData(currentPage) {
+    //     console.log("change")
+    //     var _this = this;
+    //     let callback = (pd) => {
+    //         var res = [];
+    //         console.log("get it")
+    //         console.log(pd)
+    //         this.$store.commit("setNewProblems", pd);
+    //         pd.filter(v => {
+    //             let ts = [];
+    //             if (v.tags !== null) {
+    //                 for (let i = 0; i < v.tags.length; i++) {
+    //                     ts.push(v.tags[i].value)
+    //                 }
+    //             }
+    //             if (v.answer === null) {
+    //                 v.answer = {
+    //                     answerText: ""
+    //                 }
+    //             }
+    //             let ress = {
+    //                 problemId: v.problem.id,
+    //                 problem: v.problem.problemText,
+    //                 answer: v.answer.answerText,
+    //                 pictures: '',
+    //                 sound: '',
+    //                 status: (!v.status ? '未通过' : '通过'),
+    //                 tag: ts
+    //             };
+    //             res.push(ress)
+    //         });
+    //         console.log(res);
+    //         _this.tableData = res;
+    //     };
+    //     getProblems(currentPage, callback);
+    // }
     export default {
         name: "GeneralTable",
         props: {
-            tableInfo: GeneralTable
+            tableInfo: GeneralTable,//表格信息
+            listSize:Number,        //总页数
+            handleChange:Function,  //页修改回调函数
+            usePagination:Boolean,  //是否使用内置分页器
         },
         data() {
             return {
                 centerDialogVisible: false,
-                tableData
+                inputVisible:false,
             }
         },
         methods: {
@@ -181,11 +194,11 @@
             handleClose,
             showInput,
             handleInputConfirm,
-            handlerchange,
-            getData
+            // handlerchange,
+            // getData
         },
         mounted: function () {
-            this.getData(0);
+            // this.getData(0);
         },
     }
 </script>

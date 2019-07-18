@@ -46,7 +46,7 @@
     import GeneralTable from "../components/GeneralTable";
     import paperListTable from "../data/mock/PaperListTableInfoMock";
     import {getPapers} from "../api/Paper";
-    //获取试卷
+
    function getPaperData(currentPage){
       console.log("change")
       var _this=this;
@@ -96,14 +96,14 @@
         paperListTable.tableData=res;
       };
 
-      getPapers(0,callback,1,10);
+      getPapers(currentPage,callback,1,10);
       console.log("aaaaaa")
     }
     export default {
         name: "PaperList",
       components: {GeneralTable},
       mounted: function(){
-        getPaperData.bind(this).call(this);
+        getPaperData.bind(this).call(this,0);
       },
       watch: {
         '$route': 'data'
@@ -166,6 +166,7 @@
         }
         },
       handlerchange:function(currentPage){//获取题目
+          console.log("123");
         this.getPaperData(currentPage-1);
       },
       getPaperData

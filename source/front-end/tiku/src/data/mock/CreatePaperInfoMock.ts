@@ -3,24 +3,13 @@ import GeneralTable from "@/data/model/GeneralTable";
 let createPaperInfoMock:GeneralTable={
   fieldInfo: [],
   tableData: [
-    {
-      id: '100',
-      problem: '2016-05-02',
-      answer: '王小虎1',
-      tag: '22'
-    },
-    {
-      id: '200',
-      problem: '2016',
-      answer: '王小虎2',
-      tag: '22'
-    },
-    {
-      id: '300',
-      problem: '2016-05',
-      answer: '王小虎3',
-      tag: '22'
-    }
+    // {
+    //   id: '100',
+    //   problem: '2016-05-02',
+    //   answer: '王小虎1',
+    //   tag: '22'
+    // },
+
   ],
   col: [
     {

@@ -23,24 +23,16 @@
         </el-col>
       </el-row>
       <el-row>
-<!--          <draggable-->
-<!--            :list="createPaperInfoMock.tableData"-->
-<!--            :options="dragOptions1">-->
-              <el-col span=12.5 style="margin-right: 10px">
-                <GeneralTable v-bind:table-info="createPaperInfoMock"></GeneralTable>
-              </el-col>
-<!--          </draggable>-->
-<!--          <draggable-->
-<!--            :list="createPaperOrderMock.tableData"-->
-<!--            :options="dragOptions2">-->
-             <el-col span=11>
-               <GeneralTable v-bind:table-info="createPaperOrderMock"></GeneralTable>
-             </el-col>
-<!--          </draggable>-->
+        <el-col :span=12.5 style="margin-right: 10px">
+          <GeneralTable usePagination :handleChange="leftTablePageChange" :listSize="listSize" v-bind:table-info="leftTable"></GeneralTable>
+        </el-col>
+       <el-col :span=11>
+         <GeneralTable :listSize="listSize" v-bind:table-info="createPaperOrderMock"></GeneralTable>
+       </el-col>
       </el-row>
       <el-row>
         <pre style="text-align: left">
-      {{createPaperInfoMock.tableData}}
+      {{leftTable.tableData}}
        </pre>
         <hr>
         <pre style="text-align: left">
@@ -58,63 +50,110 @@
   import GeneralTable from "./GeneralTable";
   import tikuTableInfo from "../data/mock/TikuTableInfoMock";
   import {createPaperInfoMock, createPaperOrderMock} from "../data/mock/CreatePaperInfoMock";
+  import {getProblems} from "../api/Problem";
+
+  /**
+   * 隐藏右边出现过的题目，检查有没有出现过
+   * @param leftId
+   */
+  function checkInRight(leftProblemId){
+    let t = this.createPaperOrderMock.tableData;
+    if(t!==null && t.length>0){
+      for (let i = 0; i < t.length; i++) {
+          if(leftProblemId===t[i].id){
+            return false;
+          }
+      }
+    }
+    return true;
+  }
+
+  /**
+   * 加载题目数据
+   * @param page
+   */
+  function loadDataToLeftTable(page) {
+    console.log("will get problem data")
+    var _this = this;
+    let callback = (pd, size) => {
+      var res = [];
+      // {
+      //   id: '100',
+      //   problem: '2016-05-02',
+      //   answer: '王小虎1',
+      //   tag: '22'
+      // },
+
+      pd.filter(v => {
+        if(!checkInRight.bind(_this).call(_this,v.problem.id)){
+          return;
+        }
+        let ts = [];
+        if (v.tags !== null) {
+          for (let i = 0; i < v.tags.length; i++) {
+            ts.push(v.tags[i].value);
+          }
+        }
+        if (v.answer === null) {
+          v.answer = {
+            answerText: ""
+          };
+        }
+
+        let ress = {
+          id: v.problem.id,
+          problem: v.problem.problemText,
+          answer: v.answer.answerText,
+          tag: ts
+        };
+        res.push(ress);
+      });
+      console.log(res);
+      _this.leftTable.tableData = res;
+      _this.listSize=size;
+
+    }; //callback
+    getProblems(page, callback, 1);
+  } //function
   export default {
         name: "CreatePaper",
-    components: {GeneralTable,draggable},
+    components: {GeneralTable},
     data(){
-          return{
-            tikuTableInfo,
-            createPaperInfoMock,
-            createPaperOrderMock,
-            ruleForm: {
-              name: ''
-            },
-            rules: {
-              name: [
-                {required: true, message: '请输入试卷名称', trigger: 'blur'}
-              ]
-            }
-          }
+      return{
+        tikuTableInfo,
+        leftTable:createPaperInfoMock,
+        createPaperOrderMock,
+        listSize:100,
+        curPage:0,
+        ruleForm: {
+          name: ''
+        },
+        rules: {
+          name: [
+            {required: true, message: '请输入试卷名称', trigger: 'blur'}
+          ]
+        }
+      }
       },
     mounted() {
+        this.loadDataToLeftTable(0);
         this.rowDrop();
         this.editPaper();
-    },
-    computed:{
-      dragOptions1() {
-        return {
-          animation: 0,
-          group: {
-            name: 'shared',
-          },
-          ghostClass: 'ghost',
-          // onEnd:function(evt) {
-          //   const currRow = _this.tableData.splice(evt.oldIndex, 1)[0]
-          //   _this.tableData.splice(evt.newIndex, 0, currRow)
-          // },
-          // draggable: ".el-table__row"
-        };
-      },
-      dragOptions2(){
-        return {
-          animation: 0,
-          group: {
-            name:'shared',
-          },
-          // draggable: ".el-table__row"
-          // onEnd:function(evt) {
-          //   const currRow = _this.tableData.splice(evt.oldIndex, 1)[0]
-          //   _this.tableData.splice(evt.newIndex, 0, currRow)
-          // }
-        };
-      }
+
     },
     methods: {
+      loadDataToLeftTable,
+      leftTablePageChange(newPage){
+        this.curPage=newPage-1;
+        this.loadDataToLeftTable(newPage-1);
+      },
       editPaper(){
         console.log("paperEdit")
         console.log(this.$store.state.paperEditData)
         //createPaperOrderMock.tableData=this.$store.state.paperEditData.problems;
         let p=this.$store.state.paperEditData.problems;
+        if(p===undefined)
+          return;
         let res = [];
         for(let i=0;i<this.$store.state.paperEditData.problems.length;i++){
           let ts = [];
@@ -150,52 +189,48 @@
       rowDrop() {
         const tbody = document.querySelectorAll('.el-table__body-wrapper tbody')
         const _this = this
-        // for(let i=0;i<tbody.length;i++){
         new Sortable(tbody[0], {
           group: 'shared',
-          //multiDrag: true, // Enable multi-drag
-          //selectedClass: 'selected', // The class applied to the selected items
           onEnd:function(evt) {
             if(tbody[0]===evt.from&&tbody[0]===evt.to){
-              const currRow = _this.createPaperInfoMock.tableData.splice(evt.oldIndex, 1)[0]
-              _this.createPaperInfoMock.tableData.splice(evt.newIndex, 0, currRow)
-              // evt.from.splice(currRow)
+              const currRow = _this.leftTable.tableData.splice(evt.oldIndex, 1)[0]
+              _this.leftTable.tableData.splice(evt.newIndex, 0, currRow)
               console.log(evt.from)
             }
             if(tbody[0]===evt.from&&tbody[1]===evt.to){
-              const currRow = _this.createPaperInfoMock.tableData.splice(evt.oldIndex, 1)[0]
+              const currRow = _this.leftTable.tableData.splice(evt.oldIndex, 1)[0]
               _this.createPaperOrderMock.tableData.splice(evt.newIndex, 0, currRow)
-              // evt.from.splice(currRow)
               console.log(evt.from)
             }
+            _this.loadDataToLeftTable(_this.curPage);
 
           },
-
-        })
+        });
           new Sortable(tbody[1], {
             group: 'shared',
-            //multiDrag: true, // Enable multi-drag
-            //selectedClass: 'selected', // The class applied to the selected items
             onEnd:function(evt) {
               if(tbody[1]===evt.from&&tbody[1]===evt.to){
                 const currRow = _this.createPaperOrderMock.tableData.splice(evt.oldIndex, 1)[0]
                 _this.createPaperOrderMock.tableData.splice(evt.newIndex, 0, currRow)
-                // evt.from.splice(currRow)
-                console.log(evt.from)
               }
               if(tbody[1]===evt.from&&tbody[0]===evt.to){
                 const currRow = _this.createPaperOrderMock.tableData.splice(evt.oldIndex, 1)[0]
-                _this.createPaperInfoMock.tableData.splice(evt.newIndex, 0, currRow)
-                // evt.from.splice(currRow)
-                console.log(evt.from)
+                _this.leftTable.tableData.splice(evt.newIndex, 0, currRow)
               }
+              //重新加载左边题目列表
+              _this.loadDataToLeftTable(_this.curPage);
             },
           })
         }
 
-      }
-
-    // }
+      },
+      handleSelect(){
+          //todo
+      },
+      querySearchAsync(){
+        //todo
+      },
+    checkInRight,
     }
 </script>
 
