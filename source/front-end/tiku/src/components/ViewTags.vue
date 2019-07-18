@@ -58,6 +58,14 @@ import { delTag } from "../api/Tag";
 export default {
   data() {
     return {
+      /**
+       * @ListPageNumber 当前页面的页数
+       */
+      ListPageNumber:0,
+
+      /**
+       * @listSize 页面的数量
+       */
       listSize: 0,
       tableChecked: [], //被选中的记录数据
       search: "",
@@ -87,18 +95,19 @@ export default {
   methods: {
     //获取标签列表
     handlerchange: function(currentpage) {
-      this.getData(currentpage-1);
+      this.getData(currentpage - 1);
     },
     getData: function(currentpage) {
       // console.log("change");
+      this.ListPageNumber = currentpage;
       var _this = this;
       let callback = (pd, size) => {
-        this.listSize = size*10;
+        this.listSize = size * 10;
         var res = [];
         console.log("get it");
         console.log(pd);
         console.log("finish!");
-        
+
         this.$store.commit("setNewCommits", pd);
         console.log("aha");
         // console.log(this.$store.state.commits);
@@ -196,12 +205,13 @@ export default {
       })
         .then(({ value }) => {
           console.log("修改标签");
-          var pd = [];
-          let pd_tmp = {
+          // var pd = [];
+          let pd = {
             id: this.$store.state.commits[index].id,
             value: value
           };
-          pd.push(pd_tmp);
+          console.log(pd.id);
+          // pd.push(pd_tmp);
           // alert(pd);
           console.log(pd);
           //alert('submit!');
@@ -232,25 +242,31 @@ export default {
       })
         .then(({ value }) => {
           console.log("提交标签");
-          let pd = [];
-          let res = {
+          var res = {
             value: value
           };
-          pd.push(res);
           // alert(pd);
-          console.log(pd);
+          // console.log(pd);
           //alert('submit!');
-          addTags(pd, b => {
+          console.log(res);
+          let callback = b => {
             if (b.code === "ok") {
               alert("添加成功");
+
               // todo 返回上一页
               this.$message({
                 type: "success",
                 message: "新增标签: " + value
               });
               // this.$router.go(0); //页面刷新（要加上）
+              this.getData(this.ListPageNumber);
             }
-          });
+          };
+          addTags(res, callback);
+
+          // addTags(res, b => {
+          //   console.log(res);
+          // });
         })
         .catch(() => {
           this.$message({

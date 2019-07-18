@@ -33,7 +33,7 @@
           <el-pagination
             background
             layout="prev, pager, next"
-            :total="1000"
+            :total=this.listSize
             @current-change="this.handlerchange"
           ></el-pagination>
         </el-row>
@@ -49,7 +49,8 @@
    function getPaperData(){
       console.log("change")
       var _this=this;
-      let callback=(pd)=>{
+      let callback=(pd,size)=>{
+        this.listSize = size;
         var res=[];
         console.log("get it")
         console.log(pd)
@@ -83,7 +84,7 @@
         paperListTable.tableData=res;
       };
       console.log("aaaaaa")
-      getPapers(callback);
+      getPapers(0,callback);
     }
     export default {
         name: "PaperList",
@@ -96,6 +97,7 @@
       },
       data: function (){
           return{
+            listSize:0,
             paperListTable,
             tableData:[]
           }
