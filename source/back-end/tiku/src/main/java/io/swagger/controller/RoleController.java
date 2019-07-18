@@ -2,6 +2,7 @@ package io.swagger.controller;
 
 import io.swagger.pojo.dao.Role;
 import io.swagger.pojo.dto.BasicResponse;
+import io.swagger.pojo.dto.RoleDto;
 import io.swagger.service.WebRoleServiceImpl;
 import io.swagger.service.WebTagService;
 import lombok.extern.slf4j.Slf4j;
@@ -34,12 +35,12 @@ public class RoleController {
      * @return
      */
     @PostMapping("/add")
-    public BasicResponse add(@RequestBody Role role) {
+    public BasicResponse add(@RequestBody RoleDto roleDto) {
         BasicResponse basicResponse = new BasicResponse();
 
         Long createBy = 1L;
         try {
-            webRoleService.add(role, createBy);
+            webRoleService.add(roleDto, createBy);
             basicResponse.setData("角色添加成功");
         } catch (Exception e) {
             basicResponse.setCode(BasicResponse.ERRORCODE);
@@ -85,7 +86,7 @@ public class RoleController {
             basicResponse.setData(resultMap);
         } catch (Exception e) {
             basicResponse.setCode(BasicResponse.ERRORCODE);
-            basicResponse.setData("query error : " + e.getMessage());
+            basicResponse.setData("查询角色列表失败 : " + e.getMessage());
         }
         return basicResponse;
     }
@@ -97,13 +98,13 @@ public class RoleController {
      * @return
      */
     @PutMapping("/update")
-    public BasicResponse update(@RequestBody Role role) {
+    public BasicResponse update(@RequestBody RoleDto roleDto) {
         BasicResponse basicResponse = new BasicResponse();
 
         Long updateBy = 1L;
         try {
 
-            webRoleService.update(role, updateBy);
+            webRoleService.update(roleDto, updateBy);
             basicResponse.setData("更改角色成功");
         } catch (Exception e) {
             basicResponse.setCode(BasicResponse.ERRORCODE);

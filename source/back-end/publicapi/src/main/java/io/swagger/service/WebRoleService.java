@@ -1,6 +1,7 @@
 package io.swagger.service;
 
 import io.swagger.pojo.dao.Role;
+import io.swagger.pojo.dto.RoleDto;
 
 import java.util.List;
 import java.util.Map;
@@ -13,7 +14,11 @@ public interface WebRoleService {
 
     Map<Long, String> selectRole();
 
-    void add(Role role, Long createBy) throws Exception;
+    int deletePermission(Long id);
+
+    int detect(List<Long> permissionList) throws Exception;
+
+    void add(RoleDto roleDto, Long createBy) throws Exception;
 
     void deleteAll(List<Long> idList) throws Exception;
 
@@ -21,7 +26,7 @@ public interface WebRoleService {
 
     Map<String, Object> list(Integer pageNumber, Integer pageSize);
 
-    void update(Role role, Long updateBy) throws Exception;
+    void update(RoleDto roleDto, Long updateBy) throws Exception;
 
 
 }
