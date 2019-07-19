@@ -1,4 +1,5 @@
 <template>
+  <div>
     <el-table :data="tableInfo.tableData"
               row-key="id"
               class="newTable"
@@ -42,12 +43,12 @@
                            :key="`oper_${index}`"
                            :type="oper.type"
                            :size="oper.size"
-                           v-on:click="handleButton(oper.method,scope.$index, scope.row,scope.column); oper.method==='showTags'?centerDialogVisible=true:centerDialogVisible=false">
+                           v-on:click="handleButton(oper.method,scope.$index, scope.row,scope.column); oper.method==='showTags'?centerDialogVisible_single=true:centerDialogVisible_single=false">
                     {{oper.label}}
                 </el-button>
             </template>
         </el-table-column>
-      <el-dialog title="修改标签" :visible.sync="this.centerDialogVisible_single" width="30%" center>
+      <el-dialog class="modifyTag" title="修改标签" :visible.sync="this.centerDialogVisible_single" width="30%" center append-to-body>
                         <template>
                           <el-select
                             v-model="value"
@@ -55,8 +56,8 @@
                             filterable
                             allow-create
                             default-first-option
-                            size="medium"
-                            placeholder="请选择题目标签"
+                            class="kuang"
+                            placeholder="请选择标签"
                           >
                             <!-- @change="modifyTag" -->
                             <el-option
@@ -87,6 +88,7 @@
 <script>
     import GeneralTable from "../data/model/GeneralTable"
     import {getProblems} from "../api/Problem";
+    import {getTagsList} from "../api/Tag";
 
     function handleButton(method, index, row, col) {
         this.$emit('handleButton', {'method': method, 'index': index, 'row': row, 'col': col})
@@ -166,19 +168,65 @@
         };
         getProblems(currentPage, callback);
     }
+    function getTags() {
+      console.log("getTag!");
+      var _this = this;
+      let callback = (pd, size) => {
+        this.options=[]
+        //this.$store.commit("setNewCommit", pd);
+        pd.filter(v => {
+          let ress = {
+            value: v.value,
+            label: v.value
+          };
+          _this.options.push(ress);
+          //console.log(_this.options);
+        });
+      };
+      console.log("bbbb");
+      getTagsList(0, callback, 0);
 
+    }
+    //修改某一行问题的标签
+    function modifyTag() {
+      let selectedPaper = this.$store.state.modifyPaper[this.paperId];
+      console.log(this.$store.state.modifyPaper);
+      console.log("test change1!--");
+      console.log(selectedPaper);
+      selectedPaper.tags = [];
+      this.value.forEach(v => {
+        selectedPaper.tags.push({
+          value: v
+        });
+      });
+      console.log("test change2!--");
+      console.log(selectedPaper);
+      // changeProblem(selectedProblem, b => {
+      //   if (b.code === "ok") {
+      //     alert("修改成功");
+      //     // this.$router.go(0); //页面刷新（要加上）
+      //   } else {
+      //     alert("修改失败" + b.data);
+      //   }
+      // });
+    }
     export default {
         name: "GeneralTable",
         props: {
             tableInfo: GeneralTable,//表格信息
             listSize:Number,        //总页数
-            handleChange:Function,  //页修改回调函数
+            handleChange:Function,  //页修改回调函: b数
             usePagination:Boolean,  //是否使用内置分页器
+          centerDialogVisible_single:Boolean,
+          options: Array,
+          value: Array,
+          paperId: Number
         },
         data() {
             return {
-                centerDialogVisible: false,
-                tableData
+
+                tableData,
+              options: []
             }
         },
         methods: {
@@ -188,14 +236,24 @@
             showInput,
             handleInputConfirm,
             handlerchange,
-            getData
+            getData,
+            getTags,
+           modifyTag
         },
         mounted: function () {
+          this.getTags();
             this.getData(0);
+            console.log("666")
+
         },
     }
 </script>
 
 <style scoped>
-
+.modifyTag{
+  z-index: 1000;
+}
+  .kuang{
+    width: 400px;
+  }
 </style>

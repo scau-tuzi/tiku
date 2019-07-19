@@ -16,7 +16,7 @@
           </el-col>
         </el-row>
         <el-row>
-          <GeneralTable v-bind:table-info="paperListTable" v-on:handleButton="handleButton"></GeneralTable>
+          <GeneralTable  v-bind:paper-id="paperId" v-bind:value="value" v-bind:centerDialogVisible_single="centerDialogVisible_single" v-bind:table-info="paperListTable" v-on:handleButton="handleButton"></GeneralTable>
         </el-row>
 <!--        <el-row>-->
 <!--          <el-button v-on:click="this.getData()">测试</el-button>-->
@@ -45,6 +45,7 @@
     import GeneralTable from "../components/GeneralTable";
     import paperListTable from "../data/mock/PaperListTableInfoMock";
     import {getPapers} from "../api/Paper";
+    import createPaperOrderMock from "../data/model/GeneralTable";
     //获取试卷
    function getPaperData(currentPage){
       console.log("change")
@@ -54,7 +55,7 @@
         var res=[];
         console.log("get it")
         console.log(pd)
-        //this.$store.commit("setNewProblems",pd);
+        this.$store.commit("setModifyPaper",pd);
         pd.filter(v=>{
           let ts = [];
           let map ="";
@@ -111,7 +112,10 @@
           return{
             listSize:100,
             paperListTable,
-            tableData:[]
+            tableData:[],
+            centerDialogVisible_single:false,
+            value:[],
+            paperId: 0
           }
       },
       methods:{
@@ -178,7 +182,9 @@
           this.$router.push({path: '/ViewPaper'})
         },
         showTags(row,col,index){
+          this.value=row.tag;
           this.centerDialogVisible_single=true;
+          this.paperId=index;
         },
         //搜索框
         search(){

@@ -92,7 +92,7 @@ let createPaperOrderMock:GeneralTable={
       specialType: "tag"
     }
   ],
-  operWidth: "100",
+  operWidth: "200",
   oper: [
     {
       label: "查看",

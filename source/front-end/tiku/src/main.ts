@@ -12,7 +12,8 @@ const store = new Vuex.Store({
   state: {
     commits:[],
     allProblem:[],
-    paperEditData:{}
+    paperEditData:{},
+    modifyPaper: []
   },
   mutations: {
     setNewCommits (state,newcommits) {
@@ -23,6 +24,9 @@ const store = new Vuex.Store({
     },
     setPaperEditData(state,paperEditData){
       state.paperEditData=paperEditData;
+    },
+    setModifyPaper(state,modifyPaper){
+      state.modifyPaper=modifyPaper;
     }
   }
 });

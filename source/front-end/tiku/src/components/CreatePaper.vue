@@ -6,14 +6,31 @@
           <el-button align="left" plain @click="complete">完成</el-button>
           <el-button type="primary" plain>全选</el-button>
         </el-col>
-        <el-col span=17>
+        <el-col span=10>
           <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="" style="margin-right: 10px">
             <el-form-item label="" prop="name">
               <el-input v-model="ruleForm.name" placeholder="请输入试卷名称"></el-input>
             </el-form-item>
           </el-form>
         </el-col>
-        <el-col span=4>
+        <el-col span=6>
+          <el-select
+            v-model="modifyPaperTag"
+            multiple
+            filterable
+            allow-create
+            default-first-option
+            placeholder="请选择标签"
+          >
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-col>
+        <el-col span=5>
           <el-autocomplete
                   v-model="state"
                   :fetch-suggestions="querySearchAsync"
@@ -53,6 +70,7 @@
   import {createPaperInfoMock, createPaperOrderMock} from "../data/mock/CreatePaperInfoMock";
   import {getProblems} from "../api/Problem";
   import {addPaper} from "../api/Paper";
+  import {getTagsList} from "../api/Tag";
 
   /**
    * 隐藏右边出现过的题目，检查有没有出现过
@@ -69,7 +87,25 @@
     }
     return true;
   }
+  function getTags() {
+    console.log("getTag!");
+    var _this = this;
+    let callback = (pd, size) => {
+      this.options=[]
+      //this.$store.commit("setNewCommit", pd);
+      pd.filter(v => {
+        let ress = {
+          value: v.value,
+          label: v.value
+        };
+        _this.options.push(ress);
+        console.log(_this.options);
+      });
+    };
+    console.log("bbbb");
+    getTagsList(0, callback, 0);
 
+  }
   /**
    * 加载题目数据
    * @param page
@@ -122,6 +158,9 @@
     components: {GeneralTable},
     data() {
       return {
+        isNewPaper: true,
+        options: [],
+        modifyPaperTag: [],
         tikuTableInfo,
         leftTable: createPaperInfoMock,
         createPaperOrderMock,
@@ -138,12 +177,14 @@
       }
     },
     mounted() {
+      this.getTags();
       this.loadDataToLeftTable(0);
       this.rowDrop();
       this.editPaper();
 
     },
     methods: {
+      getTags,
       handleSelect() {
         //todo
       },
@@ -174,8 +215,11 @@
       editPaper() {
         //createPaperOrderMock.tableData=this.$store.state.paperEditData.problems;
         let p = this.$store.state.paperEditData.problems;
-        if (p === undefined)
+        if (p === undefined || p.length===0){
+          this.isNewPaper=true
           return;
+        }
+          this.isNewPaper=false
         let res = [];
         for (let i = 0; i < this.$store.state.paperEditData.problems.length; i++) {
           let ts = [];
@@ -208,6 +252,7 @@
             title: this.ruleForm.name,
           },
           //todo tags?: TagInfo[],
+          //tags: this.modifyPaperTag,
           serialProblemIdMap: {}
         };
         //装载serialProblemIdMap 数据
@@ -222,14 +267,19 @@
           pfd.serialProblemIdMap[i]=tableData[i].id;
         }
         // ok 了 发送
-        addPaper(pfd,(b)=>{
-          if(b.code==="ok"){
-            alert("提交成功");
-            this.$router.push({path: '/PaperList'})
-          }else{
-            alert("提交失败"+b.data);
-          }
-        })
+        if(this.isNewPaper){
+          addPaper(pfd,(b)=>{
+            if(b.code==="ok"){
+              alert("提交成功");
+              this.$router.push({path: '/PaperList'})
+            }else{
+              alert("提交失败"+b.data);
+            }
+          })
+        }else {
+
+        }
+
 
       },
       //行拖拽
