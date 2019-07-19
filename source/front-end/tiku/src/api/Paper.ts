@@ -80,12 +80,11 @@ function findPaperBytags(tags: TagInfo[], callback: (p: PaperFullData[]) => void
  * @param paperId 要修改试卷的id
  * @param callback
  */
-function changePaper(paperId: number, callback: (b: BasicResponse) => void) {
+function changePaper(paper: PaperFullData, callback: (b: BasicResponse) => void) {
     axios
-        .post("/api/paper/update", paperId)
+        .post("/api/paper/update", paper)
         .then(res => {
             let response: BasicResponse = res.data;
-
             callback(response)
         })
 }

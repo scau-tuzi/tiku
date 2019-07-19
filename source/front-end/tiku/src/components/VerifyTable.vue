@@ -41,9 +41,9 @@
             </el-table-column>
           </el-table>
         </el-row>
-<!--        <el-row>-->
-<!--          <GeneralTable v-bind:table-info="verifyTableInfo" v-on:handleButton="handleButton"></GeneralTable>-->
-<!--        </el-row>-->
+        <!--        <el-row>-->
+        <!--          <GeneralTable v-bind:table-info="verifyTableInfo" v-on:handleButton="handleButton"></GeneralTable>-->
+        <!--        </el-row>-->
       </el-main>
       <el-footer align="center">
         <el-pagination
@@ -75,15 +75,15 @@ export default {
     //查看操作
     handleView(index) {
       // console.log(index, row),
-        // alert(index+row.problem+row.answer),
-        //转到ViewProblem页面
-        this.$router.push({
-          path: "/ViewProblem",
-          //query对象获取参数
-          query: {
-            viewIndex:index
-          }
-        });
+      // alert(index+row.problem+row.answer),
+      //转到ViewProblem页面
+      this.$router.push({
+        path: "/ViewProblem",
+        //query对象获取参数
+        query: {
+          viewIndex: index
+        }
+      });
     },
     handlerchange: function(currentPage) {
       //获取题目

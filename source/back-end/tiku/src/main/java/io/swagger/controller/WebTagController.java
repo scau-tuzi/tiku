@@ -16,7 +16,7 @@ import java.util.Map;
 @Slf4j
 @RequestMapping("/api/tag")
 @RestController
-public class WebTagController {
+public class WebTagController extends WebBasicController{
 
     @Autowired
     private WebTagService tagService;
@@ -29,7 +29,7 @@ public class WebTagController {
     public BasicResponse add(@RequestBody Tag tag) {
         BasicResponse basicResponse = new BasicResponse();
 
-        Long createBy = 1L;
+        Long createBy = super.getUserId();
         try {
             tagService.add(tag, createBy);
 
@@ -88,7 +88,7 @@ public class WebTagController {
         BasicResponse basicResponse = new BasicResponse();
 
         try {
-            Long updateBy = 1L;
+            Long updateBy = super.getUserId();
             tagService.update(tag, updateBy);
             basicResponse.setData("更改标签成功");
         } catch (Exception e) {

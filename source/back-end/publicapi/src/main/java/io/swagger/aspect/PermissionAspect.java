@@ -123,6 +123,7 @@ public class PermissionAspect {
             return new ResponseEntity<>(basicResponse, HttpStatus.BAD_REQUEST);
         } catch (Exception e){
             // 出现异常，这里直接返回，防止控制器被调用
+            basicResponse.setData("出错"+e.getMessage()+Arrays.toString(e.getStackTrace()));
             return new ResponseEntity<>(basicResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         try {
@@ -130,7 +131,7 @@ public class PermissionAspect {
             res = jp.proceed();
         }catch (Exception e){
             //捕获到未处理的异常
-
+            basicResponse.setData("出错"+e.getMessage()+Arrays.toString(e.getStackTrace()));
             res= new ResponseEntity<>(basicResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 

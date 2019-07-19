@@ -85,3 +85,9 @@ source/back-end/tiku/src/main/resources/static/**/*.*
 *.jar
 
 *.MF
+
+source/back-end/tiku-copy/
+
+source/back-end/tiku/src/main/resources/templates/index\.html
+
+source/back-end/deploy\.sh

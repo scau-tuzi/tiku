@@ -169,8 +169,8 @@ let callback = (pd, size) => {
       console.log("提交数据");
       console.log(this.form);
       let pd = { problem: {}, answer: {} };
-      let callback = p=>{};
-      addProblem(pd,callback);
+      // let callback = p=>{};
+      // addProblem(pd,callback);
 
 
       pd.problem.problemText = this.ruleForm.question;

@@ -15,10 +15,11 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("/api/role")
-public class RoleController {
+public class RoleController extends WebBasicController{
     @Autowired
     private WebRoleServiceImpl webRoleService;
 
+    //列出角色列表，可给添加用户选择
     @RequestMapping("/selectRole")
     public BasicResponse selectRole() {
         BasicResponse basicResponse = new BasicResponse();
@@ -31,14 +32,14 @@ public class RoleController {
     /**
      * 增加新角色
      *
-     * @param role
+     * @param roleDto
      * @return
      */
     @PostMapping("/add")
     public BasicResponse add(@RequestBody RoleDto roleDto) {
         BasicResponse basicResponse = new BasicResponse();
 
-        Long createBy = 1L;
+        Long createBy = super.getUserId();
         try {
             webRoleService.add(roleDto, createBy);
             basicResponse.setData("角色添加成功");
@@ -68,6 +69,10 @@ public class RoleController {
         return basicResponse;
     }
 
+
+
+
+
     /**
      * 列出角色列表
      *
@@ -94,14 +99,14 @@ public class RoleController {
     /**
      * 更改角色信息
      *
-     * @param role
+     * @param roleDto
      * @return
      */
     @PutMapping("/update")
     public BasicResponse update(@RequestBody RoleDto roleDto) {
         BasicResponse basicResponse = new BasicResponse();
 
-        Long updateBy = 1L;
+        Long updateBy = super.getUserId();
         try {
 
             webRoleService.update(roleDto, updateBy);

@@ -2,6 +2,7 @@ package io.swagger.controller;
 
 import io.swagger.pojo.dao.Permission;
 import io.swagger.pojo.dto.BasicResponse;
+import io.swagger.pojo.dto.PermissionDto;
 import io.swagger.service.WebPermissionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ import java.util.Map;
 @RestController
 @Slf4j
 @RequestMapping("/api/permission")
-public class WebPermissionController {
+public class WebPermissionController extends WebBasicController {
 
     @Autowired
     private WebPermissionService webPermissionService;
@@ -27,7 +28,7 @@ public class WebPermissionController {
     public BasicResponse add(@RequestBody Permission permission) {
         BasicResponse basicResponse = new BasicResponse();
 
-        Long createBy = 1L;
+        Long createBy = super.getUserId();
         try {
             webPermissionService.add(permission, createBy);
             basicResponse.setData("权限添加成功");
@@ -58,19 +59,16 @@ public class WebPermissionController {
 
     /**
      * 查询权限列表
-     * @param pageNumber
-     * @param pageSize
+     *
      * @return
      */
     @RequestMapping("/list")
-    public BasicResponse list(@RequestParam Integer pageNumber, @RequestParam Integer pageSize) {
+    public BasicResponse list() {
         BasicResponse basicResponse = new BasicResponse();
 
-        pageNumber = (pageNumber < 0 ? 0 : pageNumber);
-        pageSize = (pageSize < 1 || pageSize > 100 ? 100 : pageSize);
         try {
-            Map<String, Object> resultMap = webPermissionService.list(pageNumber, pageSize);
-            basicResponse.setData(resultMap);
+            List<PermissionDto> permissionDtoList= webPermissionService.list();
+            basicResponse.setData(permissionDtoList);
         } catch (Exception e) {
             basicResponse.setCode(BasicResponse.ERRORCODE);
             basicResponse.setData("权限列表查询失败: " + e.getMessage());
@@ -87,7 +85,7 @@ public class WebPermissionController {
     public BasicResponse update(@RequestBody Permission permission) {
         BasicResponse basicResponse = new BasicResponse();
 
-        Long updateBy = 1L;
+        Long updateBy = super.getUserId();
         try {
 
             webPermissionService.update(permission, updateBy);

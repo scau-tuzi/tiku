@@ -1,6 +1,7 @@
 package io.swagger.utils;
 
 import io.swagger.pojo.dao.User;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -17,6 +18,8 @@ public class UserRealm extends AuthorizingRealm {
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         System.out.println("权限配置-->MyShiroRealm.doGetAuthorizationInfo()");
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
+
+
 //        UserInfo userInfo  = (UserInfo)principals.getPrimaryPrincipal();
         authorizationInfo.addRole("admin");
         authorizationInfo.addStringPermission("role:create");
@@ -39,6 +42,7 @@ public class UserRealm extends AuthorizingRealm {
         //通过username从数据库中查找 User对象，如果找到，没找到.
         //实际项目中，这里可以根据实际情况做缓存，如果不做，Shiro自己也是有时间间隔机制，2分钟内不会重复执行该方法
         User user = new User();
+        user.setId(123L);
         user.setUsername("czfshine");
         user.setPasswordSaltMd5("123456");
         SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(

@@ -215,7 +215,7 @@
         props: {
             tableInfo: GeneralTable,//表格信息
             listSize:Number,        //总页数
-            handleChange:Function,  //页修改回调函: b数
+            handleChange:Function,  //页修改回调函数
             usePagination:Boolean,  //是否使用内置分页器
           centerDialogVisible_single:Boolean,
           options: Array,
@@ -243,8 +243,6 @@
         mounted: function () {
           this.getTags();
             this.getData(0);
-            console.log("666")
-
         },
     }
 </script>
