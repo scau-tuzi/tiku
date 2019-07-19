@@ -142,7 +142,7 @@
         getTags(){
             console.log("getTag!")
             var _this=this;
-            let callback=(pd)=>{
+            let callback=(pd,size)=>{
             console.log("get it");
             console.log(pd);
             this.$store.commit("setNewCommits",pd);
@@ -156,7 +156,7 @@
                 this.options.push(ress)
             });
             };
-            getTagsList(callback);
+            getTagsList(0, callback, 0);
             console.log(this.options);
           },
 
@@ -180,22 +180,30 @@
             pd.extData[keyname]=value;
           });
           console.log(pd)
-          this.$refs[formName].validate((valid) => {
-            if (valid) {
-              //alert('submit!');
-              addProblem(pd,(b)=>{
-                if(b.code==="ok"){
-                  alert("添加成功");
-                  // todo 返回上一页
-                }else{
-                  alert("添加失败"+b.data)
-                }
-              });
-            } else {
-              console.log('数据不正确');
-              return false;
-            }
-          });
+          addProblem(pd, b => {
+            if (b.code === "ok") {
+            alert("添加成功");
+            // todo 返回上一页
+          } else {
+            alert("添加失败" + b.data);
+          }
+        });
+          // this.$refs[formName].validate((valid) => {
+          //   if (valid) {
+          //     //alert('submit!');
+          //     addProblem(pd,(b)=>{
+          //       if(b.code==="ok"){
+          //         alert("添加成功");
+          //         // todo 返回上一页
+          //       }else{
+          //         alert("添加失败"+b.data)
+          //       }
+          //     });
+          //   } else {
+          //     console.log('数据不正确');
+          //     return false;
+          //   }
+          // });
         },
         resetForm(formName) {
           this.$refs[formName].resetFields();

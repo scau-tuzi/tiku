@@ -32,17 +32,31 @@ function getProblems(pageNumber: number, callback: (Problems: ProblemFullData[],
  * @param problem 是一个有关于 problemFullData 的一个对象实例
  * @param callback  回调函数
  */
+// function addProblem(problem: ProblemFullData, callback: (b: BasicResponse) => void) {
+//     //增加问题方法--本地数据测试
+//     if (problem.problem.id === undefined) {
+//         problem.problem.id = Number(problemTemp[problemTemp.length - 1].problem.id) + 1;
+//     }
+//     problemTemp.push(problem);
+//     console.log("增加了题目");
+//     console.log(problemTemp);
+//     let response: BasicResponse = { code: 'ok' };
+//     callback(response);
+// }
+
 function addProblem(problem: ProblemFullData, callback: (b: BasicResponse) => void) {
-    //增加问题方法--本地数据测试
-    if (problem.problem.id === undefined) {
-        problem.problem.id = Number(problemTemp[problemTemp.length - 1].problem.id) + 1;
-    }
-    problemTemp.push(problem);
-    console.log("增加了题目");
-    console.log(problemTemp);
-    let response: BasicResponse = { code: 'ok' };
-    callback(response);
+    //线上    
+    axios
+        .post("/api/problem/add", problem)
+        .then(res => {
+            //得到一个返回的参数,以确保题目增加成功
+            let response: BasicResponse = res.data;
+            console.log("获取的数据");
+            console.log(response);
+            callback(response);
+        })
 }
+
 
 /**
  * 删除题目方法

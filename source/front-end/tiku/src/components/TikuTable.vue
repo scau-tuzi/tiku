@@ -80,7 +80,7 @@
       ></el-pagination>
     </el-footer>
     <el-dialog title="修改标签" :visible.sync="centerDialogVisible_single" width="30%" center>
-      <template>
+      <div align="center">
         <el-select
           v-model="value"
           multiple
@@ -98,14 +98,17 @@
             :value="item.value"
           ></el-option>
         </el-select>
+      </div>
+      <el-row></el-row>
+      <div align="center">
         <span slot="footer" class="dialog-footer">
           <el-button @click="centerDialogVisible_single = false">取 消</el-button>
           <el-button type="primary" @click="centerDialogVisible_single = false;modifyTag()">确 定</el-button>
         </span>
-      </template>
+      </div>
     </el-dialog>
     <el-dialog title="批量修改标签" :visible.sync="centerDialogVisible_batch" width="30%" center>
-      <template>
+      <div align="center">
         <el-select
           v-model="value_batch"
           multiple
@@ -123,11 +126,14 @@
             :value="item.value"
           ></el-option>
         </el-select>
+      </div>
+      <el-row></el-row>
+      <div align="center">
         <span slot="footer" class="dialog-footer">
           <el-button @click="centerDialogVisible_batch = false">取 消</el-button>
           <el-button type="primary" @click="centerDialogVisible_batch = false;modifyBatchTags()">确 定</el-button>
         </span>
-      </template>
+      </div>
     </el-dialog>
   </el-container>
 </template>
