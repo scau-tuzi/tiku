@@ -1,4 +1,5 @@
 <template>
+    <div>
     <el-table :data="tableInfo.tableData"
               row-key="id"
               class="newTable"
@@ -73,6 +74,7 @@
                         </template>
       </el-dialog>
     </el-table>
+
     <el-footer align="center">
         <el-pagination v-if="usePagination===true"
                 background
