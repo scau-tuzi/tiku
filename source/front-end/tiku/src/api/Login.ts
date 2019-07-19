@@ -9,7 +9,7 @@ function login(username:string,pwd:string,callback: (u: BasicResponse) => void) 
     password:pwd
   };
   axios
-      .post("/api/login",u)
+      .post("/web/login",u)
       .then(res => {
         let lists: BasicResponse = res.data;
         callback(lists)

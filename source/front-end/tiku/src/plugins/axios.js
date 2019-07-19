@@ -2,6 +2,7 @@
 
 import Vue from 'vue';
 import axios from "axios";
+import me from "../main"
 
 // Full config:  https://github.com/axios/axios#request-config
 // axios.defaults.baseURL = process.env.baseURL || process.env.apiUrl || '';
@@ -28,12 +29,21 @@ _axios.interceptors.request.use(
 );
 
 // Add a response interceptor
-_axios.interceptors.response.use(
+axios.interceptors.response.use(
   function(response) {
+    if(response.status===200){
+      if(response.config.url==="/web/login" && response.config.method==="post") {
+        me.$router.push({ path: "/" });
+      }
+    }
     // Do something with response data
     return response;
   },
   function(error) {
+    //console.log(typeof error)
+    if(error.response.status===401){
+      me.$router.push({ path: "/Login" });
+    }
     // Do something with response error
     return Promise.reject(error);
   }
@@ -58,4 +68,4 @@ Plugin.install = function(Vue, options) {
 
 Vue.use(Plugin)
 
-export default Plugin;
+  export default Plugin;
