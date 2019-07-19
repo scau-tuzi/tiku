@@ -26,8 +26,10 @@ const store = new Vuex.Store({
     }
   }
 });
-new Vue({
+let me= new Vue({
   router,
   store,
   render: h => h(App)
 }).$mount('#app');
+
+export default me;
