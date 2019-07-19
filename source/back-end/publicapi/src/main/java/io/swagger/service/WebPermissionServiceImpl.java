@@ -3,6 +3,7 @@ package io.swagger.service;
 import io.swagger.model.Pagination;
 import io.swagger.pojo.dao.Permission;
 import io.swagger.pojo.dao.repos.PermissionRepository;
+import io.swagger.pojo.dto.PermissionDto;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -99,26 +100,52 @@ public class WebPermissionServiceImpl extends BasicService implements WebPermiss
         }
     }
 
+
     /**
-     * 查找出所有的权限
+     * 列出权限列表，包括权限的父id
+     * @return
      */
-    @Override
-    public Map<String, Object> list(Integer pageNumber, Integer pageSize) {
-        Page<Permission> page = permissionRepository.findAllByIsDel(PageRequest.of(pageNumber, pageSize), Boolean.FALSE);
+    public List<PermissionDto> list(){
+        List<Permission> parentPermissions=permissionRepository.selectParentPermissons();
 
-        List<Permission> permissionList = new ArrayList<>(page.getContent());
+        List<PermissionDto> parentPermissionDtos=new ArrayList<>();
+        for(Permission parentpermission:parentPermissions){
+            PermissionDto parentpermissionDto=new PermissionDto();
+            BeanUtils.copyProperties(parentpermission,parentpermissionDto);
 
-        //分页信息
-        Pagination pagination = new Pagination();
-        pagination.setPage(BigDecimal.valueOf(page.getNumber()));
-        pagination.setSize(BigDecimal.valueOf(page.getSize()));
-        pagination.setTotal(BigDecimal.valueOf(page.getTotalPages()));
+            List<Permission> childPermissions=permissionRepository.selectChildPermissons(parentpermissionDto.getId());
+            List<PermissionDto> childPermissionDtos=new ArrayList<>();
+            for(Permission childPermission:childPermissions){
+                PermissionDto childPermissionDto=new PermissionDto();
+                BeanUtils.copyProperties(childPermission,childPermissionDto);
+                childPermissionDtos.add(childPermissionDto);
+            }
+            parentpermissionDto.setChildPermissions(childPermissionDtos);
+            parentPermissionDtos.add(parentpermissionDto);
+        }
 
-        Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put("permissionList", permissionList);
-        resultMap.put("pagination", pagination);
-        return resultMap;
+        return parentPermissionDtos;
     }
+//    /**
+//     * 查找出所有的权限
+//     */
+//    @Override
+//    public Map<String, Object> list(Integer pageNumber, Integer pageSize) {
+//        Page<Permission> page = permissionRepository.findAllByIsDel(PageRequest.of(pageNumber, pageSize), Boolean.FALSE);
+//
+//        List<Permission> permissionList = new ArrayList<>(page.getContent());
+//
+//        //分页信息
+//        Pagination pagination = new Pagination();
+//        pagination.setPage(BigDecimal.valueOf(page.getNumber()));
+//        pagination.setSize(BigDecimal.valueOf(page.getSize()));
+//        pagination.setTotal(BigDecimal.valueOf(page.getTotalPages()));
+//
+//        Map<String, Object> resultMap = new HashMap<>();
+//        resultMap.put("permissionList", permissionList);
+//        resultMap.put("pagination", pagination);
+//        return resultMap;
+//    }
 
     @Transactional(rollbackFor = Exception.class)
     @Override

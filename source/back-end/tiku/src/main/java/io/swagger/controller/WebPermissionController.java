@@ -2,6 +2,7 @@ package io.swagger.controller;
 
 import io.swagger.pojo.dao.Permission;
 import io.swagger.pojo.dto.BasicResponse;
+import io.swagger.pojo.dto.PermissionDto;
 import io.swagger.service.WebPermissionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,19 +59,16 @@ public class WebPermissionController extends WebBasicController {
 
     /**
      * 查询权限列表
-     * @param pageNumber
-     * @param pageSize
+     *
      * @return
      */
     @RequestMapping("/list")
-    public BasicResponse list(@RequestParam Integer pageNumber, @RequestParam Integer pageSize) {
+    public BasicResponse list() {
         BasicResponse basicResponse = new BasicResponse();
 
-        pageNumber = (pageNumber < 0 ? 0 : pageNumber);
-        pageSize = (pageSize < 1 || pageSize > 100 ? 100 : pageSize);
         try {
-            Map<String, Object> resultMap = webPermissionService.list(pageNumber, pageSize);
-            basicResponse.setData(resultMap);
+            List<PermissionDto> permissionDtoList= webPermissionService.list();
+            basicResponse.setData(permissionDtoList);
         } catch (Exception e) {
             basicResponse.setCode(BasicResponse.ERRORCODE);
             basicResponse.setData("权限列表查询失败: " + e.getMessage());
