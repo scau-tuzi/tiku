@@ -19,6 +19,7 @@ public class RoleController {
     @Autowired
     private WebRoleServiceImpl webRoleService;
 
+    //列出角色列表，可给添加用户选择
     @RequestMapping("/selectRole")
     public BasicResponse selectRole() {
         BasicResponse basicResponse = new BasicResponse();
@@ -67,6 +68,10 @@ public class RoleController {
         }
         return basicResponse;
     }
+
+
+
+
 
     /**
      * 列出角色列表
