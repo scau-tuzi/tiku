@@ -13,7 +13,7 @@ import java.util.Map;
 @RestController
 @Slf4j
 @RequestMapping("/api/permission")
-public class WebPermissionController {
+public class WebPermissionController extends WebBasicController {
 
     @Autowired
     private WebPermissionService webPermissionService;
@@ -27,7 +27,7 @@ public class WebPermissionController {
     public BasicResponse add(@RequestBody Permission permission) {
         BasicResponse basicResponse = new BasicResponse();
 
-        Long createBy = 1L;
+        Long createBy = super.getUserId();
         try {
             webPermissionService.add(permission, createBy);
             basicResponse.setData("权限添加成功");
@@ -87,7 +87,7 @@ public class WebPermissionController {
     public BasicResponse update(@RequestBody Permission permission) {
         BasicResponse basicResponse = new BasicResponse();
 
-        Long updateBy = 1L;
+        Long updateBy = super.getUserId();
         try {
 
             webPermissionService.update(permission, updateBy);

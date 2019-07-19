@@ -79,13 +79,6 @@ public class WebUserServiceImpl extends BasicService<User> implements WebUserSer
 
     }
 
-    public void test() {
-        User user = userRepository.findByIdEquals(200L);
-        User user2 = userRepository.findByIdEquals(300L);
-        System.out.println("666");
-        System.out.println("777");
-    }
-
     /**
      * 批量删除用户
      *
