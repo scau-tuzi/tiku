@@ -1,5 +1,4 @@
 <template>
-    <div>
     <el-table :data="tableInfo.tableData"
               row-key="id"
               class="newTable"
@@ -46,40 +45,33 @@
                            v-on:click="handleButton(oper.method,scope.$index, scope.row,scope.column); oper.method==='showTags'?centerDialogVisible=true:centerDialogVisible=false">
                     {{oper.label}}
                 </el-button>
-                <el-dialog
-                        title="修改标签"
-                        :visible.sync="centerDialogVisible"
-                        width="30%"
-                        center
-                        :append-to-body="true">
-                    <el-tag
-                            v-for="(tagsrc,index) in scope.row.tag"
-                            v-bind:key="index"
-                            closable
-                            :disable-transitions="false"
-                            @close="handleClose(tag)"
-                            style="margin-right: 10px; margin-bottom: 10px">
-                        {{tagsrc}}
-                    </el-tag>
-                    <el-input
-                            class="input-new-tag"
-                            v-if="inputVisible"
-                            v-model="inputValue"
-                            ref="saveTagInput"
-                            size="small"
-                            @keyup.enter.native="handleInputConfirm"
-                            @blur="handleInputConfirm"
-                    >
-                    </el-input>
-                    <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
-                    <span slot="footer" class="dialog-footer">
-    <el-button @click="centerDialogVisible = false">取 消</el-button>
-    <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
-  </span>
-                </el-dialog>
             </template>
         </el-table-column>
-
+      <el-dialog title="修改标签" :visible.sync="this.centerDialogVisible_single" width="30%" center>
+                        <template>
+                          <el-select
+                            v-model="value"
+                            multiple
+                            filterable
+                            allow-create
+                            default-first-option
+                            size="medium"
+                            placeholder="请选择题目标签"
+                          >
+                            <!-- @change="modifyTag" -->
+                            <el-option
+                              v-for="item in options"
+                              :key="item.value"
+                              :label="item.label"
+                              :value="item.value"
+                            ></el-option>
+                          </el-select>
+                          <span slot="footer" class="dialog-footer">
+                  <el-button @click="centerDialogVisible_single = false">取 消</el-button>
+                  <el-button type="primary" @click="centerDialogVisible_single = false;modifyTag()">确 定</el-button>
+                </span>
+                        </template>
+      </el-dialog>
     </el-table>
     <el-footer align="center">
         <el-pagination v-if="usePagination===true"
@@ -134,46 +126,47 @@
         this.inputValue = '';
     }
 
-    // function handlerchange(currentPage) {//获取题目
-    //     this.getData(currentPage-1);
-    // }
+    function handlerchange(currentPage) {//获取题目
+        this.getData(currentPage-1);
+    }
 
-    // function getData(currentPage) {
-    //     console.log("change")
-    //     var _this = this;
-    //     let callback = (pd) => {
-    //         var res = [];
-    //         console.log("get it")
-    //         console.log(pd)
-    //         this.$store.commit("setNewProblems", pd);
-    //         pd.filter(v => {
-    //             let ts = [];
-    //             if (v.tags !== null) {
-    //                 for (let i = 0; i < v.tags.length; i++) {
-    //                     ts.push(v.tags[i].value)
-    //                 }
-    //             }
-    //             if (v.answer === null) {
-    //                 v.answer = {
-    //                     answerText: ""
-    //                 }
-    //             }
-    //             let ress = {
-    //                 problemId: v.problem.id,
-    //                 problem: v.problem.problemText,
-    //                 answer: v.answer.answerText,
-    //                 pictures: '',
-    //                 sound: '',
-    //                 status: (!v.status ? '未通过' : '通过'),
-    //                 tag: ts
-    //             };
-    //             res.push(ress)
-    //         });
-    //         console.log(res);
-    //         _this.tableData = res;
-    //     };
-    //     getProblems(currentPage, callback);
-    // }
+    function getData(currentPage) {
+        console.log("change")
+        var _this = this;
+        let callback = (pd) => {
+            var res = [];
+            console.log("get it")
+            console.log(pd)
+            this.$store.commit("setNewProblems", pd);
+            pd.filter(v => {
+                let ts = [];
+                if (v.tags !== null) {
+                    for (let i = 0; i < v.tags.length; i++) {
+                        ts.push(v.tags[i].value)
+                    }
+                }
+                if (v.answer === null) {
+                    v.answer = {
+                        answerText: ""
+                    }
+                }
+                let ress = {
+                    problemId: v.problem.id,
+                    problem: v.problem.problemText,
+                    answer: v.answer.answerText,
+                    pictures: '',
+                    sound: '',
+                    status: (!v.status ? '未通过' : '通过'),
+                    tag: ts
+                };
+                res.push(ress)
+            });
+            console.log(res);
+            _this.tableData = res;
+        };
+        getProblems(currentPage, callback);
+    }
+
     export default {
         name: "GeneralTable",
         props: {
@@ -185,7 +178,7 @@
         data() {
             return {
                 centerDialogVisible: false,
-                inputVisible:false,
+                tableData
             }
         },
         methods: {
@@ -194,11 +187,11 @@
             handleClose,
             showInput,
             handleInputConfirm,
-            // handlerchange,
-            // getData
+            handlerchange,
+            getData
         },
         mounted: function () {
-            // this.getData(0);
+            this.getData(0);
         },
     }
 </script>

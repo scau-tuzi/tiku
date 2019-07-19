@@ -45,7 +45,7 @@
     import GeneralTable from "../components/GeneralTable";
     import paperListTable from "../data/mock/PaperListTableInfoMock";
     import {getPapers} from "../api/Paper";
-
+    //获取试卷
    function getPaperData(currentPage){
       console.log("change")
       var _this=this;
@@ -123,7 +123,7 @@
         //监听子组件
         handleButton(val){
           if(val.method==='ViewPaper'){
-            this.handleEdit(val.index,val.row)
+            this.viewPaper(val.index,val.row)
           }else if(val.method==='showTags'){
             this.showTags(val.row,val.col,val.index)
           }else if(val.method==='editPaper'){
@@ -133,7 +133,10 @@
             this.handleDelete(val.index,val.row)
           }
         },
+        //添加试卷
           jumpInput(){
+            this.$store.commit("setPaperEditData", []);
+            createPaperOrderMock.tableData=[];
             //this.$router.push("/cart")
             //传递的参数用{{ $route.query.goodsId }}获取
             this.$router.push({path: '/CreatePaper'})
@@ -167,8 +170,26 @@
           console.log(row)
           this.$store.commit("setPaperEditData", row);
           this.$router.push({path: '/CreatePaper'})
-        }
         },
+        //查看试卷
+        viewPaper(index,row){
+          console.log(row)
+          this.$store.commit("setPaperEditData", row);
+          this.$router.push({path: '/ViewPaper'})
+        },
+        showTags(row,col,index){
+          this.centerDialogVisible_single=true;
+        },
+        //搜索框
+        search(){
+
+        },
+        //分页
+        handlerchange: function (currentPage){//获取题目
+          this.getPaperData(currentPage-1);
+        },
+        },
+      getPaperData,
 
     }
 </script>

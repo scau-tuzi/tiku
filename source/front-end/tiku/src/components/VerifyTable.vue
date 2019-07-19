@@ -41,9 +41,9 @@
             </el-table-column>
           </el-table>
         </el-row>
-        <el-row>
-          <GeneralTable v-bind:table-info="verifyTableInfo" v-on:handleButton="handleButton"></GeneralTable>
-        </el-row>
+<!--        <el-row>-->
+<!--          <GeneralTable v-bind:table-info="verifyTableInfo" v-on:handleButton="handleButton"></GeneralTable>-->
+<!--        </el-row>-->
       </el-main>
       <el-footer align="center">
         <el-pagination
