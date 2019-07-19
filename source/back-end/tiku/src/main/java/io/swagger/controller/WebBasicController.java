@@ -11,9 +11,11 @@ public class WebBasicController {
     public String getUsername(){
         Object principal = SecurityUtils.getSubject().getPrincipal();
         if(principal!=null && principal instanceof User){
-            return ((User) principal).getUsername();
+            String username = ((User) principal).getUsername();
+            return username!=null?username:"unknown";
         }
-        return null;
+        //防止抛NPE
+        return "unknown";
     }
 
     /**获取当前登录id
@@ -22,8 +24,10 @@ public class WebBasicController {
     public Long getUserId(){
         Object principal = SecurityUtils.getSubject().getPrincipal();
         if(principal!=null && principal instanceof User){
-            return ((User) principal).getId();
+            Long id = ((User) principal).getId();
+            return id!=null?id:1L;
         }
-        return null;
+        //防止抛NPE
+        return 1L;
     }
 }
