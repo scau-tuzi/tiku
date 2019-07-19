@@ -34,6 +34,10 @@ public interface PermissionRepository extends JpaRepository<Permission, Long> {
     List<Permission> selectChildPermissons(Long id);
 
     @Query(nativeQuery = true,
+            value = "select * from permission where roleId=?1")
+    List<Permission> selectPermissionsRoleIdEquals(Long id);
+
+    @Query(nativeQuery = true,
             value = "SELECT DISTINCT id from permission")
     List<Long> selectPermissionId();
 

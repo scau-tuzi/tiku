@@ -99,29 +99,12 @@ public class WebRoleServiceImpl extends BasicService<Role> implements WebRoleSer
             throw new Exception("角色名不可为空");
         } else if (roleRepository.findByRoleName(roleDto.getRoleName()) != null) {
             throw new Exception("该角色名已存在");
-        } else if (roleDto.getPermissionList().size() == 0) {
-            throw new Exception("角色的权限列表不可为空");
-        } else if (detect(roleDto.getPermissionList()) == 0) {
-            throw new Exception("权限不存在");
         } else {
             Role role = new Role();
             BeanUtils.copyProperties(roleDto, role);
             beforeAdd(role, createBy);
 
             roleRepository.save(role);
-
-            RolePermission rolePermission = new RolePermission();
-            rolePermission.setRoleId(role.getId());
-            for (Long permissionId : roleDto.getPermissionList()) {
-
-                rolePermission.setCreateAt(role.getCreateAt());
-                rolePermission.setCreateBy(role.getCreateBy());
-                rolePermission.setPermissionId(permissionId);
-
-                rolePermission.setIsDel(Boolean.FALSE);
-                rolePermissionRepository.save(rolePermission);
-            }
-
 
         }
 
@@ -150,9 +133,8 @@ public class WebRoleServiceImpl extends BasicService<Role> implements WebRoleSer
     @Override
     public void delete(Long id) throws Exception {
         if (id != null && roleRepository.findByIdEquals(id) != null) {
+                deletePermission(id);
 
-            //删除该角色的权限
-            deletePermission(id);
 
             deleteBasicInfo(id);
         } else {
@@ -161,7 +143,7 @@ public class WebRoleServiceImpl extends BasicService<Role> implements WebRoleSer
     }
 
     /**
-     * 查找出所有标签
+     * 查找出所有角色
      *
      * @param pageNumber
      * @param pageSize
@@ -178,7 +160,8 @@ public class WebRoleServiceImpl extends BasicService<Role> implements WebRoleSer
         for (Role role : page.getContent()) {
             RoleDto roleDto = new RoleDto();
             BeanUtils.copyProperties(role, roleDto);
-            roleDto.setPermissionList(rolePermissionRepository.findPermissionIdsByRoleIdEquals(role.getId()));
+            //获取用户的权限
+            roleDto.setPermissionList(rolePermissionRepository.findPermissionIdsByRoleIdEqualsAndIsNotDel(role.getId(),Boolean.FALSE));
 
             roleDtoList.add(roleDto);
         }
@@ -206,43 +189,48 @@ public class WebRoleServiceImpl extends BasicService<Role> implements WebRoleSer
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void update(RoleDto roleDto, Long updateBy) throws Exception {
-        List<Long> dbPermissionList = rolePermissionRepository.findPermissionIdsByRoleIdEquals(roleDto.getId());
+        //List<Long> dbPermissionList = rolePermissionRepository.findPermissionIdsByRoleIdEquals(roleDto.getId());
         if (roleDto.getId() == null || roleRepository.findByIdEquals(roleDto.getId()) == null) {
             throw new Exception("该用户id不存在");
-        } else if (roleDto.getPermissionList().size() == 0) {
-            throw new Exception("权限列表不可为空");
-        } else if (detect(roleDto.getPermissionList()) == 0) {
-            throw new Exception("权限不存在");
-        } else if (roleRepository.findByRoleName(roleDto.getRoleName()) != null
-                && dbPermissionList.containsAll(roleDto.getPermissionList())
-                && roleDto.getPermissionList().containsAll(dbPermissionList)) {
+//        } else if (roleDto.getPermissionList().size() == 0) {
+//            throw new Exception("权限列表不可为空");
+//        } else if (detect(roleDto.getPermissionList()) == 0) {
+//            throw new Exception("权限不存在");
+        } else if (roleRepository.findByRoleName(roleDto.getRoleName()) != null) {
             throw new Exception("该角色已存在");
         } else {
-            //删除该角色已有权限
-            deletePermission(roleDto.getId());
-
             Role dbRole = roleRepository.findByIdEquals(roleDto.getId());
             BeanUtils.copyProperties(roleDto, dbRole);
             beforeUpdate(dbRole, updateBy);
-
             roleRepository.save(dbRole);
 
-            RolePermission rolePermission = new RolePermission();
-            rolePermission.setRoleId(roleDto.getId());
-            for (Long permissionId : roleDto.getPermissionList()) {
-
-                rolePermission.setPermissionId(permissionId);
-
-                rolePermission.setUpdateAt(dbRole.getUpdateAt());
-                rolePermission.setUpdateBy(dbRole.getUpdateBy());
-                rolePermission.setIsDel(Boolean.FALSE);
-                rolePermissionRepository.save(rolePermission);
-            }
-
-
         }
-
     }
 
+
+//            deletePermission(roleDto.getId());
+
+//        } else if (roleDto.getPermissionList().size() != 0 && detect(roleDto.getPermissionList()) == 1) {
+//
+//            //删除该角色已有权限
+//            deletePermission(roleDto.getId());
+//            Role dbRole = roleRepository.findByIdEquals(roleDto.getId());
+//            BeanUtils.copyProperties(roleDto, dbRole);
+//            beforeUpdate(dbRole, updateBy);
+//            roleRepository.save(dbRole);
+//            RolePermission rolePermission = new RolePermission();
+//            rolePermission.setRoleId(roleDto.getId());
+//            for (Long permissionId : roleDto.getPermissionList()) {
+//
+//                rolePermission.setPermissionId(permissionId);
+//
+//                rolePermission.setUpdateAt(dbRole.getUpdateAt());
+//                rolePermission.setUpdateBy(dbRole.getUpdateBy());
+//                rolePermission.setIsDel(Boolean.FALSE);
+//                rolePermissionRepository.save(rolePermission);
+//            }
+//        }
+//
+//    }
 
 }
