@@ -5,45 +5,46 @@
         <!-- 搜索框 -->
         <el-input v-model="search" style="display: inline-block;width: 300px" placeholder="请输入搜索内容"></el-input>
         <div style="margin: 20px 0;"></div>
-        <el-row>
-          <el-table
-            :data="tables"
-            border
-            stripe="true"
-            style="width: 100%"
-            @selection-change="handleSelectionChange"
-          >
-            <el-table-column fixed="left" prop="problemId" label="问题id" width="0" hidden></el-table-column>
-            <el-table-column fixed="left" prop="problem" label="问题" width="300"></el-table-column>
-            <el-table-column prop="answer" label="答案" width="300"></el-table-column>
-            <el-table-column prop="sound" label="语音" width="150"></el-table-column>
-            <el-table-column prop="pictures" label="多图片" width="150"></el-table-column>
-            <el-table-column
-              prop="tag"
-              label="标签"
-              width="220"
-              :filter-method="filterTag"
-              filter-placement="bottom-end"
-            >
-              <template slot-scope="scope">
-                <el-tag
-                  v-for="(tagsrc,index) in scope.row.tag"
-                  v-bind:key="index"
-                  disable-transitions
-                >{{tagsrc}}</el-tag>
-              </template>
-            </el-table-column>
-            <el-table-column prop="status" label="审核状态" width="220"></el-table-column>
-            <el-table-column fixed="right" label="操作" width="150">
-              <template slot-scope="scope">
-                <el-button size="mini" type="text" @click="handleView(scope.$index)">查看</el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-        </el-row>
-        <!--        <el-row>-->
-        <!--          <GeneralTable v-bind:table-info="verifyTableInfo" v-on:handleButton="handleButton"></GeneralTable>-->
-        <!--        </el-row>-->
+<!--        <el-row>-->
+<!--          <el-table-->
+<!--            :data="tables"-->
+<!--            border-->
+<!--            stripe="true"-->
+<!--            style="width: 100%"-->
+<!--            @selection-change="handleSelectionChange"-->
+<!--          >-->
+<!--            <el-table-column fixed="left" prop="problemId" label="问题id" width="0" hidden></el-table-column>-->
+<!--            <el-table-column fixed="left" prop="problem" label="问题" width="300"></el-table-column>-->
+<!--            <el-table-column prop="answer" label="答案" width="300"></el-table-column>-->
+<!--            <el-table-column prop="sound" label="语音" width="150"></el-table-column>-->
+<!--            <el-table-column prop="pictures" label="多图片" width="150"></el-table-column>-->
+<!--            <el-table-column-->
+<!--              prop="tag"-->
+<!--              label="标签"-->
+<!--              width="220"-->
+<!--              :filter-method="filterTag"-->
+<!--              filter-placement="bottom-end"-->
+<!--            >-->
+<!--              <template slot-scope="scope">-->
+<!--                <el-tag-->
+<!--                  v-for="(tagsrc,index) in scope.row.tag"-->
+<!--                  v-bind:key="index"-->
+<!--                  disable-transitions-->
+<!--                >{{tagsrc}}</el-tag>-->
+<!--              </template>-->
+<!--            </el-table-column>-->
+<!--            <el-table-column prop="status" label="审核状态" width="220"></el-table-column>-->
+<!--            <el-table-column fixed="right" label="操作" width="150">-->
+<!--              <template slot-scope="scope">-->
+<!--                <el-button size="mini" type="text" @click="handleView(scope.$index)">查看</el-button>-->
+<!--                <el-button size="mini" type="text" @click="handleVerify(scope.$index)">审核</el-button>-->
+<!--              </template>-->
+<!--            </el-table-column>-->
+<!--          </el-table>-->
+<!--        </el-row>-->
+                <el-row>
+                  <GeneralTable v-bind:table-info="verifyTableInfo" v-on:handleButton="handleButton"></GeneralTable>
+                </el-row>
       </el-main>
       <el-footer align="center">
         <el-pagination
@@ -58,7 +59,7 @@
 </template>
 
 <script>
-import { getProblems } from "../api/Problem";
+  import {changeProblem, getProblems} from "../api/Problem";
 import ProblemFullData from "../data/model/ProblemFullData";
 import GeneralTable from "./GeneralTable";
 import verifyTableInfo from "../data/mock/VerifyTableInfoMock";
@@ -70,6 +71,8 @@ export default {
     handleButton(val) {
       if (val.method === "handleView") {
         this.handleView(val.index, val.row);
+      }else {
+        this.handleVerify(val.index,val.row)
       }
     },
     //查看操作
@@ -85,6 +88,20 @@ export default {
         }
       });
     },
+    //审核操作
+    handleVerify(index,row){
+      console.log(row.status);
+      console.log(verifyTableInfo.tableData[index].status)
+      this.$store.state.allProblem[index].status.verifyStatus=1;
+      changeProblem(this.$store.state.allProblem[index],(b)=>{
+        if (b.code === "ok") {
+          alert("审核成功");
+          _this.getPaperData(0);
+        }else {
+          alert("审核失败"+b.data)
+        }
+      })
+    },
     handlerchange: function(currentPage) {
       //获取题目
       this.getData(currentPage - 1);
@@ -98,7 +115,7 @@ export default {
         console.log(currentPage);
         console.log("get it");
         console.log(pd);
-        this.$store.commit("setNewProblems", pd);
+        _this.$store.commit("setNewProblems", pd);
         pd.filter(v => {
           let ts = [];
           if (v.tags !== null) {
@@ -122,8 +139,8 @@ export default {
           };
           res.push(ress);
         });
-        console.log(res);
-        _this.tableData = res;
+        //console.log(res);
+        verifyTableInfo.tableData = res;
       };
       getProblems(currentPage, callback, 0);
     }
