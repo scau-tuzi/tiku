@@ -1,8 +1,7 @@
 <template>
-
   <el-container>
     <el-header height="30px">
-      <el-page-header @back="goBack" content="新建试卷" >
+      <el-page-header @back="goBack" content="编辑试卷">
       </el-page-header>
     </el-header>
     <el-main>
@@ -37,10 +36,10 @@
         </el-col>
         <el-col :span=5>
           <el-autocomplete
-                  v-model="state"
-                  :fetch-suggestions="querySearchAsync"
-                  placeholder="搜索"
-                  @select="handleSelect"
+            v-model="state"
+            :fetch-suggestions="querySearchAsync"
+            placeholder="搜索"
+            @select="handleSelect"
           ></el-autocomplete>
         </el-col>
       </el-row>
@@ -50,7 +49,7 @@
                         v-bind:table-info="leftTable"  v-on:handleButton="handleButton" ></GeneralTable>
         </el-col>
         <el-col :span=11>
-          <GeneralTable :listSize="listSize" v-bind:table-info="createPaperOrderMock"  v-on:handleButton="handleButton"></GeneralTable>
+          <GeneralTable :listSize="listSize" v-bind:table-info="modifyPaperOrderMock"  v-on:handleButton="handleButton"></GeneralTable>
         </el-col>
       </el-row>
       <el-row>
@@ -59,7 +58,7 @@
        </pre>
         <hr>
         <pre style="text-align: left">
-      {{createPaperOrderMock.tableData}}
+      {{modifyPaperOrderMock.tableData}}
        </pre>
       </el-row>
 
@@ -72,7 +71,7 @@
   import draggable from 'vuedraggable';
   import GeneralTable from "./GeneralTable";
   import tikuTableInfo from "../data/mock/TikuTableInfoMock";
-  import {createPaperInfoMock, createPaperOrderMock} from "../data/mock/CreatePaperInfoMock";
+  import {createPaperInfoMock, createPaperOrderMock,modifyPaperOrderMock} from "../data/mock/CreatePaperInfoMock";
   import {getProblems} from "../api/Problem";
   import {addPaper} from "../api/Paper";
   import {getTagsList} from "../api/Tag";
@@ -82,7 +81,7 @@
    * @param leftId
    */
   function checkInRight(leftProblemId) {
-    let t = this.createPaperOrderMock.tableData;
+    let t = this.rightTable.tableData;
     if (t !== null && t.length > 0) {
       for (let i = 0; i < t.length; i++) {
         if (leftProblemId === t[i].id) {
@@ -104,7 +103,7 @@
           label: v.value
         };
         _this.options.push(ress);
-       // console.log(_this.options);
+        // console.log(_this.options);
       });
     };
     console.log("bbbb");
@@ -167,12 +166,14 @@
     data() {
       return {
         state: "",
-        isNewPaper: true,
+        isNewPaper: false,
         options: [],
         modifyPaperTag: [],
         tikuTableInfo,
         leftTable: createPaperInfoMock,
         createPaperOrderMock,
+        modifyPaperOrderMock,
+        rightTable:modifyPaperOrderMock,
         listSize: 100,
         curPage: 0,
         ruleForm: {
@@ -189,6 +190,7 @@
       this.getTags();
       this.loadDataToLeftTable(0);
       this.rowDrop();
+      console.log("editP")
       this.editPaper();
       console.log(this.isNewPaper);
     },
@@ -227,9 +229,33 @@
       },
       editPaper() {
         //createPaperOrderMock.tableData=this.$store.state.paperEditData.problems;
-
-        this.isNewPaper=true;
-
+        //let s=this.$store.state.paperEditData;
+        let p = this.$store.state.paperEditData.problems;
+        console.log("p");
+        console.log(this.$store.state.paperEditData);
+        this.isNewPaper=false
+        let res = [];
+        for (let i = 0; i < this.$store.state.paperEditData.problems.length; i++) {
+          let ts = [];
+          if (p[i].tags !== null) {
+            for (let i = 0; i < p[i].tags.length; i++) {
+              ts.push(p[i].tags[i].value);
+            }
+          }
+          if (p[i].answer === null) {
+            p[i].answer = {
+              answerText: ""
+            };
+          }
+          let ress = {
+            id: p[i].problem.id,
+            problem: p[i].problem.problemText,
+            answer: p[i].answer.answerText,
+            tag: ts
+          };
+          res.push(ress);
+        }
+        modifyPaperOrderMock.tableData = res;
       },
       complete() {
         //todo 修改数据
@@ -286,7 +312,7 @@
             }
             if (tbody[0] === evt.from && tbody[1] === evt.to) {
               const currRow = _this.leftTable.tableData.splice(evt.oldIndex, 1)[0];
-              _this.createPaperOrderMock.tableData.splice(evt.newIndex, 0, currRow);
+              _this.modifyPaperOrderMock.tableData.splice(evt.newIndex, 0, currRow);
             }
             _this.loadDataToLeftTable(_this.curPage);
 
@@ -296,11 +322,11 @@
           group: 'shared',
           onEnd: function (evt) {
             if (tbody[1] === evt.from && tbody[1] === evt.to) {
-              const currRow = _this.createPaperOrderMock.tableData.splice(evt.oldIndex, 1)[0];
-              _this.createPaperOrderMock.tableData.splice(evt.newIndex, 0, currRow);
+              const currRow = _this.modifyPaperOrderMock.tableData.splice(evt.oldIndex, 1)[0];
+              _this.modifyPaperOrderMock.tableData.splice(evt.newIndex, 0, currRow);
             }
             if (tbody[1] === evt.from && tbody[0] === evt.to) {
-              const currRow = _this.createPaperOrderMock.tableData.splice(evt.oldIndex, 1)[0];
+              const currRow = _this.modifyPaperOrderMock.tableData.splice(evt.oldIndex, 1)[0];
               _this.leftTable.tableData.splice(evt.newIndex, 0, currRow);
             }
             //重新加载左边题目列表

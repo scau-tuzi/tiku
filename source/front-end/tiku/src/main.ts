@@ -16,7 +16,8 @@ const store = new Vuex.Store({
     allRole:[],
     allUser:[],
     modifyPaper: [],
-    allPermission:[]
+    allPermission:[],
+    title:"首页"
   },
   mutations: {
     setNewCommits (state,newcommits) {
@@ -39,6 +40,9 @@ const store = new Vuex.Store({
     },
     setPermission(state,pd){
       state.allPermission=pd;
+    },
+    setTitle(state,newTitle){
+      state.title=newTitle;
     }
   }
 });

@@ -111,27 +111,25 @@ export default {
       this.getData(currentpage - 1, 0);
     },
     getData: function(currentpage, last) {
-      // console.log("change");
-      console.log("1=" + this.listSize);
-
       var _this = this;
       let callback = (pd, size) => {
         this.ListPageNumber = currentpage;
-        this.isCurrentPage = currentpage === size - 1 ? 1 : 0;
+        this.isCurrentPage = pd.length === 1 ? 1 : 0;
         this.listSize = size;
-        currentpage = last === 1 ? this.listSize - 1 : currentpage;
         this.listLenght = pd.length;
-
-        var res = [];
-        this.$store.commit("setNewCommits", pd);
-        console.log(this.$store.state.commits);
-        pd.filter(v => {
-          let ress = {
-            tag: v.value
-          };
-          res.push(ress);
-        });
-        _this.tableData = res;
+        if (last === 1) {
+          this.getData(this.listSize - 1, 0);
+        } else {
+          var res = [];
+          this.$store.commit("setNewCommits", pd);
+          pd.filter(v => {
+            let ress = {
+              tag: v.value
+            };
+            res.push(ress);
+          });
+          _this.tableData = res;
+        }
       };
       getTagsList(currentpage, callback);
     },
@@ -146,7 +144,6 @@ export default {
     batchDelete(rows) {
       let delIndex = [];
       let delId = [];
-      // console.log("batchDelete--",rows);
       for (var i = 0; i < this.tableData.length; i++) {
         //获取选中项id
         for (var j = 0; j < rows.length; j++) {
@@ -156,26 +153,24 @@ export default {
           }
         }
       }
-      // console.log("4--",delId);
+      console.log(delId.length);
+
       this.$confirm("确定批量删除标签?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       })
         .then(() => {
-          //alert('submit!');
           delTag(delId, b => {
             if (b.code === "ok") {
-              alert("删除成功");
+              this.isCurrentPage = delId.length === this.listLenght ? 1 : 0;
+              this.getData(this.ListPageNumber - this.isCurrentPage, 0);
+              this.$message({ type: "success", message: "删除成功!" });
             }
-            this.$router.go(0); //页面刷新（要加上）
           });
         })
         .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
+          this.$message({ type: "info", message: "已取消删除" });
         });
     },
 
@@ -187,28 +182,29 @@ export default {
         type: "warning"
       })
         .then(() => {
-          console.log("删除标签");
+          // console.log("删除标签");
           console.log(this.$store.state.commits);
           //alert('submit!');
           let tagId = [];
           tagId.push(this.$store.state.commits[index].id);
           delTag(tagId, b => {
             if (b.code === "ok") {
-              alert("删除成功");
+              this.getData(this.ListPageNumber - this.isCurrentPage, 0);
+
+              this.$message({ type: "success", message: "删除成功" });
             }
-            this.$router.go(0); //页面刷新（要加上）
+
+            // this.$router.go(0); //页面刷新（要加上）
           });
         })
         .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
+          this.$message({ type: "info", message: "已取消删除" });
         });
     },
 
     //修改标签待测试
     editTags(row, column, index) {
+      let _this = this;
       //修改标签的弹窗
       this.$prompt("请输入修改后的标签名称", "提示", {
         confirmButtonText: "确定",
@@ -216,28 +212,38 @@ export default {
         inputValue: row.tag //初始文本为该标签
       })
         .then(({ value }) => {
-          console.log("修改标签");
-          // var pd = [];
+          let tmp = this.$store.state.commits[index].value;
           let pd = {
             id: this.$store.state.commits[index].id,
             value: value
           };
-          console.log(pd.id);
-          // pd.push(pd_tmp);
-          // alert(pd);
-          console.log(pd);
-          //alert('submit!');
-          changeTag(pd, b => {
-            if (b.code === "ok") {
-              this.getData(this.ListPageNumber, 0);
-              alert("修改成功");
-              // todo 返回上一页
-              this.$message({
-                type: "success",
-                message: "修改后标签为: " + value
-              });
-            }
-          });
+          if (tmp === pd.value) {
+            this.$message({
+              type: "error",
+              message: "前后内容一致,无法修改"
+            });
+            setTimeout(function() {
+              _this.editTags(row, column, index);
+            }, 500);
+          } else {
+            changeTag(pd, b => {
+              if (b.code === "ok") {
+                this.getData(this.ListPageNumber, 0);
+                this.$message({
+                  type: "success",
+                  message: "修改后标签为: " + value
+                });
+              } else {
+                this.$message({
+                  type: "error",
+                  message: b.data
+                });
+                setTimeout(function() {
+                  _this.editTags(row, column, index);
+                }, 500);
+              }
+            });
+          }
         })
         .catch(() => {
           this.$message({
@@ -254,31 +260,24 @@ export default {
         cancelButtonText: "取消"
       })
         .then(({ value }) => {
-          console.log("提交标签");
           var res = {
             value: value
           };
-          // alert(pd);
-          // console.log(pd);
-          //alert('submit!');
-          console.log(res);
           let callback = b => {
             if (b.code === "ok") {
-              alert("添加成功");
-
-              // todo 返回上一页
               this.$message({
                 type: "success",
                 message: "新增标签: " + value
               });
               this.getData(this.listSize - 1, 1);
+            } else {
+              this.$message({
+                type: "error",
+                message: b.data
+              });
             }
           };
           addTags(res, callback);
-
-          // addTags(res, b => {
-          //   console.log(res);
-          // });
         })
         .catch(() => {
           this.$message({

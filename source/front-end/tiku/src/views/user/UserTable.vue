@@ -33,18 +33,18 @@
           <el-table-column prop="name" label="用户名" width="250"></el-table-column>
           <!-- <el-table-column prop="icon" label="头像" width="125"></el-table-column> -->
           <el-table-column prop="role" label="角色" width="310">
-            <!-- <template slot-scope="scope">
+            <template slot-scope="scope">
               <el-tag
-                v-for="(author,index) in scope.row.authority"
+                v-for="(role,index) in scope.row.role"
                 v-bind:key="index"
                 disable-transitions
-              >{{author}}</el-tag>
-            </template> -->
+              >{{role}}</el-tag>
+            </template>
           </el-table-column>
           <!-- <el-table-column prop="password" label="密码" width="200"></el-table-column> -->
           <el-table-column label="操作" width="200">
             <template slot-scope="scope">
-              <el-button size="mini" @click="editUser(scope.row,scope.column,scope.$index);dialogFormVisible_edit=true">编辑</el-button>
+              <el-button size="mini" @click="dialogFormVisible_edit=true;editUser(scope.row,scope.column,scope.$index)">编辑</el-button>
               <el-button size="mini" type="danger" @click="handleDelete(scope.row,scope.column,scope.$index)">删除</el-button>
             </template>
           </el-table-column>
@@ -65,7 +65,7 @@
             <el-input v-model="form.name" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="用户密码" :label-width="formLabelWidth">
-            <el-input v-model="form.password" autocomplete="off"></el-input> 
+            <el-input v-model="form.password" autocomplete="off" show-password=true></el-input> 
             <!-- show-password=true -->
             </el-form-item>
             <el-form-item label="用户角色" :label-width="formLabelWidth">
@@ -86,15 +86,15 @@
         </div>
     </el-dialog>
     <el-dialog title="编辑用户" :visible.sync="dialogFormVisible_edit" width="30%" center>
-        <el-form :model="form">
+        <el-form :model="form_edit">
             <el-form-item label="用户名称" :label-width="formLabelWidth">
-            <el-input v-model="form.name" autocomplete="off"></el-input>
+            <el-input v-model="form_edit.name" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="用户密码" :label-width="formLabelWidth">
-            <el-input v-model="form.password" autocomplete="off" show-password=true></el-input>
+            <el-input v-model="form_edit.password" autocomplete="off" show-password=true></el-input>
             </el-form-item>
             <el-form-item label="用户角色" :label-width="formLabelWidth">
-            <el-select v-model="form.role" placeholder="请选择用户角色" filterable>
+            <el-select v-model="form_edit.role" placeholder="请选择用户角色" filterable multiple>
                <el-option
                 v-for="item in options"
                 :key="item.value"
@@ -106,7 +106,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogFormVisible_edit = false">取 消</el-button>
-            <el-button type="primary" @click="dialogFormVisible_edit = false">确 定</el-button>
+            <el-button type="primary" @click="dialogFormVisible_edit = false;editUserConfirm()">确 定</el-button>
         </div>
     </el-dialog>    
   </el-container>
@@ -114,7 +114,7 @@
 
 
 <script>
-import { getUserList,addUser,delUser } from "../../api/User";
+import { getUserList,addUser,delUser,changeUser } from "../../api/User";
 import { getRoles } from "../../api/Role";
 export default {
   data() {
@@ -122,7 +122,10 @@ export default {
       dialogFormVisible_add: false,
       dialogFormVisible_edit: false,
       listSize: 0,
+      tableChecked:[],
       search: "",
+      role:[],
+      id_tmp:'',//临时存放要操作行的账号id
       tableData: [
         // {
         //   id:'535436532',
@@ -155,10 +158,20 @@ export default {
         //   label: '角色三'
         // }
       ],
-      value:[]
+      value:[],
+      form_edit: {
+        name: '',
+        password: '',
+        role: []
+      },
     };
   },
   methods: {
+    //多选触发
+    handleSelectionChange:function(val) {
+      console.log("handleSelectionChange--", val); //选中项
+      this.tableChecked = val;
+    },    
     //获取用户列表
     handlerchange: function(currentpage) {
       this.getData(currentpage-1);
@@ -169,6 +182,7 @@ export default {
       let callback = (pd, size) => {
         this.listSize = size*10;
         var res = [];
+        
         console.log("get it");
         console.log(pd);
         console.log("finish!");      
@@ -176,10 +190,21 @@ export default {
         console.log('存了什么啊？---');
         console.log(this.$store.state.allUser);
         pd.filter(v => {
+          var role_id=[];
+          var role_tmp=[];
+          v.roleIds.forEach((id)=>{
+            role_id.push(id);
+            for(let i=0;i<this.$store.state.allRole.length;i++){
+              if(id===this.$store.state.allRole[i].id){
+                role_tmp.push(this.$store.state.allRole[i].roleName);
+              }
+            }
+          });
           let ress = {
             id: v.id,
             name: v.username,
-            role: v.roleId,
+            roleId: role_id,
+            role: role_tmp
           };
           res.push(ress);
         });
@@ -189,18 +214,18 @@ export default {
       };
       getUserList(currentpage, callback);
     },
-    //待编辑，要修改，因为一个用户可以有多个角色，为什么roleId传不进去？？
+    //添加失败
     addUsers: function(){
       // let username=this.form.name;
       // let password=this.form.password;
-      let author;
+      let author=[];
       this.value.forEach((v)=>{
-            author=v;
+        author.push(v);
       });
       let newUser={
         username: this.form.name,
         password: this.form.password,
-        roleId: author
+        roleIds: author
       };
       console.log('add a new user!----');
       console.log(newUser);
@@ -208,12 +233,49 @@ export default {
             if (b.code === "ok") {
             alert("添加成功");
             // todo 返回上一页
-            // this.$router.go(0); //页面刷新（要加上）
+            this.$router.go(0); //页面刷新（要加上）
             
           } else {
             alert("添加失败" + b.data);
           }
         });     
+    },
+    //显示用户的旧信息
+    editUser:function(row,column,index){
+      let role_tmp=[];
+      this.id_tmp=row.id;
+      row.role.forEach((role_name)=>{
+        role_tmp.push(role_name)
+      });
+      this.form_edit={
+        name: row.name,
+        password: this.$store.state.allUser[index].password,//其实也拿不到密码，为null
+        role: role_tmp
+      }
+    },
+    //编辑用户信息
+    editUserConfirm:function(){
+      let author=[];
+      this.form_edit.role.forEach((v)=>{
+        author.push(v);
+      });
+      let pd={
+        id: this.id_tmp,
+        username: this.form_edit.name,
+        password: this.form_edit.password,
+        roleIds: author
+      };
+      console.log('change a  user!----');
+      console.log(pd);
+      changeUser(pd, b => {
+            if (b.code === "ok") {
+            alert("修改成功");
+            // todo 返回上一页
+            this.$router.go(0); //页面刷新（要加上）           
+          } else {
+            alert("修改失败" + b.data);
+          }
+        });   
     },
     getRole: function(){
       console.log("getRole!--");
@@ -261,6 +323,33 @@ export default {
             message: "已取消删除"
           });
         });        
+    },
+    batchDelete:function(rows){
+      this.$confirm("确定批量删除用户？", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          console.log("批量删除用户");
+          //alert('submit!');
+          let userId = [];
+          rows.forEach((row)=>{
+            userId.push(row.id)
+          });
+          delUser(userId, b => {
+            if (b.code === "ok") {
+              alert("删除成功");
+            }
+            this.$router.go(0); //页面刷新（要加上）
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });       
     }        
   },
   computed: {
@@ -284,8 +373,9 @@ export default {
     }
   },  
   mounted: function() {
-    this.getData(0);
     this.getRole();
+    this.getData(0);
+    
   },
 }
 </script>

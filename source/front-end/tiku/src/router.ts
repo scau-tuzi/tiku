@@ -80,6 +80,11 @@ export default new Router({
           component: () => import(/* webpackChunkName: "CreatePaper" */ './components/CreatePaper.vue')
         },
         {
+          path: 'ModifyPaper',
+          name: 'ModifyPaper',
+          component: () => import(/* webpackChunkName: "CreatePaper" */ './components/ModifyPaper.vue')
+        },
+        {
           path: 'ViewPaper',
           name: 'ViewPaper',
           component: () => import(/* webpackChunkName: "ViewPaper" */ './components/ViewPaper.vue')
