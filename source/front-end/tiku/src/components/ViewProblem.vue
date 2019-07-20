@@ -138,7 +138,7 @@
           let j = 1;
           if(selectedProblem.extData!=null && selectedProblem.extData!==undefined){
             Object.keys(selectedProblem.extData).forEach((k)=>{
-              this.form.option[j]=k;
+              this.form.option[j]=k     ;
               this.form.text[j]=selectedProblem.extData[k];
               j++
             });
