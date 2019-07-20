@@ -1,8 +1,7 @@
 <template>
   <el-tree
           :data="treeData"
-          show-checkbox
-          ref="tree"
+          show-checkbox        
           node-key="id"
           :props="defaultProps"
           @check-change="handleCheckChange">
@@ -10,7 +9,7 @@
 </template>
 
 <script>
-  import {getPermissionTree} from "../api/Permission";
+  import {getPermissionTree} from "../../api/Permission";
 
   function loadData() {
     let me=this;
@@ -37,6 +36,7 @@
     methods: {
       handleCheckChange(data, checked, indeterminate) {
         //实现单选功能
+        console.log('拿到什么？---');
         console.log(data, checked, indeterminate);
         if(checked===true){
           //最多只有一个被选中

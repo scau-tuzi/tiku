@@ -11,7 +11,7 @@ function getUserList(pageNumber: number, callback: (u: UserInfo[], usersListSize
     axios
         .post("/api/user/list?pageNumber=" + pageNumber+"&pageSize="+pageSize)
         .then(res => {
-            let lists: UserInfo[] = res.data.data.userList;
+            let lists: UserInfo[] = res.data.data.userDtoList;
             let size: number = res.data.data.pagination.total;
             callback(lists,size)
         })

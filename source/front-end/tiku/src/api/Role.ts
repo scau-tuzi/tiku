@@ -13,7 +13,7 @@ function getRoles(pageNumber: number, callback: (r: RoleInfo[]) => void, pageSiz
     axios
         .get("/api/role/list?pageNumber=" + pageNumber + "&pageSize=" + pageSize)
         .then(res => {
-            let lists: RoleInfo[] = res.data.data;
+            let lists: RoleInfo[] = res.data.data.roleDtoList;
             callback(lists)
         })
 }

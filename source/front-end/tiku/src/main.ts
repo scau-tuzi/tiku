@@ -13,7 +13,10 @@ const store = new Vuex.Store({
     commits:[],
     allProblem:[],
     paperEditData:{},
+    allRole:[],
+    allUser:[],
     modifyPaper: [],
+    allPermission:[],
     title:"首页"
   },
   mutations: {
@@ -26,8 +29,17 @@ const store = new Vuex.Store({
     setPaperEditData(state,paperEditData){
       state.paperEditData=paperEditData;
     },
+    setNewRoles(state,pd){
+      state.allRole=pd;
+    },
+    setNewUsers(state,pd){
+      state.allUser=pd;
+    },
     setModifyPaper(state,modifyPaper){
       state.modifyPaper=modifyPaper;
+    },
+    setPermission(state,pd){
+      state.allPermission=pd;
     },
     setTitle(state,newTitle){
       state.title=newTitle;
