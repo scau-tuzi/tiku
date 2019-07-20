@@ -17,7 +17,9 @@ const store = new Vuex.Store({
     allUser:[],
     modifyPaper: [],
     allPermission:[],
-    title:"首页"
+    title:"首页",
+    lastPageNumber:0,//上一页的页数
+    useLastPage:false,//是否要使用上个变量来设置页数
   },
   mutations: {
     setNewCommits (state,newcommits) {
@@ -43,7 +45,15 @@ const store = new Vuex.Store({
     },
     setTitle(state,newTitle){
       state.title=newTitle;
-    }
+    },
+    //上一页的页数
+    setLastPageNumber(state,lastPageNumber){
+      state.lastPageNumber=lastPageNumber;
+    },
+    //是否要使用上个变量来设置页数
+    setUseLastPage(state,useLastPage){
+      state.useLastPage=useLastPage;
+    },
   }
 });
 let me= new Vue({

@@ -74,9 +74,11 @@
     <el-footer align="center">
       <el-pagination
         background
-        layout="prev, pager, next"
+        layout="prev, pager, next, jumper"
         :total="this.listSize"
         @current-change="this.handlechange"
+        @size-change="this.handleSizeChange"
+        ref="pager"
       ></el-pagination>
     </el-footer>
     <el-dialog title="修改标签" :visible.sync="centerDialogVisible_single" width="30%" center>
@@ -148,6 +150,7 @@ import { changePaper } from "../api/Paper";
 //编辑操作
 function handleEdit(index, row) {
   console.log(index, row);
+  this.$store.commit("setLastPageNumber",this.currentPage);
   //转到ModifyProblem页面
   this.$router.push({
     path: "/ModifyProblem",
@@ -245,6 +248,7 @@ function jumpInput() {
   //this.$router.push("/cart")
 
   //传递的参数用{{ $route.query.goodsId }}获取
+  this.$store.commit("setLastPageNumber",this.currentPage);
   this.$router.push({ path: "/InputTiku" });
   //this.$router.go(-2)
   //后退两步
@@ -265,6 +269,7 @@ function handleInputConfirm() {
 
 function handlechange(currentPage) {
   //获取题目
+  this.currentPage=currentPage
   this.getData(currentPage - 1);
 }
 function getData(currentPage) {
@@ -360,12 +365,16 @@ function getTags() {
   getTagsList(0, callback, 0);
   // console.log(this.options);
 }
+function handleSizeChange(val) {
+  
+}
 
 export default {
   name: "TikuTable",
   datas: [],
   methods: {
     handleEdit,
+    handleSizeChange,
     handleDelete,
     handleSelectionChange,
     batchDelete,
@@ -394,6 +403,10 @@ export default {
     });
 
     this.fieldInfo = all;
+    if(this.$store.state.useLastPage){
+      this.$refs.pager.internalCurrentPage=this.$store.state.lastPageNumber;
+      this.$store.commit("setUseLastPage",false);//使用保存的页数
+    }
   },
   data() {
     return {
@@ -424,7 +437,8 @@ export default {
       options: [], //修改标签窗口选择器下拉的标签列表
       value: [], //修改标签窗口选择器里面的已选标签
       index_tmp: "", //选中修改标签的行index
-      value_batch: [] //批量修改标签窗口选择器里面的已选标签
+      value_batch: [], //批量修改标签窗口选择器里面的已选标签
+      currentPage:0
     };
   },
   // 搜索操作

@@ -56,9 +56,7 @@
       }
     },
     methods:{
-
       //事件函数
-
       onSelectChanged(id){
         this.parentId=id;
       },
