@@ -302,7 +302,7 @@ function getData(currentPage) {
         sound: "",
         tag: ts
       };
-      if (v.extData !== undefined) {
+      if (v.extData !== null&&v.extData !== undefined) {
         Object.keys(v.extData).forEach(key => {
           ress[key] = v.extData[key];
         });
