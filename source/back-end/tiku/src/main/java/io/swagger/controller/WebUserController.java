@@ -56,7 +56,7 @@ public class WebUserController extends WebBasicController{
      * @param idList
      * @return
      */
-    @DeleteMapping("/delete")
+    @PostMapping("/delete")
     public BasicResponse delete(@RequestBody List<Long> idList) {
         BasicResponse basicResponse = new BasicResponse();
         try {

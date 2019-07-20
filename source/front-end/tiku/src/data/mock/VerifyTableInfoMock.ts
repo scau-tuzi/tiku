@@ -46,6 +46,14 @@ let verifyTableInfo:GeneralTable={
     },
     {
       fixed: "",
+      label: "标签",
+      prop: "tags",
+      width: "200",
+      type: "",
+      specialType: "tag"
+    },
+    {
+      fixed: "",
       label: "审核状态",
       prop: "status",
       width: "220",
@@ -60,6 +68,12 @@ let verifyTableInfo:GeneralTable={
       size: "mini",
       type: "text",
       method: "handleView"
+    },
+    {
+      label: "审核通过",
+      size: "mini",
+      type: "text",
+      method: "handleVerify"
     }]
 }
 export default verifyTableInfo;
