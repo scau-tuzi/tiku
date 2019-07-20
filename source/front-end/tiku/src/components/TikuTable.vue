@@ -29,7 +29,7 @@
           style="width: 100%"
           @selection-change="this.handleSelectionChange"
         >
-          <el-table-column prop="id"  type="selection" width="55"></el-table-column>
+          <el-table-column prop="id" type="selection" width="55"></el-table-column>
           <el-table-column fixed="left" prop="problem" label="问题" width="300"></el-table-column>
           <el-table-column prop="answer" label="答案" width="300"></el-table-column>
           <el-table-column prop="sound" label="语音" width="100"></el-table-column>
@@ -175,17 +175,15 @@ function handleDelete(index) {
   });
 }
 function handleSelectionChange(val) {
-console.log("??",val);
+  console.log("??", val);
   this.tableChecked = val;
 }
 function batchDelete(rows) {
-  console.log("batchDelete--", rows);
+  //批量删除
   let delId = [];
-  for(var i=0;i<rows.length;i++){
-    delId.push(rows[i].id)
+  for (var i = 0; i < rows.length; i++) {
+    delId.push(rows[i].id);
   }
-  // console.log(delId)
-  // console.log("4--",delId);
   this.$confirm("确定批量删除问题?", "提示", {
     confirmButtonText: "确定",
     cancelButtonText: "取消",
@@ -195,7 +193,7 @@ function batchDelete(rows) {
       //alert('submit!');
       delProblem(delId, b => {
         if (b.code === "ok") {
-          alert("删除成功");
+          this.$message({ type: "info", message: "已取消删除" });
         }
         // this.$router.go(0); //页面刷新（要加上）
         this.del = delId.length === this.listLenght ? 1 : this.del;
