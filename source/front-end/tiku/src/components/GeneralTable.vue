@@ -24,13 +24,12 @@
             <el-table-column
                     v-else-if="item.specialType==='tag'"
                     prop="tag"
-                    :width="item.width"
-                    :filters="[{ text: '一年级', value: '一年级' }, { text: '英语', value: '英语' }]"
-                    :filter-method="filterTag"
-                    filter-placement="bottom-end">
+                    :width="item.width">
+<!--                    :filters="[{ text: '一年级', value: '一年级' }, { text: '英语', value: '英语' }]"-->
+<!--                    :filter-method="filterTag"-->
+<!--                    filter-placement="bottom-end">-->
                 <template slot-scope="scope">
                     <el-tag v-for="(tagsrc,index) in scope.row.tag" v-bind:key="index"
-                            :type="scope.row.tag === '英语' ? 'primary' : 'success'"
                             disable-transitions>{{tagsrc}}
                     </el-tag>
                 </template>
@@ -43,12 +42,13 @@
                            :key="`oper_${index}`"
                            :type="oper.type"
                            :size="oper.size"
-                           v-on:click="handleButton(oper.method,scope.$index, scope.row,scope.column); oper.method==='showTags'?centerDialogVisible_single=true:centerDialogVisible_single=false">
+                           v-on:click="handleButton(oper.method,scope.$index, scope.row,scope.column);
+                           oper.method==='showTags'?centerDialogVisible_single=true:centerDialogVisible_single=false">
                     {{oper.label}}
                 </el-button>
             </template>
         </el-table-column>
-      <el-dialog class="modifyTag" title="修改标签" :visible.sync="this.centerDialogVisible_single" width="30%" center append-to-body>
+      <el-dialog class="modifyTag" ref="tagDialog" title="修改标签" :visible.sync="this.centerDialogVisible_single" width="30%" center append-to-body>
                         <template>
                           <el-select
                             v-model="value"
@@ -89,6 +89,7 @@
     import GeneralTable from "../data/model/GeneralTable"
     import {getProblems} from "../api/Problem";
     import {getTagsList} from "../api/Tag";
+    import {changePaper} from "../api/Paper";
 
     function handleButton(method, index, row, col) {
         this.$emit('handleButton', {'method': method, 'index': index, 'row': row, 'col': col})
@@ -187,29 +188,64 @@
       getTagsList(0, callback, 0);
 
     }
-    //修改某一行问题的标签
+    //修改某一行试卷的标签
     function modifyTag() {
-      let selectedPaper = this.$store.state.modifyPaper[this.paperId];
-      console.log(this.$store.state.modifyPaper);
-      console.log("test change1!--");
-      console.log(selectedPaper);
-      selectedPaper.tags = [];
-      this.value.forEach(v => {
-        selectedPaper.tags.push({
-          value: v
+      this.$emit('modifyTag', {});
+      if(!this.isBatchChangeTag){
+        let selectedPaper = this.$store.state.modifyPaper[this.paperId];
+        console.log(this.$store.state.modifyPaper);
+        //console.log("test change1!--");
+        //console.log(selectedPaper);
+        selectedPaper.tags = [];
+        this.value.forEach(v => {
+          selectedPaper.tags.push({
+            value: v
+          });
         });
-      });
-      console.log("test change2!--");
-      console.log(selectedPaper);
-      // changeProblem(selectedProblem, b => {
-      //   if (b.code === "ok") {
-      //     alert("修改成功");
-      //     // this.$router.go(0); //页面刷新（要加上）
-      //   } else {
-      //     alert("修改失败" + b.data);
-      //   }
-      // });
+        console.log("test change2!--");
+        console.log(selectedPaper);
+        // changePaper(selectedPaper, b => {
+        //   if (b.code === "ok") {
+        //     alert("修改成功");
+        //     // this.$router.go(0); //页面刷新（要加上）
+        //   } else {
+        //     alert("修改失败" + b.data);
+        //   }
+        // });
+      }
     }
+    function modifyBatchTag() {
+      for(let i=0;i<this.multipleSelection.length;i++){
+        let id=this.multipleSelection[i].paperId;
+        let selectedPaper = this.$store.state.modifyPaper[id];
+        console.log(this.$store.state.modifyPaper);
+        console.log("test change1!--");
+        console.log(selectedPaper);
+        selectedPaper.tags = [];
+        this.value.forEach(v => {
+          selectedPaper.tags.push({
+            value: v
+          });
+        });
+        console.log("test change2!--");
+        console.log(selectedPaper);
+        changePaper(selectedPaper, b => {
+          if (b.code === "ok") {
+            alert("修改成功");
+            // this.$router.go(0); //页面刷新（要加上）
+          } else {
+            alert("修改失败" + b.data);
+          }
+        });
+      }
+    }
+    //批量删除试卷的选择变化
+    function handleSelectionChange(val) {
+      //console.log(val);
+      this.multipleSelection = val;
+      this.$emit('handleSelectionChange', {'val': val});
+    }
+
     export default {
         name: "GeneralTable",
         props: {
@@ -218,15 +254,17 @@
             handleChange:Function,  //页修改回调函数
             usePagination:Boolean,  //是否使用内置分页器
           centerDialogVisible_single:Boolean,
-          options: Array,
-          value: Array,
+          //options: Array,
+          //value: Array,
           paperId: Number
         },
         data() {
             return {
-
-                tableData,
-              options: []
+                tableData:[],
+              options: [],
+              value:[],
+              multipleSelection: [],
+              isBatchChangeTag:false
             }
         },
         methods: {
@@ -238,11 +276,12 @@
             handlerchange,
             getData,
             getTags,
-           modifyTag
+           modifyTag,
+          handleSelectionChange,
         },
         mounted: function () {
           this.getTags();
-            this.getData(0);
+            //this.getData(0);
         },
     }
 </script>
