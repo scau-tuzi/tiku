@@ -1,56 +1,70 @@
-/**
-  权限树
-**/
 <template>
-  <div>
-    <el-table
-            :data="tableData"
-            style="width: 100%;margin-bottom: 20px;"
-            row-key="id"
-            border
-            default-expand-all
-            :tree-props="{children: 'childPermissions', hasChildren: 'hasChildren'}">
-      <el-table-column
-              prop="name"
-              label="名字"
-              sortable
-              width="180">
-      </el-table-column>
-      <el-table-column
-              prop="url"
-              label="路径"
-              sortable
-              width="180">
-      </el-table-column>
-      <el-table-column
-              prop="method"
-              label="方法">
-      </el-table-column>
-    </el-table>
-  </div>
+  <el-tree
+          :data="treeData"
+          show-checkbox
+          check-strictly
+          ref="tree"
+          node-key="id"
+          :props="defaultProps"
+          @check-change="handleCheckChange">
+  </el-tree>
 </template>
-<script>
 
+<script>
   import {getPermissionTree} from "../api/Permission";
 
   function loadData() {
     let me=this;
     getPermissionTree((b=>{
-      me.tableData=b;
+      me.treeData=b;
     }))
   }
   export default {
-    name: "PermissionTree",
+    name: "PermissionTreeComp",
+    props:{
+      onSelectChanged:Function, //(id)
+      selectId:Number,
+    },
     data() {
       return {
-        tableData: []
+        treeData:[],
+        selectId_:0,
+        defaultProps:{
+          label:"name",
+          children:"childPermissions",
+        }
       }
     },
     methods: {
+      handleCheckChange(data, checked, indeterminate) {
+        //实现单选功能
+        console.log(data, checked, indeterminate);
+        if(checked===true){
+          //最多只有一个被选中
+          // tree 要设置  check-strictly
+          this.$refs.tree.setCheckedKeys([data.id]);
+          this.selectId_=data.id;
+          this.onSelectChanged(data.id)
+        }
+      },
       loadData
     },
-    mounted(){
+    created(){
+        console.log("parentid"+this.selectId)
+    },
+    watch:{
+      selectId:function () {
+        this.$refs.tree.setCheckedKeys([this.selectId]);
+      }
+    },
+    mounted() {
       this.loadData()
+      this.$refs.tree.setCheckedKeys([this.selectId]);
     }
-  }
+
+  };
 </script>
+
+<style scoped>
+
+</style>

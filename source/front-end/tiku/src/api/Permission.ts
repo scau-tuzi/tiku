@@ -1,5 +1,6 @@
 
 import axios from 'axios'
+import BasicResponse from "@/data/model/BasicResponse";
 
 
 function getPermissionTree(callback: (p: PermissionInfo[]) => void) {
@@ -11,6 +12,24 @@ function getPermissionTree(callback: (p: PermissionInfo[]) => void) {
       })
 }
 
+function updatePermission(data:PermissionInfo, callback: (p: BasicResponse) => void) {
+  axios
+      .put("/api/permission/update",data)//服务器地址
+      .then(res => {
+        let lists: BasicResponse = res.data;
+        callback(lists)
+      })
+}
+
+function addPermission(data:PermissionInfo, callback: (p: BasicResponse) => void) {
+  axios
+      .post("/api/permission/add",data)//服务器地址
+      .then(res => {
+        let lists: BasicResponse = res.data;
+        callback(lists)
+      })
+}
 export {
-  getPermissionTree
+  getPermissionTree,
+  updatePermission
 }

@@ -165,12 +165,12 @@ public class WebPermissionServiceImpl extends BasicService implements WebPermiss
             throw new Exception("url不可为空");
         } else if (permission.getMethod() == null) {
             throw new Exception("方法不可为空");
-        } else if (permission.getParentPermission() == null) {
-            throw new Exception("父权限不可为空");
-        } else if (!permissionRepository.selectParentPermissons().contains(permissionRepository.findByIdEquals(permission.getParentPermission()))) {
-            throw new Exception("父权限不存在");
-        } else if (permissionRepository.findByName(permission.getName()) != null) {
-            throw new Exception("新权限名已存在");
+        //} else if (permission.getParentPermission() == null) {
+       //     throw new Exception("父权限不可为空");
+       // } else if (!permissionRepository.selectParentPermissons().contains(permissionRepository.findByIdEquals(permission.getParentPermission()))) {
+        //    throw new Exception("父权限不存在");
+       // } else if (permissionRepository.findByName(permission.getName()) != null) {
+       //     throw new Exception("新权限名已存在");
         } else {
             Permission dbPermission = new Permission();
             BeanUtils.copyProperties(permission, dbPermission);
