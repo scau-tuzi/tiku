@@ -48,7 +48,7 @@
                 </el-button>
             </template>
         </el-table-column>
-      <el-dialog class="modifyTag" title="修改标签" :visible.sync="this.centerDialogVisible_single" width="30%" center append-to-body>
+      <el-dialog class="modifyTag" title="修改标签" ref="tagDialog" :visible.sync="this.centerDialogVisible_single" width="30%" center append-to-body>
                         <template>
                           <el-select
                             v-model="value"

@@ -15,5 +15,5 @@ interface RoleInfo {
     /**
      * @permissionList 角色对应的权限名字列表
      */
-    permissionIdList?: number[]
+    permissionList?: string[]
 }

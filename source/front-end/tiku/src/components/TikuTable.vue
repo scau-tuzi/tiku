@@ -402,9 +402,21 @@ export default {
   },
   data() {
     return {
+      /**
+       * @listLenght 当前页面的 list 的的长度
+       */
       listLenght: 0,
+      /**
+       * @del 用作是否为最后一页或者一页只有一个的标志位
+       */
       del: 0,
+      /**
+       * @listPageNumber 当前页面是第几页
+       */
       listPageNumber: 0,
+      /**
+       * @listSize  记录后天有多少页符合的数据
+       */
       listSize: 0,
       tableChecked: [], //被选中的记录数据
       search: "",

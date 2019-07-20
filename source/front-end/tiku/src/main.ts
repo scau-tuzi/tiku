@@ -15,7 +15,8 @@ const store = new Vuex.Store({
     paperEditData:{},
     allRole:[],
     allUser:[],
-    modifyPaper: []
+    modifyPaper: [],
+    allPermission:[]
   },
   mutations: {
     setNewCommits (state,newcommits) {
@@ -35,6 +36,9 @@ const store = new Vuex.Store({
     },
     setModifyPaper(state,modifyPaper){
       state.modifyPaper=modifyPaper;
+    },
+    setPermission(state,pd){
+      state.allPermission=pd;
     }
   }
 });

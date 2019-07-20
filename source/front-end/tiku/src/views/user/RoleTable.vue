@@ -3,7 +3,7 @@
     <el-main>
       <el-row gutter="0">
         <el-col span="20">
-          <el-button class="el-button" align="left" plain @click="addRoles">添加角色</el-button>
+          <el-button class="el-button" align="left" plain @click="dialogFormVisible_add = true">添加角色</el-button>
           <!-- <el-button type="primary" plain>全选</el-button> -->
           <el-button type="success" plain @click="batchDelete(tableChecked)">批量删除</el-button>
         </el-col>
@@ -57,6 +57,21 @@
         </el-table>
       </el-row>
     </el-main>
+    <el-dialog title="添加角色" :visible.sync="dialogFormVisible_add">
+      <el-form :model="form">
+        <el-form-item label="角色名称" :label-width="formLabelWidth">
+          <el-input v-model="form.name" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item >
+          <label>选择权限</label>
+          <PermissionTree :onSelectChanged=onSelectChanged :selectId="parentId"></PermissionTree>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogFormVisible = false;addRoles()">确 定</el-button>
+      </div>
+</el-dialog>
     <el-footer align="center">
       <el-pagination
         background
@@ -68,8 +83,11 @@
   </el-container>
 </template>
 <script>
+import PermissionTree from "./PermissionTree"
 import { getRoles,changeRole,delRole,addRole } from "../../api/Role";
+import { getPermissionTree } from "../../api/Permission";
 export default {
+  components:{PermissionTree},
   data() {
     return {
       listSize: 0,
@@ -77,6 +95,13 @@ export default {
       tableChecked: [], //被选中的记录数据
       search: "",
       id:'',
+      dialogFormVisible_add:false,
+      form: {
+      },
+      options: [
+      ],
+      value:[],
+      treeData:'',
       tableData: [
         // {
         //   id:'304958345',
@@ -87,7 +112,10 @@ export default {
         //   role:'审核员',
         //   authority:['审核题目']
         // }
-      ]
+      ],
+      permissionId:[],
+      permissionName:[]
+
     };
   },
   methods:{
@@ -122,13 +150,22 @@ export default {
             }
           }
           //跟所有的权限id对比，取权限名称
+          for(let j=0;j<author_id.length;j++){
+            for(let k=0;k<_this.permissionId.length;k++){
+              if(author_id[j]===_this.permissionId[k]){
+                  author_tmp.push(_this.permissionName[k]);
+                  break;
+              }
+            }
+          }
           let ress = {
             id: v.id,
             role: v.roleName,
-            authority: author_id
+            authority: author_tmp
           };
           res.push(ress);
         });
+        console.log("why?=--------");
         console.log(res);
         _this.tableData = res;
       };
@@ -136,42 +173,43 @@ export default {
     },    
     //添加角色（后台要修改，待测试）
     addRoles: function(){
-      this.$prompt("请输入新增的角色名称", "提示", {
-        confirmButtonText: "保存",
-        cancelButtonText: "取消"
-      })
-        .then(( {value} ) => {
-          // let tmp=[];
-          // tmp.push(value);
-          console.log("提交新角色");
-          var res = {
-            roleName: value,
-            // permissionList: [3,4]
-          };
-          // alert(pd);
-          // console.log(pd);
-          //alert('submit!');
-          console.log(res);
-          let callback = b => {
-            if (b.code === "ok") {
-              alert("添加成功");
-              // todo 返回上一页
-              this.$message({
-                type: "success",
-                message: "新增角色: " + value
-              });
-              // this.$router.go(0); //页面刷新（要加上）
-              this.getData(this.listPageNumber);
-            }
-          };
-          addRole(res, callback);
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "取消添加"
-          });
-        });      
+      
+    //   this.$prompt("请输入新增的角色名称", "提示", {
+    //     confirmButtonText: "保存",
+    //     cancelButtonText: "取消"
+    //   })
+    //     .then(( {value} ) => {
+    //       // let tmp=[];
+    //       // tmp.push(value);
+    //       console.log("提交新角色");
+    //       var res = {
+    //         roleName: value,
+    //         // permissionList: [3,4]
+    //       };
+    //       // alert(pd);
+    //       // console.log(pd);
+    //       //alert('submit!');
+    //       console.log(res);
+    //       let callback = b => {
+    //         if (b.code === "ok") {
+    //           alert("添加成功");
+    //           // todo 返回上一页
+    //           this.$message({
+    //             type: "success",
+    //             message: "新增角色: " + value
+    //           });
+    //           // this.$router.go(0); //页面刷新（要加上）
+    //           this.getData(this.listPageNumber);
+    //         }
+    //       };
+    //       addRole(res, callback);
+    //     })
+    //     .catch(() => {
+    //       this.$message({
+    //         type: "info",
+    //         message: "取消添加"
+    //       });
+    //     });      
     },
     //修改角色，后台有修改，待测试
     editRole:function(row, column, index){
@@ -283,6 +321,39 @@ export default {
           modifyAuthorId: this.$store.state.allRole[index].id
         }
       });
+    },
+    getPermission:function(){
+      var _this = this;
+      let callback = (pd) => {
+        var res = [];
+        console.log("get it");
+        console.log(pd);
+        console.log("finish!");
+        this.$store.commit("setPermission", pd);
+        // console.log(this.$store.state.allRole);
+        // console.log(this.$store.state.commits[0].id);
+        let auth_id_tmp = [];
+        let auth_name_tmp = [];
+        let auth_child_tmp = [];
+        pd.filter(v => {
+          //跟所有的权限id对比，取权限名称
+          auth_id_tmp.push(v.id);
+          auth_name_tmp.push(v.name);
+          auth_child_tmp.push(v.childPermissions);
+        });  
+        for(let i=0;i<auth_child_tmp.length;i++){
+          for(let j=0;j<auth_child_tmp[i].length;j++){
+            auth_id_tmp.push(auth_child_tmp[i][j].id);
+            auth_name_tmp.push(auth_child_tmp[i][j].name);
+          }
+        }
+        _this.permissionId = auth_id_tmp;
+        _this.permissionName = auth_name_tmp;
+        console.log('拿到权限吗？？---');
+        console.log(_this.permissionId);
+        console.log(_this.permissionName);
+      };
+      getPermissionTree(callback);      
     }
   },
   computed: {
@@ -306,7 +377,9 @@ export default {
     }
   },
   mounted: function() {
+    this.getPermission();
     this.getData(0);
+    
   }
 }
 </script>
