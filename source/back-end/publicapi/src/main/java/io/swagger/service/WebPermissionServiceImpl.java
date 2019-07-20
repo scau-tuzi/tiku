@@ -26,17 +26,17 @@ public class WebPermissionServiceImpl extends BasicService implements WebPermiss
 
     /**
      * 列出权限id对应权限的名称
+     *
      * @return
      */
     public Map<Long, String> selectPermission() {
         List<Long> permissionIdList = permissionRepository.selectPermissionId();
-        Map<Long, String> permissionIdPermissionName= new HashMap<>();
+        Map<Long, String> permissionIdPermissionName = new HashMap<>();
         for (Long id : permissionIdList) {
             permissionIdPermissionName.put(id, permissionRepository.findByIdEquals(id).getName());
         }
         return permissionIdPermissionName;
     }
-
 
 
     /**
@@ -55,10 +55,13 @@ public class WebPermissionServiceImpl extends BasicService implements WebPermiss
             throw new Exception("方法名不可为空");
         } else if (permission.getUrl() == null) {
             throw new Exception("url不可为空");
-        } else if(permissionRepository.findByName(permission.getName())!=null){
+        } else if (permission.getParentPermission() == null) {
+            throw new Exception("父权限不可为空");
+        } else if (!permissionRepository.selectParentPermissons().contains(permissionRepository.findByIdEquals(permission.getParentPermission()))) {
+            throw new Exception("父权限不存在");
+        } else if (permissionRepository.findByName(permission.getName()) != null) {
             throw new Exception("权限名已存在");
-        }
-        else {
+        } else {
             beforeAdd(permission, createBy);
             Permission dbPermission = new Permission();
             BeanUtils.copyProperties(permission, dbPermission);
@@ -103,21 +106,22 @@ public class WebPermissionServiceImpl extends BasicService implements WebPermiss
 
     /**
      * 列出权限列表，包括权限的父id
+     *
      * @return
      */
-    public List<PermissionDto> list(){
-        List<Permission> parentPermissions=permissionRepository.selectParentPermissons();
+    public List<PermissionDto> list() {
+        List<Permission> parentPermissions = permissionRepository.selectParentPermissons();
 
-        List<PermissionDto> parentPermissionDtos=new ArrayList<>();
-        for(Permission parentpermission:parentPermissions){
-            PermissionDto parentpermissionDto=new PermissionDto();
-            BeanUtils.copyProperties(parentpermission,parentpermissionDto);
+        List<PermissionDto> parentPermissionDtos = new ArrayList<>();
+        for (Permission parentpermission : parentPermissions) {
+            PermissionDto parentpermissionDto = new PermissionDto();
+            BeanUtils.copyProperties(parentpermission, parentpermissionDto);
 
-            List<Permission> childPermissions=permissionRepository.selectChildPermissons(parentpermissionDto.getId());
-            List<PermissionDto> childPermissionDtos=new ArrayList<>();
-            for(Permission childPermission:childPermissions){
-                PermissionDto childPermissionDto=new PermissionDto();
-                BeanUtils.copyProperties(childPermission,childPermissionDto);
+            List<Permission> childPermissions = permissionRepository.selectChildPermissons(parentpermissionDto.getId());
+            List<PermissionDto> childPermissionDtos = new ArrayList<>();
+            for (Permission childPermission : childPermissions) {
+                PermissionDto childPermissionDto = new PermissionDto();
+                BeanUtils.copyProperties(childPermission, childPermissionDto);
                 childPermissionDtos.add(childPermissionDto);
             }
             parentpermissionDto.setChildPermissions(childPermissionDtos);
@@ -161,6 +165,10 @@ public class WebPermissionServiceImpl extends BasicService implements WebPermiss
             throw new Exception("url不可为空");
         } else if (permission.getMethod() == null) {
             throw new Exception("方法不可为空");
+        } else if (permission.getParentPermission() == null) {
+            throw new Exception("父权限不可为空");
+        } else if (!permissionRepository.selectParentPermissons().contains(permissionRepository.findByIdEquals(permission.getParentPermission()))) {
+            throw new Exception("父权限不存在");
         } else if (permissionRepository.findByName(permission.getName()) != null) {
             throw new Exception("新权限名已存在");
         } else {
