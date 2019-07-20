@@ -42,6 +42,15 @@ function addProblem(problem: ProblemFullData, callback: (b: BasicResponse) => vo
         })
 }
 
+function checkProblem(problemId: number, callback: (b: BasicResponse) => void) {
+  //线上
+  axios
+      .put("/api/problem/check?id="+problemId)
+      .then(res=>{
+        let response :BasicResponse=res.data;
+        callback(response)
+      })
+}
 
 /**
  * 删除题目方法
@@ -110,5 +119,6 @@ export {
     delProblem,
     findProbLemsByTags,
     findProblemsVaguely,
-    changeProblem
+    changeProblem,
+  checkProblem
 }      
