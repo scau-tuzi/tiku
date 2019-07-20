@@ -24,7 +24,7 @@ public interface RolePermissionRepository extends JpaRepository<RolePermission, 
 
 
     @Query(nativeQuery = true,
-            value = "select permission_id from role_permission where role_id=?1")
-    List<Long> findPermissionIdsByRoleIdEquals(Long id);
+            value = "select permission_id from role_permission where is_del=?2 and role_id=?1")
+    List<Long> findPermissionIdsByRoleIdEqualsAndIsNotDel(Long id,Boolean is_del);
 
 }
