@@ -133,8 +133,7 @@ public class WebRoleServiceImpl extends BasicService<Role> implements WebRoleSer
     @Override
     public void delete(Long id) throws Exception {
         if (id != null && roleRepository.findByIdEquals(id) != null) {
-                deletePermission(id);
-
+            deletePermission(id);
 
             deleteBasicInfo(id);
         } else {
@@ -161,7 +160,7 @@ public class WebRoleServiceImpl extends BasicService<Role> implements WebRoleSer
             RoleDto roleDto = new RoleDto();
             BeanUtils.copyProperties(role, roleDto);
             //获取用户的权限
-            roleDto.setPermissionList(rolePermissionRepository.findPermissionIdsByRoleIdEqualsAndIsNotDel(role.getId(),Boolean.FALSE));
+            roleDto.setPermissionList(rolePermissionRepository.findPermissionIdsByRoleIdEqualsAndIsNotDel(role.getId(), Boolean.FALSE));
 
             roleDtoList.add(roleDto);
         }

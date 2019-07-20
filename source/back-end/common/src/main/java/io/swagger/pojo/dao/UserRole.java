@@ -30,4 +30,7 @@ public class UserRole {
      */
     @Column(name = "user_id")
     private Long userId;
+
+    @Column(name = "is_del")
+    private Boolean isDel;
 }

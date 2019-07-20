@@ -2,8 +2,10 @@ package io.swagger.service;
 
 import io.swagger.model.Pagination;
 import io.swagger.pojo.dao.User;
+import io.swagger.pojo.dao.UserRole;
 import io.swagger.pojo.dao.repos.RoleRepository;
 import io.swagger.pojo.dao.repos.UserRepository;
+import io.swagger.pojo.dao.repos.UserRoleRepository;
 import io.swagger.pojo.dto.UserDto;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,9 @@ import java.util.Map;
 public class WebUserServiceImpl extends BasicService<User> implements WebUserService {
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private UserRoleRepository userRoleRepository;
 
 
     //
@@ -60,7 +65,7 @@ public class WebUserServiceImpl extends BasicService<User> implements WebUserSer
         //判断用户名是否为空
         if (userDto.getUsername() == null || userDto.getUsername().isEmpty()) {
             throw new Exception("用户名不可为空！");
-        } else if (userDto.getRoleId() == null) {
+        } else if (userDto.getRoleIds().size() == 0) {
             throw new Exception("角色不可为空！");
         } else if (userDto.getPassword() == null || userDto.getPassword().isEmpty()) {
             throw new Exception("密码不可为空！");
@@ -75,7 +80,19 @@ public class WebUserServiceImpl extends BasicService<User> implements WebUserSer
             beforeAdd(user, createdBy);
             BeanUtils.copyProperties(userDto, user);
             userRepository.save(user);
+
+            //将用户与角色关系保存至角色表中
+
+            for (Long roleId : userDto.getRoleIds()) {
+                UserRole userRole = new UserRole();
+                userRole.setUserId(user.getId());
+                userRole.setRoleId(roleId);
+                userRole.setIsDel(Boolean.FALSE);
+                userRoleRepository.save(userRole);
+
+            }
         }
+
 
     }
 
@@ -103,6 +120,9 @@ public class WebUserServiceImpl extends BasicService<User> implements WebUserSer
         if (user == null || user.getIsDel() == Boolean.TRUE)
             throw new Exception("用户id不存在！");
         else {
+            //先删除其角色
+            userRoleRepository.updateIsDelByUserId(id, Boolean.TRUE);
+
             this.deleteBasicInfo(id);
         }
     }
@@ -121,11 +141,14 @@ public class WebUserServiceImpl extends BasicService<User> implements WebUserSer
 
         List<UserDto> userDtoList = new ArrayList<>();
         for (User user : page.getContent()) {
+            List<Long> roleIdList=userRoleRepository.findRoleIdsByUserIdEqualsAndIsDel(user.getId(), Boolean.FALSE);
             UserDto userDto = new UserDto();
             BeanUtils.copyProperties(user, userDto);
             //todo 不传密码到前端
             userDto.setPassword(null);
 
+
+            userDto.setRoleIds(roleIdList);
             userDtoList.add(userDto);
         }
 
@@ -153,42 +176,44 @@ public class WebUserServiceImpl extends BasicService<User> implements WebUserSer
     public void update(UserDto userDto, Long updateBy) throws Exception {
 
         //判断传入参数的正确
-
-        if (userRepository.findById(userDto.getId()).get() == null) {
+        if (userDto.getId() == null || userRepository.findById(userDto.getId()).get() == null) {
             throw new Exception("该用户id不存在！");
-        }
-        //        else if(userRepository.findById(userDto.getId()).get().getUsername().equals(userDto.getUsername())){
-        //            throw new Exception("用户名不可与更改前相同！");
-        //        }
-        else if (userDto.getRoleId() == null) {
+        } else if (userDto.getRoleIds().size() == 0) {
             throw new Exception("角色不可为空");
-        } else if (userDto.getPassword() == null) {
+        } else if (userDto.getPassword() == null || userDto.getPassword().isEmpty()) {
+            throw new Exception("密码不可为空");
+        } else if (userDto.getUsername() == null) {
+            throw new Exception("用户名不可为空");
 
-            if (userDto.getPassword() == null || userDto.getPassword().isEmpty()) {
+        } else {
+            User user = userRepository.findById(userDto.getId()).get();
+            BeanUtils.copyProperties(userDto, user);
+            beforeUpdate(user, updateBy);
 
-                throw new Exception("密码不可为空");
-            } else if (userDto.getRoleId() == null || roleRepository.findByIdEquals(userDto.getRoleId()) == null) {
-                throw new Exception("角色不可为空");
-            } else if (userDto.getId() == null || userRepository.findByIdEquals(userDto.getId()) == null) {
-                throw new Exception("用户id不存在！");
-            } else if (userDto.getUsername() == null || userRepository.findByUsername(userDto.getUsername()) == null) {
-                throw new Exception("用户名已存在！");
-            } else {
-                User user = userRepository.findById(userDto.getId()).get();
+            //todo MD5加密
 
+            user.setPasswordSaltMd5(passwordMD5(userDto.getPassword()));
+            userRepository.save(user);
+            //删除掉用户原名已有角色
+            userRoleRepository.updateIsDelByUserId(userDto.getId(), Boolean.TRUE);
 
-                BeanUtils.copyProperties(userDto, user);
-                beforeUpdate(user, updateBy);
+            //增加新角色
 
-                //todo MD5加密
+            for (Long roleId : userDto.getRoleIds()) {
+                UserRole userRole = new UserRole();
+                userRole.setUserId(user.getId());
+                userRole.setRoleId(roleId);
 
-                user.setPasswordSaltMd5(passwordMD5(userDto.getPassword()));
+                userRole.setIsDel(Boolean.FALSE);
 
-                userRepository.save(user);
+                userRoleRepository.save(userRole);
+
             }
 
+
         }
 
-
     }
+
+
 }

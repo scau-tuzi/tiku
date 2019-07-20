@@ -10,11 +10,14 @@
         <div v-for="(item,index) in datas" :key="index" class="text item" style="margin-bottom: 20px">
           {{index+1+"、"+item.problem+"（答案）"+item.answer}}
             <div style="margin: 20px 0;"></div>
-          <div>
-            <el-checkbox v-for="f in AllFieldInfo">
-              {{f.title}}
-            </el-checkbox>
-          </div>
+          <el-checkbox v-for="(choice,index) in item.choice" :key="index">
+            {{choice}}
+          </el-checkbox>
+<!--          <div>-->
+<!--            <el-checkbox v-for="f in AllFieldInfo">-->
+<!--              {{f.title+":"+item["choice_A"]}}-->
+<!--            </el-checkbox>-->
+<!--          </div>-->
         </div>
       </el-card>
     </el-main>
@@ -37,35 +40,39 @@
           }
       },
       methods: {
-          back(){
-            this.$router.push({path: "/PaperList"})
-          },
-        viewPaper(){
-          let s=this.$store.state.paperEditData;
-          let p=this.$store.state.paperEditData.problems;
-          this.title=s.title;
+        back() {
+          this.$router.push({path: "/PaperList"})
+        },
+        viewPaper() {
+          let s = this.$store.state.paperEditData;
+          let p = this.$store.state.paperEditData.problems;
+          this.title = s.title;
           let res = [];
-          let ext=[]
-          for(let i=0;i<p.length;i++) {
+          for (let i = 0; i < p.length; i++) {
+            let ext = [];
             if (p[i].extData) {
-              // for(let j=0;j<Object.keys(p[i].extData).length;j++)
-              // {
-              //    ext.push(p[i].extData[j].title);
-              // }
+              for(let j=0;j<Object.keys(p[i].extData).length;j++){
+                ext.push(Object.keys(p[i].extData)[j]+":"+Object.values(p[i].extData)[j])
+              }
             }
             let ress = {
               problem: p[i].problem.problemText,
               answer: p[i].answer.answerText,
-              choice:ext
+              choice: ext
             };
-            res.push(ress);
+            // if (p[i].extData !== undefined) {
+            //   Object.keys(p[i].extData).forEach(key => {
+            //     ress[key] = p[i].extData[key];
+            //   });
+              res.push(ress);
+            }
+            this.datas = res;
+            console.log(this.datas)
+            //console.log(ext)
           }
-          this.datas=res;
-          console.log(this.datas)
-          console.log(ext)
         }
-      }
-    }
+
+  }
 </script>
 
 <style scoped>
