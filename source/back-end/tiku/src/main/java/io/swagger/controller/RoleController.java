@@ -84,6 +84,7 @@ public class RoleController extends WebBasicController{
     public BasicResponse list(@RequestParam Integer pageNumber, @RequestParam Integer pageSize) {
         BasicResponse basicResponse = new BasicResponse();
 
+        //判断页码跟页大小参数是否正确
         pageNumber = (pageNumber < 0 ? 0 : pageNumber);
         pageSize = (pageSize < 1 || pageSize > 100 ? 100 : pageSize);
         try {
@@ -108,7 +109,6 @@ public class RoleController extends WebBasicController{
 
         Long updateBy = super.getUserId();
         try {
-
             webRoleService.update(roleDto, updateBy);
             basicResponse.setData("更改角色成功");
         } catch (Exception e) {

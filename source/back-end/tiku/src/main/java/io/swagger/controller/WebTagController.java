@@ -21,6 +21,23 @@ public class WebTagController extends WebBasicController{
     @Autowired
     private WebTagService tagService;
 
+    /**
+     * 判断标签是否已被使用
+     * @param id
+     * @return
+     */
+    @GetMapping("/detectTagIfUsed")
+    public BasicResponse detectTagIfUsed(@RequestParam Long id){
+        BasicResponse basicResponse = new BasicResponse();
+        tagService.findIfUsed(id);
+        if(tagService.findIfUsed(id)==1){
+            basicResponse.setData("标签已被使用");
+        }
+        else{
+            basicResponse.setData("标签未被使用");
+        }
+        return basicResponse;
+    }
 
     /**
      * 增加标签
@@ -32,6 +49,7 @@ public class WebTagController extends WebBasicController{
         Long createBy = super.getUserId();
         try {
             tagService.add(tag, createBy);
+            basicResponse.setData("标签添加成功");
 
         } catch (Exception e) {
             basicResponse.setCode(BasicResponse.ERRORCODE);
