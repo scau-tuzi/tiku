@@ -42,8 +42,16 @@
           <el-table-column label="操作" width="286">
             <template slot-scope="scope">
               <el-button size="mini" @click="editRole(scope.row,scope.column, scope.$index)">编辑</el-button>
-              <el-button size="mini" type="success" @click="modifyAuthor(scope.row,scope.column, scope.$index)">修改权限</el-button>
-              <el-button size="mini" type="danger" @click="handleDelete(scope.row,scope.column, scope.$index)">删除</el-button>
+              <el-button
+                size="mini"
+                type="success"
+                @click="modifyAuthor(scope.row,scope.column, scope.$index)"
+              >修改权限</el-button>
+              <el-button
+                size="mini"
+                type="danger"
+                @click="handleDelete(scope.row,scope.column, scope.$index)"
+              >删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -60,7 +68,7 @@
   </el-container>
 </template>
 <script>
-import { getRoles,changeRole,delRole } from "../../api/Role";
+import { getRoles,changeRole,delRole,addRole } from "../../api/Role";
 export default {
   data() {
     return {
@@ -68,6 +76,7 @@ export default {
       listPageNumber: 0,
       tableChecked: [], //被选中的记录数据
       search: "",
+      id:'',
       tableData: [
         // {
         //   id:'304958345',
@@ -82,7 +91,12 @@ export default {
     };
   },
   methods:{
+    handleSelectionChange(val) {
+      console.log("handleSelectionChange--", val); //选中项
+      this.tableChecked = val;
+    },    
     //获取角色列表（名称、权限）
+    //通过获取的权限id和权限接口，拿到权限的名字，放在authority数组中
     handlerchange: function(currentpage) {
       this.getData(currentpage - 1);
     },
@@ -100,16 +114,18 @@ export default {
         // console.log(this.$store.state.allRole);
         // console.log(this.$store.state.commits[0].id);
         pd.filter(v => {
+          let author_id = [];
           let author_tmp = [];
           if (v.permissionList !== null) {
             for (let i = 0; i < v.permissionList.length; i++) {
-              author_tmp.push(v.permissionList[i]);
+              author_id.push(v.permissionList[i]);
             }
           }
+          //跟所有的权限id对比，取权限名称
           let ress = {
-            // id: v.id,
+            id: v.id,
             role: v.roleName,
-            authority: author_tmp
+            authority: author_id
           };
           res.push(ress);
         });
@@ -130,7 +146,7 @@ export default {
           console.log("提交新角色");
           var res = {
             roleName: value,
-            // permissionList: tmp
+            // permissionList: [3,4]
           };
           // alert(pd);
           // console.log(pd);
@@ -157,7 +173,7 @@ export default {
           });
         });      
     },
-    //修改角色，后台有修改
+    //修改角色，后台有修改，待测试
     editRole:function(row, column, index){
       //修改角色的弹窗
       this.$prompt("请输入修改后的角色名称", "提示", {
@@ -208,9 +224,9 @@ export default {
           console.log("删除角色");
           console.log(this.$store.state.allRole[index]);
           //alert('submit!');
-          // let roleId = [];
-          // roleId.push(this.$store.state.allRole[index].id);
-          let roleId=this.$store.state.allRole[index].id;
+          let roleId = [];
+          roleId.push(this.$store.state.allRole[index].id);
+          // let roleId=this.$store.state.allRole[index].id;
           delRole(roleId, b => {
             if (b.code === "ok") {
               alert("删除成功");
@@ -224,6 +240,38 @@ export default {
             message: "已取消删除"
           });
         });      
+    },
+    //批量删除，待测试
+    batchDelete:function(rows){
+      console.log("看看批量删除拿到的是啥----");
+      console.log(rows);
+      this.$confirm("确定批量删除角色?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+      .then(() => {
+        let batchDelId=[];
+        rows.forEach(row => {
+          batchDelId.push({
+            id: row.id
+          });
+        }); 
+        console.log("看看批量删除拿到的是啥id----");   
+        console.log(batchDelId);  
+        delRole(batchDelId, b => {
+          if (b.code === "ok") {
+            alert("删除成功");
+          }
+          this.$router.go(0); //页面刷新（要加上）
+        })        
+        .catch(() => {
+            this.$message({
+              type: "info",
+              message: "已取消删除"
+            });
+        })  
+      })        
     },
     modifyAuthor:function(row,column,index){
       console.log("拿到角色的id吗？----");

@@ -29,15 +29,23 @@
           @selection-change="handleSelectionChange"
         >
           <el-table-column type="selection" width="55"></el-table-column>
-          <el-table-column prop="id" label="账号" width="200"></el-table-column>
-          <el-table-column prop="name" label="用户名" width="200"></el-table-column>
+          <el-table-column prop="id" label="账号" width="250"></el-table-column>
+          <el-table-column prop="name" label="用户名" width="250"></el-table-column>
           <!-- <el-table-column prop="icon" label="头像" width="125"></el-table-column> -->
-          <el-table-column prop="role" label="角色" width="200"></el-table-column>
-          <el-table-column prop="password" label="密码" width="200"></el-table-column>
+          <el-table-column prop="role" label="角色" width="310">
+            <!-- <template slot-scope="scope">
+              <el-tag
+                v-for="(author,index) in scope.row.authority"
+                v-bind:key="index"
+                disable-transitions
+              >{{author}}</el-tag>
+            </template> -->
+          </el-table-column>
+          <!-- <el-table-column prop="password" label="密码" width="200"></el-table-column> -->
           <el-table-column label="操作" width="200">
             <template slot-scope="scope">
               <el-button size="mini" @click="editUser(scope.row,scope.column,scope.$index);dialogFormVisible_edit=true">编辑</el-button>
-              <el-button size="mini" type="danger" @click="handleDelete(scope.$index)">删除</el-button>
+              <el-button size="mini" type="danger" @click="handleDelete(scope.row,scope.column,scope.$index)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -106,7 +114,7 @@
 
 
 <script>
-import { getUserList,addUser } from "../../api/User";
+import { getUserList,addUser,delUser } from "../../api/User";
 import { getRoles } from "../../api/Role";
 export default {
   data() {
@@ -116,19 +124,19 @@ export default {
       listSize: 0,
       search: "",
       tableData: [
-        {
-          id:'535436532',
-          name:'新垣结衣',
-          // icon:'',
-          role:'录入员',
-          password:'123'
-        },{
-          id:'43546453',
-          name:'林颖欣',
-          // icon:'',
-          role:'审核员',
-          password:'456'
-        }
+        // {
+        //   id:'535436532',
+        //   name:'新垣结衣',
+        //   // icon:'',
+        //   role:'录入员',
+        //   password:'123'
+        // },{
+        //   id:'43546453',
+        //   name:'林颖欣',
+        //   // icon:'',
+        //   role:'审核员',
+        //   password:'456'
+        // }
       ],
       form: {
         name: '',
@@ -165,13 +173,13 @@ export default {
         console.log(pd);
         console.log("finish!");      
         this.$store.commit("setNewUsers", pd);
-        // console.log(this.$store.state.commits[0].id);
+        console.log('存了什么啊？---');
+        console.log(this.$store.state.allUser);
         pd.filter(v => {
           let ress = {
             id: v.id,
             name: v.username,
             role: v.roleId,
-            password:v.password
           };
           res.push(ress);
         });
@@ -181,14 +189,14 @@ export default {
       };
       getUserList(currentpage, callback);
     },
-    //待编辑，要修改，因为一个用户可以有多个角色
+    //待编辑，要修改，因为一个用户可以有多个角色，为什么roleId传不进去？？
     addUsers: function(){
       // let username=this.form.name;
       // let password=this.form.password;
       let author;
       this.value.forEach((v)=>{
             author=v;
-          });
+      });
       let newUser={
         username: this.form.name,
         password: this.form.password,
@@ -200,7 +208,7 @@ export default {
             if (b.code === "ok") {
             alert("添加成功");
             // todo 返回上一页
-            this.$router.go(0); //页面刷新（要加上）
+            // this.$router.go(0); //页面刷新（要加上）
             
           } else {
             alert("添加失败" + b.data);
@@ -222,8 +230,38 @@ export default {
       };
       getRoles(0, callback);
       console.log(this.options);      
-    }
-        
+    },
+    handleDelete: function(row,column,index){
+      this.$confirm("确定删除该用户？", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          console.log("删除用户");
+          console.log(this.$store.state.allUser[index]);
+          //alert('submit!');
+          let userId = [];
+          userId.push(this.$store.state.allUser[index].id);
+          // console.log("删除用户id1---");
+          // console.log(this.$store.state.allRole[index].id);
+          // console.log("删除用户id2---");
+          // console.log(row.id);
+          // let roleId=this.$store.state.allRole[index].id;
+          delUser(userId, b => {
+            if (b.code === "ok") {
+              alert("删除成功");
+            }
+            this.$router.go(0); //页面刷新（要加上）
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });        
+    }        
   },
   computed: {
     //搜索功能

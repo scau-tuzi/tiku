@@ -1,6 +1,7 @@
 package io.swagger.service;
 
 import io.swagger.pojo.dao.Permission;
+import io.swagger.pojo.dto.PermissionDto;
 
 import java.util.List;
 import java.util.Map;
@@ -14,7 +15,7 @@ public interface WebPermissionService {
 
     void delete(Long id) throws Exception;
 
-    Map<String, Object> list(Integer pageNumber, Integer pageSize);
+    List<PermissionDto> list();
 
     void update(Permission permission, Long updateBy) throws Exception;
 }

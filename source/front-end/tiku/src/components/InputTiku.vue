@@ -135,8 +135,7 @@
           // }
           ],
           value: []
-
-      };
+        }
       },
       methods: {
         getTags(){

@@ -14,7 +14,7 @@ import java.util.Map;
 @RequestMapping("/api/paper")
 @RestController
 @Slf4j
-public class WebPaperController {
+public class WebPaperController extends WebBasicController{
 
     @Autowired
     private WebPaperService webPaperService;
@@ -91,7 +91,7 @@ public class WebPaperController {
     public BasicResponse add(@RequestBody PaperFullData paperFullData) {
         BasicResponse basicResponse = new BasicResponse();
 
-        Long createBy = 1L;
+        Long createBy = super.getUserId();
         try {
             webPaperService.add(paperFullData, createBy);
             basicResponse.setData("试卷添加成功");
@@ -113,7 +113,7 @@ public class WebPaperController {
     public BasicResponse update(@RequestBody PaperFullData paperFullData) {
         BasicResponse basicResponse = new BasicResponse();
 
-        Long updateBy = 1L;
+        Long updateBy = super.getUserId();
         try {
             webPaperService.update(paperFullData, updateBy);
             basicResponse.setData("试卷修改成功");

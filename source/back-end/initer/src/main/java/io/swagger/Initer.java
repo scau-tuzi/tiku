@@ -50,13 +50,13 @@ public class Initer {
             }
         };
     }
-    @Transient
     private void initData() {
         log.info("Preloading data ...");
 
         long tid =0;
         Tag one = tagRepository.save(new Tag(null, "一年级", null));
         tid=one.getId();
+        tid++;
         log.debug("tid:{}",tid);
         {
 
@@ -92,11 +92,11 @@ public class Initer {
         long maxpr=0;
         int kk=0;
         // TAG1 12 * TAG2 12 * PAPAER 10 * PROBLEM 20 =48000 PROBLEMS
-        for (int i = (int) tid; i < tid+12;i++) {
+        for (int i = (int) tid; i < tid+6;i++) {
             log.info(String.valueOf(i));
-            for (int j = (int) (tid + 12); j < tid + 24; j++) {
+            for (int j = (int) (tid + 12); j < tid + 18; j++) {
                 log.info(String.valueOf(j));
-                for (long paperNo = 0; paperNo < 10; paperNo++) {
+                for (long paperNo = 0; paperNo < 5; paperNo++) {
                     // 生成试卷
                     long papid=23456789;
                     kk++;
@@ -115,15 +115,15 @@ public class Initer {
                     paperTag2.setTagId((long) j);
                     paperTagRepository.save(paperTag2);
 
-                    for (int proNo = 0; proNo < 20; proNo++) {
+                    for (int proNo = 0; proNo < 10; proNo++) {
 
-                        String text = i + "+" + j + "=?";
-                        String ans = i + j + "";
+                        String text = (i*paperNo+proNo) + "+" + (j*proNo+paperNo) + "=?";
+                        int ans = (int) (i*paperNo+proNo + j*proNo+paperNo);
 
 
                         Answer answer = new Answer();
                         answer.setId(curid);
-                        answer.setAnswerText(Character.toString((char) ('A'+(proNo%4))));
+                        answer.setAnswerText("A");
                         Answer an = answerRepository.save(answer);
 
                         curid++;
@@ -144,7 +144,7 @@ public class Initer {
                             ExtData extData1 = new ExtData();
                             extData1.setId(exid);
                             extData1.setKeyname("choice_A");
-                            extData1.setValue(ans);
+                            extData1.setValue(String.valueOf(ans));
                             extData1.setProblemId(pr.getId());
                             extDataRepository.save(extData1);
 
@@ -152,7 +152,7 @@ public class Initer {
                             ExtData extData2 = new ExtData();
                             extData2.setId(exid);
                             extData2.setKeyname("choice_B");
-                            extData2.setValue(String.valueOf(i + j + 1));
+                            extData2.setValue(String.valueOf(ans+i + j + 1));
                             extData2.setProblemId(pr.getId());
                             extDataRepository.save(extData2);
 
@@ -160,7 +160,7 @@ public class Initer {
                             ExtData extData3 = new ExtData();
                             extData3.setId(exid);
                             extData3.setKeyname("choice_C");
-                            extData3.setValue(String.valueOf(i + j + 2));
+                            extData3.setValue(String.valueOf(ans+i + j + 2));
                             extData3.setProblemId(pr.getId());
                             extDataRepository.save(extData3);
 
@@ -168,7 +168,7 @@ public class Initer {
                             ExtData extData4 = new ExtData();
                             extData4.setId(exid);
                             extData4.setKeyname("choice_D");
-                            extData4.setValue(String.valueOf(i + j + 3));
+                            extData4.setValue(String.valueOf(ans+i + j + 3));
                             extData4.setProblemId(pr.getId());
                             extDataRepository.save(extData4);
 

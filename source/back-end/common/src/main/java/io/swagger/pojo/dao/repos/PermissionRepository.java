@@ -23,6 +23,20 @@ public interface PermissionRepository extends JpaRepository<Permission, Long> {
 
     Permission findByName(String name);
 
+    List<Permission> findAllByIsDelEquals(Boolean isDel);
+
+    @Query(nativeQuery = true,
+            value = "select * from permission where parent_permission=0")
+    List<Permission> selectParentPermissons();
+
+    @Query(nativeQuery = true,
+            value = "select * from permission where parent_permission=?1")
+    List<Permission> selectChildPermissons(Long id);
+
+    @Query(nativeQuery = true,
+            value = "select * from permission where roleId=?1")
+    List<Permission> selectPermissionsRoleIdEquals(Long id);
+
     @Query(nativeQuery = true,
             value = "SELECT DISTINCT id from permission")
     List<Long> selectPermissionId();

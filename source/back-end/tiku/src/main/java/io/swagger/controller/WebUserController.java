@@ -18,7 +18,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("/api/user")
-public class WebUserController {
+public class WebUserController extends WebBasicController{
 
     @Autowired
     private WebUserService webUserService;
@@ -38,7 +38,7 @@ public class WebUserController {
 
         BasicResponse basicResponse = new BasicResponse();
 
-        Long createBy = 1L;
+        Long createBy = super.getUserId();
         try {
             webUserService.add(userDto, createBy);
             basicResponse.setData("用户添加成功");
@@ -47,11 +47,6 @@ public class WebUserController {
             basicResponse.setData("用户添加失败: " + e.getMessage());
         }
         return basicResponse;
-    }
-
-    @GetMapping("/test")
-    public void test() {
-        webUserServiceImpl.test();
     }
 
 
@@ -108,7 +103,7 @@ public class WebUserController {
     public BasicResponse update(@RequestBody UserDto userDto) {
         BasicResponse basicResponse = new BasicResponse();
 
-        Long updateBy = 1L;
+        Long updateBy = super.getUserId();
         try {
 
             webUserService.update(userDto, updateBy);

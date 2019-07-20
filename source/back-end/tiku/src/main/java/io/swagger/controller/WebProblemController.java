@@ -97,7 +97,7 @@ public class WebProblemController extends WebBasicController {
 
         BasicResponse basicResponse = new BasicResponse();
 
-        Long createBy = 1L;
+        Long createBy = super.getUserId();
         try {
             webProblemService.add(problemFullData, createBy);
             basicResponse.setData("问题添加成功");
@@ -142,7 +142,7 @@ public class WebProblemController extends WebBasicController {
 
         BasicResponse basicResponse = new BasicResponse();
 
-        Long updateBy = 1L;
+        Long updateBy = super.getUserId();
         try {
             webProblemService.update(problemFullData, updateBy);
             basicResponse.setData("问题修改成功");
@@ -164,7 +164,7 @@ public class WebProblemController extends WebBasicController {
     public BasicResponse check(@RequestParam Long id) {
         BasicResponse basicResponse = new BasicResponse();
 
-        Long updateBy = 1L;
+        Long updateBy = super.getUserId();
         try {
             webProblemService.check(id, Status.CHECK, updateBy);
             basicResponse.setData("问题审核成功");

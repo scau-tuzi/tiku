@@ -60,7 +60,7 @@ public class ProblemServiceImpl implements ProblemService {
                 if (to > (longs.size() - 1)) {
                     to = longs.size() - 1;
                 }
-                longs = longs.subList(page * size, to);
+                longs = longs.subList(page * size, to+1);
                 resPagin.setPage(BigDecimal.valueOf(page));
             } else {
                 longs = new ArrayList<>();
