@@ -5,7 +5,7 @@ interface RoleInfo {
     /**
      * @id 角色的id
      */
-    id: number,
+    id?: number,
 
     /**
      * @roleName 角色的名字
@@ -15,5 +15,5 @@ interface RoleInfo {
     /**
      * @permissionList 角色对应的权限名字列表
      */
-    permissionList: string[]
+    permissionList?: string[]
 }

@@ -11,6 +11,8 @@ var tagsTemp: TagInfo[] = tagslistData;
  */
 function getTagsList(pageNumber: number, callback: (t: TagInfo[], tagsListSize: number) => void,pageSize?:number) {
     //线上
+    console.log("?="+pageNumber);
+    
     pageSize = (pageSize === undefined ? 10 : pageSize)
     axios
         .get("/api/tag/list?pageNumber=" + pageNumber+"&pageSize="+pageSize)//服务器地址
