@@ -41,7 +41,6 @@
               >{{role}}</el-tag>
             </template>
           </el-table-column>
-          <!-- <el-table-column prop="password" label="密码" width="200"></el-table-column> -->
           <el-table-column label="操作" width="200">
             <template slot-scope="scope">
               <el-button size="mini" @click="dialogFormVisible_edit=true;editUser(scope.row,scope.column,scope.$index)">编辑</el-button>
