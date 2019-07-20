@@ -251,6 +251,7 @@ function filterTag(value, row) {
 }
 function jumpInput() {
   //this.$router.push("/cart")
+
   //传递的参数用{{ $route.query.goodsId }}获取
   this.$router.push({ path: "/InputTiku" });
   //this.$router.go(-2)
@@ -269,15 +270,7 @@ function handleInputConfirm() {
   this.inputVisible = false;
   this.inputValue = "";
 }
-/**
- * problem题目接口测试:测试结果可在 console 观察
- */
 
-/**
- * tag标签接口测试: 可以在 console 查看是否有tag输出
- */
-
-/** */
 function handlechange(currentPage) {
   //获取题目
   this.getData(currentPage - 1);

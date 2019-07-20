@@ -3,7 +3,7 @@
     <el-main>
       <el-row gutter="0">
         <el-col span="20">
-          <el-button class="el-button" align="left" plain @click="addUser;dialogFormVisible_add=true">添加用户</el-button>
+          <el-button class="el-button" align="left" plain @click="dialogFormVisible_add=true">添加用户</el-button>
           <!-- <el-button type="primary" plain>全选</el-button> -->
           <el-button type="success" plain @click="batchDelete(tableChecked)">批量删除</el-button>
         </el-col>
@@ -57,10 +57,11 @@
             <el-input v-model="form.name" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="用户密码" :label-width="formLabelWidth">
-            <el-input v-model="form.password" autocomplete="off" show-password=true></el-input>
+            <el-input v-model="form.password" autocomplete="off"></el-input> 
+            <!-- show-password=true -->
             </el-form-item>
             <el-form-item label="用户角色" :label-width="formLabelWidth">
-            <el-select v-model="form.role" placeholder="请选择用户角色" filterable>
+            <el-select v-model="value" placeholder="请选择用户角色" filterable multiple>
                <el-option
                 v-for="item in options"
                 :key="item.value"
@@ -72,7 +73,8 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogFormVisible_add = false">取 消</el-button>
-            <el-button type="primary" @click="dialogFormVisible_add = false">确 定</el-button>
+            <el-button type="primary" @click="dialogFormVisible_add = false;addUsers()">确 定</el-button>
+            <!-- ;dialogFormVisible_add = false -->
         </div>
     </el-dialog>
     <el-dialog title="编辑用户" :visible.sync="dialogFormVisible_edit" width="30%" center>
@@ -104,7 +106,8 @@
 
 
 <script>
-// import { getUserList } from "../../api/User";
+import { getUserList,addUser } from "../../api/User";
+import { getRoles } from "../../api/Role";
 export default {
   data() {
     return {
@@ -133,21 +136,22 @@ export default {
         role: ''
       },
       options: [
-        {
-          value: 'role_1',
-          label: '角色一'
-        }, {
-          value: 'role_2',
-          label: '角色二'
-        }, {
-          value: 'role_3',
-          label: '角色三'
-        }
+        // {
+        //   value: 'role_1',
+        //   label: '角色一'
+        // }, {
+        //   value: 'role_2',
+        //   label: '角色二'
+        // }, {
+        //   value: 'role_3',
+        //   label: '角色三'
+        // }
       ],
+      value:[]
     };
   },
   methods: {
-    //获取标签列表
+    //获取用户列表
     handlerchange: function(currentpage) {
       this.getData(currentpage-1);
     },
@@ -160,7 +164,7 @@ export default {
         console.log("get it");
         console.log(pd);
         console.log("finish!");      
-        this.$store.commit("setNewCommits", pd);
+        this.$store.commit("setNewUsers", pd);
         // console.log(this.$store.state.commits[0].id);
         pd.filter(v => {
           let ress = {
@@ -171,16 +175,55 @@ export default {
           };
           res.push(ress);
         });
+        console.log("check table data----");
         console.log(res);
         _this.tableData = res;
       };
       getUserList(currentpage, callback);
     },
-    // addUser: function(){
-        
-    // },
-    editUser(row,column,index){
+    //待编辑，要修改，因为一个用户可以有多个角色
+    addUsers: function(){
+      // let username=this.form.name;
+      // let password=this.form.password;
+      let author;
+      this.value.forEach((v)=>{
+            author=v;
+          });
+      let newUser={
+        username: this.form.name,
+        password: this.form.password,
+        roleId: author
+      };
+      console.log('add a new user!----');
+      console.log(newUser);
+      addUser(newUser, b => {
+            if (b.code === "ok") {
+            alert("添加成功");
+            // todo 返回上一页
+            this.$router.go(0); //页面刷新（要加上）
+            
+          } else {
+            alert("添加失败" + b.data);
+          }
+        });     
+    },
+    getRole: function(){
+      console.log("getRole!--");
+      var _this = this;
+      let callback = (pd, size) => {
+        this.$store.commit("setNewRoles", pd);
+        pd.filter(v => {
+          let ress = {
+            value: v.id,
+            label: v.roleName
+          };
+          this.options.push(ress);
+        });
+      };
+      getRoles(0, callback);
+      console.log(this.options);      
     }
+        
   },
   computed: {
     //搜索功能
@@ -203,7 +246,8 @@ export default {
     }
   },  
   mounted: function() {
-    // this.getData(0);
+    this.getData(0);
+    this.getRole();
   },
 }
 </script>

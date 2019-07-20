@@ -12,7 +12,9 @@ const store = new Vuex.Store({
   state: {
     commits:[],
     allProblem:[],
-    paperEditData:{}
+    paperEditData:{},
+    allRole:[],
+    allUser:[]
   },
   mutations: {
     setNewCommits (state,newcommits) {
@@ -23,11 +25,19 @@ const store = new Vuex.Store({
     },
     setPaperEditData(state,paperEditData){
       state.paperEditData=paperEditData;
+    },
+    setNewRoles(state,pd){
+      state.allRole=pd;
+    },
+    setNewUsers(state,pd){
+      state.allUser=pd;
     }
   }
 });
-new Vue({
+let me= new Vue({
   router,
   store,
   render: h => h(App)
 }).$mount('#app');
+
+export default me;

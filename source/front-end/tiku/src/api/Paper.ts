@@ -6,13 +6,13 @@ import TagInfo from '@/data/model/Tag';
  * 拿到试卷列表方法
  * @param callback 回调函数
  */
-function getPapers(pageNumber:number,callback: (p: PaperFullData[]) => void, isDeep?: number,pageSize?:number) {
+function getPapers(pageNumber:number,callback: (p: PaperFullData[],size:number) => void, isDeep?: number,pageSize?:number) {
     axios
         .get("/api/paper/list?pageNumber="+pageNumber+"&isDeep="+isDeep+"&pageSize="+pageSize)//服务器地址
         .then(res => {
             //console.log(res)
             let lists: PaperFullData[] = res.data.data.paperFullDataList;
-            callback(lists)
+            callback(lists,res.data.data.pagination.total)
         })
 }
 
@@ -80,12 +80,11 @@ function findPaperBytags(tags: TagInfo[], callback: (p: PaperFullData[]) => void
  * @param paperId 要修改试卷的id
  * @param callback
  */
-function changePaper(paperId: number, callback: (b: BasicResponse) => void) {
+function changePaper(paper: PaperFullData, callback: (b: BasicResponse) => void) {
     axios
-        .post("/api/paper/update", paperId)
+        .post("/api/paper/update", paper)
         .then(res => {
             let response: BasicResponse = res.data;
-
             callback(response)
         })
 }

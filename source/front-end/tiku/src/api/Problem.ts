@@ -45,15 +45,12 @@ function getProblems(pageNumber: number, callback: (Problems: ProblemFullData[],
 // }
 
 function addProblem(problem: ProblemFullData, callback: (b: BasicResponse) => void) {
-    //线上    
+    //线上
     axios
-        .post("/api/problem/add", problem)
-        .then(res => {
-            //得到一个返回的参数,以确保题目增加成功
-            let response: BasicResponse = res.data;
-            console.log("获取的数据");
-            console.log(response);
-            callback(response);
+        .post("/api/problem/add",problem)
+        .then(res=>{
+            let response :BasicResponse=res.data;
+            callback(response)
         })
 }
 

@@ -176,7 +176,11 @@
           var me=this;
           Object.keys(this.form.text).forEach(function(key){
             let keyname=me.form.option[key];
+            console.log('keyname!--');
+            console.log(keyname);
             let value=me.form.text[key];
+            console.log('value!--');
+            console.log(value);
             pd.extData[keyname]=value;
           });
           console.log(pd)

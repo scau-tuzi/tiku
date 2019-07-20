@@ -4,20 +4,17 @@ import io.swagger.pojo.ProblemFullData;
 import io.swagger.pojo.dao.Status;
 import io.swagger.pojo.dto.BasicResponse;
 import io.swagger.service.WebProblemService;
-import io.swagger.service.WebProblemServiceImpl;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.annotations.Check;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 @RequestMapping("/api/problem")
 @RestController
 @Slf4j
-public class WebProblemController {
+public class WebProblemController extends WebBasicController {
 
     @Autowired
     private WebProblemService webProblemService;
@@ -35,7 +32,7 @@ public class WebProblemController {
      */
     @GetMapping("/list")
     public BasicResponse list(@RequestParam Integer pageNumber, @RequestParam Integer pageSize, Integer isCheck) {
-
+        log.info("username:{} userid:{}",getUsername(),getUserId());
         BasicResponse basicResponse = new BasicResponse();
 
         pageNumber = (pageNumber < 0 ? 0 : pageNumber);

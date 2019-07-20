@@ -1,4 +1,5 @@
 <template>
+    <div>
     <el-table :data="tableInfo.tableData"
               row-key="id"
               class="newTable"
@@ -45,40 +46,44 @@
                            v-on:click="handleButton(oper.method,scope.$index, scope.row,scope.column); oper.method==='showTags'?centerDialogVisible=true:centerDialogVisible=false">
                     {{oper.label}}
                 </el-button>
-                <el-dialog
-                        title="修改标签"
-                        :visible.sync="centerDialogVisible"
-                        width="30%"
-                        center
-                        :append-to-body="true">
-                    <el-tag
-                            v-for="(tagsrc,index) in scope.row.tag"
-                            v-bind:key="index"
-                            closable
-                            :disable-transitions="false"
-                            @close="handleClose(tag)"
-                            style="margin-right: 10px; margin-bottom: 10px">
-                        {{tagsrc}}
-                    </el-tag>
-                    <el-input
-                            class="input-new-tag"
-                            v-if="inputVisible"
-                            v-model="inputValue"
-                            ref="saveTagInput"
-                            size="small"
-                            @keyup.enter.native="handleInputConfirm"
-                            @blur="handleInputConfirm"
-                    >
-                    </el-input>
-                    <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
-                    <span slot="footer" class="dialog-footer">
-    <el-button @click="centerDialogVisible = false">取 消</el-button>
-    <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
-  </span>
-                </el-dialog>
             </template>
         </el-table-column>
+      <el-dialog title="修改标签" :visible.sync="this.centerDialogVisible_single" width="30%" center>
+                        <template>
+                          <el-select
+                            v-model="value"
+                            multiple
+                            filterable
+                            allow-create
+                            default-first-option
+                            size="medium"
+                            placeholder="请选择题目标签"
+                          >
+                            <!-- @change="modifyTag" -->
+                            <el-option
+                              v-for="item in options"
+                              :key="item.value"
+                              :label="item.label"
+                              :value="item.value"
+                            ></el-option>
+                          </el-select>
+                          <span slot="footer" class="dialog-footer">
+                  <el-button @click="centerDialogVisible_single = false">取 消</el-button>
+                  <el-button type="primary" @click="centerDialogVisible_single = false;modifyTag()">确 定</el-button>
+                </span>
+                        </template>
+      </el-dialog>
     </el-table>
+
+    <el-footer align="center">
+        <el-pagination v-if="usePagination===true"
+                background
+                layout="prev, pager, next"
+                :total="this.listSize"
+                @current-change="this.handleChange"
+        ></el-pagination>
+    </el-footer>
+    </div>
 </template>
 
 <script>
@@ -167,7 +172,10 @@
     export default {
         name: "GeneralTable",
         props: {
-            tableInfo: GeneralTable
+            tableInfo: GeneralTable,//表格信息
+            listSize:Number,        //总页数
+            handleChange:Function,  //页修改回调函数
+            usePagination:Boolean,  //是否使用内置分页器
         },
         data() {
             return {

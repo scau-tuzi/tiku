@@ -3,7 +3,7 @@
     <el-main>
       <el-row gutter="0">
         <el-col span="20">
-          <el-button class="el-button" align="left" plain @click="addRole">添加角色</el-button>
+          <el-button class="el-button" align="left" plain @click="addRoles">添加角色</el-button>
           <!-- <el-button type="primary" plain>全选</el-button> -->
           <el-button type="success" plain @click="batchDelete(tableChecked)">批量删除</el-button>
         </el-col>
@@ -28,12 +28,22 @@
           style="width: 100%"
           @selection-change="handleSelectionChange"
         >
-          <el-table-column type="selection" width="55"></el-table-column>
-          <el-table-column prop="role" label="角色名称" width="725"></el-table-column>
+          <el-table-column prop="id" type="selection" width="55"></el-table-column>
+          <el-table-column prop="role" label="角色名称" width="325"></el-table-column>
+          <el-table-column prop="authority" label="拥有权限" width="400">
+            <template slot-scope="scope">
+              <el-tag
+                v-for="(author,index) in scope.row.authority"
+                v-bind:key="index"
+                disable-transitions
+              >{{author}}</el-tag>
+            </template>
+          </el-table-column>
           <el-table-column label="操作" width="286">
             <template slot-scope="scope">
               <el-button size="mini" @click="editRole(scope.row,scope.column, scope.$index)">编辑</el-button>
-              <el-button size="mini" type="danger" @click="handleDelete(scope.$index)">删除</el-button>
+              <el-button size="mini" type="success" @click="modifyAuthor(scope.row,scope.column, scope.$index)">修改权限</el-button>
+              <el-button size="mini" type="danger" @click="handleDelete(scope.row,scope.column, scope.$index)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -50,7 +60,7 @@
   </el-container>
 </template>
 <script>
-// import { addRoles } from "../../api/Role";
+import { getRoles,changeRole,delRole } from "../../api/Role";
 export default {
   data() {
     return {
@@ -59,16 +69,20 @@ export default {
       tableChecked: [], //被选中的记录数据
       search: "",
       tableData: [
-        {
-          role:'录入员'
-        },{
-          role:'审核员'
-        }
+        // {
+        //   id:'304958345',
+        //   role:'录入员',
+        //   authority:['录入题目','组卷']
+        // },{
+        //   id:'39850394',
+        //   role:'审核员',
+        //   authority:['审核题目']
+        // }
       ]
     };
   },
   methods:{
-    //获取标签列表
+    //获取角色列表（名称、权限）
     handlerchange: function(currentpage) {
       this.getData(currentpage - 1);
     },
@@ -82,29 +96,41 @@ export default {
         console.log("get it");
         console.log(pd);
         console.log("finish!");
-        this.$store.commit("setNewCommits", pd);
-        console.log(this.$store.state.commits);
+        this.$store.commit("setNewRoles", pd);
+        // console.log(this.$store.state.allRole);
         // console.log(this.$store.state.commits[0].id);
         pd.filter(v => {
+          let author_tmp = [];
+          if (v.permissionList !== null) {
+            for (let i = 0; i < v.permissionList.length; i++) {
+              author_tmp.push(v.permissionList[i]);
+            }
+          }
           let ress = {
-            role: v.value
+            // id: v.id,
+            role: v.roleName,
+            authority: author_tmp
           };
           res.push(ress);
         });
         console.log(res);
         _this.tableData = res;
       };
-      getRolesList(currentpage, callback);
+      getRoles(currentpage, callback);
     },    
-    addRole: function(){
+    //添加角色（后台要修改，待测试）
+    addRoles: function(){
       this.$prompt("请输入新增的角色名称", "提示", {
         confirmButtonText: "保存",
         cancelButtonText: "取消"
       })
         .then(( {value} ) => {
+          // let tmp=[];
+          // tmp.push(value);
           console.log("提交新角色");
           var res = {
-            value: value
+            roleName: value,
+            // permissionList: tmp
           };
           // alert(pd);
           // console.log(pd);
@@ -122,7 +148,7 @@ export default {
               this.getData(this.listPageNumber);
             }
           };
-          addRoles(res, callback);
+          addRole(res, callback);
         })
         .catch(() => {
           this.$message({
@@ -131,6 +157,7 @@ export default {
           });
         });      
     },
+    //修改角色，后台有修改
     editRole:function(row, column, index){
       //修改角色的弹窗
       this.$prompt("请输入修改后的角色名称", "提示", {
@@ -142,10 +169,11 @@ export default {
           console.log("修改角色名");
           // var pd = [];
           let pd = {
-            id: this.$store.state.commits[index].id,
-            value: value
+            id: this.$store.state.allRole[index].id,
+            roleName: value,
+            permissionList: this.$store.state.allRole[index].permissionList
           };
-          console.log(pd.id);
+          console.log("check pd!----");
           // pd.push(pd_tmp);
           // alert(pd);
           console.log(pd);
@@ -158,7 +186,7 @@ export default {
                 type: "success",
                 message: "修改后角色名为: " + value
               });
-              // this.$router.go(0); //页面刷新（要加上）
+              this.$router.go(0); //页面刷新（要加上）
             }
           });
         })
@@ -168,6 +196,45 @@ export default {
             message: "取消修改"
           });
         });      
+    },
+    //单行删除（待测试）
+    handleDelete:function(row,column,index){
+      this.$confirm("确定删除该角色?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          console.log("删除角色");
+          console.log(this.$store.state.allRole[index]);
+          //alert('submit!');
+          // let roleId = [];
+          // roleId.push(this.$store.state.allRole[index].id);
+          let roleId=this.$store.state.allRole[index].id;
+          delRole(roleId, b => {
+            if (b.code === "ok") {
+              alert("删除成功");
+            }
+            this.$router.go(0); //页面刷新（要加上）
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });      
+    },
+    modifyAuthor:function(row,column,index){
+      console.log("拿到角色的id吗？----");
+      console.log(this.$store.state.allRole[index].id);
+      this.$router.push({
+        path: "/ModifyProblem",//跳到权限列表
+        //query对象获取问题和答案
+        query: {
+          modifyAuthorId: this.$store.state.allRole[index].id
+        }
+      });
     }
   },
   computed: {
