@@ -65,9 +65,10 @@ public class WebTagServiceImpl extends BasicService<Tag> implements WebTagServic
      * @return 0:未被使用
      * 1：已被问题或试卷使用
      */
-    public Integer findIfUsed(@RequestBody Tag tag) {
-        if (paperTagRepository.findAllByTagIdEquals(tag.getId()).size() == 0
-                && problemTagRepository.findAllByTagIdEquals(tag.getId()).size() == 0) {
+    @Override
+    public Integer findIfUsed(Long tagId) {
+        if (paperTagRepository.findAllByTagIdEquals(tagId).size() == 0
+                && problemTagRepository.findAllByTagIdEquals(tagId).size() == 0) {
             return 0;
         } else
             return 1;
@@ -89,6 +90,11 @@ public class WebTagServiceImpl extends BasicService<Tag> implements WebTagServic
         webPaperTagServiceImpl.deleteByTagId(id);
     }
 
+    /**
+     * 删除一个列表的标签
+     * @param idList
+     * @throws Exception
+     */
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void deleteAll(List<Long> idList) throws Exception {

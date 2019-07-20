@@ -149,29 +149,27 @@ export default {
   },
   methods: {
     getTags() {
-      console.log("get what!");
+      // console.log("get what!");
       var _this = this;
-let callback = (pd, size) => {
-    this.$store.commit("setNewCommits", pd);
-    pd.filter(v => {
-      let ress = {
-        value: v.value,
-        label: v.value
+      let callback = (pd, size) => {
+        this.$store.commit("setNewCommits", pd);
+        pd.filter(v => {
+          let ress = {
+            value: v.value,
+            label: v.value
+          };
+          this.options.push(ress);
+        });
       };
-      this.options.push(ress);
-    });
-  };
-  getTagsList(0, callback, 0);
-  console.log(this.options);
-},
+      getTagsList(0, callback, 0);
+      // console.log(this.options);
+    },
 
     submitForm(formName) {
-      console.log("提交数据");
-      console.log(this.form);
+      let _this = this;
       let pd = { problem: {}, answer: {} };
       // let callback = p=>{};
       // addProblem(pd,callback);
-
 
       pd.problem.problemText = this.ruleForm.question;
       pd.answer.answerText = this.ruleForm.answer;
@@ -188,16 +186,21 @@ let callback = (pd, size) => {
         let value = me.form.text[key];
         pd.extData[keyname] = value;
       });
-      console.log(pd);
+      // console.log(pd);
       this.$refs[formName].validate(valid => {
         if (valid) {
           //alert('submit!');
           addProblem(pd, b => {
             if (b.code === "ok") {
-              alert("添加成功");
+              this.$message({ type: "success", message: "添加成功!" });
+              setTimeout(function() {
+                _this.$router.replace({ path: "/VerifyTable" });
+              }, 500);
+
               // todo 返回上一页
             } else {
-              alert("添加失败" + b.data);
+              this.$message({ type: "error", message: "添加失败!\n" + b.data });
+              // alert("添加失败" + b.data);
             }
           });
         } else {

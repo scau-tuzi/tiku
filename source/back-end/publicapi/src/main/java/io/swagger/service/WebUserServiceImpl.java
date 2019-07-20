@@ -28,25 +28,6 @@ public class WebUserServiceImpl extends BasicService<User> implements WebUserSer
     @Autowired
     private UserRoleRepository userRoleRepository;
 
-
-    //
-    //    @Autowired
-    //    private WebRoleServiceImpl webRoleService;
-
-    //    /**
-    //     * 返回角色名角色ID映射表
-    //     *
-    //     * @return
-    //     */
-    //    public Map<Long, String> listRole() {
-    //        return webRoleService.selectRole();
-    //
-    //    }
-
-    @Autowired
-    private RoleRepository roleRepository;
-
-
     /**
      * 密码加密
      */
@@ -74,7 +55,6 @@ public class WebUserServiceImpl extends BasicService<User> implements WebUserSer
         else if (userRepository.findByUsername(userDto.getUsername()) != null) {
             throw new Exception("该用户名已存在！");
         } else {
-
             User user = new User();
             user.setPasswordSaltMd5(passwordMD5(userDto.getPassword()));
             beforeAdd(user, createdBy);
@@ -82,18 +62,14 @@ public class WebUserServiceImpl extends BasicService<User> implements WebUserSer
             userRepository.save(user);
 
             //将用户与角色关系保存至角色表中
-
             for (Long roleId : userDto.getRoleIds()) {
                 UserRole userRole = new UserRole();
                 userRole.setUserId(user.getId());
                 userRole.setRoleId(roleId);
                 userRole.setIsDel(Boolean.FALSE);
                 userRoleRepository.save(userRole);
-
             }
         }
-
-
     }
 
     /**
@@ -128,6 +104,7 @@ public class WebUserServiceImpl extends BasicService<User> implements WebUserSer
     }
 
     @Override
+    //将数据库中的is_del字段置为true
     public int deleteBasicInfo(Long id) {
         return userRepository.updateIsDelById(id, Boolean.TRUE);
     }
@@ -139,14 +116,16 @@ public class WebUserServiceImpl extends BasicService<User> implements WebUserSer
     public Map<String, Object> list(Integer pageNumber, Integer pageSize) {
         Page<User> page = userRepository.findAllByIsDel(PageRequest.of(pageNumber, pageSize), Boolean.FALSE);
 
+        //用户列表
         List<UserDto> userDtoList = new ArrayList<>();
+        //列表中的每个用户都要获取其角色信息
         for (User user : page.getContent()) {
+            //用户的角色列表
             List<Long> roleIdList=userRoleRepository.findRoleIdsByUserIdEqualsAndIsDel(user.getId(), Boolean.FALSE);
             UserDto userDto = new UserDto();
             BeanUtils.copyProperties(user, userDto);
             //todo 不传密码到前端
             userDto.setPassword(null);
-
 
             userDto.setRoleIds(roleIdList);
             userDtoList.add(userDto);
@@ -158,6 +137,7 @@ public class WebUserServiceImpl extends BasicService<User> implements WebUserSer
         pagination.setSize(BigDecimal.valueOf(page.getSize()));
         pagination.setTotal(BigDecimal.valueOf(page.getTotalPages()));
 
+        //将结果放入map中
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("userDtoList", userDtoList);
         resultMap.put("pagination", pagination);
@@ -172,6 +152,7 @@ public class WebUserServiceImpl extends BasicService<User> implements WebUserSer
      * @param updateBy
      * @throws Exception
      */
+    @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(UserDto userDto, Long updateBy) throws Exception {
 
@@ -191,21 +172,17 @@ public class WebUserServiceImpl extends BasicService<User> implements WebUserSer
             beforeUpdate(user, updateBy);
 
             //todo MD5加密
-
             user.setPasswordSaltMd5(passwordMD5(userDto.getPassword()));
             userRepository.save(user);
             //删除掉用户原名已有角色
             userRoleRepository.updateIsDelByUserId(userDto.getId(), Boolean.TRUE);
 
             //增加新角色
-
             for (Long roleId : userDto.getRoleIds()) {
                 UserRole userRole = new UserRole();
-                userRole.setUserId(user.getId());
                 userRole.setRoleId(roleId);
-
+                userRole.setUserId(user.getId());
                 userRole.setIsDel(Boolean.FALSE);
-
                 userRoleRepository.save(userRole);
 
             }
