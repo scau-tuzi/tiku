@@ -59,7 +59,7 @@
 </template>
 
 <script>
-  import {changeProblem, getProblems} from "../api/Problem";
+  import {changeProblem, checkProblem, getProblems} from "../api/Problem";
 import ProblemFullData from "../data/model/ProblemFullData";
 import GeneralTable from "./GeneralTable";
 import verifyTableInfo from "../data/mock/VerifyTableInfoMock";
@@ -93,7 +93,8 @@ export default {
       console.log(row.status);
       console.log(verifyTableInfo.tableData[index].status)
       this.$store.state.allProblem[index].status.verifyStatus=1;
-      changeProblem(this.$store.state.allProblem[index],(b)=>{
+      let _this=this
+      checkProblem(this.$store.state.allProblem[index].problem.id,(b)=>{
         if (b.code === "ok") {
           alert("审核成功");
           _this.getPaperData(0);
