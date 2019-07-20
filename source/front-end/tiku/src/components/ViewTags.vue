@@ -163,7 +163,7 @@ export default {
         .then(() => {
           delTag(delId, b => {
             if (b.code === "ok") {
-              this.isCurrentPage = delId.length === this.listLenght ? 1 : 0;
+              this.isCurrentPage = delId.length === this.listLenght ? 1 : this.currentpage;
               this.getData(this.ListPageNumber - this.isCurrentPage, 0);
               this.$message({ type: "success", message: "删除成功!" });
             }
@@ -182,9 +182,7 @@ export default {
         type: "warning"
       })
         .then(() => {
-          // console.log("删除标签");
           console.log(this.$store.state.commits);
-          //alert('submit!');
           let tagId = [];
           tagId.push(this.$store.state.commits[index].id);
           delTag(tagId, b => {
@@ -193,8 +191,6 @@ export default {
 
               this.$message({ type: "success", message: "删除成功" });
             }
-
-            // this.$router.go(0); //页面刷新（要加上）
           });
         })
         .catch(() => {
