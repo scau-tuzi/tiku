@@ -17,7 +17,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 @WebAppConfiguration
 @ComponentScan(basePackages = "io.swagger.api")
-@RunWith(SpringJUnit4ClassRunner.class)
+//@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Swagger2SpringBoot.class)
 public class QueryApiBaseTest {
     @Autowired
@@ -146,4 +146,5 @@ public class QueryApiBaseTest {
             }
         }
     }
+
 }

@@ -43,7 +43,8 @@
       <el-pagination
         background
         layout="prev, pager, next"
-        :total="this.listSize"
+        :total="this.listSize*10"
+        :current-page="this.ListPageNumber+1"
         @current-change="this.handlerchange"
       ></el-pagination>
     </el-footer>
@@ -59,12 +60,24 @@ export default {
   data() {
     return {
       /**
-       * @ListPageNumber 当前页面的页数
+       * 页面最大的容量
        */
-      ListPageNumber:0,
+      pageSize: 10,
+      /**
+       *  当前页面的 list 的的长度
+       */
+      listLenght: 0,
+      /**
+       *  是否留在当前页面
+       */
+      isCurrentPage: 0,
+      /**
+       *  当前页面的页数
+       */
+      ListPageNumber: 0,
 
       /**
-       * @listSize 页面的数量
+       *  页面的数量
        */
       listSize: 0,
       tableChecked: [], //被选中的记录数据
@@ -95,30 +108,29 @@ export default {
   methods: {
     //获取标签列表
     handlerchange: function(currentpage) {
-      this.getData(currentpage - 1);
+      this.getData(currentpage - 1, 0);
     },
-    getData: function(currentpage) {
+    getData: function(currentpage, last) {
       // console.log("change");
-      this.ListPageNumber = currentpage;
+      console.log("1=" + this.listSize);
+
       var _this = this;
       let callback = (pd, size) => {
-        this.listSize = size * 10;
-        var res = [];
-        console.log("get it");
-        console.log(pd);
-        console.log("finish!");
+        this.ListPageNumber = currentpage;
+        this.isCurrentPage = currentpage === size - 1 ? 1 : 0;
+        this.listSize = size;
+        currentpage = last === 1 ? this.listSize - 1 : currentpage;
+        this.listLenght = pd.length;
 
+        var res = [];
         this.$store.commit("setNewCommits", pd);
-        console.log("aha----");
         console.log(this.$store.state.commits);
-        // console.log(this.$store.state.commits[0].id);
         pd.filter(v => {
           let ress = {
             tag: v.value
           };
           res.push(ress);
         });
-        console.log(res);
         _this.tableData = res;
       };
       getTagsList(currentpage, callback);
@@ -217,13 +229,13 @@ export default {
           //alert('submit!');
           changeTag(pd, b => {
             if (b.code === "ok") {
+              this.getData(this.ListPageNumber, 0);
               alert("修改成功");
               // todo 返回上一页
               this.$message({
                 type: "success",
                 message: "修改后标签为: " + value
               });
-              this.$router.go(0); //页面刷新（要加上）
             }
           });
         })
@@ -241,7 +253,7 @@ export default {
         confirmButtonText: "保存",
         cancelButtonText: "取消"
       })
-        .then(( {value} ) => {
+        .then(({ value }) => {
           console.log("提交标签");
           var res = {
             value: value
@@ -259,8 +271,7 @@ export default {
                 type: "success",
                 message: "新增标签: " + value
               });
-              // this.$router.go(0); //页面刷新（要加上）
-              this.getData(this.ListPageNumber);
+              this.getData(this.listSize - 1, 1);
             }
           };
           addTags(res, callback);

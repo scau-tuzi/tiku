@@ -67,6 +67,10 @@ let mockData:MenuInfo={
       title:"授权管理",
       subItems:[
         {
+          title:"权限列表",
+          path:"/PermissionTreePage"
+        },
+        {
           title:"应用授权",
           // component:InputTiku,
           path:"/InputTiku",

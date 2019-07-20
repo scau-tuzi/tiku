@@ -1,23 +1,21 @@
 package io.swagger.service;
 
-import io.swagger.model.Pagination;
 import io.swagger.pojo.dao.Permission;
 import io.swagger.pojo.dao.repos.PermissionRepository;
 import io.swagger.pojo.dto.PermissionDto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Service
+@Slf4j
 public class WebPermissionServiceImpl extends BasicService implements WebPermissionService {
 
     @Autowired
@@ -26,17 +24,17 @@ public class WebPermissionServiceImpl extends BasicService implements WebPermiss
 
     /**
      * 列出权限id对应权限的名称
+     *
      * @return
      */
     public Map<Long, String> selectPermission() {
         List<Long> permissionIdList = permissionRepository.selectPermissionId();
-        Map<Long, String> permissionIdPermissionName= new HashMap<>();
+        Map<Long, String> permissionIdPermissionName = new HashMap<>();
         for (Long id : permissionIdList) {
             permissionIdPermissionName.put(id, permissionRepository.findByIdEquals(id).getName());
         }
         return permissionIdPermissionName;
     }
-
 
 
     /**
@@ -55,10 +53,13 @@ public class WebPermissionServiceImpl extends BasicService implements WebPermiss
             throw new Exception("方法名不可为空");
         } else if (permission.getUrl() == null) {
             throw new Exception("url不可为空");
-        } else if(permissionRepository.findByName(permission.getName())!=null){
+        } else if (permission.getParentPermission() == null) {
+            throw new Exception("父权限不可为空");
+        } else if (!permissionRepository.selectParentPermissons().contains(permissionRepository.findByIdEquals(permission.getParentPermission()))) {
+            throw new Exception("父权限不存在");
+        } else if (permissionRepository.findByName(permission.getName()) != null) {
             throw new Exception("权限名已存在");
-        }
-        else {
+        } else {
             beforeAdd(permission, createBy);
             Permission dbPermission = new Permission();
             BeanUtils.copyProperties(permission, dbPermission);
@@ -101,51 +102,54 @@ public class WebPermissionServiceImpl extends BasicService implements WebPermiss
     }
 
 
+    private boolean checkIsNotHadParent(PermissionDto permission){
+        return permission.getParentPermission() == null || permission.getParentPermission()==(0L);
+    }
+
     /**
      * 列出权限列表，包括权限的父id
+     *
      * @return
      */
-    public List<PermissionDto> list(){
-        List<Permission> parentPermissions=permissionRepository.selectParentPermissons();
+    public List<PermissionDto> list() {
 
-        List<PermissionDto> parentPermissionDtos=new ArrayList<>();
-        for(Permission parentpermission:parentPermissions){
-            PermissionDto parentpermissionDto=new PermissionDto();
-            BeanUtils.copyProperties(parentpermission,parentpermissionDto);
+        List<Permission> all = permissionRepository.findAll();
 
-            List<Permission> childPermissions=permissionRepository.selectChildPermissons(parentpermissionDto.getId());
-            List<PermissionDto> childPermissionDtos=new ArrayList<>();
-            for(Permission childPermission:childPermissions){
-                PermissionDto childPermissionDto=new PermissionDto();
-                BeanUtils.copyProperties(childPermission,childPermissionDto);
-                childPermissionDtos.add(childPermissionDto);
+        HashMap<Long,PermissionDto> tree=new HashMap<>();
+
+        all.forEach((p)->{
+            PermissionDto pdto = new PermissionDto();
+            BeanUtils.copyProperties(p, pdto);
+            tree.put(pdto.getId(),pdto);
+        });
+
+        tree.values().forEach((p)->{
+
+            if(!checkIsNotHadParent(p)){
+                PermissionDto parent = tree.getOrDefault(p.getParentPermission(), null);
+                if(parent==null){
+                    log.error("权限对象的父权限记录不存在，对象{}",p.toString());
+                    return;
+                }
+
+                if(parent.getChildPermissions()==null){
+                    parent.setChildPermissions(new ArrayList<>());
+                }
+                parent.getChildPermissions().add(p);
             }
-            parentpermissionDto.setChildPermissions(childPermissionDtos);
-            parentPermissionDtos.add(parentpermissionDto);
-        }
+        });
+
+
+        List<PermissionDto> parentPermissionDtos = new ArrayList<>();
+
+        tree.values().forEach((p)->{
+            if(checkIsNotHadParent(p)){
+                parentPermissionDtos.add(p);
+            }
+        });
 
         return parentPermissionDtos;
     }
-//    /**
-//     * 查找出所有的权限
-//     */
-//    @Override
-//    public Map<String, Object> list(Integer pageNumber, Integer pageSize) {
-//        Page<Permission> page = permissionRepository.findAllByIsDel(PageRequest.of(pageNumber, pageSize), Boolean.FALSE);
-//
-//        List<Permission> permissionList = new ArrayList<>(page.getContent());
-//
-//        //分页信息
-//        Pagination pagination = new Pagination();
-//        pagination.setPage(BigDecimal.valueOf(page.getNumber()));
-//        pagination.setSize(BigDecimal.valueOf(page.getSize()));
-//        pagination.setTotal(BigDecimal.valueOf(page.getTotalPages()));
-//
-//        Map<String, Object> resultMap = new HashMap<>();
-//        resultMap.put("permissionList", permissionList);
-//        resultMap.put("pagination", pagination);
-//        return resultMap;
-//    }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -161,8 +165,12 @@ public class WebPermissionServiceImpl extends BasicService implements WebPermiss
             throw new Exception("url不可为空");
         } else if (permission.getMethod() == null) {
             throw new Exception("方法不可为空");
-        } else if (permissionRepository.findByName(permission.getName()) != null) {
-            throw new Exception("新权限名已存在");
+        //} else if (permission.getParentPermission() == null) {
+       //     throw new Exception("父权限不可为空");
+       // } else if (!permissionRepository.selectParentPermissons().contains(permissionRepository.findByIdEquals(permission.getParentPermission()))) {
+        //    throw new Exception("父权限不存在");
+       // } else if (permissionRepository.findByName(permission.getName()) != null) {
+       //     throw new Exception("新权限名已存在");
         } else {
             Permission dbPermission = new Permission();
             BeanUtils.copyProperties(permission, dbPermission);

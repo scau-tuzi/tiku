@@ -92,12 +92,17 @@ export default new Router({
         {
           path: 'RoleTable',
           name: 'RoleTable',
-          component: () => import(/* webpackChunkName: "ViewPaper" */ './views/user/RoleTable.vue')
+          component: () => import(/* webpackChunkName: "RoleTable" */ './views/user/RoleTable.vue')
         },
         {
           path: 'UserTable',
           name: 'UserTable',
-          component: () => import(/* webpackChunkName: "ViewPaper" */ './views/user/UserTable.vue')
+          component: () => import(/* webpackChunkName: "UserTable" */ './views/user/UserTable.vue')
+        },
+        {
+          path:'PermissionTreePage',
+          name:'PermissionTreePage',
+          component:()=>  import(/* webpackChunkName: "ViewPaper" */ './views/Permission/PermissionTreePage.vue')
         }
       ]
     },
