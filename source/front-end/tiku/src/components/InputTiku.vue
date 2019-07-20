@@ -89,161 +89,116 @@
 </template>
 
 <script >
-    import ProblemFullData from "../data/model/ProblemFullData";
-    import {addProblem} from "../api/Problem";
-    import {getTagsList} from "../api/Tag";
+import ProblemFullData from "../data/model/ProblemFullData";
+import { addProblem } from "../api/Problem";
+import { getTagsList } from "../api/Tag";
 
-    export default {
-        name: "InputTiku",
-      data(){
-        return {
-          OptionNum: 0,
-          dialogImageUrl: '',
-          dialogVisible: false,
-          disabled: false,
-          fileList:[],
-          ruleForm: {
-            question: '',
-            answer: '',
-            pics: '',
-            sound: '',
-            tags: ''
-          },
-          form: {
-            option: ['','choice_A','choice_B','choice_C','choice_D'],
-            text: {},
-          },
-          rules: {
-            question: [
-              { required: true, message: '请输入题目', trigger: 'blur' }
-            ],
-            answer: [
-              { required: true, message: '请输入题目', trigger: 'blur'}
-            ]
-
-          },
-          options: [
-          //   {
-          //   value: '一年级',
-          //   label: '一年级'
-          // }, {
-          //   value: '二年级',
-          //   label: '二年级'
-          // }, {
-          //   value: '三年级',
-          //   label: '三年级'
-          // }
-          ],
-          value: []
-        }
+export default {
+  name: "InputTiku",
+  data() {
+    return {
+      OptionNum: 0,
+      dialogImageUrl: "",
+      dialogVisible: false,
+      disabled: false,
+      fileList: [],
+      ruleForm: {
+        question: "",
+        answer: "",
+        pics: "",
+        sound: "",
+        tags: ""
       },
-      methods: {
-        getTags(){
-            console.log("getTag!")
-            var _this=this;
-            let callback=(pd,size)=>{
-            console.log("get it");
-            console.log(pd);
-            this.$store.commit("setNewCommits",pd);
-            // console.log(this.$store.state.commits);
-            // console.log(this.$store.state.commits[0].id);
-            pd.filter(v=>{
-                let ress={
-                value:v.value,
-                label:v.value
-                };
-                this.options.push(ress)
-            });
-            };
-            getTagsList(0, callback, 0);
-            console.log(this.options);
-          },
+      form: {
+        option: ["", "choice_A", "choice_B", "choice_C", "choice_D"],
+        text: {}
+      },
+      rules: {
+        question: [{ required: true, message: "请输入题目", trigger: "blur" }],
+        answer: [{ required: true, message: "请输入题目", trigger: "blur" }]
+      },
+      options: [
+        //   {
+        //   value: '一年级',
+        //   label: '一年级'
+        // }, {
+        //   value: '二年级',
+        //   label: '二年级'
+        // }, {
+        //   value: '三年级',
+        //   label: '三年级'
+        // }
+      ],
+      value: []
+    };
+  },
+  methods: {
+    getTags() {
+      // console.log("get what!");
+      var _this = this;
+      let callback = (pd, size) => {
+        this.$store.commit("setNewCommits", pd);
+        pd.filter(v => {
+          let ress = {
+            value: v.value,
+            label: v.value
+          };
+          this.options.push(ress);
+        });
+      };
+      getTagsList(0, callback, 0);
+      // console.log(this.options);
+    },
 
-        submitForm(formName) {
-          console.log("提交数据");
-          console.log(this.form);
-          let pd={problem:{},answer:{}};
-          pd.problem.problemText=this.ruleForm.question;
-          pd.answer.answerText=this.ruleForm.answer;
-          pd.tags=[];
-          this.value.forEach((v)=>{
-            pd.tags.push({
-              value:v,
-            })
-          });
-          pd.extData={}
-          var me=this;
-          Object.keys(this.form.text).forEach(function(key){
-            let keyname=me.form.option[key];
-            console.log('keyname!--');
-            console.log(keyname);
-            let value=me.form.text[key];
-            console.log('value!--');
-            console.log(value);
-            pd.extData[keyname]=value;
-          });
-          console.log(pd)
+    submitForm(formName) {
+      let _this = this;
+      let pd = { problem: {}, answer: {} };
+      // let callback = p=>{};
+      // addProblem(pd,callback);
+
+      pd.problem.problemText = this.ruleForm.question;
+      pd.answer.answerText = this.ruleForm.answer;
+      pd.tags = [];
+      this.value.forEach(v => {
+        pd.tags.push({
+          value: v
+        });
+      });
+      pd.extData = {};
+      var me = this;
+      Object.keys(this.form.text).forEach(function(key) {
+        let keyname = me.form.option[key];
+        let value = me.form.text[key];
+        pd.extData[keyname] = value;
+      });
+      // console.log(pd);
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          //alert('submit!');
           addProblem(pd, b => {
             if (b.code === "ok") {
-            alert("添加成功");
-            // todo 返回上一页
-          } else {
-            alert("添加失败" + b.data);
-          }
-        });
-          // this.$refs[formName].validate((valid) => {
-          //   if (valid) {
-          //     //alert('submit!');
-          //     addProblem(pd,(b)=>{
-          //       if(b.code==="ok"){
-          //         alert("添加成功");
-          //         // todo 返回上一页
-          //       }else{
-          //         alert("添加失败"+b.data)
-          //       }
-          //     });
-          //   } else {
-          //     console.log('数据不正确');
-          //     return false;
-          //   }
-          // });
-        },
-        resetForm(formName) {
-          this.$refs[formName].resetFields();
-        },
-        handleRemove(file) {
-          console.log(file);
-        },
-        handlePreview(file) {
-          console.log(file);
-        },
-        handleExceed(files, fileList) {
-          this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
-        },
-        beforeRemove(file, fileList) {
-          return this.$confirm(`确定移除 ${ file.name }？`);
-        },
-        beforeUpload(file){
-          var testmsg = file.name.substring(file.name.lastIndexOf('.')+1)
-          const extension = testmsg === 'mp3'
-          if(!extension){
-            this.$message.warning(`上传文件只能是mp3格式！`);
-          }
-          return extension;
-        },
-        OptionHandleChange(value) {
-          console.log(value);
-        },
-        addOption(){
+              this.$message({ type: "success", message: "添加成功!" });
+              setTimeout(function() {
+                _this.$router.replace({ path: "/VerifyTable" });
+              }, 500);
 
+              // todo 返回上一页
+            } else {
+              this.$message({ type: "error", message: "添加失败!\n" + b.data });
+              // alert("添加失败" + b.data);
+            }
+          });
+        } else {
+          console.log("数据不正确");
+          return false;
         }
-
-      },
-      mounted: function() {
-        this.getTags();
-      }
-
+      })
     }
+  },
+  mounted: function() {
+    this.getTags();
+  }
+}
 </script>
 
 <style scoped>

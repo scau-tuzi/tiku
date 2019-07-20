@@ -38,16 +38,31 @@ public class WebRoleServiceImpl extends BasicService<Role> implements WebRoleSer
      * @param id
      * @return
      */
+    /**
+     * 根据角色id找出角色名称
+     * @param id
+     * @return
+     */
     @Override
     public String selectRolenameByRoleId(Long id) {
         return roleRepository.selectRolenameByRoleId(id);
     }
 
+    /**
+     * 将数据库中的is_del字段设置为true
+     * @param id
+     * @return
+     */
     @Override
     public int deleteBasicInfo(Long id) {
         return roleRepository.updateIsDelById(id, Boolean.TRUE);
     }
 
+    /**
+     * 删除角色时也要删除角色的权限
+     * @param id
+     * @return
+     */
     @Override
     public int deletePermission(Long id) {
         return rolePermissionRepository.updateIsDelByRoleId(id, Boolean.TRUE);
@@ -69,7 +84,7 @@ public class WebRoleServiceImpl extends BasicService<Role> implements WebRoleSer
     }
 
     /**
-     * 角色的权限列表中的权限是否存在
+     * 判断角色的权限列表中的权限是否在数据库中存在
      *
      * @param permissionList
      * @return 1：存在  0：不存在
@@ -99,20 +114,23 @@ public class WebRoleServiceImpl extends BasicService<Role> implements WebRoleSer
             throw new Exception("角色名不可为空");
         } else if (roleRepository.findByRoleName(roleDto.getRoleName()) != null) {
             throw new Exception("该角色名已存在");
+
+            //如果没有给新增角色分配权限
         } else if (roleDto.getPermissionList().size() == 0) {
             Role role = new Role();
             BeanUtils.copyProperties(roleDto, role);
             beforeAdd(role, createBy);
             roleRepository.save(role);
+
+            //如果有给新增角色分配权限
         } else {
             Role role = new Role();
             BeanUtils.copyProperties(roleDto, role);
             beforeAdd(role, createBy);
             roleRepository.save(role);
 
-            //将权限新增到表中
+            //将权限新增到数据库的表中
             RolePermission rolePermission = new RolePermission();
-
             rolePermission.setRoleId(role.getId());
             for (Long permissionId : roleDto.getPermissionList()) {
 
@@ -126,7 +144,7 @@ public class WebRoleServiceImpl extends BasicService<Role> implements WebRoleSer
     }
 
     /**
-     * 删除一个列表
+     * 删除一个列表的角色
      *
      * @param idList
      * @throws Exception
@@ -148,6 +166,8 @@ public class WebRoleServiceImpl extends BasicService<Role> implements WebRoleSer
     @Override
     public void delete(Long id) throws Exception {
         if (id != null && roleRepository.findByIdEquals(id) != null) {
+
+            //先删除角色的权限
             deletePermission(id);
 
 

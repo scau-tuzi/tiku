@@ -148,7 +148,6 @@ import { changePaper } from "../api/Paper";
 //编辑操作
 function handleEdit(index, row) {
   console.log(index, row);
-  // alert(index+row.problem+row.answer),
   //转到ModifyProblem页面
   this.$router.push({
     path: "/ModifyProblem",
@@ -161,9 +160,6 @@ function handleEdit(index, row) {
 }
 //删除单行问题
 function handleDelete(index) {
-  console.log("要删除的下标---");
-  console.log(index);
-  console.log(this.$store.state.allProblem[index]);
   this.$confirm("确定删除该问题?", "提示", {
     confirmButtonText: "确定",
     cancelButtonText: "取消",
@@ -173,15 +169,14 @@ function handleDelete(index) {
     delId.push(this.$store.state.allProblem[index].problem.id); //获取要删除的问题id
     delProblem(delId, b => {
       if (b.code === "ok") {
-        alert("删除成功");
+        this.getData(this.listPageNumber - this.del);
+        this.$message({ type: "warning ", message: "删除成功!" });
       }
-      // this.$router.go(0); //页面刷新（要加上）
-      this.getData(this.listPageNumber - this.del);
     });
   });
 }
 function handleSelectionChange(val) {
-  console.log("??", val);
+  // console.log("??", val);
   this.tableChecked = val;
 }
 function batchDelete(rows) {
@@ -196,35 +191,27 @@ function batchDelete(rows) {
     type: "warning"
   })
     .then(() => {
-      //alert('submit!');
       delProblem(delId, b => {
         if (b.code === "ok") {
-          this.$message({ type: "info", message: "已取消删除" });
+          this.del = delId.length === this.listLenght ? 1 : this.del;
+          this.getData(this.listPageNumber - this.del);
+          this.$message({ type: "success", message: "删除成功!" });
         }
-        // this.$router.go(0); //页面刷新（要加上）
-        this.del = delId.length === this.listLenght ? 1 : this.del;
-        // console.log(delId);
-        this.getData(this.listPageNumber - this.del);
       });
     })
     .catch(() => {
-      this.$message({
-        type: "info",
-        message: "已取消删除"
-      });
+      this.$message({ type: "info", message: "已取消删除" });
     });
 }
 //批量修改标签
 function modifyBatchTags() {
   let rows = this.tableChecked;
   let modifyProblems = [];
-  // console.log("batchDelete--",rows);
   for (var i = 0; i < this.tableData.length; i++) {
     //获取选中项id
     for (var j = 0; j < rows.length; j++) {
       if (this.tableData[i].problem === rows[j].problem) {
         //获取选中的问题id
-        // delIndex.push(i);
         this.$store.state.allProblem[i].tags = [];
         this.value_batch.forEach(v => {
           this.$store.state.allProblem[i].tags.push({
@@ -238,11 +225,18 @@ function modifyBatchTags() {
   for (var k = 0; k < modifyProblems.length; k++) {
     changeProblem(modifyProblems[k], b => {
       if (b.code !== "ok") {
-        alert("修改失败" + b.data);
+        this.$message({ type: "error", message: "修改失败! " + b.data });
+      } else {
+        this.$message({
+          type: "success",
+          message: "修改成功! 可去审核列表查看"
+        });
       }
     });
   }
-  this.$router.go(0); //页面刷新（要加上）
+  this.del = modifyProblems.length === this.listLenght ? 1 : this.del;
+  this.getData(this.listPageNumber - this.del);
+  // this.$router.go(0); //页面刷新（要加上）
 }
 function filterTag(value, row) {
   return row.tag === value;
@@ -327,28 +321,31 @@ function showTags(index) {
 //修改某一行问题的标签
 function modifyTag() {
   let selectedProblem = this.$store.state.allProblem[this.index_tmp];
-  console.log("test change1!--");
-  console.log(selectedProblem);
+  // console.log("test change1!--");
+  // console.log(selectedProblem);
   selectedProblem.tags = [];
   this.value.forEach(v => {
     selectedProblem.tags.push({
       value: v
     });
   });
-  console.log("test change2!--");
-  console.log(selectedProblem);
+  // console.log("test change2!--");
+  // console.log(selectedProblem);
   changeProblem(selectedProblem, b => {
     if (b.code === "ok") {
-      alert("修改成功");
-      // this.$router.go(0); //页面刷新（要加上）
+      this.getData(this.listPageNumber - this.del);
+      this.$message({
+        type: "success",
+        message: "修改成功! 可去审核列表查看"
+      });
     } else {
-      alert("修改失败" + b.data);
+      this.$message({ type: "error", message: "修改失败!" + b.data });
     }
   });
 }
 //获取全部标签（选择器下拉窗口里用）
 function getTags() {
-  console.log("getTag!");
+  // console.log("getTag!");
   var _this = this;
   let callback = (pd, size) => {
     this.$store.commit("setNewCommits", pd);
@@ -361,7 +358,7 @@ function getTags() {
     });
   };
   getTagsList(0, callback, 0);
-  console.log(this.options);
+  // console.log(this.options);
 }
 
 export default {

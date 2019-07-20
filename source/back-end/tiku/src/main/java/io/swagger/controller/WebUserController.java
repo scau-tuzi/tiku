@@ -80,6 +80,7 @@ public class WebUserController extends WebBasicController{
     public BasicResponse list(@RequestParam Integer pageNumber, @RequestParam Integer pageSize) {
         BasicResponse basicResponse = new BasicResponse();
 
+        //判断传入页码跟页大小是否正确，不正确则设置一个默认值
         pageSize = (pageSize < 1 || pageSize > 100 ? 100 : pageSize);
         pageNumber = (pageNumber < 0 ? 0 : pageNumber);
 
@@ -103,9 +104,9 @@ public class WebUserController extends WebBasicController{
     public BasicResponse update(@RequestBody UserDto userDto) {
         BasicResponse basicResponse = new BasicResponse();
 
+
         Long updateBy = super.getUserId();
         try {
-
             webUserService.update(userDto, updateBy);
             basicResponse.setData("更改用户成功");
         } catch (Exception e) {
