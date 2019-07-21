@@ -130,17 +130,22 @@
           // 将问题和答案放在当前组件的数据内
           this.ruleForm.ti = selectedProblem.problem.problemText;
           this.ruleForm.answer = selectedProblem.answer.answerText;
-          for (let i = 0; i < selectedProblem.tags.length; i++) {
-            this.ruleForm.tags.push(selectedProblem.tags[i].value);
+          if(selectedProblem.tags!=null && selectedProblem.tags!==undefined && selectedProblem.tags.length>0){
+            for (let i = 0; i < selectedProblem.tags.length; i++) {
+              this.ruleForm.tags.push(selectedProblem.tags[i].value);
+            }
           }
           let j = 1;
-          for (let data in selectedProblem.extData) {
-            console.log("show data");
-            console.log(data);
-            this.OptionNum++;
-            this.form.text[j++] = selectedProblem.extData[data];
-            console.log(this.form.text[j]);
+          if(selectedProblem.extData!=null && selectedProblem.extData!==undefined){
+            Object.keys(selectedProblem.extData).forEach((k)=>{
+              this.form.option[j]=k     ;
+              this.form.text[j]=selectedProblem.extData[k];
+              j++
+            });
+            this.OptionNum=j-1;
           }
+
+
           console.log("show this.form");
           console.log(this.form);  
         },

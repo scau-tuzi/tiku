@@ -135,6 +135,7 @@ function getTags() {
 }
 
 function goback() {
+  this.$store.commit("setUseLastPage",true);//使用保存的页数
   this.$router.go(-1);
 }
 

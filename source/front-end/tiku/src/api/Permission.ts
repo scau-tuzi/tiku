@@ -31,5 +31,6 @@ function addPermission(data:PermissionInfo, callback: (p: BasicResponse) => void
 }
 export {
   getPermissionTree,
-  updatePermission
+  updatePermission,
+  addPermission
 }

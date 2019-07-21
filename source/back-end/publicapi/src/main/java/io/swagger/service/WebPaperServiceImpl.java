@@ -10,6 +10,7 @@ import io.swagger.pojo.dao.Tag;
 import io.swagger.pojo.dao.repos.PaperItemRepository;
 import io.swagger.pojo.dao.repos.PaperRepository;
 import io.swagger.pojo.dao.repos.PaperTagRepository;
+import io.swagger.pojo.dao.repos.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class WebPaperServiceImpl extends BasicService<Paper> implements WebPaperService {
@@ -42,6 +44,12 @@ public class WebPaperServiceImpl extends BasicService<Paper> implements WebPaper
 
     @Autowired
     private PaperItemRepository paperItemRepository;
+
+    @Autowired
+    private TagRepository tagRepository;
+
+    @Autowired
+    private WebTagService webTagService;
 
     @Override
     public Map<String, Object> getAll(Integer pageNumber, Integer pageSize, Boolean isDeep, Boolean isDel) {
@@ -109,8 +117,9 @@ public class WebPaperServiceImpl extends BasicService<Paper> implements WebPaper
          * 新增试卷标签
          */
         if (tagList != null && tagList.size() > 0) {
+            List<Tag> ts = getTagValues(tagList);
             List<PaperTag> paperTagList = new ArrayList<>();
-            for (Tag tag : tagList) {
+            for (Tag tag : ts) {
                 PaperTag paperTag = new PaperTag();
                 paperTag.setTagId(tag.getId());
                 paperTag.setPaperId(paper.getId());
@@ -119,6 +128,11 @@ public class WebPaperServiceImpl extends BasicService<Paper> implements WebPaper
             webPaperTagService.addAll(paperTagList, createBy);
         }
         return paper.getId();
+    }
+
+    private List<Tag> getTagValues(List<Tag> tagList) {
+        List<String> values = tagList.stream().map((t) -> t.getValue()).filter((ts) -> ts != null && ts.length() > 0).collect(Collectors.toList());
+        return webTagService.getTagsByValueList(values);
     }
 
     @Override
@@ -172,11 +186,12 @@ public class WebPaperServiceImpl extends BasicService<Paper> implements WebPaper
         if (tagList != null && tagList.size() > 0) {
             //先删除已关联的标签关系
             paperTagRepository.deleteAllByPaperIdEquals(paper.getId());
+            List<Tag> ts = getTagValues(tagList);
 
             //再添加重新关联的标签信息
             List<PaperTag> paperTagList = new ArrayList<>();
 
-            for (Tag tag : tagList) {
+            for (Tag tag : ts) {
                 PaperTag paperTag = new PaperTag();
                 paperTag.setPaperId(paper.getId());
                 paperTag.setTagId(tag.getId());
