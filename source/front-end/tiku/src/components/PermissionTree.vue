@@ -37,6 +37,7 @@
     methods: {
       handleCheckChange(data, checked, indeterminate) {
         //实现单选功能
+        console.log('这三是什么？-----');
         console.log(data, checked, indeterminate);
         if(checked===true){
           //最多只有一个被选中

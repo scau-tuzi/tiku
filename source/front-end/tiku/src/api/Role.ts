@@ -39,7 +39,7 @@ function addRole(role: RoleInfo, callback: (b: BasicResponse) => void) {
  * @param roleId 
  * @param callback 
  */
-function delRole(roleId: number, callback: (b: BasicResponse) => void) {
+function delRole(roleId: number[], callback: (b: BasicResponse) => void) {
     axios
         .post("/api/role/delete", roleId)
         .then(res => {
