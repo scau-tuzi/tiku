@@ -123,6 +123,9 @@ public class WebPermissionServiceImpl extends BasicService implements WebPermiss
         HashMap<Long,PermissionDto> tree=new HashMap<>();
 
         all.forEach((p)->{
+            if(p.getIsDel() || p.getId()==0){
+                return;
+            }
             PermissionDto pdto = new PermissionDto();
             BeanUtils.copyProperties(p, pdto);
             tree.put(pdto.getId(),pdto);
