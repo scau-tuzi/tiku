@@ -11,7 +11,7 @@
     <el-row class="bar">
     </el-row>
     <el-row>
-      <PermissionTable :onEdit=this.onEdit class="tree"></PermissionTable>
+      <PermissionTable  :onDelete=this.onDelete :onEdit=this.onEdit class="tree"></PermissionTable>
     </el-row>
 
     <el-dialog
@@ -39,6 +39,8 @@
 <script>
   import PermissionTable from "../../components/PermissionTable";
   import PermissionInput from "../../components/PermissionInput"
+  import {deletePermissions} from "../../api/Permission";
+
   export default {
     name: "PermissionTreePage",
     components: {PermissionTable,PermissionInput},
@@ -55,6 +57,17 @@
         console.log(row);
         this.editDialogFormVisible=true;
         this.rowData=row;
+      },
+      onDelete(index,row){
+        console.log(row);
+        deletePermissions([row.id],(b)=>{
+          if(b.code ==="ok"){
+            alert("删除成功")
+            this.$router.go(0)
+          }else{
+            alert("删除失败")
+          }
+        })
       },
       onNewButton(){
         this.newDialogFormVisible=true;

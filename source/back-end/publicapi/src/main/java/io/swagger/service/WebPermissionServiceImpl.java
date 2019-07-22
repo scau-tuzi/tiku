@@ -55,7 +55,7 @@ public class WebPermissionServiceImpl extends BasicService implements WebPermiss
             throw new Exception("url不可为空");
         } else if (permission.getParentPermission() == null) {
             throw new Exception("父权限不可为空");
-        } else if (!permissionRepository.selectParentPermissons().contains(permissionRepository.findByIdEquals(permission.getParentPermission()))) {
+        } else if (!permissionRepository.existsById(permission.getParentPermission())) {
             throw new Exception("父权限不存在");
         } else if (permissionRepository.findByName(permission.getName()) != null) {
             throw new Exception("权限名已存在");
@@ -95,9 +95,14 @@ public class WebPermissionServiceImpl extends BasicService implements WebPermiss
     @Override
     public void delete(Long id) throws Exception {
         if (id != null && permissionRepository.findByIdEquals(id) != null) {
+            //存在,先删除子权限
+            List<Permission> permissions = permissionRepository.selectChildPermissons(id);
+            for (Permission p : permissions) {
+                delete(p.getId());
+            }
             deleteBasicInfo(id);
         } else {
-            throw new Exception("该角色id不存在");
+            throw new Exception("该权限id不存在");
         }
     }
 
