@@ -186,7 +186,7 @@ export default {
       });
     },
     handleSelectionChange(val) {
-      console.log("handleSelectionChange--", val); //选中项
+      // console.log("handleSelectionChange--", val); //选中项
       this.tableChecked = val;
     },
     //获取角色列表（名称、权限）
@@ -200,9 +200,9 @@ export default {
       let callback = (pd, size) => {
         this.listSize = size * 10;
         var res = [];
-        console.log("get it");
-        console.log(pd);
-        console.log("finish!");
+        // console.log("get it");
+        // console.log(pd);
+        // console.log("finish!");
         this.$store.commit("setNewRoles", pd);
         // console.log(this.$store.state.allRole);
         // console.log(this.$store.state.commits[0].id);
@@ -238,7 +238,6 @@ export default {
     },
     //提交编辑
     editSubmit: function() {
-      // alert(this.id_tmp);
       let newRole = {
         id: this.id_tmp,
         roleName: this.form_edit.name,
@@ -246,11 +245,12 @@ export default {
       };
       changeRole(newRole, b => {
         if (b.code === "ok") {
-          alert("添加成功");
+          this.getData(this.listPageNumber);
+          this.$message({ type: "success", message: b.data });
           // todo 返回上一页
-          this.$router.go(0); //页面刷新（要加上）
+          //页面刷新（要加上）
         } else {
-          alert("添加失败" + b.data);
+          this.$message({ type: "error", message: b.data });
         }
       });
     },
@@ -274,30 +274,26 @@ export default {
         type: "warning"
       })
         .then(() => {
-          console.log("删除角色");
-          console.log(this.$store.state.allRole[index]);
-          //alert('submit!');
+          // console.log("删除角色");
+          // console.log(this.$store.state.allRole[index]);
           let roleId = [];
           roleId.push(this.$store.state.allRole[index].id);
           // let roleId=this.$store.state.allRole[index].id;
           delRole(roleId, b => {
             if (b.code === "ok") {
-              alert("删除成功");
+              this.getData(this.listPageNumber);
+              this.$message({ type: "success", message: b.data });
             }
-            this.$router.go(0); //页面刷新（要加上）
           });
         })
         .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
+          this.$message({ type: "info", message: "已取消删除" });
         });
     },
     //批量删除，待测试 Request method 'POST' not supported
     batchDelete: function(rows) {
-      console.log("看看批量删除拿到的是啥----");
-      console.log(rows);
+      // console.log("看看批量删除拿到的是啥----");
+      // console.log(rows);
       this.$confirm("确定批量删除角色?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -309,18 +305,15 @@ export default {
             id: row.id
           });
         });
-        console.log("看看批量删除拿到的是啥id----");
-        console.log(batchDelId);
+        // console.log("看看批量删除拿到的是啥id----");
+        // console.log(batchDelId);
         delRole(batchDelId, b => {
           if (b.code === "ok") {
-            alert("删除成功");
+            this.getData(this.listPageNumber);
+            this.$message({ type: "success", message: b.data });
           }
-          this.$router.go(0); //页面刷新（要加上）
         }).catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
+          this.$message({ type: "info", message: "已取消删除" });
         });
       });
     },
@@ -376,21 +369,21 @@ export default {
 
     //添加角色的确定
     onSubmit() {
-      console.log("all?----------");
-      console.log(this.$refs.tree.getCheckedKeys());
-      console.log("role?----------");
-      console.log(this.form.name);
+      // console.log("all?----------");
+      // console.log(this.$refs.tree.getCheckedKeys());
+      // console.log("role?----------");
+      // console.log(this.form.name);
       let newRole = {
         roleName: this.form.name,
         permissionList: this.$refs.tree.getCheckedKeys()
       };
       addRole(newRole, b => {
         if (b.code === "ok") {
-          alert("添加成功");
+          this.getData(this.listPageNumber);
+          this.$message({ type: "success", message: b.data });
           // todo 返回上一页
-          this.$router.go(0); //页面刷新（要加上）
         } else {
-          alert("添加失败" + b.data);
+          this.$message({ type: "error", message: b.data });
         }
       });
     }
