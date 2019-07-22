@@ -58,8 +58,8 @@
     <!-- 添加角色窗口 -->
     <el-dialog title="添加角色" :visible.sync="dialogFormVisible_add">
       <el-form :model="form">
-        <el-form-item label="角色名称" :label-width="formLabelWidth">
-          <el-input v-model="form.name" autocomplete="off"></el-input>
+        <el-form-item label="角色名称" >
+          <el-input v-model="form.name" ></el-input>
         </el-form-item>
         <el-form-item>
           <label>选择权限</label>
@@ -84,8 +84,8 @@
     <!-- 编辑角色窗口 -->
     <el-dialog title="编辑角色" :visible.sync="dialogFormVisible_edit">
       <el-form :model="form_edit">
-        <el-form-item label="角色名称" :label-width="formLabelWidth">
-          <el-input v-model="form_edit.name" autocomplete="off"></el-input>
+        <el-form-item label="角色名称" >
+          <el-input v-model="form_edit.name" ></el-input>
         </el-form-item>
         <el-form-item>
           <label>选择权限</label>
@@ -155,7 +155,9 @@ export default {
       dialogFormVisible_add: false,
       dialogFormVisible_edit: false,
       form: {},
-      form_edit: {},
+      form_edit: {
+        name:""
+      },
       options: [],
       value: [],
       tableData: [
