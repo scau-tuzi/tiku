@@ -59,7 +59,7 @@
 </template>
 
 <script>
-  import {changeProblem, getProblems} from "../api/Problem";
+  import {changeProblem, delProblem, getProblems} from "../api/Problem";
 import ProblemFullData from "../data/model/ProblemFullData";
 import GeneralTable from "./GeneralTable";
 import verifyTableInfo from "../data/mock/VerifyTableInfoMock";
@@ -71,7 +71,10 @@ export default {
     handleButton(val) {
       if (val.method === "handleView") {
         this.handleView(val.index, val.row);
-      }else {
+      }else if(val.method==='handleDelete'){
+        this.handleDelete(val.index,val.row)
+      }
+      else {
         this.handleVerify(val.index,val.row)
       }
     },
@@ -88,6 +91,20 @@ export default {
         }
       });
     },
+    //删除操作
+    handleDelete(index,row){
+      console.log(this.$store.state.allProblem[index].problem.id);
+      let id=[];
+      id.push(this.$store.state.allProblem[index].problem.id);
+      delProblem(id,(b)=>{
+        if (b.code === "ok") {
+          alert("删除成功");
+          this.getData(0);
+        }else {
+          alert("删除失败"+b.data)
+        }
+      })
+    },
     //审核操作
     handleVerify(index,row){
       console.log(row.status);
@@ -96,7 +113,7 @@ export default {
       changeProblem(this.$store.state.allProblem[index],(b)=>{
         if (b.code === "ok") {
           alert("审核成功");
-          _this.getPaperData(0);
+          this.getData(0);
         }else {
           alert("审核失败"+b.data)
         }

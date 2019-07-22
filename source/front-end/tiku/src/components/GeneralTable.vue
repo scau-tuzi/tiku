@@ -14,13 +14,20 @@
                          :label="item.label"
                          :prop="item.prop"
                          :fixed="item.fixed==='left'?'left':null"
-                         :type="item.type==='selection'?'selection':null"
+                         :type="item.type==='selection'?'selection':null||item.type==='expand'?'expand':null"
                          :width="item.width">
             <template v-if="item.specialType==='duoji'">
                 <el-table-column v-for="(f,index) in tableInfo.fieldInfo" v-bind:key="index" :prop="f.keyname"
                                  :label="f.title">
                 </el-table-column>
             </template>
+          <template v-if="item.type==='expand'">
+            <el-form label-position="left" inline class="demo-table-expand">
+              <el-form-item label="商品名称">
+<!--                <span>{{ props.row.name }}</span>-->
+              </el-form-item>
+            </el-form>
+          </template>
             <el-table-column
                     v-else-if="item.specialType==='tag'"
                     prop="tag"
@@ -293,4 +300,17 @@
   .kuang{
     width: 400px;
   }
+.demo-table-expand {
+  font-size: 0;
+}
+.demo-table-expand label {
+  width: 90px;
+  color: #99a9bf;
+}
+.demo-table-expand .el-form-item {
+  margin-right: 0;
+  margin-bottom: 0;
+  width: 50%;
+}
+
 </style>

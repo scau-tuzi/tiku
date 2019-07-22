@@ -267,7 +267,11 @@
         viewPaper(index,row){
           console.log(row)
           this.$store.commit("setPaperEditData", row);
-          this.$router.push({path: '/ViewPaper'})
+          this.$router.push({path: '/ViewPaper',
+            query:{
+            isViewOnePro: false,
+              isViewPaper:true,}
+          });
         },
         showTags(row,col,index){
           this.value=row.tag;
