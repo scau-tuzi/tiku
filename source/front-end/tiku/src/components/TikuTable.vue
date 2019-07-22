@@ -29,7 +29,7 @@
           style="width: 100%"
           @selection-change="this.handleSelectionChange"
         >
-          <el-table-column prop="id"  type="selection" width="55"></el-table-column>
+          <el-table-column prop="id" type="selection" width="55"></el-table-column>
           <el-table-column fixed="left" prop="problem" label="问题" width="300"></el-table-column>
           <el-table-column prop="answer" label="答案" width="300"></el-table-column>
           <el-table-column prop="sound" label="语音" width="100"></el-table-column>
@@ -72,15 +72,15 @@
       </el-row>
     </el-main>
     <el-footer align="center">
-      <el-pagination
-        background
-        layout="prev, pager, next"
-        :total="this.listSize"
-        @current-change="this.handlechange"
-      ></el-pagination>
+      <HistoryPagination :listSize="this.listSize"
+                         :handlechange="this.handlechange"
+                         :handleSizeChange="this.handleSizeChange"
+                         ref="pager"
+      >
+      </HistoryPagination>
     </el-footer>
     <el-dialog title="修改标签" :visible.sync="centerDialogVisible_single" width="30%" center>
-      <template>
+      <div align="center">
         <el-select
           v-model="value"
           multiple
@@ -98,14 +98,17 @@
             :value="item.value"
           ></el-option>
         </el-select>
+      </div>
+      <el-row></el-row>
+      <div align="center">
         <span slot="footer" class="dialog-footer">
           <el-button @click="centerDialogVisible_single = false">取 消</el-button>
           <el-button type="primary" @click="centerDialogVisible_single = false;modifyTag()">确 定</el-button>
         </span>
-      </template>
+      </div>
     </el-dialog>
     <el-dialog title="批量修改标签" :visible.sync="centerDialogVisible_batch" width="30%" center>
-      <template>
+      <div align="center">
         <el-select
           v-model="value_batch"
           multiple
@@ -123,11 +126,14 @@
             :value="item.value"
           ></el-option>
         </el-select>
+      </div>
+      <el-row></el-row>
+      <div align="center">
         <span slot="footer" class="dialog-footer">
           <el-button @click="centerDialogVisible_batch = false">取 消</el-button>
           <el-button type="primary" @click="centerDialogVisible_batch = false;modifyBatchTags()">确 定</el-button>
         </span>
-      </template>
+      </div>
     </el-dialog>
   </el-container>
 </template>
@@ -138,11 +144,12 @@ import ProblemFullData from "../data/model/ProblemFullData";
 import { getTagsList, addTags, delTag } from "../api/Tag";
 import { AllFieldInfo } from "../data/mock/FiledInfoMock";
 import { changePaper } from "../api/Paper";
+import HistoryPagination from "./HistoryPagination";
 
 //编辑操作
 function handleEdit(index, row) {
   console.log(index, row);
-  // alert(index+row.problem+row.answer),
+  this.$store.commit("setLastPageNumber",this.currentPage);
   //转到ModifyProblem页面
   this.$router.push({
     path: "/ModifyProblem",
@@ -155,9 +162,6 @@ function handleEdit(index, row) {
 }
 //删除单行问题
 function handleDelete(index) {
-  console.log("要删除的下标---");
-  console.log(index);
-  console.log(this.$store.state.allProblem[index]);
   this.$confirm("确定删除该问题?", "提示", {
     confirmButtonText: "确定",
     cancelButtonText: "取消",
@@ -167,60 +171,49 @@ function handleDelete(index) {
     delId.push(this.$store.state.allProblem[index].problem.id); //获取要删除的问题id
     delProblem(delId, b => {
       if (b.code === "ok") {
-        alert("删除成功");
+        this.getData(this.listPageNumber - this.del);
+        this.$message({ type: "warning ", message: "删除成功!" });
       }
-      // this.$router.go(0); //页面刷新（要加上）
-      this.getData(this.listPageNumber - this.del);
     });
   });
 }
 function handleSelectionChange(val) {
-console.log("??",val);
+  // console.log("??", val);
   this.tableChecked = val;
 }
 function batchDelete(rows) {
-  console.log("batchDelete--", rows);
+  //批量删除
   let delId = [];
-  for(var i=0;i<rows.length;i++){
-    delId.push(rows[i].id)
+  for (var i = 0; i < rows.length; i++) {
+    delId.push(rows[i].id);
   }
-  // console.log(delId)
-  // console.log("4--",delId);
   this.$confirm("确定批量删除问题?", "提示", {
     confirmButtonText: "确定",
     cancelButtonText: "取消",
     type: "warning"
   })
     .then(() => {
-      //alert('submit!');
       delProblem(delId, b => {
         if (b.code === "ok") {
-          alert("删除成功");
+          this.del = delId.length === this.listLenght ? 1 : this.del;
+          this.getData(this.listPageNumber - this.del);
+          this.$message({ type: "success", message: "删除成功!" });
         }
-        // this.$router.go(0); //页面刷新（要加上）
-        this.del = delId.length === this.listLenght ? 1 : this.del;
-        // console.log(delId);
-        this.getData(this.listPageNumber - this.del);
       });
     })
     .catch(() => {
-      this.$message({
-        type: "info",
-        message: "已取消删除"
-      });
+      this.$message({ type: "info", message: "已取消删除" });
     });
 }
 //批量修改标签
 function modifyBatchTags() {
   let rows = this.tableChecked;
   let modifyProblems = [];
-  // console.log("batchDelete--",rows);
   for (var i = 0; i < this.tableData.length; i++) {
     //获取选中项id
     for (var j = 0; j < rows.length; j++) {
       if (this.tableData[i].problem === rows[j].problem) {
         //获取选中的问题id
-        // delIndex.push(i);
         this.$store.state.allProblem[i].tags = [];
         this.value_batch.forEach(v => {
           this.$store.state.allProblem[i].tags.push({
@@ -234,11 +227,18 @@ function modifyBatchTags() {
   for (var k = 0; k < modifyProblems.length; k++) {
     changeProblem(modifyProblems[k], b => {
       if (b.code !== "ok") {
-        alert("修改失败" + b.data);
+        this.$message({ type: "error", message: "修改失败! " + b.data });
+      } else {
+        this.$message({
+          type: "success",
+          message: "修改成功! 可去审核列表查看"
+        });
       }
     });
   }
-  this.$router.go(0); //页面刷新（要加上）
+  this.del = modifyProblems.length === this.listLenght ? 1 : this.del;
+  this.getData(this.listPageNumber - this.del);
+  // this.$router.go(0); //页面刷新（要加上）
 }
 function filterTag(value, row) {
   return row.tag === value;
@@ -247,6 +247,7 @@ function jumpInput() {
   //this.$router.push("/cart")
 
   //传递的参数用{{ $route.query.goodsId }}获取
+  this.$store.commit("setLastPageNumber",this.currentPage);
   this.$router.push({ path: "/InputTiku" });
   //this.$router.go(-2)
   //后退两步
@@ -267,6 +268,7 @@ function handleInputConfirm() {
 
 function handlechange(currentPage) {
   //获取题目
+  this.currentPage=currentPage
   this.getData(currentPage - 1);
 }
 function getData(currentPage) {
@@ -299,7 +301,7 @@ function getData(currentPage) {
         sound: "",
         tag: ts
       };
-      if (v.extData !== undefined) {
+      if (v.extData !== null&&v.extData !== undefined) {
         Object.keys(v.extData).forEach(key => {
           ress[key] = v.extData[key];
         });
@@ -323,28 +325,31 @@ function showTags(index) {
 //修改某一行问题的标签
 function modifyTag() {
   let selectedProblem = this.$store.state.allProblem[this.index_tmp];
-  console.log("test change1!--");
-  console.log(selectedProblem);
+  // console.log("test change1!--");
+  // console.log(selectedProblem);
   selectedProblem.tags = [];
   this.value.forEach(v => {
     selectedProblem.tags.push({
       value: v
     });
   });
-  console.log("test change2!--");
-  console.log(selectedProblem);
+  // console.log("test change2!--");
+  // console.log(selectedProblem);
   changeProblem(selectedProblem, b => {
     if (b.code === "ok") {
-      alert("修改成功");
-      // this.$router.go(0); //页面刷新（要加上）
+      this.getData(this.listPageNumber - this.del);
+      this.$message({
+        type: "success",
+        message: "修改成功! 可去审核列表查看"
+      });
     } else {
-      alert("修改失败" + b.data);
+      this.$message({ type: "error", message: "修改失败!" + b.data });
     }
   });
 }
 //获取全部标签（选择器下拉窗口里用）
 function getTags() {
-  console.log("getTag!");
+  // console.log("getTag!");
   var _this = this;
   let callback = (pd, size) => {
     this.$store.commit("setNewCommits", pd);
@@ -357,14 +362,19 @@ function getTags() {
     });
   };
   getTagsList(0, callback, 0);
-  console.log(this.options);
+  // console.log(this.options);
+}
+function handleSizeChange(val) {
+  
 }
 
 export default {
   name: "TikuTable",
+  components: {HistoryPagination},
   datas: [],
   methods: {
     handleEdit,
+    handleSizeChange,
     handleDelete,
     handleSelectionChange,
     batchDelete,
@@ -393,6 +403,10 @@ export default {
     });
 
     this.fieldInfo = all;
+    if(this.$store.state.useLastPage){
+      this.$refs.pager.internalCurrentPage=this.$store.state.lastPageNumber;
+      this.$store.commit("setUseLastPage",false);//使用保存的页数
+    }
   },
   data() {
     return {
@@ -423,7 +437,8 @@ export default {
       options: [], //修改标签窗口选择器下拉的标签列表
       value: [], //修改标签窗口选择器里面的已选标签
       index_tmp: "", //选中修改标签的行index
-      value_batch: [] //批量修改标签窗口选择器里面的已选标签
+      value_batch: [], //批量修改标签窗口选择器里面的已选标签
+      currentPage:0
     };
   },
   // 搜索操作

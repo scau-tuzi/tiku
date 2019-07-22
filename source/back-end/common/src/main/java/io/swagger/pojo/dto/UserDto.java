@@ -3,6 +3,8 @@ package io.swagger.pojo.dto;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.util.List;
+
 @Data
 @Accessors(chain = true)
 public class UserDto {
@@ -15,5 +17,7 @@ public class UserDto {
 
     private String image;
 
-    private Long roleId;
+    private List<Long> roleIds;
+
+
 }

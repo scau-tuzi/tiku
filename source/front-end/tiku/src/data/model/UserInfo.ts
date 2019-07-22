@@ -25,6 +25,6 @@ interface UserInfo {
     /**
      * @roleId 用户角色id
      */
-    roleId?: number[]
+    roleIds?: number[]
 }
 export default UserInfo;

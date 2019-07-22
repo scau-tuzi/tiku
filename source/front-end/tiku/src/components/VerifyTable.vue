@@ -47,25 +47,32 @@
                 </el-row>
       </el-main>
       <el-footer align="center">
-        <el-pagination
-          background
-          layout="prev, pager, next"
-          :total="this.listSzie"
-          @current-change="this.handlerchange"
-        ></el-pagination>
+<!--        <el-pagination-->
+<!--          background-->
+<!--          layout="prev, pager, next"-->
+<!--          :total="this.listSzie"-->
+<!--          @current-change="this.handlerchange"-->
+<!--        ></el-pagination>-->
+
+        <HistoryPagination :listSize="this.listSize"
+                           :handlechange="this.handlerchange"
+                           ref="pager"
+        >
+        </HistoryPagination>
       </el-footer>
     </el-container>
   </div>
 </template>
 
 <script>
-  import {changeProblem, delProblem, getProblems} from "../api/Problem";
+  import {changeProblem, delProblem,checkProblem, getProblems} from "../api/Problem";
 import ProblemFullData from "../data/model/ProblemFullData";
 import GeneralTable from "./GeneralTable";
 import verifyTableInfo from "../data/mock/VerifyTableInfoMock";
+import HistoryPagination from "../components/HistoryPagination"
 export default {
   name: "VerifyTable",
-  components: { GeneralTable },
+  components: { GeneralTable,HistoryPagination },
   datas: [],
   methods: {
     handleButton(val) {
@@ -110,7 +117,8 @@ export default {
       console.log(row.status);
       console.log(verifyTableInfo.tableData[index].status)
       this.$store.state.allProblem[index].status.verifyStatus=1;
-      changeProblem(this.$store.state.allProblem[index],(b)=>{
+      let _this=this
+      checkProblem(this.$store.state.allProblem[index].problem.id,(b)=>{
         if (b.code === "ok") {
           alert("审核成功");
           this.getData(0);
@@ -167,7 +175,7 @@ export default {
   },
   data: function() {
     return {
-      listSzie: 0,
+      listSize: 0,
       verifyTableInfo,
       search: "",
       tableData: []

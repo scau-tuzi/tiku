@@ -32,6 +32,18 @@ function getProblems(pageNumber: number, callback: (Problems: ProblemFullData[],
  * @param problem 是一个有关于 problemFullData 的一个对象实例
  * @param callback  回调函数
  */
+// function addProblem(problem: ProblemFullData, callback: (b: BasicResponse) => void) {
+//     //增加问题方法--本地数据测试
+//     if (problem.problem.id === undefined) {
+//         problem.problem.id = Number(problemTemp[problemTemp.length - 1].problem.id) + 1;
+//     }
+//     problemTemp.push(problem);
+//     console.log("增加了题目");
+//     console.log(problemTemp);
+//     let response: BasicResponse = { code: 'ok' };
+//     callback(response);
+// }
+
 function addProblem(problem: ProblemFullData, callback: (b: BasicResponse) => void) {
     //线上
     axios
@@ -42,6 +54,15 @@ function addProblem(problem: ProblemFullData, callback: (b: BasicResponse) => vo
         })
 }
 
+function checkProblem(problemId: number, callback: (b: BasicResponse) => void) {
+  //线上
+  axios
+      .put("/api/problem/check?id="+problemId)
+      .then(res=>{
+        let response :BasicResponse=res.data;
+        callback(response)
+      })
+}
 
 /**
  * 删除题目方法
@@ -110,5 +131,6 @@ export {
     delProblem,
     findProbLemsByTags,
     findProblemsVaguely,
-    changeProblem
+    changeProblem,
+  checkProblem
 }      

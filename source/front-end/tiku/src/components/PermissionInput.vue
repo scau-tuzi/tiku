@@ -29,7 +29,7 @@
 
 <script>
   import PermissionTree from "./PermissionTree"
-  import {updatePermission} from "../api/Permission";
+  import {addPermission, updatePermission} from "../api/Permission";
   export default {
     name: "PermissionInput",
     components:{  PermissionTree},
@@ -56,33 +56,45 @@
       }
     },
     methods:{
-
       //事件函数
-
       onSelectChanged(id){
         this.parentId=id;
       },
       onSubmit(){
+        let me=this;
         console.log(this.parentId);
         let dto=this.getDtoWithoutId();
         if(!this.isAdd){
           dto.id=this.thisId,
           updatePermission(dto,(b)=>{
             //todo
+            if(b.code==="ok"){
+              me.$router.go(0)
+            }else{
+              alert("失败"+b.data)
+            }
           })
         }else{
-          //todo
-
+          addPermission(dto,(b)=>{
+            //todo
+            if(b.code==="ok"){
+              me.$router.go(0)
+            }else{
+              alert("失败"+b.data)
+            }
+          })
         }
       },
 
       //数据函数
       setAllData(){
-        this.selectValue=this.rowData.method;
-        this.name=this.rowData.name;
-        this.parentId=this.rowData.parentPermission;
-        this.path=this.rowData.url;
-        this.thisId=this.rowData.id;
+        if(!this.isAdd){
+          this.selectValue=this.rowData.method;
+          this.name=this.rowData.name;
+          this.parentId=this.rowData.parentPermission;
+          this.path=this.rowData.url;
+          this.thisId=this.rowData.id;
+        }
       },
       //辅助函数
       getDtoWithoutId(){

@@ -13,7 +13,7 @@ function getRoles(pageNumber: number, callback: (r: RoleInfo[]) => void, pageSiz
     axios
         .get("/api/role/list?pageNumber=" + pageNumber + "&pageSize=" + pageSize)
         .then(res => {
-            let lists: RoleInfo[] = res.data.data;
+            let lists: RoleInfo[] = res.data.data.roleDtoList;
             callback(lists)
         })
 }
@@ -39,7 +39,7 @@ function addRole(role: RoleInfo, callback: (b: BasicResponse) => void) {
  * @param roleId 
  * @param callback 
  */
-function delRole(roleId: number, callback: (b: BasicResponse) => void) {
+function delRole(roleId: number[], callback: (b: BasicResponse) => void) {
     axios
         .post("/api/role/delete", roleId)
         .then(res => {

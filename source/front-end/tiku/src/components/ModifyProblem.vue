@@ -10,7 +10,7 @@
       >
         <el-form-item>
           <el-button type="primary" @click="submitForm(ruleForm)">保存</el-button>
-          <el-button @click="back">返回</el-button>
+          <el-button @click="goback()">返回</el-button>
         </el-form-item>
         <el-form-item label="题目" prop="ti">
           <el-input type="textarea" :rows="5" v-model="ruleForm.problem"></el-input>
@@ -134,8 +134,14 @@ function getTags() {
   console.log(this.options);
 }
 
+function goback() {
+  this.$store.commit("setUseLastPage",true);//使用保存的页数
+  this.$router.go(-1);
+}
+
 //保存修改
 function submitForm(formName) {
+  let _this = this;
   const problemIndex = this.$route.query.modifyIndex;
   let selectedProblem = this.$store.state.allProblem[problemIndex];
   console.log("test change1!--");
@@ -165,10 +171,13 @@ function submitForm(formName) {
   });
   changeProblem(selectedProblem, b => {
     if (b.code === "ok") {
-      alert("修改成功");
+      this.$message({ type: "success", message: "修改成功!" });
+      setTimeout(function() {
+        _this.$router.replace({ path: "/VerifyTable" });
+      }, 500);
       // todo 返回上一页
     } else {
-      alert("修改失败" + b.data);
+      this.$message({ type: "error", message: "修改失败!\n" + b.data });
     }
   });
 }
@@ -280,6 +289,7 @@ export default {
   methods: {
     back,
     getTags,
+    goback,
     submitForm,
     resetForm,
     handleRemove,
