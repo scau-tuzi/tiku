@@ -140,7 +140,7 @@ export default {
       },
       treeData: [], //添加角色的权限树
       treeData_edit: [], //编辑角色的权限树
-      selectId: [],
+      // selectId: [],
       defaultProps: {
         label: "name",
         children: "childPermissions"
@@ -157,8 +157,7 @@ export default {
       form_edit: {},
       options: [],
       value: [],
-      tableData: [
-      ],
+      tableData: [],
       permissionId: [],
       permissionName: []
       // auth_id_tmp:[],
@@ -308,30 +307,33 @@ export default {
         let auth_id_tmp = [];
         let auth_name_tmp = [];
         let auth_child_tmp = [];
-        pd.filter(v => {
-          //取父权限的数据
-          auth_id_tmp.push(v.id);
-          auth_name_tmp.push(v.name);
-          auth_child_tmp.push(v.childPermissions);
-        });
-        /**
-         * hu获取所以权限内容
-         */
+
         let GAP = function(tmp) {
           if (tmp !== null) {
             for (let i = 0; i < tmp.length; i++) {
-              auth_id_tmp.push(tmp[i].id);
-              auth_name_tmp.push(tmp[i].name);
-
               if (tmp[i].childPermissions !== null) {
                 GAP(tmp[i].childPermissions);
+              } else {
+                auth_id_tmp.push(tmp[i].id);
+                auth_name_tmp.push(tmp[i].name);
               }
             }
           }
         };
-        for (let i = 0; i < auth_child_tmp.length; i++) {
-          GAP(auth_child_tmp[i]);
-        }
+
+        pd.filter(v => {
+          /**
+           * hu获取所以权限内容
+           * 当用户只拥有父权限下的某一个子权限的时候,不应该展示父权限???
+           */
+          if (v.childPermissions !== null) {
+            GAP(v.childPermissions);
+          } else {
+            auth_id_tmp.push(v.id);
+            auth_name_tmp.push(v.name);
+          }
+        });
+
         _this.permissionId = auth_id_tmp;
         _this.permissionName = auth_name_tmp;
       };
