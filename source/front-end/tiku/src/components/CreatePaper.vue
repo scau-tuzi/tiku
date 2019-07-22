@@ -47,7 +47,7 @@
       <el-row>
         <el-col :span=12.5 style="margin-right: 10px">
           <GeneralTable usePagination :handleChange="leftTablePageChange" :listSize="listSize"
-                        v-bind:table-info="leftTable"  v-on:handleButton="handleButton" ></GeneralTable>
+                        v-bind:table-info="leftTable"  v-on:handleButton="handleButtonLeft" ></GeneralTable>
         </el-col>
         <el-col :span=11>
           <GeneralTable :listSize="listSize" v-bind:table-info="createPaperOrderMock"  v-on:handleButton="handleButton"></GeneralTable>
@@ -132,6 +132,7 @@
           return;
         }
         let ts = [];
+        let ext=[];
         if (v.tags !== null) {
           for (let i = 0; i < v.tags.length; i++) {
             ts.push(v.tags[i].value);
@@ -142,12 +143,17 @@
             answerText: ""
           };
         }
-
+        if (v.extData!== null) {
+          for(let j=0;j<Object.keys(v.extData).length;j++){
+            ext.push(Object.keys(v.extData)[j]+":"+Object.values(v.extData)[j])
+          }
+        }
         let ress = {
           id: v.problem.id,
           problem: v.problem.problemText,
           answer: v.answer.answerText,
-          tag: ts
+          tag: ts,
+          choice:ext
         };
         res.push(ress);
       });
@@ -204,9 +210,31 @@
       querySearchAsync() {
         //todo
       },
-      handleView(a,b,c){
-        console.log("view")
-        console.log(a,b,c)
+      handleView(index,row){
+        // console.log(index, row),
+        // alert(index+row.problem+row.answer),
+        //转到ViewProblem页面
+        //console.log(modifyPaperOrderMock.tableData[index]);
+        this.$router.push({
+          path: "/ViewPaper",
+          //query对象获取参数
+          query: {
+            isViewOnePro: true,
+            isViewPaper:false,
+            problem: createPaperOrderMock.tableData[index]
+          }
+        });
+      },
+      handleViewLeft(index,row){
+        this.$router.push({
+          path: "/ViewPaper",
+          //query对象获取参数
+          query: {
+            isViewOnePro: true,
+            isViewPaper:false,
+            problem: this.leftTable.tableData[index]
+          }
+        });
       },
       handleDelete(i,r){
         console.log("view")
@@ -221,6 +249,13 @@
       handleButton(val){
         if(val.method==='handleView'){
           this.handleView(val.index,val.row)
+        }else if(val.method==='handleDelete'){
+          this.handleDelete(val.row,val.col,val.index)
+        }
+      },
+      handleButtonLeft(val){
+        if(val.method==='handleView'){
+          this.handleViewLeft(val.index,val.row);
         }else if(val.method==='handleDelete'){
           this.handleDelete(val.row,val.col,val.index)
         }

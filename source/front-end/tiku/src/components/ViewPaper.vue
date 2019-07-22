@@ -7,18 +7,31 @@
         <div slot="header" class="clearfix">
           <span>{{title}}</span>
         </div>
-        <div v-for="(item,index) in datas" :key="index" class="text item" style="margin-bottom: 20px">
-          {{index+1+"、"+item.problem+"（答案）"+item.answer}}
+        <template v-if="isViewPaper===true">
+          <div v-for="(item,index) in datas" :key="index" class="text item" style="margin-bottom: 20px">
+            {{index+1+"、"+item.problem+"（答案）"+item.answer}}
             <div style="margin: 20px 0;"></div>
-          <el-checkbox v-for="(choice,index) in item.choice" :key="index">
-            {{choice}}
-          </el-checkbox>
+            <el-checkbox v-for="(choice,index) in item.choice" :key="index">
+              {{choice}}
+            </el-checkbox>
+          </div>
+        </template>
+        <template v-if="isViewOnePro===true">
+          <div style="margin-bottom: 20px">
+            {{"1、"+problem.problem+"（答案）"+problem.answer}}
+            <div style="margin: 20px 0;"></div>
+            <el-checkbox v-for="(choice,index) in problem.choice" :key="index">
+              {{choice}}
+            </el-checkbox>
+          </div>
+        </template>
+
 <!--          <div>-->
 <!--            <el-checkbox v-for="f in AllFieldInfo">-->
 <!--              {{f.title+":"+item["choice_A"]}}-->
 <!--            </el-checkbox>-->
 <!--          </div>-->
-        </div>
+
       </el-card>
     </el-main>
   </el-container>
@@ -26,23 +39,53 @@
 </template>
 
 <script>
+  // //路由获取数据
+  // function getParams(){
+  //   var _this=this;
+  //   console.log(_this.$route.query.isViewOnePro);
+  //   const is = _this.$route.query.isViewOnePro;
+  //   this.isViewOnePro=is;
+  //   this.problem=_this.$route.query.problem;
+  // }
   import {AllFieldInfo} from "@/data/mock/FiledInfoMock"
     export default {
         name: "ViewPaper",
       mounted(){
           this.viewPaper()
       },
+      // 页面渲染前执行取路由带过来的参数
+      created(){
+        //getParams().bind(this).call();
+        this.getParams();
+      },
       data(){
           return{
             AllFieldInfo,
             title:"",
-            datas: []
+            datas: [],
+            problem:[],
+            isViewPaper:true,
+            isViewOnePro:false
           }
+      },
+      //监听路由变化
+      watch: {
+        '$route': 'getParams'
       },
       methods: {
         back() {
           this.$router.push({path: "/PaperList"})
         },
+        getParams(){
+          var _this=this;
+          console.log(_this.$route.query.isViewOnePro);
+          console.log(_this.$route.query.problem);
+          const is = _this.$route.query.isViewOnePro;
+          this.isViewOnePro=is;
+          this.isViewPaper=_this.$route.query.isViewPaper;
+          this.problem=_this.$route.query.problem;
+        },
+        //查看试卷获取数据
         viewPaper() {
           let s = this.$store.state.paperEditData;
           let p = this.$store.state.paperEditData.problems;
@@ -70,7 +113,10 @@
             console.log(this.datas)
             //console.log(ext)
           }
-        }
+        },
+      //路由获取数据
+      //getParams
+
 
   }
 </script>
