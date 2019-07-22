@@ -53,13 +53,13 @@
     },
     methods:{
       onEdit(index,row){
-        console.log("edit");
-        console.log(row);
+        // console.log("edit");
+        // console.log(row);
         this.editDialogFormVisible=true;
         this.rowData=row;
       },
       onDelete(index,row){
-        console.log(row);
+        // console.log(row);
         deletePermissions([row.id],(b)=>{
           if(b.code ==="ok"){
             alert("删除成功")

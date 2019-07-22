@@ -70,9 +70,10 @@
           updatePermission(dto,(b)=>{
             //todo
             if(b.code==="ok"){
-              me.$router.go(0)
+              me.$router.replace({path:"PermissionTreePage"})
+              // me.$router.go(0)
             }else{
-              alert("失败"+b.data)
+              this.$message({ type: "error", message: b.data });
             }
           })
         }else{
@@ -81,7 +82,7 @@
             if(b.code==="ok"){
               me.$router.go(0)
             }else{
-              alert("失败"+b.data)
+              this.$message({ type: "error", message: b.data });
             }
           })
         }
