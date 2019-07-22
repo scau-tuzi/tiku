@@ -230,8 +230,8 @@ export default {
           };
           res.push(ress);
         });
-        console.log("why?=--------");
-        console.log(res);
+        // console.log("why?=--------");
+        // console.log(res);
         _this.tableData = res;
       };
       getRoles(currentpage, callback);
@@ -254,6 +254,7 @@ export default {
         }
       });
     },
+
     //编辑，显示已有角色信息
     editRole: function(row, column, index) {
       this.form_edit.name = row.role;
@@ -264,6 +265,7 @@ export default {
       );
       this.id_tmp = this.$store.state.allRole[index].id;
     },
+
     //单行删除（待测试）Request method 'POST' not supported
     handleDelete: function(row, column, index) {
       this.$confirm("确定删除该角色?", "提示", {
@@ -338,17 +340,14 @@ export default {
       var _this = this;
       let callback = pd => {
         var res = [];
-        // console.log("get it");
-        // console.log(pd);
-        // console.log("finish!");
         this.$store.commit("setPermission", pd);
-        // console.log(this.$store.state.allRole);
-        // console.log(this.$store.state.commits[0].id);
         let auth_id_tmp = [];
         let auth_name_tmp = [];
         let auth_child_tmp = [];
         pd.filter(v => {
           //取父权限的数据
+          // console.log(v);
+
           auth_id_tmp.push(v.id);
           auth_name_tmp.push(v.name);
           auth_child_tmp.push(v.childPermissions);
@@ -356,28 +355,21 @@ export default {
         /**
          * hu获取所以权限内容
          */
-        let gg = function(tmp) {
+        let GAP = function(tmp) {
           for (let i = 0; i < tmp.length; i++) {
-            // console.log("gg = " + i);
-            // console.log(tmp[i]);
             auth_id_tmp.push(tmp[i].id);
             auth_name_tmp.push(tmp[i].name);
-            gg(tmp[i]);
+            if (tmp[i].childPermissions !== null) {
+              GAP(tmp[i].childPermissions);
+            }
           }
         };
         //取第二级的子权限数据
         for (let i = 0; i < auth_child_tmp.length; i++) {
-          gg(auth_child_tmp[i]);
-          // for (let j = 0; j < auth_child_tmp[i].length; j++) {
-          //   auth_id_tmp.push(auth_child_tmp[i][j].id);
-          //   auth_name_tmp.push(auth_child_tmp[i][j].name);
-          // }
+          GAP(auth_child_tmp[i]);
         }
         _this.permissionId = auth_id_tmp;
         _this.permissionName = auth_name_tmp;
-        // console.log("拿到权限吗？？---");
-        // console.log(_this.permissionId);
-        // console.log(_this.permissionName);
       };
       getPermissionTree(callback);
     },
