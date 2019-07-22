@@ -118,7 +118,6 @@
   </el-container>
 </template>
 <script>
-// import PermissionTree from "./PermissionTree"
 import { getRoles, changeRole, delRole, addRole } from "../../api/Role";
 import { getPermissionTree } from "../../api/Permission";
 export default {
@@ -161,15 +160,6 @@ export default {
       options: [],
       value: [],
       tableData: [
-        // {
-        //   id:'304958345',
-        //   role:'录入员',
-        //   authority:['录入题目','组卷']
-        // },{
-        //   id:'39850394',
-        //   role:'审核员',
-        //   authority:['审核题目']
-        // }
       ],
       permissionId: [],
       permissionName: []
@@ -188,7 +178,6 @@ export default {
       });
     },
     handleSelectionChange(val) {
-      console.log("handleSelectionChange--", val); //选中项
       this.tableChecked = val;
     },
     //获取角色列表（名称、权限）
@@ -196,18 +185,12 @@ export default {
       this.getData(currentpage - 1);
     },
     getData: function(currentpage) {
-      // console.log("change");
       this.listPageNumber = currentpage;
       var _this = this;
       let callback = (pd, size) => {
         this.listSize = size * 10;
         var res = [];
-        console.log("get it");
-        console.log(pd);
-        console.log("finish!");
         this.$store.commit("setNewRoles", pd);
-        // console.log(this.$store.state.allRole);
-        // console.log(this.$store.state.commits[0].id);
         pd.filter(v => {
           let author_id = [];
           let author_tmp = [];
@@ -232,15 +215,12 @@ export default {
           };
           res.push(ress);
         });
-        console.log("why?=--------");
-        console.log(res);
         _this.tableData = res;
       };
       getRoles(currentpage, callback);
     },
     //提交编辑
     editSubmit: function() {
-      // alert(this.id_tmp);
       let newRole = {
         id: this.id_tmp,
         roleName: this.form_edit.name,
@@ -248,24 +228,23 @@ export default {
       };
       changeRole(newRole, b => {
         if (b.code === "ok") {
-          alert("添加成功");
-          // todo 返回上一页
-          this.$router.go(0); //页面刷新（要加上）
+          this.getData(this.listPageNumber);
+          this.$message({ type: "success", message: b.data });
         } else {
-          alert("添加失败" + b.data);
+          this.$message({ type: "error", message: b.data });
         }
       });
     },
+
     //编辑，显示已有角色信息
     editRole: function(row, column, index) {
       this.form_edit.name = row.role;
-      // console.log("can i get authorityid?----");
-      // console.log(this.$store.state.allRole[index].permissionList);
       this.$refs.tree_edit.setCheckedKeys(
         this.$store.state.allRole[index].permissionList
       );
       this.id_tmp = this.$store.state.allRole[index].id;
     },
+
     //单行删除（待测试）Request method 'POST' not supported
     handleDelete: function(row, column, index) {
       this.$confirm("确定删除该角色?", "提示", {
@@ -274,30 +253,22 @@ export default {
         type: "warning"
       })
         .then(() => {
-          console.log("删除角色");
-          console.log(this.$store.state.allRole[index]);
-          //alert('submit!');
           let roleId = [];
           roleId.push(this.$store.state.allRole[index].id);
           // let roleId=this.$store.state.allRole[index].id;
           delRole(roleId, b => {
             if (b.code === "ok") {
-              alert("删除成功");
+              this.getData(this.listPageNumber);
+              this.$message({ type: "success", message: b.data });
             }
-            this.$router.go(0); //页面刷新（要加上）
           });
         })
         .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
+          this.$message({ type: "info", message: "已取消删除" });
         });
     },
     //批量删除，待测试 Request method 'POST' not supported
     batchDelete: function(rows) {
-      console.log("看看批量删除拿到的是啥----");
-      console.log(rows);
       this.$confirm("确定批量删除角色?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -309,18 +280,13 @@ export default {
             id: row.id
           });
         });
-        console.log("看看批量删除拿到的是啥id----");
-        console.log(batchDelId);
         delRole(batchDelId, b => {
           if (b.code === "ok") {
-            alert("删除成功");
+            this.getData(this.listPageNumber);
+            this.$message({ type: "success", message: b.data });
           }
-          this.$router.go(0); //页面刷新（要加上）
         }).catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
+          this.$message({ type: "info", message: "已取消删除" });
         });
       });
     },
@@ -340,12 +306,7 @@ export default {
       var _this = this;
       let callback = pd => {
         var res = [];
-        // console.log("get it");
-        // console.log(pd);
-        // console.log("finish!");
         this.$store.commit("setPermission", pd);
-        // console.log(this.$store.state.allRole);
-        // console.log(this.$store.state.commits[0].id);
         let auth_id_tmp = [];
         let auth_name_tmp = [];
         let auth_child_tmp = [];
@@ -358,49 +319,39 @@ export default {
         /**
          * hu获取所以权限内容
          */
-        let gg = function(tmp) {
-          for (let i = 0; i < tmp.length; i++) {
-            // console.log("gg = " + i);
-            // console.log(tmp[i]);
-            auth_id_tmp.push(tmp[i].id);
-            auth_name_tmp.push(tmp[i].name);
-            gg(tmp[i]);
+        let GAP = function(tmp) {
+          if (tmp !== null) {
+            for (let i = 0; i < tmp.length; i++) {
+              auth_id_tmp.push(tmp[i].id);
+              auth_name_tmp.push(tmp[i].name);
+
+              if (tmp[i].childPermissions !== null) {
+                GAP(tmp[i].childPermissions);
+              }
+            }
           }
         };
-        //取第二级的子权限数据
         for (let i = 0; i < auth_child_tmp.length; i++) {
-          gg(auth_child_tmp[i]);
-          // for (let j = 0; j < auth_child_tmp[i].length; j++) {
-          //   auth_id_tmp.push(auth_child_tmp[i][j].id);
-          //   auth_name_tmp.push(auth_child_tmp[i][j].name);
-          // }
+          GAP(auth_child_tmp[i]);
         }
         _this.permissionId = auth_id_tmp;
         _this.permissionName = auth_name_tmp;
-        // console.log("拿到权限吗？？---");
-        // console.log(_this.permissionId);
-        // console.log(_this.permissionName);
       };
       getPermissionTree(callback);
     },
 
-    //添加角色的确定
     onSubmit() {
-      console.log("all?----------");
-      console.log(this.$refs.tree.getCheckedKeys());
-      console.log("role?----------");
-      console.log(this.form.name);
       let newRole = {
         roleName: this.form.name,
         permissionList: this.$refs.tree.getCheckedKeys()
       };
       addRole(newRole, b => {
         if (b.code === "ok") {
-          alert("添加成功");
+          this.getData(this.listPageNumber);
+          this.$message({ type: "success", message: b.data });
           // todo 返回上一页
-          this.$router.go(0); //页面刷新（要加上）
         } else {
-          alert("添加失败" + b.data);
+          this.$message({ type: "error", message: b.data });
         }
       });
     }
