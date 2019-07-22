@@ -93,7 +93,7 @@
             <el-input v-model="form_edit.password" autocomplete="off" show-password=true></el-input>
             </el-form-item>
             <el-form-item label="用户角色" :label-width="formLabelWidth">
-            <el-select v-model="form_edit.role" placeholder="请选择用户角色" filterable multiple>
+            <el-select v-model="value_edit" placeholder="请选择用户角色" filterable multiple>
                <el-option
                 v-for="item in options"
                 :key="item.value"
@@ -158,6 +158,7 @@ export default {
         // }
       ],
       value:[],
+      value_edit:[],
       form_edit: {
         name: '',
         password: '',
@@ -217,14 +218,20 @@ export default {
     addUsers: function(){
       // let username=this.form.name;
       // let password=this.form.password;
-      let author=[];
+      let roleId_tmp=[];
       this.value.forEach((v)=>{
-        author.push(v);
+        for(let i=0;i<this.$store.state.allRole.length;i++){
+          if(this.$store.state.allRole[i].roleName===v){
+            roleId_tmp.push(this.$store.state.allRole[i].id);
+            break;
+          }
+        }
+        
       });
       let newUser={
         username: this.form.name,
         password: this.form.password,
-        roleIds: author
+        roleIds: roleId_tmp
       };
       console.log('add a new user!----');
       console.log(newUser);
@@ -242,30 +249,44 @@ export default {
     //显示用户的旧信息
     editUser:function(row,column,index){
       let role_tmp=[];
+      let allRole_tmp=[];
       this.id_tmp=row.id;
       row.role.forEach((role_name)=>{
         role_tmp.push(role_name)
       });
+      this.value_edit=role_tmp;
       this.form_edit={
         name: row.name,
         password: this.$store.state.allUser[index].password,//其实也拿不到密码，为null
         role: role_tmp
       }
+
+      // for (let i = 0; i < this.$store.state.allRole.length; i++) {
+      //   allRole_tmp.push(this.$store.state.allRole[i].roleName); //获取store的标签
+      // }
     },
     //编辑用户信息
     editUserConfirm:function(){
-      let author=[];
-      this.form_edit.role.forEach((v)=>{
-        author.push(v);
+      let roleId_tmp=[];
+      console.log('form edit ?---');
+      console.log(this.value_edit);
+      this.value_edit.forEach((v)=>{
+        for(let i=0;i<this.$store.state.allRole.length;i++){
+          if(this.$store.state.allRole[i].roleName===v){
+            roleId_tmp.push(this.$store.state.allRole[i].id);
+            break;
+          }
+        }
       });
       let pd={
         id: this.id_tmp,
         username: this.form_edit.name,
         password: this.form_edit.password,
-        roleIds: author
+        roleIds: roleId_tmp
       };
       console.log('change a  user!----');
       console.log(pd);
+      console.log(this.value_edit);
       changeUser(pd, b => {
             if (b.code === "ok") {
             alert("修改成功");
@@ -283,7 +304,7 @@ export default {
         this.$store.commit("setNewRoles", pd);
         pd.filter(v => {
           let ress = {
-            value: v.id,
+            value: v.roleName,
             label: v.roleName
           };
           this.options.push(ress);
