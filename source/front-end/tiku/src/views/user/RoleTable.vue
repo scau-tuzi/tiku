@@ -246,11 +246,11 @@ export default {
       };
       changeRole(newRole, b => {
         if (b.code === "ok") {
-          alert("添加成功");
+          alert("修改成功");
           // todo 返回上一页
           this.$router.go(0); //页面刷新（要加上）
         } else {
-          alert("添加失败" + b.data);
+          alert("修改失败" + b.data);
         }
       });
     },
