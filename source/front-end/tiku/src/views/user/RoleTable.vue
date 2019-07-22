@@ -58,8 +58,8 @@
     <!-- 添加角色窗口 -->
     <el-dialog title="添加角色" :visible.sync="dialogFormVisible_add">
       <el-form :model="form">
-        <el-form-item label="角色名称" :label-width="formLabelWidth">
-          <el-input v-model="form.name" autocomplete="off"></el-input>
+        <el-form-item label="角色名称" >
+          <el-input v-model="form.name" ></el-input>
         </el-form-item>
         <el-form-item>
           <label>选择权限</label>
@@ -77,15 +77,15 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false;onSubmit()">确 定</el-button>
+        <el-button @click="dialogFormVisible_add = false">取 消</el-button>
+        <el-button type="primary" @click="dialogFormVisible_add = false;onSubmit()">确 定</el-button>
       </div>
     </el-dialog>
     <!-- 编辑角色窗口 -->
     <el-dialog title="编辑角色" :visible.sync="dialogFormVisible_edit">
       <el-form :model="form_edit">
-        <el-form-item label="角色名称" :label-width="formLabelWidth">
-          <el-input v-model="form_edit.name" autocomplete="off"></el-input>
+        <el-form-item label="角色名称" >
+          <el-input v-model="form_edit.name" ></el-input>
         </el-form-item>
         <el-form-item>
           <label>选择权限</label>
@@ -140,7 +140,6 @@ export default {
       },
       treeData: [], //添加角色的权限树
       treeData_edit: [], //编辑角色的权限树
-      // selectId: [],
       defaultProps: {
         label: "name",
         children: "childPermissions"
@@ -154,7 +153,9 @@ export default {
       dialogFormVisible_add: false,
       dialogFormVisible_edit: false,
       form: {},
-      form_edit: {},
+      form_edit: {
+        name:""
+      },
       options: [],
       value: [],
       tableData: [],
