@@ -213,7 +213,7 @@ export default {
       };
       getUserList(currentpage, callback);
     },
-    //添加失败
+    //添加用户
     addUsers: function(){
       // let username=this.form.name;
       // let password=this.form.password;
