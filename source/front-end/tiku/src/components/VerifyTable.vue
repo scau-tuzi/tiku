@@ -47,31 +47,41 @@
                 </el-row>
       </el-main>
       <el-footer align="center">
-        <el-pagination
-          background
-          layout="prev, pager, next"
-          :total="this.listSzie"
-          @current-change="this.handlerchange"
-        ></el-pagination>
+<!--        <el-pagination-->
+<!--          background-->
+<!--          layout="prev, pager, next"-->
+<!--          :total="this.listSzie"-->
+<!--          @current-change="this.handlerchange"-->
+<!--        ></el-pagination>-->
+
+        <HistoryPagination :listSize="this.listSize"
+                           :handlechange="this.handlerchange"
+                           ref="pager"
+        >
+        </HistoryPagination>
       </el-footer>
     </el-container>
   </div>
 </template>
 
 <script>
-  import {changeProblem, checkProblem, getProblems} from "../api/Problem";
+  import {changeProblem, delProblem,checkProblem, getProblems} from "../api/Problem";
 import ProblemFullData from "../data/model/ProblemFullData";
 import GeneralTable from "./GeneralTable";
 import verifyTableInfo from "../data/mock/VerifyTableInfoMock";
+import HistoryPagination from "../components/HistoryPagination"
 export default {
   name: "VerifyTable",
-  components: { GeneralTable },
+  components: { GeneralTable,HistoryPagination },
   datas: [],
   methods: {
     handleButton(val) {
       if (val.method === "handleView") {
         this.handleView(val.index, val.row);
-      }else {
+      }else if(val.method==='handleDelete'){
+        this.handleDelete(val.index,val.row)
+      }
+      else {
         this.handleVerify(val.index,val.row)
       }
     },
@@ -88,6 +98,20 @@ export default {
         }
       });
     },
+    //删除操作
+    handleDelete(index,row){
+      console.log(this.$store.state.allProblem[index].problem.id);
+      let id=[];
+      id.push(this.$store.state.allProblem[index].problem.id);
+      delProblem(id,(b)=>{
+        if (b.code === "ok") {
+          alert("删除成功");
+          this.getData(0);
+        }else {
+          alert("删除失败"+b.data)
+        }
+      })
+    },
     //审核操作
     handleVerify(index,row){
       console.log(row.status);
@@ -97,7 +121,7 @@ export default {
       checkProblem(this.$store.state.allProblem[index].problem.id,(b)=>{
         if (b.code === "ok") {
           alert("审核成功");
-          _this.getPaperData(0);
+          this.getData(0);
         }else {
           alert("审核失败"+b.data)
         }
@@ -151,7 +175,7 @@ export default {
   },
   data: function() {
     return {
-      listSzie: 0,
+      listSize: 0,
       verifyTableInfo,
       search: "",
       tableData: []

@@ -74,6 +74,13 @@ let verifyTableInfo:GeneralTable={
       size: "mini",
       type: "text",
       method: "handleVerify"
-    }]
+    },
+    {
+      label: "删除",
+      size: "mini",
+      type: "text",
+      method: "handleDelete"
+    }
+  ]
 }
 export default verifyTableInfo;

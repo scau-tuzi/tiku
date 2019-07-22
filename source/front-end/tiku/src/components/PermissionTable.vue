@@ -19,7 +19,7 @@
       <el-table-column label="操作" :width="400" fixed="right">
         <template slot-scope="scope" >
          <el-button @click="onEdit(scope.$index, scope.row)" type="success" icon="el-icon-edit" round>编辑</el-button>
-            <el-button type="danger" icon="el-icon-delete" round>删除</el-button>
+            <el-button @click="onDelete(scope.$index, scope.row)" type="danger" icon="el-icon-delete" round>删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -44,6 +44,7 @@
     },
     props:{
       onEdit:Function,// (index,row)
+      onDelete:Function
     },
     methods: {
       loadData
