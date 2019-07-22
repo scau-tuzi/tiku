@@ -8,7 +8,7 @@
       <el-row>
         <el-col :span=3>
           <el-button align="left" plain @click="complete">完成</el-button>
-          <el-button type="primary" plain>全选</el-button>
+          <!-- <el-button type="primary" plain>全选</el-button> -->
         </el-col>
         <el-col :span=10>
           <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="" style="margin-right: 10px">
