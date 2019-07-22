@@ -4,6 +4,7 @@
           show-checkbox
           ref="tree"
           node-key="id"
+          check-strictly
           :props="defaultProps"
           @check-change="handleCheckChange">
   </el-tree>

@@ -16,6 +16,7 @@
         <el-option key="POST" label="POST" value="POST"></el-option>
         <el-option key="PUT" label="PUT" value="PUT"></el-option>
         <el-option key="DELETE" label="DELETE" value="DELETE"></el-option>
+        <el-option key="无" label="无" value="无"></el-option>
       </el-select>
     </el-form-item>
     <el-form-item label="请求路径" >
