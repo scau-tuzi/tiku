@@ -230,8 +230,8 @@ export default {
           };
           res.push(ress);
         });
-        console.log("why?=--------");
-        console.log(res);
+        // console.log("why?=--------");
+        // console.log(res);
         _this.tableData = res;
       };
       getRoles(currentpage, callback);
@@ -254,6 +254,7 @@ export default {
         }
       });
     },
+
     //编辑，显示已有角色信息
     editRole: function(row, column, index) {
       this.form_edit.name = row.role;
@@ -264,6 +265,7 @@ export default {
       );
       this.id_tmp = this.$store.state.allRole[index].id;
     },
+
     //单行删除（待测试）Request method 'POST' not supported
     handleDelete: function(row, column, index) {
       this.$confirm("确定删除该角色?", "提示", {
@@ -353,22 +355,18 @@ export default {
         /**
          * hu获取所以权限内容
          */
-        let gg = function(tmp) {
+        let GAP = function(tmp) {
           for (let i = 0; i < tmp.length; i++) {
             auth_id_tmp.push(tmp[i].id);
             auth_name_tmp.push(tmp[i].name);
             if (tmp[i].childPermissions !== null) {
-              gg(tmp[i].childPermissions);
+              GAP(tmp[i].childPermissions);
             }
-            console.log("==");
-
-            console.log(tmp[i].childPermissions);
-            console.log("==");
           }
         };
         //取第二级的子权限数据
         for (let i = 0; i < auth_child_tmp.length; i++) {
-          gg(auth_child_tmp[i]);
+          GAP(auth_child_tmp[i]);
         }
         _this.permissionId = auth_id_tmp;
         _this.permissionName = auth_name_tmp;
