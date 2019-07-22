@@ -39,12 +39,16 @@
       </el-main>
       <el-footer align="center">
         <el-row>
-          <el-pagination
-            background
-            layout="prev, pager, next"
-            :total="this.listSize"
-            @current-change="this.handlerchange"
-          ></el-pagination>
+<!--          <el-pagination-->
+<!--            background-->
+<!--            layout="prev, pager, next"-->
+<!--            :total="this.listSize"-->
+<!--            @current-change="this.handlerchange"-->
+<!--          ></el-pagination>-->
+          <HistoryPagination :listSize="this.listSize"
+                             :handlechange="this.handlerchange"
+                             ref="pager"
+          ></HistoryPagination>
         </el-row>
       </el-footer>
     </el-container>
@@ -55,6 +59,7 @@
     import paperListTable from "../data/mock/PaperListTableInfoMock";
     import {delPaper, getPapers} from "../api/Paper";
     import {createPaperOrderMock} from "../data/mock/CreatePaperInfoMock";
+    import HistoryPagination from "../components/HistoryPagination"
     //获取试卷
    function getPaperData(currentPage){
       console.log("change")
@@ -110,8 +115,8 @@
       console.log("aaaaaa")
     }
     export default {
-        name: "PaperList",
-      components: {GeneralTable},
+      name: "PaperList",
+      components: {GeneralTable,HistoryPagination},
       mounted: function(){
         getPaperData.bind(this).call(this,0);
       },
@@ -275,9 +280,9 @@
           this.paperId=index;
         },
         //分页
-        handlerchange: function (currentPage){//获取题目
-          this.getPaperData(currentPage-1);
-        },
+        // handlerchange: function (currentPage){//获取题目
+        //   this.getPaperData(currentPage-1);
+        // },
         },
       getPaperData,
 

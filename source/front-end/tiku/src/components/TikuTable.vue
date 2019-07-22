@@ -72,14 +72,12 @@
       </el-row>
     </el-main>
     <el-footer align="center">
-      <el-pagination
-        background
-        layout="prev, pager, next, jumper"
-        :total="this.listSize"
-        @current-change="this.handlechange"
-        @size-change="this.handleSizeChange"
-        ref="pager"
-      ></el-pagination>
+      <HistoryPagination :listSize="this.listSize"
+                         :handlechange="this.handlechange"
+                         :handleSizeChange="this.handleSizeChange"
+                         ref="pager"
+      >
+      </HistoryPagination>
     </el-footer>
     <el-dialog title="修改标签" :visible.sync="centerDialogVisible_single" width="30%" center>
       <div align="center">
@@ -146,6 +144,7 @@ import ProblemFullData from "../data/model/ProblemFullData";
 import { getTagsList, addTags, delTag } from "../api/Tag";
 import { AllFieldInfo } from "../data/mock/FiledInfoMock";
 import { changePaper } from "../api/Paper";
+import HistoryPagination from "./HistoryPagination";
 
 //编辑操作
 function handleEdit(index, row) {
@@ -371,6 +370,7 @@ function handleSizeChange(val) {
 
 export default {
   name: "TikuTable",
+  components: {HistoryPagination},
   datas: [],
   methods: {
     handleEdit,
