@@ -150,7 +150,7 @@ import { changePaper } from "../api/Paper";
 //编辑操作
 function handleEdit(index, row) {
   console.log(index, row);
-  this.$store.commit("setLastPageNumber",this.currentPage);
+  this.$store.commit("setLastPageNumber", this.currentPage);
   //转到ModifyProblem页面
   this.$router.push({
     path: "/ModifyProblem",
@@ -248,7 +248,7 @@ function jumpInput() {
   //this.$router.push("/cart")
 
   //传递的参数用{{ $route.query.goodsId }}获取
-  this.$store.commit("setLastPageNumber",this.currentPage);
+  this.$store.commit("setLastPageNumber", this.currentPage);
   this.$router.push({ path: "/InputTiku" });
   //this.$router.go(-2)
   //后退两步
@@ -269,7 +269,7 @@ function handleInputConfirm() {
 
 function handlechange(currentPage) {
   //获取题目
-  this.currentPage=currentPage
+  this.currentPage = currentPage;
   this.getData(currentPage - 1);
 }
 function getData(currentPage) {
@@ -365,9 +365,7 @@ function getTags() {
   getTagsList(0, callback, 0);
   // console.log(this.options);
 }
-function handleSizeChange(val) {
-  
-}
+function handleSizeChange(val) {}
 
 export default {
   name: "TikuTable",
@@ -391,7 +389,7 @@ export default {
     modifyTag
   },
   mounted: function() {
-    this.getData(0);
+    this.getData(this.listPageNumber);
     this.getTags();
 
     let all = [];
@@ -403,9 +401,9 @@ export default {
     });
 
     this.fieldInfo = all;
-    if(this.$store.state.useLastPage){
-      this.$refs.pager.internalCurrentPage=this.$store.state.lastPageNumber;
-      this.$store.commit("setUseLastPage",false);//使用保存的页数
+    if (this.$store.state.useLastPage) {
+      this.$refs.pager.internalCurrentPage = this.$store.state.lastPageNumber;
+      this.$store.commit("setUseLastPage", false); //使用保存的页数
     }
   },
   data() {
@@ -438,7 +436,7 @@ export default {
       value: [], //修改标签窗口选择器里面的已选标签
       index_tmp: "", //选中修改标签的行index
       value_batch: [], //批量修改标签窗口选择器里面的已选标签
-      currentPage:0
+      currentPage: 0
     };
   },
   // 搜索操作
