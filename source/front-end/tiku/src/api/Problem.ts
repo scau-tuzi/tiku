@@ -21,7 +21,6 @@ function getProblems(pageNumber: number, callback: (Problems: ProblemFullData[],
         .then(res => {
             let lists: ProblemFullData[] = res.data.data.problemFullDataList;
             let size: number = res.data.data.pagination.total;
-            // console.log(lists);
             callback(lists, size);
         })
 }
@@ -38,8 +37,6 @@ function getProblems(pageNumber: number, callback: (Problems: ProblemFullData[],
 //         problem.problem.id = Number(problemTemp[problemTemp.length - 1].problem.id) + 1;
 //     }
 //     problemTemp.push(problem);
-//     console.log("增加了题目");
-//     console.log(problemTemp);
 //     let response: BasicResponse = { code: 'ok' };
 //     callback(response);
 // }
@@ -47,21 +44,21 @@ function getProblems(pageNumber: number, callback: (Problems: ProblemFullData[],
 function addProblem(problem: ProblemFullData, callback: (b: BasicResponse) => void) {
     //线上
     axios
-        .post("/api/problem/add",problem)
-        .then(res=>{
-            let response :BasicResponse=res.data;
+        .post("/api/problem/add", problem)
+        .then(res => {
+            let response: BasicResponse = res.data;
             callback(response)
         })
 }
 
 function checkProblem(problemId: number, callback: (b: BasicResponse) => void) {
-  //线上
-  axios
-      .put("/api/problem/check?id="+problemId)
-      .then(res=>{
-        let response :BasicResponse=res.data;
-        callback(response)
-      })
+    //线上
+    axios
+        .put("/api/problem/check?id=" + problemId)
+        .then(res => {
+            let response: BasicResponse = res.data;
+            callback(response)
+        })
 }
 
 /**
@@ -132,5 +129,5 @@ export {
     findProbLemsByTags,
     findProblemsVaguely,
     changeProblem,
-  checkProblem
+    checkProblem
 }      
