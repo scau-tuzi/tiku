@@ -1,4 +1,9 @@
-# tiku-app
+# tiku-app 题库管理后台
+
+提供图形化的界面用来管理题目
+
+#usage
+一个标准的使用vue-cli生成的项目
 
 ## Project setup
 ```

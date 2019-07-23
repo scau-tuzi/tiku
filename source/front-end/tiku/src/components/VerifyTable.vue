@@ -50,7 +50,7 @@
 <!--        <el-pagination-->
 <!--          background-->
 <!--          layout="prev, pager, next"-->
-<!--          :total="this.listSzie"-->
+<!--          :total="this.listSize"-->
 <!--          @current-change="this.handlerchange"-->
 <!--        ></el-pagination>-->
 
@@ -135,7 +135,7 @@ export default {
       console.log("change");
       var _this = this;
       let callback = (pd, size) => {
-        this.listSzie = size * 10;
+        _this.listSize = size * 10;
         var res = [];
         console.log(currentPage);
         console.log("get it");

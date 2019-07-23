@@ -67,17 +67,16 @@ public class ProblemStatusServiceImpl implements ProblemStatusService {
         }
 
         //剩下两个不会为空的
-
         @NotNull String unionid = statusInfo.getUnionid();
-        Optional<TikuUser> byUserUuidEquals = tikuUserRepository.findByUserUuidEquals(unionid);
-        if (!byUserUuidEquals.isPresent()) {
+        List<TikuUser> userlist = tikuUserRepository.findAllByUserUuidEquals(unionid);
+        if (userlist.size()==0) {
             //todo 注册
-            log.warn("用户的uuid：{}不存在", unionid);
-            //throw  new ProblemStatusArgumentException("用户uuid"+unionid+"不存在");
-            TikuUser tikuUser = new TikuUser();
-            tikuUser.setUserUuid(unionid);
-            tikuUser.setGrade("一年级");
-            tikuUserRepository.save(tikuUser);
+            throw new ProblemStatusArgumentException("用户的uuid不存在"+unionid);
+//            //throw  new ProblemStatusArgumentException("用户uuid"+unionid+"不存在");
+//            TikuUser tikuUser = new TikuUser();
+//            tikuUser.setUserUuid(unionid);
+//            tikuUser.setGrade("一年级");
+//            tikuUserRepository.save(tikuUser);
         }
 
         @NotNull String status = statusInfo.getStatus();

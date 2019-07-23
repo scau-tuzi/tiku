@@ -42,9 +42,8 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Override
     public void addUserInfo(UserInfo userInfo) throws UserInfoServiceException {
         @NotNull String unionid = userInfo.getUnionid();
-
-        Optional<TikuUser> byUserUuidEquals = tikuUserRepository.findByUserUuidEquals(unionid);
-        if (byUserUuidEquals.isPresent()) {
+        List<TikuUser> list = tikuUserRepository.findAllByUserUuidEquals(unionid);
+        if (list.size()>=1) {
             log.warn("用户{}已存在", unionid);
             //todo 应该使用put更新
             throw new UserInfoServiceException("用户" + unionid + "已存在");
@@ -60,11 +59,13 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Override
     public UserInfo getUserInfo(UserId userId) throws UserInfoServiceException {
         @NotNull String unionid = userId.getUnionid();
-        Optional<TikuUser> user = tikuUserRepository.findByUserUuidEquals(unionid);
-        if (!user.isPresent()) {
+
+        List<TikuUser> list = tikuUserRepository.findAllByUserUuidEquals(unionid);
+
+        if (list.size()==0) {
             throw new UserInfoServiceException("用户不存在");
         }
-        TikuUser tikuUser = user.get();
+        TikuUser tikuUser = list.get(0);
         UserInfo userInfo = new UserInfo();
         userInfo.setGrade(tikuUser.getGrade());
         userInfo.setUnionid(tikuUser.getUserUuid());

@@ -31,7 +31,7 @@ public class Parser {
      * @param expression
      * @return
      */
-    public List<Long> getAllProblemsByExpression(QuerryInfo expression) throws ParserErrorException {
+    public @NotNull List<Long> getAllProblemsByExpression(QuerryInfo expression) throws ParserErrorException {
         List<Long> longs = executeExpression(expression.getQuerry(), false);
 
         return longs;
@@ -59,7 +59,7 @@ public class Parser {
      * @param value
      * @return
      */
-    private List<Long> problemEquals(String fieldName, String value) throws ParserErrorException {
+    private List<Long> problemEquals(@NotNull String fieldName, @NotNull String value) throws ParserErrorException {
         ArrayList<Long> res = new ArrayList<>();
         try {
 
@@ -214,7 +214,7 @@ public class Parser {
      * @return
      * @throws ParserErrorException
      */
-    private List<Long> executeExpression(Expression expression, boolean isPaper) throws ParserErrorException {
+    private @NotNull List<Long> executeExpression(Expression expression, boolean isPaper) throws ParserErrorException {
         @NotNull String op = expression.getOperator();
 
 
