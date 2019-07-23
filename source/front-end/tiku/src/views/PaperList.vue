@@ -148,7 +148,6 @@ export default {
       this.selectedBatchPaperId = val;
     },
     paperBatchDelete() {
-
       var _this = this;
       this.$confirm("确定删除问题?", "提示", {
         confirmButtonText: "确定",
@@ -161,12 +160,12 @@ export default {
         }
         delPaper(batch, b => {
           if (b.code === "ok") {
-            alert("删除成功");
+            this.$message({ type: "success", message: b.data });
             _this.getPaperData(0);
           } else {
-            alert("删除失败" + b.data);
+            this.$message({ type: "error", message: b.data });
           }
-          // this.$router.go(0); //页面刷新（要加上）
+          this.$router.go(0); //页面刷新（要加上）
           this.getPaperData();
         });
       });
@@ -181,7 +180,7 @@ export default {
     paperChangeBatchTag() {
       console.log("paperChangeBatchTag");
       console.log(this.$refs.dialog._data.multipleSelection.length);
-      
+
       let value = this.$refs.dialog._data.value;
       for (
         let i = 0;
@@ -196,13 +195,13 @@ export default {
           });
         });
         console.log(selectedPaper);
-        
+
         changePaper(selectedPaper, b => {
           if (b.code === "ok") {
             this.$message({ type: "success", message: b.data });
             // this.$router.go(0); //页面刷新（要加上）
           } else {
-            alert("修改失败" + b.data);
+            this.$message({ type: "error", message: b.data });
           }
         });
       }
@@ -219,16 +218,15 @@ export default {
     },
     //编辑操作
     handleEdit(index, row) {
-        // alert(index+row.problem+row.answer),
-        //转到ModifyProblem页面
-        this.$router.push({
-          path: "/ViewPaper"
-          //query对象获取问题和答案
-          // query: {
-          //   modifyQues:row.problem,
-          //   modifyAnsw:row.answer
-          // }
-        });
+      //转到ModifyProblem页面
+      this.$router.push({
+        path: "/ViewPaper"
+        //query对象获取问题和答案
+        // query: {
+        //   modifyQues:row.problem,
+        //   modifyAnsw:row.answer
+        // }
+      });
     },
     //删除操作
     handleDelete(index, row) {
@@ -240,13 +238,13 @@ export default {
       }).then(() => {
         delPaper([row.paperId], b => {
           if (b.code === "ok") {
-            alert("删除成功");
+            this.$message({ type: "success", message: b.data });
             _this.getPaperData(0);
           } else {
-            alert("删除失败" + b.data);
+            this.$message({ type: "error", message: b.data });
           }
-          // this.$router.go(0); //页面刷新（要加上）
-          //this.getPaperData();
+          this.$router.go(0); //页面刷新（要加上）
+          // this.getPaperData();
         });
       });
     },

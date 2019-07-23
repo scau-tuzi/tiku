@@ -43,8 +43,15 @@
           </el-table-column>
           <el-table-column label="操作" width="200">
             <template slot-scope="scope">
-              <el-button size="mini" @click="dialogFormVisible_edit=true;editUser(scope.row,scope.column,scope.$index)">编辑</el-button>
-              <el-button size="mini" type="danger" @click="handleDelete(scope.row,scope.column,scope.$index)">删除</el-button>
+              <el-button
+                size="mini"
+                @click="dialogFormVisible_edit=true;editUser(scope.row,scope.column,scope.$index)"
+              >编辑</el-button>
+              <el-button
+                size="mini"
+                type="danger"
+                @click="handleDelete(scope.row,scope.column,scope.$index)"
+              >删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -59,72 +66,73 @@
       ></el-pagination>
     </el-footer>
     <el-dialog title="添加用户" :visible.sync="dialogFormVisible_add" width="30%" center>
-        <el-form :model="form">
-            <el-form-item label="用户名称" :label-width="formLabelWidth">
-            <el-input v-model="form.name" autocomplete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="用户密码" :label-width="formLabelWidth">
-            <el-input v-model="form.password" autocomplete="off" show-password=true></el-input> 
-            <!-- show-password=true -->
-            </el-form-item>
-            <el-form-item label="用户角色" :label-width="formLabelWidth">
-            <el-select v-model="value" placeholder="请选择用户角色" filterable multiple>
-               <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-               ></el-option>
-            </el-select>
-            </el-form-item>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-            <el-button @click="dialogFormVisible_add = false">取 消</el-button>
-            <el-button type="primary" @click="dialogFormVisible_add = false;addUsers()">确 定</el-button>
-            <!-- ;dialogFormVisible_add = false -->
-        </div>
+      <el-form :model="form">
+        <el-form-item label="用户名称" :label-width="formLabelWidth">
+          <el-input v-model="form.name" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="用户密码" :label-width="formLabelWidth">
+          <el-input v-model="form.password" autocomplete="off" show-password="true"></el-input>
+          <!-- show-password=true -->
+        </el-form-item>
+        <el-form-item label="用户角色" :label-width="formLabelWidth">
+          <el-select v-model="value" placeholder="请选择用户角色" filterable multiple>
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible_add = false">取 消</el-button>
+        <el-button type="primary" @click="dialogFormVisible_add = false;addUsers()">确 定</el-button>
+        <!-- ;dialogFormVisible_add = false -->
+      </div>
     </el-dialog>
     <el-dialog title="编辑用户" :visible.sync="dialogFormVisible_edit" width="30%" center>
-        <el-form :model="form_edit">
-            <el-form-item label="用户名称" :label-width="formLabelWidth">
-            <el-input v-model="form_edit.name" autocomplete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="用户密码" :label-width="formLabelWidth">
-            <el-input v-model="form_edit.password" autocomplete="off" show-password=true></el-input>
-            </el-form-item>
-            <el-form-item label="用户角色" :label-width="formLabelWidth">
-            <el-select v-model="value_edit" placeholder="请选择用户角色" filterable multiple>
-               <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-               ></el-option>
-            </el-select>
-            </el-form-item>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-            <el-button @click="dialogFormVisible_edit = false">取 消</el-button>
-            <el-button type="primary" @click="dialogFormVisible_edit = false;editUserConfirm()">确 定</el-button>
-        </div>
-    </el-dialog>    
+      <el-form :model="form_edit">
+        <el-form-item label="用户名称" :label-width="formLabelWidth">
+          <el-input v-model="form_edit.name" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="用户密码" :label-width="formLabelWidth">
+          <el-input v-model="form_edit.password" autocomplete="off" show-password="true"></el-input>
+        </el-form-item>
+        <el-form-item label="用户角色" :label-width="formLabelWidth">
+          <el-select v-model="value_edit" placeholder="请选择用户角色" filterable multiple>
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible_edit = false">取 消</el-button>
+        <el-button type="primary" @click="dialogFormVisible_edit = false;editUserConfirm()">确 定</el-button>
+      </div>
+    </el-dialog>
   </el-container>
 </template>
 
 
 <script>
-import { getUserList,addUser,delUser,changeUser } from "../../api/User";
+import { getUserList, addUser, delUser, changeUser } from "../../api/User";
 import { getRoles } from "../../api/Role";
 export default {
   data() {
     return {
+      listPageNumber: 0,
       dialogFormVisible_add: false,
       dialogFormVisible_edit: false,
       listSize: 0,
-      tableChecked:[],
+      tableChecked: [],
       search: "",
-      role:[],
-      id_tmp:'',//临时存放要操作行的账号id
+      role: [],
+      id_tmp: "", //临时存放要操作行的账号id
       tableData: [
         // {
         //   id:'535436532',
@@ -141,9 +149,9 @@ export default {
         // }
       ],
       form: {
-        name: '',
-        password: '',
-        role: ''
+        name: "",
+        password: "",
+        role: ""
       },
       options: [
         // {
@@ -157,45 +165,38 @@ export default {
         //   label: '角色三'
         // }
       ],
-      value:[],
-      value_edit:[],
+      value: [],
+      value_edit: [],
       form_edit: {
-        name: '',
-        password: '',
+        name: "",
+        password: "",
         role: []
-      },
+      }
     };
   },
   methods: {
     //多选触发
-    handleSelectionChange:function(val) {
-      console.log("handleSelectionChange--", val); //选中项
+    handleSelectionChange: function(val) {
       this.tableChecked = val;
-    },    
+    },
     //获取用户列表
     handlerchange: function(currentpage) {
-      this.getData(currentpage-1);
+      this.getData(currentpage - 1);
     },
     getData: function(currentpage) {
-      // console.log("change");
+      this.listPageNumber = currentpage;
       var _this = this;
       let callback = (pd, size) => {
-        this.listSize = size*10;
+        this.listSize = size * 10;
         var res = [];
-        
-        console.log("get it");
-        console.log(pd);
-        console.log("finish!");      
         this.$store.commit("setNewUsers", pd);
-        console.log('存了什么啊？---');
-        console.log(this.$store.state.allUser);
         pd.filter(v => {
-          var role_id=[];
-          var role_tmp=[];
-          v.roleIds.forEach((id)=>{
+          var role_id = [];
+          var role_tmp = [];
+          v.roleIds.forEach(id => {
             role_id.push(id);
-            for(let i=0;i<this.$store.state.allRole.length;i++){
-              if(id===this.$store.state.allRole[i].id){
+            for (let i = 0; i < this.$store.state.allRole.length; i++) {
+              if (id === this.$store.state.allRole[i].id) {
                 role_tmp.push(this.$store.state.allRole[i].roleName);
               }
             }
@@ -208,97 +209,85 @@ export default {
           };
           res.push(ress);
         });
-        console.log("check table data----");
-        console.log(res);
         _this.tableData = res;
       };
       getUserList(currentpage, callback);
     },
     //添加用户
-    addUsers: function(){
+    addUsers: function() {
       // let username=this.form.name;
       // let password=this.form.password;
-      let roleId_tmp=[];
-      this.value.forEach((v)=>{
-        for(let i=0;i<this.$store.state.allRole.length;i++){
-          if(this.$store.state.allRole[i].roleName===v){
+      let roleId_tmp = [];
+      this.value.forEach(v => {
+        for (let i = 0; i < this.$store.state.allRole.length; i++) {
+          if (this.$store.state.allRole[i].roleName === v) {
             roleId_tmp.push(this.$store.state.allRole[i].id);
             break;
           }
         }
-        
       });
-      let newUser={
+      let newUser = {
         username: this.form.name,
         password: this.form.password,
         roleIds: roleId_tmp
       };
-      console.log('add a new user!----');
-      console.log(newUser);
       addUser(newUser, b => {
-            if (b.code === "ok") {
-            alert("添加成功");
-            // todo 返回上一页
-            this.$router.go(0); //页面刷新（要加上）
-            
-          } else {
-            alert("添加失败" + b.data);
-          }
-        });     
+        if (b.code === "ok") {
+          this.$message({ type: "success", message: b.data });
+          // todo 返回上一页
+          this.getData(this.listPageNumber);
+        } else {
+          this.$message({ type: "error", message: b.data });
+        }
+      });
     },
     //显示用户的旧信息
-    editUser:function(row,column,index){
-      let role_tmp=[];
-      let allRole_tmp=[];
-      this.id_tmp=row.id;
-      row.role.forEach((role_name)=>{
-        role_tmp.push(role_name)
+    editUser: function(row, column, index) {
+      let role_tmp = [];
+      let allRole_tmp = [];
+      this.id_tmp = row.id;
+      row.role.forEach(role_name => {
+        role_tmp.push(role_name);
       });
-      this.value_edit=role_tmp;
-      this.form_edit={
+      this.value_edit = role_tmp;
+      this.form_edit = {
         name: row.name,
-        password: this.$store.state.allUser[index].password,//其实也拿不到密码，为null
+        password: this.$store.state.allUser[index].password, //其实也拿不到密码，为null
         role: role_tmp
-      }
+      };
 
       // for (let i = 0; i < this.$store.state.allRole.length; i++) {
       //   allRole_tmp.push(this.$store.state.allRole[i].roleName); //获取store的标签
       // }
     },
     //编辑用户信息
-    editUserConfirm:function(){
-      let roleId_tmp=[];
-      console.log('form edit ?---');
-      console.log(this.value_edit);
-      this.value_edit.forEach((v)=>{
-        for(let i=0;i<this.$store.state.allRole.length;i++){
-          if(this.$store.state.allRole[i].roleName===v){
+    editUserConfirm: function() {
+      let roleId_tmp = [];
+      this.value_edit.forEach(v => {
+        for (let i = 0; i < this.$store.state.allRole.length; i++) {
+          if (this.$store.state.allRole[i].roleName === v) {
             roleId_tmp.push(this.$store.state.allRole[i].id);
             break;
           }
         }
       });
-      let pd={
+      let pd = {
         id: this.id_tmp,
         username: this.form_edit.name,
         password: this.form_edit.password,
         roleIds: roleId_tmp
       };
-      console.log('change a  user!----');
-      console.log(pd);
-      console.log(this.value_edit);
       changeUser(pd, b => {
-            if (b.code === "ok") {
-            alert("修改成功");
-            // todo 返回上一页
-            this.$router.go(0); //页面刷新（要加上）           
-          } else {
-            alert("修改失败" + b.data);
-          }
-        });   
+        if (b.code === "ok") {
+          this.$message({ type: "success", message: b.data });
+          // todo 返回上一页
+          this.getData(this.listPageNumber);
+        } else {
+          this.$message({ type: "error", message: b.data });
+        }
+      });
     },
-    getRole: function(){
-      console.log("getRole!--");
+    getRole: function() {
       var _this = this;
       let callback = (pd, size) => {
         this.$store.commit("setNewRoles", pd);
@@ -311,30 +300,24 @@ export default {
         });
       };
       getRoles(0, callback);
-      console.log(this.options);      
     },
-    handleDelete: function(row,column,index){
+    handleDelete: function(row, column, index) {
       this.$confirm("确定删除该用户？", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       })
         .then(() => {
-          console.log("删除用户");
-          console.log(this.$store.state.allUser[index]);
-          //alert('submit!');
           let userId = [];
           userId.push(this.$store.state.allUser[index].id);
-          // console.log("删除用户id1---");
-          // console.log(this.$store.state.allRole[index].id);
-          // console.log("删除用户id2---");
-          // console.log(row.id);
-          // let roleId=this.$store.state.allRole[index].id;
           delUser(userId, b => {
             if (b.code === "ok") {
-              alert("删除成功");
+              this.$message({ type: "success", message: b.data });
             }
-            this.$router.go(0); //页面刷新（要加上）
+            let _this = this;
+            setTimeout(() => {
+              _this.$router.go(0);
+            }, 700);
           });
         })
         .catch(() => {
@@ -342,35 +325,33 @@ export default {
             type: "info",
             message: "已取消删除"
           });
-        });        
+        });
     },
-    batchDelete:function(rows){
+    batchDelete: function(rows) {
       this.$confirm("确定批量删除用户？", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       })
         .then(() => {
-          console.log("批量删除用户");
-          //alert('submit!');
           let userId = [];
-          rows.forEach((row)=>{
-            userId.push(row.id)
+          rows.forEach(row => {
+            userId.push(row.id);
           });
           delUser(userId, b => {
             if (b.code === "ok") {
-              alert("删除成功");
+              this.$message({ type: "success", message: b.data });
             }
-            this.$router.go(0); //页面刷新（要加上）
+            let _this = this;
+            setTimeout(() => {
+              _this.$router.go(0);
+            }, 700);
           });
         })
         .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
-        });       
-    }        
+          this.$message({ type: "info", message: "已取消删除" });
+        });
+    }
   },
   computed: {
     //搜索功能
@@ -391,13 +372,12 @@ export default {
       }
       return this.tableData;
     }
-  },  
+  },
   mounted: function() {
     this.getRole();
     this.getData(0);
-    
-  },
-}
+  }
+};
 </script>
 <style scoped>
 .el-row {

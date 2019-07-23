@@ -3,11 +3,10 @@
 </template>
 
 <script>
-  export default {
-    name: "ProblemList"
-  }
+export default {
+  name: "ProblemList"
+};
 </script>
 
 <style scoped>
-
 </style>

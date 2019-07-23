@@ -289,8 +289,6 @@ export default {
       });
     },
     // modifyAuthor:function(row,column,index){
-    //   console.log("拿到角色的id吗？----");
-    //   console.log(this.$store.state.allRole[index].id);
     //   this.$router.push({
     //     path: "/ModifyProblem",//跳到权限列表
     //     //query对象获取问题和答案

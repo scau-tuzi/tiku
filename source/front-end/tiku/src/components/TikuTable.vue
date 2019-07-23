@@ -72,12 +72,12 @@
       </el-row>
     </el-main>
     <el-footer align="center">
-      <HistoryPagination :listSize="this.listSize"
-                         :handlechange="this.handlechange"
-                         :handleSizeChange="this.handleSizeChange"
-                         ref="pager"
-      >
-      </HistoryPagination>
+      <HistoryPagination
+        :listSize="this.listSize"
+        :handlechange="this.handlechange"
+        :handleSizeChange="this.handleSizeChange"
+        ref="pager"
+      ></HistoryPagination>
     </el-footer>
     <el-dialog title="修改标签" :visible.sync="centerDialogVisible_single" width="30%" center>
       <div align="center">
@@ -148,7 +148,6 @@ import HistoryPagination from "./HistoryPagination";
 
 //编辑操作
 function handleEdit(index, row) {
-  console.log(index, row);
   this.$store.commit("setLastPageNumber", this.currentPage);
   //转到ModifyProblem页面
   this.$router.push({
@@ -178,7 +177,6 @@ function handleDelete(index) {
   });
 }
 function handleSelectionChange(val) {
-  // console.log("??", val);
   this.tableChecked = val;
 }
 function batchDelete(rows) {
@@ -238,13 +236,11 @@ function modifyBatchTags() {
   }
   this.del = modifyProblems.length === this.listLenght ? 1 : this.del;
   this.getData(this.listPageNumber - this.del);
-  // this.$router.go(0); //页面刷新（要加上）
 }
 function filterTag(value, row) {
   return row.tag === value;
 }
 function jumpInput() {
-  //this.$router.push("/cart")
 
   //传递的参数用{{ $route.query.goodsId }}获取
   this.$store.commit("setLastPageNumber", this.currentPage);
@@ -272,7 +268,6 @@ function handlechange(currentPage) {
   this.getData(currentPage - 1);
 }
 function getData(currentPage) {
-  // console.log("change")
   var _this = this;
   let callback = (pd, size) => {
     this.listLenght = pd.length;
@@ -301,14 +296,13 @@ function getData(currentPage) {
         sound: "",
         tag: ts
       };
-      if (v.extData !== null&&v.extData !== undefined) {
+      if (v.extData !== null && v.extData !== undefined) {
         Object.keys(v.extData).forEach(key => {
           ress[key] = v.extData[key];
         });
       }
       res.push(ress);
     });
-    console.log(res);
     _this.tableData = res;
   };
   getProblems(currentPage, callback, 1);
@@ -325,16 +319,12 @@ function showTags(index) {
 //修改某一行问题的标签
 function modifyTag() {
   let selectedProblem = this.$store.state.allProblem[this.index_tmp];
-  // console.log("test change1!--");
-  // console.log(selectedProblem);
   selectedProblem.tags = [];
   this.value.forEach(v => {
     selectedProblem.tags.push({
       value: v
     });
   });
-  // console.log("test change2!--");
-  // console.log(selectedProblem);
   changeProblem(selectedProblem, b => {
     if (b.code === "ok") {
       this.getData(this.listPageNumber - this.del);
@@ -349,7 +339,6 @@ function modifyTag() {
 }
 //获取全部标签（选择器下拉窗口里用）
 function getTags() {
-  // console.log("getTag!");
   var _this = this;
   let callback = (pd, size) => {
     this.$store.commit("setNewCommits", pd);
@@ -362,13 +351,12 @@ function getTags() {
     });
   };
   getTagsList(0, callback, 0);
-  // console.log(this.options);
 }
 function handleSizeChange(val) {}
 
 export default {
   name: "TikuTable",
-  components: {HistoryPagination},
+  components: { HistoryPagination },
   datas: [],
   methods: {
     handleEdit,

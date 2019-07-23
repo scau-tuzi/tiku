@@ -136,7 +136,6 @@ export default {
 
     //多选触发
     handleSelectionChange(val) {
-      console.log("handleSelectionChange--", val); //选中项
       this.tableChecked = val;
     },
 
@@ -153,7 +152,6 @@ export default {
           }
         }
       }
-      console.log(delId.length);
 
       this.$confirm("确定批量删除标签?", "提示", {
         confirmButtonText: "确定",
@@ -163,9 +161,9 @@ export default {
         .then(() => {
           delTag(delId, b => {
             if (b.code === "ok") {
-              this.isCurrentPage = delId.length === this.listLenght ? 1 : this.currentpage;
+              this.isCurrentPage = delId.length === this.listLenght ? 1 : 0;
               this.getData(this.ListPageNumber - this.isCurrentPage, 0);
-              this.$message({ type: "success", message: "删除成功!" });
+              this.$message({ type: "success", message: b.data });
             }
           });
         })
@@ -182,14 +180,12 @@ export default {
         type: "warning"
       })
         .then(() => {
-          console.log(this.$store.state.commits);
           let tagId = [];
           tagId.push(this.$store.state.commits[index].id);
           delTag(tagId, b => {
             if (b.code === "ok") {
               this.getData(this.ListPageNumber - this.isCurrentPage, 0);
-
-              this.$message({ type: "success", message: "删除成功" });
+              this.$message({ type: "success", message: b.data });
             }
           });
         })
@@ -276,10 +272,7 @@ export default {
           addTags(res, callback);
         })
         .catch(() => {
-          this.$message({
-            type: "info",
-            message: "取消添加"
-          });
+          this.$message({ type: "info", message: "取消添加" });
         });
     }
   },

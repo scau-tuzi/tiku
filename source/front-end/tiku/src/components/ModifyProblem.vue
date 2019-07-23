@@ -114,14 +114,9 @@ function back() {
 
 //获取标签列表
 function getTags() {
-  console.log("getTag!");
   var _this = this;
   let callback = (pd, size) => {
-    console.log("get it");
-    console.log(pd);
     this.$store.commit("setNewCommits", pd);
-    // console.log(this.$store.state.commits);
-    // console.log(this.$store.state.commits[0].id);
     pd.filter(v => {
       let ress = {
         value: v.value,
@@ -131,11 +126,10 @@ function getTags() {
     });
   };
   getTagsList(0, callback, 0);
-  console.log(this.options);
 }
 
 function goback() {
-  this.$store.commit("setUseLastPage",true);//使用保存的页数
+  this.$store.commit("setUseLastPage", true); //使用保存的页数
   this.$router.go(-1);
 }
 
@@ -144,12 +138,8 @@ function submitForm(formName) {
   let _this = this;
   const problemIndex = this.$route.query.modifyIndex;
   let selectedProblem = this.$store.state.allProblem[problemIndex];
-  console.log("test change1!--");
-  console.log(selectedProblem);
   selectedProblem.answer.answerText = formName.answer; //重新赋修改后的值
   selectedProblem.problem.problemText = formName.problem;
-  console.log("test change2!--");
-  console.log(selectedProblem);
 
   selectedProblem.tags = [];
   this.value.forEach(v => {
@@ -161,20 +151,16 @@ function submitForm(formName) {
   var me = this;
   Object.keys(this.form.text).forEach(function(key) {
     //重新赋额外信息值
-    console.log("view key--");
-    console.log(key);
     let keyname = me.form.option[key];
     let value = me.form.text[key];
-    console.log("view value--");
-    console.log(value);
     selectedProblem.extData[keyname] = value;
   });
   changeProblem(selectedProblem, b => {
     if (b.code === "ok") {
       this.$message({ type: "success", message: "修改成功!" });
-      setTimeout(function() {
-        _this.$router.replace({ path: "/VerifyTable" });
-      }, 500);
+      // setTimeout(function() {
+        this.$router.replace({ path: "/VerifyTable" });
+      // }, 500);
       // todo 返回上一页
     } else {
       this.$message({ type: "error", message: "修改失败!\n" + b.data });
@@ -186,13 +172,9 @@ function resetForm(formName) {
   this.$refs[formName].resetFields();
 }
 
-function handleRemove(file) {
-  console.log(file);
-}
+function handleRemove(file) {}
 
-function handlePreview(file) {
-  console.log(file);
-}
+function handlePreview(file) {}
 
 function handleExceed(files, fileList) {
   this.$message.warning(
@@ -220,8 +202,6 @@ function getParams() {
   const problemIndex = this.$route.query.modifyIndex;
 
   let selectedProblem = this.$store.state.allProblem[problemIndex];
-  console.log("show selected problem---");
-  console.log(this.$store.state.allProblem[problemIndex]);
 
   // 将问题和答案放在当前组件的数据内
   this.ruleForm.problem = selectedProblem.problem.problemText;
@@ -231,14 +211,9 @@ function getParams() {
   }
   let j = 1;
   for (let data in selectedProblem.extData) {
-    console.log("show data");
-    console.log(data);
     this.OptionNum++;
     this.form.text[j++] = selectedProblem.extData[data];
-    console.log(this.form.text[j]);
   }
-  console.log("show this.form");
-  console.log(this.form);
 }
 
 export default {
@@ -264,18 +239,7 @@ export default {
         problem: [{ required: true, message: "请输入题目", trigger: "blur" }],
         answer: [{ required: true, message: "请输入题目", trigger: "blur" }]
       },
-      options: [
-        //  {
-        //   value: 'FirstGrade',
-        //   label: '一年级'
-        // }, {
-        //   value: 'SecondGrade',
-        //   label: '二年级'
-        // }, {
-        //   value: 'ThirdGrade',
-        //   label: '三年级'
-        // }
-      ],
+      options: [],
       value: []
     };
   },
