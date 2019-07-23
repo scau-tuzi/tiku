@@ -53,15 +53,15 @@
           <GeneralTable v-bind:table-info="createPaperOrderMock"  v-on:handleButton="handleButton"></GeneralTable>
         </el-col>
       </el-row>
-      <el-row>
-        <pre style="text-align: left">
-      {{leftTable.tableData}}
-       </pre>
-        <hr>
-        <pre style="text-align: left">
-      {{createPaperOrderMock.tableData}}
-       </pre>
-      </el-row>
+<!--      <el-row>-->
+<!--        <pre style="text-align: left">-->
+<!--      {{leftTable.tableData}}-->
+<!--       </pre>-->
+<!--        <hr>-->
+<!--        <pre style="text-align: left">-->
+<!--      {{createPaperOrderMock.tableData}}-->
+<!--       </pre>-->
+<!--      </el-row>-->
 
     </el-main>
   </el-container>
