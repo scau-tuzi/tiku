@@ -49,18 +49,18 @@
                         v-bind:table-info="leftTable"  v-on:handleButton="handleButtonLeft" ></GeneralTable>
         </el-col>
         <el-col :span=11>
-          <GeneralTable :listSize="listSize" v-bind:table-info="modifyPaperOrderMock"  v-on:handleButton="handleButton"></GeneralTable>
+          <GeneralTable  v-bind:table-info="modifyPaperOrderMock"  v-on:handleButton="handleButton"></GeneralTable>
         </el-col>
       </el-row>
-      <el-row>
-        <pre style="text-align: left">
-      {{leftTable.tableData}}
-       </pre>
-        <hr>
-        <pre style="text-align: left">
-      {{modifyPaperOrderMock.tableData}}
-       </pre>
-      </el-row>
+<!--      <el-row>-->
+<!--        <pre style="text-align: left">-->
+<!--      {{leftTable.tableData}}-->
+<!--       </pre>-->
+<!--        <hr>-->
+<!--        <pre style="text-align: left">-->
+<!--      {{modifyPaperOrderMock.tableData}}-->
+<!--       </pre>-->
+<!--      </el-row>-->
 
     </el-main>
   </el-container>
@@ -151,7 +151,7 @@
       });
       console.log(res);
       _this.leftTable.tableData = res;
-      _this.listSize = size;
+      _this.listSize = size*10;
 
     }; //callback
     getProblems(page, callback, 1);
