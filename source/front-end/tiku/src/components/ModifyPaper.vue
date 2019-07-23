@@ -119,13 +119,6 @@
     var _this = this;
     let callback = (pd, size) => {
       var res = [];
-      // {
-      //   id: '100',
-      //   problem: '2016-05-02',
-      //   answer: '王小虎1',
-      //   tag: '22'
-      // },
-
       pd.filter(v => {
         if (!checkInRight.bind(_this).call(_this, v.problem.id)) {
           return;

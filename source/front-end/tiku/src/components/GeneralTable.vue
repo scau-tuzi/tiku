@@ -104,7 +104,7 @@
 
     //查看操作
     function handleView(index, row) {
-        console.log(index, row),
+        // console.log(index, row),
             // alert(index+row.problem+row.answer),
             //转到ViewProblem页面
             this.$router.push({
@@ -141,12 +141,12 @@
     }
 
     function getData(currentPage) {
-        console.log("change")
+        // console.log("change")
         var _this = this;
         let callback = (pd) => {
             var res = [];
-            console.log("get it")
-            console.log(pd)
+            // console.log("get it")
+            // console.log(pd)
             this.$store.commit("setNewProblems", pd);
             pd.filter(v => {
                 let ts = [];
@@ -171,13 +171,13 @@
                 };
                 res.push(ress)
             });
-            console.log(res);
+            // console.log(res);
             _this.tableData = res;
         };
         getProblems(currentPage, callback);
     }
     function getTags() {
-      console.log("getTag!");
+      // console.log("getTag!");
       var _this = this;
       let callback = (pd, size) => {
         this.options=[]
@@ -191,7 +191,7 @@
           //console.log(_this.options);
         });
       };
-      console.log("bbbb");
+      // console.log("bbbb");
       getTagsList(0, callback, 0);
 
     }
@@ -200,7 +200,7 @@
       this.$emit('modifyTag', {});
       if(!this.isBatchChangeTag){
         let selectedPaper = this.$store.state.modifyPaper[this.paperId];
-        console.log(this.$store.state.modifyPaper);
+        // console.log(this.$store.state.modifyPaper);
         //console.log("test change1!--");
         //console.log(selectedPaper);
         selectedPaper.tags = [];
@@ -209,8 +209,8 @@
             value: v
           });
         });
-        console.log("test change2!--");
-        console.log(selectedPaper);
+        // console.log("test change2!--");
+        // console.log(selectedPaper);
         // changePaper(selectedPaper, b => {
         //   if (b.code === "ok") {
         //     alert("修改成功");
@@ -225,17 +225,17 @@
       for(let i=0;i<this.multipleSelection.length;i++){
         let id=this.multipleSelection[i].paperId;
         let selectedPaper = this.$store.state.modifyPaper[id];
-        console.log(this.$store.state.modifyPaper);
-        console.log("test change1!--");
-        console.log(selectedPaper);
+        // console.log(this.$store.state.modifyPaper);
+        // console.log("test change1!--");
+        // console.log(selectedPaper);
         selectedPaper.tags = [];
         this.value.forEach(v => {
           selectedPaper.tags.push({
             value: v
           });
         });
-        console.log("test change2!--");
-        console.log(selectedPaper);
+        // console.log("test change2!--");
+        // console.log(selectedPaper);
         changePaper(selectedPaper, b => {
           if (b.code === "ok") {
             alert("修改成功");
