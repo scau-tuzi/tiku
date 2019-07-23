@@ -57,7 +57,7 @@
 <script>
     import GeneralTable from "../components/GeneralTable";
     import paperListTable from "../data/mock/PaperListTableInfoMock";
-    import {delPaper, getPapers} from "../api/Paper";
+    import {delPaper, getPapers,changePaper} from "../api/Paper";
     import {createPaperOrderMock} from "../data/mock/CreatePaperInfoMock";
     import HistoryPagination from "../components/HistoryPagination"
     //获取试卷
@@ -208,14 +208,15 @@
             });
             console.log("test change2!--");
             console.log(selectedPaper);
-            // changePaper(selectedPaper, b => {
-            //   if (b.code === "ok") {
-            //     alert("修改成功");
-            //     // this.$router.go(0); //页面刷新（要加上）
-            //   } else {
-            //     alert("修改失败" + b.data);
-            //   }
-            // });
+            changePaper(selectedPaper, b => {
+              if (b.code === "ok") {
+                // alert("修改成功");
+                this.getPaperData(0);
+                // this.$router.go(0); //页面刷新（要加上）
+              } else {
+                alert("修改失败" + b.data);
+              }
+            });
           }
         },
         //添加试卷

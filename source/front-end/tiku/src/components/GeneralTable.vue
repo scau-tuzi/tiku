@@ -211,14 +211,14 @@
         });
         console.log("test change2!--");
         console.log(selectedPaper);
-        // changePaper(selectedPaper, b => {
-        //   if (b.code === "ok") {
-        //     alert("修改成功");
-        //     // this.$router.go(0); //页面刷新（要加上）
-        //   } else {
-        //     alert("修改失败" + b.data);
-        //   }
-        // });
+        changePaper(selectedPaper, b => {
+          if (b.code === "ok") {
+            alert("修改成功");
+            this.$router.go(0); //页面刷新（要加上）
+          } else {
+            alert("修改失败" + b.data);
+          }
+        });
       }
     }
     function modifyBatchTag() {

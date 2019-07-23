@@ -82,7 +82,7 @@ function findPaperBytags(tags: TagInfo[], callback: (p: PaperFullData[]) => void
  */
 function changePaper(paper: PaperFullData, callback: (b: BasicResponse) => void) {
     axios
-        .post("/api/paper/update", paper)
+        .put("/api/paper/update", paper)
         .then(res => {
             let response: BasicResponse = res.data;
             callback(response)
