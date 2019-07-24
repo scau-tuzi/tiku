@@ -8,18 +8,12 @@
 import axios from 'axios'
 
 // 参数是回调函数，拿到数据就调用callback
-function getAllCommit(callback:(c:CommitInfo[])=>void){
-    axios.get("/repos/czfshine/DMML/commits").then(res=>{
-
-        let lists:CommitInfo[] = res.data;
-        console.log("获取到的数据");
-        console.log(lists);
-
+function getAllCommit(callback: (c: CommitInfo[]) => void) {
+    axios.get("/repos/czfshine/DMML/commits").then(res => {
+        let lists: CommitInfo[] = res.data;
         callback(lists);
     })
 }
-
-
 export {
     getAllCommit
 }

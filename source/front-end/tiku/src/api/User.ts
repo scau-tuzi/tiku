@@ -6,14 +6,14 @@ import BasicResponse from '@/data/model/BasicResponse';
  *  user api 获取用户列表方法
  * @param callback 
  */
-function getUserList(pageNumber: number, callback: (u: UserInfo[], usersListSize: number) => void,pageSize?:number) {
+function getUserList(pageNumber: number, callback: (u: UserInfo[], usersListSize: number) => void, pageSize?: number) {
     pageSize = (pageSize === undefined ? 10 : pageSize)
     axios
-        .post("/api/user/list?pageNumber=" + pageNumber+"&pageSize="+pageSize)
+        .post("/api/user/list?pageNumber=" + pageNumber + "&pageSize=" + pageSize)
         .then(res => {
             let lists: UserInfo[] = res.data.data.userDtoList;
             let size: number = res.data.data.pagination.total;
-            callback(lists,size)
+            callback(lists, size)
         })
 }
 

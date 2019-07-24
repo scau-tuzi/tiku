@@ -9,13 +9,11 @@ var tagsTemp: TagInfo[] = tagslistData;
  * 获得标签列表方法
  * @param callback 回调函数
  */
-function getTagsList(pageNumber: number, callback: (t: TagInfo[], tagsListSize: number) => void,pageSize?:number) {
+function getTagsList(pageNumber: number, callback: (t: TagInfo[], tagsListSize: number) => void, pageSize?: number) {
     //线上
-    console.log("?="+pageNumber);
-    
     pageSize = (pageSize === undefined ? 10 : pageSize)
     axios
-        .get("/api/tag/list?pageNumber=" + pageNumber+"&pageSize="+pageSize)//服务器地址
+        .get("/api/tag/list?pageNumber=" + pageNumber + "&pageSize=" + pageSize)//服务器地址
         .then(res => {
             let lists: TagInfo[] = res.data.data.tagList;
             let size: number = res.data.data.pagination.total;
@@ -31,8 +29,6 @@ function getTagsList(pageNumber: number, callback: (t: TagInfo[], tagsListSize: 
  */
 function addTags(tags: TagInfo, callback: (b: BasicResponse) => void) {
     //线上
-    console.log(tags);
-    
     axios
         .post("/api/tag/add", tags)
         .then(res => {
@@ -52,7 +48,7 @@ function addTags(tags: TagInfo, callback: (b: BasicResponse) => void) {
 function delTag(idLsit: number[], callback: (b: BasicResponse) => void) {
     //线上
     axios
-        .post("/api/tag/delete" , idLsit)
+        .post("/api/tag/delete", idLsit)
         .then(res => {
             let response: BasicResponse = res.data;
             callback(response)
